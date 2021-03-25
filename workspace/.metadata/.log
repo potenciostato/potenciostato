@@ -1,0 +1,24 @@
+!SESSION 2021-03-25 20:41:19.587 -----------------------------------------------
+eclipse.buildId=unknown
+java.version=1.8.0_65
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86, WS=win32, NL=es_AR
+Command-line arguments:  -os win32 -ws win32 -arch x86 -data C:\Utn\6to año\proyecto final\repo\proyecto-final\workspace
+
+!ENTRY org.eclipse.ui 4 4 2021-03-25 20:42:01.347
+!MESSAGE Plugin org.eclipse.cdt.ui, extension org.eclipse.ui.decorators, id org.eclipse.cdt.internal.ui.CustomBuildSettingsDecorator: Duplicate id found: org.eclipse.cdt.internal.ui.CustomBuildSettingsDecorator
+
+!ENTRY org.eclipse.ui 4 4 2021-03-25 20:42:01.438
+!MESSAGE Plugin org.eclipse.cdt.ui, extension org.eclipse.ui.decorators, id org.eclipse.cdt.internal.ui.CustomBuildSettingsDecorator: Unknown extension tag found: decorator
+
+!ENTRY org.eclipse.cdt.core 1 0 2021-03-25 20:45:13.430
+!MESSAGE Indexed 'freertos_blinky' (10 sources, 63 headers) in 8,57 sec: 4.547 declarations; 9.146 references; 0 unresolved inclusions; 5 syntax errors; 0 unresolved names (0 %)
+
+!ENTRY org.eclipse.cdt.core 1 0 2021-03-25 20:45:21.843
+!MESSAGE Indexed 'lpc_board_nxp_lpcxpresso_1769' (3 sources, 79 headers) in 8,03 sec: 4.293 declarations; 7.505 references; 0 unresolved inclusions; 0 syntax errors; 0 unresolved names (0 %)
+
+!ENTRY org.eclipse.cdt.core 1 0 2021-03-25 20:45:25.668
+!MESSAGE Indexed 'lpc_chip_175x_6x' (32 sources, 86 headers) in 3,62 sec: 5.577 declarations; 13.696 references; 4 unresolved inclusions; 4 syntax errors; 8 unresolved names (0,041 %)
+
+!ENTRY org.eclipse.cdt.core 1 0 2021-03-25 20:47:14.634
+!MESSAGE Indexed 'Sintetizador_v0.9.9.1' (16 sources, 85 headers) in 6,04 sec: 6.090 declarations; 16.480 references; 7 unresolved inclusions; 5 syntax errors; 124 unresolved names (0,55 %)
