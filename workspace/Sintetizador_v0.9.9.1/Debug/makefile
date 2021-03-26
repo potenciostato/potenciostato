@@ -30,7 +30,7 @@ all: Sintetizador_v0.9.9.1.axf
 Sintetizador_v0.9.9.1.axf: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: MCU Linker'
-	arm-none-eabi-gcc -nostdlib -L"C:\workspaceLPC\Sinte\lpc_chip_175x_6x\Debug" -L"C:\workspaceLPC\Sinte\lpc_board_nxp_lpcxpresso_1769\Debug" -L"C:\workspaceLPC\Sinte\lpc_chip_175x_6x\libs" -Xlinker -Map="Sintetizador_v0.9.9.1.map" -Xlinker --gc-sections -mcpu=cortex-m3 -mthumb -T "Sintetizador_v0_9_5_Debug.ld" -o "Sintetizador_v0.9.9.1.axf" $(OBJS) $(USER_OBJS) $(LIBS)
+	arm-none-eabi-gcc -nostdlib -L"/home/zero/Desktop/UTN/6/Proyecto final/LPC/proyecto-final/workspace/lpc_chip_175x_6x/Debug" -L"/home/zero/Desktop/UTN/6/Proyecto final/LPC/proyecto-final/workspace/lpc_board_nxp_lpcxpresso_1769/Debug" -L"/home/zero/Desktop/UTN/6/Proyecto final/LPC/proyecto-final/workspace/lpc_chip_175x_6x/libs" -Xlinker -Map="Sintetizador_v0.9.9.1.map" -Xlinker --gc-sections -mcpu=cortex-m3 -mthumb -T "Sintetizador_v0_9_5_Debug.ld" -o "Sintetizador_v0.9.9.1.axf" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 	$(MAKE) --no-print-directory post-build

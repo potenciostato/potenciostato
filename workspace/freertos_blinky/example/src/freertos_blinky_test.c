@@ -147,7 +147,7 @@ char BufferOutSTR[] = "000000000000000000";
 				// Envio datos a PC de manera continua
 				DEBUGOUT("UART: Envio datos a PC\r\n");
 				//Leo el valor recibido por el adc
-				xQueueReceive( xACDqueue, &BufferOutSTR[], 0);
+				xQueueReceive( xACDqueue, &BufferOutSTR, 0);
 
 				break;
 
@@ -192,7 +192,7 @@ static void vDACTask(void *pvParameters) {
 }
 /* ADC parpadeo cada 1s */
 static void vADCTask(void *pvParameters) {
-char ADCBuff[] = "666";
+char ADCBuff[] = "000000000000000666";
 	while (1) {
 
 		DEBUGOUT("ADC: Voy a tomar el semaforo\n");
