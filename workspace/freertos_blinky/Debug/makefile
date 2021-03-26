@@ -30,7 +30,11 @@ all: freertos_blinky.axf
 freertos_blinky.axf: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: MCU Linker'
+<<<<<<< HEAD
 	arm-none-eabi-gcc -nostdlib -L"C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug" -L"C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x" -L"C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug" -Xlinker -Map="freertos_blinky.map" -Xlinker --gc-sections -mcpu=cortex-m3 -mthumb -T "freertos_blinky_Debug.ld" -o "freertos_blinky.axf" $(OBJS) $(USER_OBJS) $(LIBS)
+=======
+	arm-none-eabi-gcc -nostdlib -L"/home/zero/Desktop/UTN/6/Proyecto final/LPC/proyecto-final/workspace/lpc_chip_175x_6x/Debug" -L"/home/zero/Desktop/UTN/6/Proyecto final/LPC/proyecto-final/workspace/lpc_board_nxp_lpcxpresso_1769/Debug" -Xlinker -Map="freertos_blinky.map" -Xlinker --gc-sections -mcpu=cortex-m3 -mthumb -T "freertos_blinky_Debug.ld" -o "freertos_blinky.axf" $(OBJS) $(USER_OBJS) $(LIBS)
+>>>>>>> 3f16a922beb5e105e2b5fc5cda1b636fcdc94e8b
 	@echo 'Finished building target: $@'
 	@echo ' '
 	$(MAKE) --no-print-directory post-build
