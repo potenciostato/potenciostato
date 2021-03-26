@@ -45,7 +45,7 @@ xSemaphoreHandle UARTSemMtx,UARTSendMtx,DACSemMtx,ADCSemMtx;
 #define SendData "0030"
 #define SendDataEnd "0031"
 
-char QTFlagSTR[] = "000000000000000000", UARTAKTSTR[] = "0000", pruebahernan[]="020";
+char QTFlagSTR[] = "000000000000000000", UARTAKTSTR[] = "0000", pruebahernan[]="080";
 /*****************************************************************************
  * Public types/enumerations/variables
  ****************************************************************************/
