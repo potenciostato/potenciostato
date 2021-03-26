@@ -69,6 +69,7 @@ static void prvSetupHardware(void)
 /* ADC parpadeo cada 1s */
 static void vINTSimTask(void *pvParameters) {
 	int i;
+	int a = 0;
 
 	while (1) {
 
