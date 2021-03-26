@@ -47,17 +47,11 @@ xQueueHandle xQTqueue,xACDqueue;
 #define SendDataEnd "0031"
 
 
-<<<<<<< HEAD
 
-
-char QTFlagSTR[] = "000000000000000000", UARTAKTSTR[] = "0000", pruebahernan[]="040";
+char QTFlagSTR[] = "000000000000000000", UARTAKTSTR[] = "0000", pruebahernan[]="080";
 
 xSemaphoreHandle slectura_ok;
 xQueueHandle datoADC;
-
-=======
-char QTFlagSTR[] = "000000000000000000", UARTAKTSTR[] = "0000", pruebahernan[]="080";
->>>>>>> 3f16a922beb5e105e2b5fc5cda1b636fcdc94e8b
 
 /*****************************************************************************
  * Public types/enumerations/variables
