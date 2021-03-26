@@ -45,11 +45,32 @@ xSemaphoreHandle UARTSemMtx,UARTSendMtx,DACSemMtx,ADCSemMtx;
 #define SendData "0030"
 #define SendDataEnd "0031"
 
+
+
+
 char QTFlagSTR[] = "000000000000000000", UARTAKTSTR[] = "0000", pruebahernan[]="040";
+
+xSemaphoreHandle slectura_ok;
+xQueueHandle datoADC;
+
+
 /*****************************************************************************
  * Public types/enumerations/variables
  ****************************************************************************/
 
+
+
+/*****************************************************************************
+ * Interrupciones
+ ****************************************************************************/
+
+void ADC_IRQHandler(void){
+	static signed portBASE_TYPE xHigherPriorityTaskWoken;
+	xHigherPriorityTaskWoken = pdFALSE;
+	NVIC_DisableIRQ(ADC_IRQn);
+	xSemaphoreGiveFromISR(slectura_ok, &xHigherPriorityTaskWoken);
+	portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+}
 
 /*****************************************************************************
  * Private functions
@@ -94,8 +115,6 @@ static void vINTSimTask(void *pvParameters) {
 		xSemaphoreGive(UARTSemMtx);
 		/* Espero 1s*/
 		vTaskDelay(1000/portTICK_RATE_MS);
-
-
 	}
 }
 /* UART
@@ -163,6 +182,7 @@ static void vDACTask(void *pvParameters) {
 	int inDAC = 0;
 	static portBASE_TYPE xHigherPriorityTaskWoken;
 
+
 	while (1)	{
 		Board_LED_Set(0, LedState);
 		LedState = (bool) !LedState;
@@ -187,6 +207,13 @@ static void vDACTask(void *pvParameters) {
 /* ADC parpadeo cada 1s */
 static void vADCTask(void *pvParameters) {
 
+	static uint16_t lecturaADC;
+	uint32_t timerFreq, duty;
+	timerFreq = Chip_Clock_GetSystemClockRate()/4;
+	NVIC_ClearPendingIRQ(ADC_IRQn);
+	NVIC_EnableIRQ(ADC_IRQn);
+
+
 	while (1) {
 
 		DEBUGOUT("ADC: Voy a tomar el semaforo\n");
@@ -200,6 +227,15 @@ static void vADCTask(void *pvParameters) {
 		strcpy(UARTAKTSTR,SendData);
 		//le indico a la uart que debe mandar info
 		xSemaphoreGive( UARTSemMtx);
+
+		NVIC_EnableIRQ(ADC_IRQn);
+		Chip_ADC_SetStartMode(LPC_ADC,ADC_START_NOW,ADC_TRIGGERMODE_RISING);
+		xSemaphoreTake(slectura_ok, ( portTickType ) portMAX_DELAY);
+		Chip_ADC_ReadValue(LPC_ADC,ADC_CH0,&lecturaADC);
+		duty =(uint32_t)lecturaADC*100/4096;
+		Chip_TIMER_SetMatch(LPC_TIMER0, 0, (uint32_t)(timerFreq-(timerFreq*duty)/100)/100);
+		xQueueSend( datoADC, ( void * ) &lecturaADC, ( portTickType ) 0 );
+		vTaskDelay(configTICK_RATE_HZ / 4);
 
 
 		/* parpadeo cada 1s*/
@@ -229,10 +265,15 @@ int main(void)
 	 DEBUGOUT("Hello code\r\n");
 
 
-	 UARTSendMtx = xSemaphoreCreateMutex();
-	 UARTSemMtx = xSemaphoreCreateMutex();
-	 ADCSemMtx = xSemaphoreCreateMutex();
-	 DACSemMtx = xSemaphoreCreateMutex();
+	UARTSendMtx = xSemaphoreCreateMutex();
+	UARTSemMtx = xSemaphoreCreateMutex();
+	ADCSemMtx = xSemaphoreCreateMutex();
+	DACSemMtx = xSemaphoreCreateMutex();
+
+
+	vSemaphoreCreateBinary(slectura_ok);
+	xSemaphoreTake(slectura_ok, ( portTickType ) 10 );
+	datoADC = xQueueCreate( 1, sizeof( uint16_t ) );
 
 
 	 /* Check the semaphore was created successfully. */

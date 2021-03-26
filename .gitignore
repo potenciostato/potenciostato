@@ -1,2 +1,5 @@
 */.metadata
 */.cproject
+*/*.axf
+*/*.o
+

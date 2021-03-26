@@ -1,4 +1,5 @@
-src/sysctl_17xx_40xx.o src/sysctl_17xx_40xx.d: ../src/sysctl_17xx_40xx.c \
+example/src/setup.o example/src/setup.d: ../example/src/setup.c \
+ C:\repo\ proyecto\ final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\inc/board.h \
  C:\repo\ proyecto\ final\proyecto-final\workspace\lpc_chip_175x_6x\inc/chip.h \
  C:\repo\ proyecto\ final\proyecto-final\workspace\lpc_chip_175x_6x\inc/lpc_types.h \
  C:\repo\ proyecto\ final\proyecto-final\workspace\lpc_chip_175x_6x\inc/sys_config.h \
@@ -35,7 +36,25 @@ src/sysctl_17xx_40xx.o src/sysctl_17xx_40xx.d: ../src/sysctl_17xx_40xx.c \
  C:\repo\ proyecto\ final\proyecto-final\workspace\lpc_chip_175x_6x\inc/fmc_17xx_40xx.h \
  C:\repo\ proyecto\ final\proyecto-final\workspace\lpc_chip_175x_6x\inc/romapi_17xx_40xx.h \
  C:\repo\ proyecto\ final\proyecto-final\workspace\lpc_chip_175x_6x\inc/iap.h \
- C:\repo\ proyecto\ final\proyecto-final\workspace\lpc_chip_175x_6x\inc/error.h
+ C:\repo\ proyecto\ final\proyecto-final\workspace\lpc_chip_175x_6x\inc/error.h \
+ C:\repo\ proyecto\ final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\inc/board_api.h \
+ C:\repo\ proyecto\ final\proyecto-final\workspace\lpc_chip_175x_6x\inc/lpc_types.h \
+ C:\repo\ proyecto\ final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\inc/lpc_phy.h \
+ C:\repo\ proyecto\ final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\inc/board.h \
+ C:\repo\ proyecto\ final\proyecto-final\workspace\freertos_blinky\freertos\inc/FreeRTOS.h \
+ C:\repo\ proyecto\ final\proyecto-final\workspace\freertos_blinky\freertos\inc/projdefs.h \
+ C:\repo\ proyecto\ final\proyecto-final\workspace\freertos_blinky\example\inc/FreeRTOSConfig.h \
+ C:\repo\ proyecto\ final\proyecto-final\workspace\freertos_blinky\freertos\inc/portable.h \
+ C:\repo\ proyecto\ final\proyecto-final\workspace\freertos_blinky\freertos\inc/portmacro.h \
+ C:\repo\ proyecto\ final\proyecto-final\workspace\freertos_blinky\freertos\inc/mpu_wrappers.h \
+ C:\repo\ proyecto\ final\proyecto-final\workspace\freertos_blinky\freertos\inc/task.h \
+ C:\repo\ proyecto\ final\proyecto-final\workspace\freertos_blinky\freertos\inc/list.h \
+ C:\repo\ proyecto\ final\proyecto-final\workspace\freertos_blinky\freertos\inc/semphr.h \
+ C:\repo\ proyecto\ final\proyecto-final\workspace\freertos_blinky\freertos\inc/queue.h \
+ C:\repo\ proyecto\ final\proyecto-final\workspace\freertos_blinky\freertos\inc/queue.h \
+ C:\repo\ proyecto\ final\proyecto-final\workspace\freertos_blinky\example\inc/defines.h
+
+C:\repo\ proyecto\ final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\inc/board.h:
 
 C:\repo\ proyecto\ final\proyecto-final\workspace\lpc_chip_175x_6x\inc/chip.h:
 
@@ -110,3 +129,35 @@ C:\repo\ proyecto\ final\proyecto-final\workspace\lpc_chip_175x_6x\inc/romapi_17
 C:\repo\ proyecto\ final\proyecto-final\workspace\lpc_chip_175x_6x\inc/iap.h:
 
 C:\repo\ proyecto\ final\proyecto-final\workspace\lpc_chip_175x_6x\inc/error.h:
+
+C:\repo\ proyecto\ final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\inc/board_api.h:
+
+C:\repo\ proyecto\ final\proyecto-final\workspace\lpc_chip_175x_6x\inc/lpc_types.h:
+
+C:\repo\ proyecto\ final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\inc/lpc_phy.h:
+
+C:\repo\ proyecto\ final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\inc/board.h:
+
+C:\repo\ proyecto\ final\proyecto-final\workspace\freertos_blinky\freertos\inc/FreeRTOS.h:
+
+C:\repo\ proyecto\ final\proyecto-final\workspace\freertos_blinky\freertos\inc/projdefs.h:
+
+C:\repo\ proyecto\ final\proyecto-final\workspace\freertos_blinky\example\inc/FreeRTOSConfig.h:
+
+C:\repo\ proyecto\ final\proyecto-final\workspace\freertos_blinky\freertos\inc/portable.h:
+
+C:\repo\ proyecto\ final\proyecto-final\workspace\freertos_blinky\freertos\inc/portmacro.h:
+
+C:\repo\ proyecto\ final\proyecto-final\workspace\freertos_blinky\freertos\inc/mpu_wrappers.h:
+
+C:\repo\ proyecto\ final\proyecto-final\workspace\freertos_blinky\freertos\inc/task.h:
+
+C:\repo\ proyecto\ final\proyecto-final\workspace\freertos_blinky\freertos\inc/list.h:
+
+C:\repo\ proyecto\ final\proyecto-final\workspace\freertos_blinky\freertos\inc/semphr.h:
+
+C:\repo\ proyecto\ final\proyecto-final\workspace\freertos_blinky\freertos\inc/queue.h:
+
+C:\repo\ proyecto\ final\proyecto-final\workspace\freertos_blinky\freertos\inc/queue.h:
+
+C:\repo\ proyecto\ final\proyecto-final\workspace\freertos_blinky\example\inc/defines.h:
