@@ -45,7 +45,9 @@ xSemaphoreHandle UARTSemMtx,UARTSendMtx,DACSemMtx,ADCSemMtx;
 #define SendData "0030"
 #define SendDataEnd "0031"
 
+
 char QTFlagSTR[] = "000000000000000000", UARTAKTSTR[] = "0000", pruebahernan[]="080";
+
 /*****************************************************************************
  * Public types/enumerations/variables
  ****************************************************************************/
@@ -69,6 +71,7 @@ static void prvSetupHardware(void)
 /* ADC parpadeo cada 1s */
 static void vINTSimTask(void *pvParameters) {
 	int i;
+	int a = 0;
 
 	while (1) {
 
