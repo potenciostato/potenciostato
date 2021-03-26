@@ -208,18 +208,13 @@ static void vDACTask(void *pvParameters) {
 }
 /* ADC parpadeo cada 1s */
 static void vADCTask(void *pvParameters) {
-<<<<<<< HEAD
 
 	static uint16_t lecturaADC;
 	uint32_t timerFreq, duty;
 	timerFreq = Chip_Clock_GetSystemClockRate()/4;
 	NVIC_ClearPendingIRQ(ADC_IRQn);
 	NVIC_EnableIRQ(ADC_IRQn);
-
-
-=======
-char ADCBuff[] = "000000000000000666";
->>>>>>> 3f16a922beb5e105e2b5fc5cda1b636fcdc94e8b
+	char ADCBuff[] = "000000000000000666";
 	while (1) {
 
 		DEBUGOUT("ADC: Voy a tomar el semaforo\n");
@@ -272,29 +267,21 @@ int main(void)
 
 	 DEBUGOUT("Hello code\r\n");
 
-
-<<<<<<< HEAD
 	UARTSendMtx = xSemaphoreCreateMutex();
 	UARTSemMtx = xSemaphoreCreateMutex();
 	ADCSemMtx = xSemaphoreCreateMutex();
 	DACSemMtx = xSemaphoreCreateMutex();
 
-
 	vSemaphoreCreateBinary(slectura_ok);
 	xSemaphoreTake(slectura_ok, ( portTickType ) 10 );
 	datoADC = xQueueCreate( 1, sizeof( uint16_t ) );
-=======
-	 UARTSendMtx = xSemaphoreCreateMutex();
-	 UARTSemMtx = xSemaphoreCreateMutex();
-	 ADCSemMtx = xSemaphoreCreateMutex();
-	 DACSemMtx = xSemaphoreCreateMutex();
+
 	 /*
 	  * Busco asegurar que pueda pasar un string del tamaño definido en el protocolo, no se que
 	  * tan rapido sea el adc vs a la uart, por lo que a priori creo una cola que pueda
 	  * almacenar hasta 4 envios del adc
 	  * */
 	 xACDqueue = xQueueCreate(4, sizeof(QTFlagSTR));
->>>>>>> 3f16a922beb5e105e2b5fc5cda1b636fcdc94e8b
 
 
 	 /* Check the semaphore was created successfully. */
