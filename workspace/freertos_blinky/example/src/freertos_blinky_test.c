@@ -39,6 +39,7 @@
  * Private types/enumerations/variables
  ****************************************************************************/
 xSemaphoreHandle UARTSemMtx,UARTSendMtx,DACSemMtx,ADCSemMtx;
+xQueueHandle xQTqueue,xACDqueue;
 #define InitMeasure "001"
 #define AbortMeasure "002"
 #define ACK "099"
@@ -145,6 +146,9 @@ char BufferOutSTR[] = "000000000000000000";
 			case 30:
 				// Envio datos a PC de manera continua
 				DEBUGOUT("UART: Envio datos a PC\r\n");
+				//Leo el valor recibido por el adc
+				xQueueReceive( xACDqueue, &BufferOutSTR[], 0);
+
 				break;
 
 			case 31:
@@ -188,7 +192,7 @@ static void vDACTask(void *pvParameters) {
 }
 /* ADC parpadeo cada 1s */
 static void vADCTask(void *pvParameters) {
-
+char ADCBuff[] = "666";
 	while (1) {
 
 		DEBUGOUT("ADC: Voy a tomar el semaforo\n");
@@ -200,6 +204,8 @@ static void vADCTask(void *pvParameters) {
 		xSemaphoreTake( ADCSemMtx, portMAX_DELAY );
 		DEBUGOUT("ADC: Doy el semaforo de la UART\n");
 		strcpy(UARTAKTSTR,SendData);
+		//Espero 0" para enviar los datos
+		xQueueSendToBack(xACDqueue,&ADCBuff,0);
 		//le indico a la uart que debe mandar info
 		xSemaphoreGive( UARTSemMtx);
 
@@ -235,6 +241,12 @@ int main(void)
 	 UARTSemMtx = xSemaphoreCreateMutex();
 	 ADCSemMtx = xSemaphoreCreateMutex();
 	 DACSemMtx = xSemaphoreCreateMutex();
+	 /*
+	  * Busco asegurar que pueda pasar un string del tamaño definido en el protocolo, no se que
+	  * tan rapido sea el adc vs a la uart, por lo que a priori creo una cola que pueda
+	  * almacenar hasta 4 envios del adc
+	  * */
+	 xACDqueue = xQueueCreate(4, sizeof(QTFlagSTR));
 
 
 	 /* Check the semaphore was created successfully. */
