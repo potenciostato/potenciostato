@@ -1,6 +1,5 @@
 EESchema Schematic File Version 4
-LIBS:potenciostato-cache
-EELAYER 26 0
+EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
@@ -15,7 +14,7 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L potenciostato-rescue:LPCXPRESSO_LPC1769-LPCXPRESSO_LPC1769 LPC?
+L LPCXPRESSO_LPC1769:LPCXPRESSO_LPC1769 LPC?
 U 1 1 6014AC32
 P 4000 3100
 AR Path="/6014AC32" Ref="LPC?"  Part="1" 
