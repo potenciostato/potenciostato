@@ -39,15 +39,15 @@
  * Private types/enumerations/variables
  ****************************************************************************/
 xSemaphoreHandle UARTSemMtx,UARTSendMtx,DACSemMtx,ADCSemMtx;
-xQueueHandle xQTqueue,xACDqueue;
+xQueueHandle xQTqueue,xACDqueue,xOPCodequeue;
 #define InitMeasure "001"
-#define AbortMeasure "002"
+#define AbortMeasurement "002"
 #define ACK "099"
 #define SendData "0030"
 #define SendDataEnd "0031"
 
 
-char QTFlagSTR[] = "000000000000000000", UARTAKTSTR[] = "0000", pruebahernan[]="080";
+char QTFlagSTR[] = "0000000000000000", UARTAKTSTR[] = "0000", pruebahernan[]="080";
 
 /*****************************************************************************
  * Public types/enumerations/variables
@@ -69,30 +69,43 @@ static void prvSetupHardware(void)
 }
 
 
-/* ADC parpadeo cada 1s */
+/*
+* Tarea para simular la INT del QT
+* interrumpo a la UART/USB para:
+* _comenzar a medir, paso el código de operacion y los valores a usar
+* _detener la medición, ppaso el código de operacion
+* _pedir datos de la medición, paso el código de operacion*/
 static void vINTSimTask(void *pvParameters) {
 	int i;
 	int a = 0;
+	char USBBuff[] = "0000000000000777";
+
 
 	while (1) {
 
-		DEBUGOUT("INT: Iniciar medicion\n");
-		strcpy(QTFlagSTR,"0010050001000010");
 		/*
-		 * uso strncpy  para quedarme con los primeros 3 caracteres
-		 * reconozco la int que llamó a la uart
-		 * */
-		strncpy (UARTAKTSTR,QTFlagSTR,3);
-
-		DEBUGOUT("INT: QTFlagSTR = %s\n", QTFlagSTR);
+		 * Envio el código para iniciar la medición*/
+		DEBUGOUT("INT: Iniciar medicion\n");
+		strcpy(USBBuff,"0010050001000010");
+		/*
+		 * Envio
+		 * 	_código de operación
+		 * 	_datos a usar
+		 * Para la ISR usar
+		 * xQueueSendToBackFromISR( xQTqueue, &USBBuff, pdFALSE );*/
+		xQueueSendToBack(xOPCodequeue,&InitMeasure,0);
+		xQueueSendToBack(xQTqueue,&USBBuff,0);
 		xSemaphoreGive(UARTSemMtx);
 		/* Espero 3s*/
 		vTaskDelay(3000/portTICK_RATE_MS);
 
+		/*
+		 * Envio el código para parar*/
 		DEBUGOUT("INT: Abortar medicion\n");
-		strcpy(QTFlagSTR,AbortMeasure);
-		strncpy (UARTAKTSTR,QTFlagSTR,3);
-		DEBUGOUT("INT: QTFlagSTR = %s\n", QTFlagSTR);
+		strcpy(USBBuff,AbortMeasurement);
+		xQueueSendToBack(xQTqueue,&AbortMeasurement,0);
+		//strncpy (UARTAKTSTR,QTFlagSTR,3);
+
 
 		xSemaphoreGive(UARTSemMtx);
 		/* Espero 1s*/
@@ -109,8 +122,10 @@ static void vINTSimTask(void *pvParameters) {
  * Uso BufferOutSTR para enviarle datos a QT
  * */
 static void vUARTTask(void *pvParameters) {
-int ProgState = 0;
-char BufferOutSTR[] = "000000000000000000";
+//char ProgState= "0000000000000000";
+	int ProgState = 0;
+char BufferOutSTR[] = "0000000000000000";
+
 
 	while (1) {
 		DEBUGOUT("UART: Voy a tomar semaforos\n");
@@ -119,10 +134,11 @@ char BufferOutSTR[] = "000000000000000000";
 		 * cuando debe enviar datos a la PC*/
 		xSemaphoreTake( UARTSemMtx, portMAX_DELAY);
 
-
-			ProgState = atoi(UARTAKTSTR);
-			DEBUGOUT("UART: UARTAKTSTR = %s, ProgState = %d\n",UARTAKTSTR,ProgState);
-
+		xQueueReceive( xOPCodequeue, &BufferOutSTR, 0);
+		/*
+		 * Me quedo con el código de operación*/
+		strncpy (UARTAKTSTR,BufferOutSTR,3);
+		ProgState = atoi(UARTAKTSTR);
 			switch(ProgState){
 			case 10 :
 				/*
@@ -192,7 +208,8 @@ static void vDACTask(void *pvParameters) {
 }
 /* ADC parpadeo cada 1s */
 static void vADCTask(void *pvParameters) {
-char ADCBuff[] = "000000000000000666";
+char ADCBuff[] = "0000000000000666";
+
 	while (1) {
 
 		DEBUGOUT("ADC: Voy a tomar el semaforo\n");
@@ -204,7 +221,11 @@ char ADCBuff[] = "000000000000000666";
 		xSemaphoreTake( ADCSemMtx, portMAX_DELAY );
 		DEBUGOUT("ADC: Doy el semaforo de la UART\n");
 		strcpy(UARTAKTSTR,SendData);
-		//Espero 0" para enviar los datos
+		/*
+		 * Envio
+		 * _código de operación
+		 * _datos de la medición*/
+		xQueueSendToBack(xOPCodequeue,&SendData,0);
 		xQueueSendToBack(xACDqueue,&ADCBuff,0);
 		//le indico a la uart que debe mandar info
 		xSemaphoreGive( UARTSemMtx);
@@ -247,6 +268,8 @@ int main(void)
 	  * almacenar hasta 4 envios del adc
 	  * */
 	 xACDqueue = xQueueCreate(4, sizeof(QTFlagSTR));
+	 xQTqueue = xQueueCreate(4, sizeof(QTFlagSTR));
+	 xOPCodequeue = xQueueCreate(4, sizeof("000"));
 
 
 	 /* Check the semaphore was created successfully. */
