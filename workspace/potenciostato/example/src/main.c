@@ -49,7 +49,8 @@ const  USBD_API_T *g_pUsbApi = &g_usbApi;
 xSemaphoreHandle UARTSemMtx,UARTSendMtx,DACSemMtx,ADCSemMtx;
 xQueueHandle xQTqueue,xACDqueue,xOPCodequeue;
 xSemaphoreHandle slectura_ok;
-xQueueHandle datoADC;
+xQueueHandle qUSBin, qUSBout, datoADC;
+
 
 #define InitMeasure "001"
 #define AbortMeasurement "002"
@@ -346,6 +347,9 @@ int main(void)
 	vSemaphoreCreateBinary(slectura_ok);
 	xSemaphoreTake(slectura_ok, ( portTickType ) 10 );
 	datoADC = xQueueCreate( 1, sizeof( uint16_t ) );
+
+	qUSBin = xQueueCreate( 10, sizeof( uint8_t )* 6);
+	qUSBout = xQueueCreate( 10, sizeof( uint8_t )* 6);
 
 	/*
 	* Busco asegurar que pueda pasar un string del tamaño definido en el protocolo, no se que

@@ -62,6 +62,8 @@ static uint8_t *loopback_report;
 extern const uint8_t HID_ReportDescriptor[];
 extern const uint16_t HID_ReportDescSize;
 
+extern xQueueHandle qUSBin, qUSBout;
+
 /*****************************************************************************
  * Private functions
  ****************************************************************************/
@@ -113,47 +115,23 @@ static ErrorCode_t HID_Ep_Hdlr(USBD_HANDLE_T hUsb, void *data, uint32_t event)
 {
 	USB_HID_CTRL_T *pHidCtrl = (USB_HID_CTRL_T *) data;
 
-	uint8_t a[6]={0};
-	uint32_t i, id, valor;
+	uint8_t i, paquete[6]={0};
 
 	switch (event) {
 	case USB_EVT_IN:
 		/* last report is successfully sent. Do something... */
+		xQueueReceive(qUSBin, paquete, 0);
+		USBD_API->hw->WriteEP(hUsb, pHidCtrl->epin_adr, paquete, 6);
 		break;
 
 	case USB_EVT_OUT:
 		/* Read the new report received. */
 		USBD_API->hw->ReadEP(hUsb, pHidCtrl->epout_adr, loopback_report);
 		for (i = 0; i < 6; i++){
-			a[i] = *(loopback_report+i);
+			paquete[i] = *(loopback_report+i);
 		}
-		//id = obtenerID(&a[0]);
-		id = a[0]*10 + a[1];
-		switch (id){
-		case 15:
-		case 16:
-		case 17:
-		case 18:
-		case 19:
-		case 20:
-		case 21:
-		case 22:
-		{
-			valor = a[3]; //es volumen, forma de onda, filtro, fcs, fci, attack, delay u over
-			hostDispositivo(id, valor);
-		}break;
-		case 10:
-		{
-			valor = 0;
-			valor |= ((a[2]<<24) | (a[3]<<16) | (a[4]<<8) | (a[5]<<0));
-			hostDispositivo(id, valor);
-		}
-		default:{
-			//nada
-		}
-		}
-
 		/* loopback the report received. */
+		xQueueSendToBack(qUSBin,paquete,0);
 		USBD_API->hw->WriteEP(hUsb, pHidCtrl->epin_adr, loopback_report, 6);
 		break;
 	}

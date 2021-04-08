@@ -1,3 +1,5 @@
+
+
 /*
  * @brief LPC17xx/40xx GPDMA driver
  *
@@ -657,6 +659,11 @@ Status Chip_GPDMA_SGTransfer(LPC_GPDMA_T *pGPDMA,
 	GPDMA_CH_CFG_T GPDMACfg;
 	uint8_t SrcPeripheral = 0, DstPeripheral = 0;
 	uint32_t src = DMADescriptor->src, dst = DMADescriptor->dst;
+
+	dst = (uint32_t) GPDMA_CONN_DAC; // Se debe forzar ésta condición. Caso contrario no funcionaría porque
+									 // la función Chip_GPDMA_InitChannegCfg acepta un índice de periferico
+									 // y no la posición absoluta. IDEM línea 684 aquí debajo.
+
 	int ret;
 
 	ret = Chip_GPDMA_InitChannelCfg(pGPDMA, &GPDMACfg, ChannelNum, src, dst, 0, TransferType);
