@@ -32,7 +32,7 @@
 #include "board.h"
 #include "string.h"
 
-// #include "retarget.h"
+#include "retarget.h"
 
 /*****************************************************************************
  * Private types/enumerations/variables
@@ -362,6 +362,8 @@ void Board_USBD_Init(uint32_t port)
 	
 	Chip_IOCON_PinMux(LPC_IOCON, 0, 29, IOCON_MODE_INACT, IOCON_FUNC1);	/* P0.29 D1+, P0.30 D1- */
 	Chip_IOCON_PinMux(LPC_IOCON, 0, 30, IOCON_MODE_INACT, IOCON_FUNC1);
+
+	Chip_IOCON_PinMux(LPC_IOCON, 2, 9, IOCON_MODE_INACT, IOCON_FUNC1);
 
 	LPC_USB->USBClkCtrl = 0x12;                /* Dev, AHB clock enable */
 	while ((LPC_USB->USBClkSt & 0x12) != 0x12); 
