@@ -61,7 +61,7 @@ extern "C" {
     via semihosting. You may need to use a C library that supports
     semihosting with this option.
  */
- //#define DEBUG_SEMIHOSTING
+// #define DEBUG_SEMIHOSTING
 
 /** Board UART used for debug output and input using the DEBUG* macros. This
     is also the port used for Board_UARTPutChar, Board_UARTGetChar, and
