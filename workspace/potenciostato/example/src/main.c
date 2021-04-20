@@ -163,26 +163,22 @@ static void vINTSimTask(void *pvParameters) {
 		DEBUGOUT("INT: Iniciar medicion\n");
 		strcpy(USBBuff,"0010050001000010");
 		/*
-		 * Envio
-		 * 	_código de operación
-		 * 	_datos a usar
 		 * Para la ISR usar
 		 * xQueueSendToBackFromISR( xQTqueue, &USBBuff, pdFALSE );*/
-		xQueueSendToBack(xOPCodequeue,&InitMeasure,0);
 		xQueueSendToBack(xQTqueue,&USBBuff,0);
-		xSemaphoreGive(UARTSemMtx);
+		xQueueSendToBack(xOPCodequeue,&InitMeasure,0);
 		/* Espero 3s*/
 		vTaskDelay(3000/portTICK_RATE_MS);
 
-		/*
-		 * Envio el código para parar*/
+		/* Envío el código para pedir datos*/
+		DEBUGOUT("INT: Pedir datos\n");
+		xQueueSendToBack(xOPCodequeue,&SendData,0);
+		/* Espero 3s*/
+		vTaskDelay(3000/portTICK_RATE_MS);
+
+		/* Envio el código para abortar la medición*/
 		DEBUGOUT("INT: Abortar medicion\n");
-		strcpy(USBBuff,AbortMeasurement);
 		xQueueSendToBack(xQTqueue,&AbortMeasurement,0);
-		//strncpy (UARTAKTSTR,QTFlagSTR,3);
-
-
-		xSemaphoreGive(UARTSemMtx);
 		/* Espero 1s*/
 		vTaskDelay(1000/portTICK_RATE_MS);
 	}
@@ -198,21 +194,15 @@ static void vINTSimTask(void *pvParameters) {
 static void vUSBTask(void *pvParameters) {
 //char ProgState= "0000000000000000";
 	int ProgState = 0;
-char BufferOutSTR[] = "0000000000000000";
+char BufferOutSTR[] = "0000000000000000",OpCode[]="000";
 
 
 	while (1) {
-		DEBUGOUT("UART: Voy a tomar semaforos\n");
-		/*
-		 * La UART funciona cuando la PC interrumpe o
-		 * cuando debe enviar datos a la PC*/
-		xSemaphoreTake( UARTSemMtx, portMAX_DELAY);
+		DEBUGOUT("USB: Leo xOPCodequeue\n");
 
-		xQueueReceive( xOPCodequeue, &BufferOutSTR, 0);
-		/*
-		 * Me quedo con el código de operación*/
-		strncpy (UARTAKTSTR,BufferOutSTR,3);
-		ProgState = atoi(UARTAKTSTR);
+		xQueueReceive( xOPCodequeue, &OpCode, portMAX_DELAY);
+
+		ProgState = atoi(OpCode);
 			switch(ProgState){
 			case 10 :
 				/*
@@ -221,21 +211,22 @@ char BufferOutSTR[] = "0000000000000000";
 				 * NVIC_EnableIRQ(ADC_IRQn);
 				 * ADC_StartCmd(LPC_ADC,ADC_START_NOW);
 				 */
-				DEBUGOUT("UART: Habilito DAC & ADC\n");
+				DEBUGOUT("USB: Habilito DAC & ADC\n");
 				xSemaphoreGive(DACSemMtx);
 				xSemaphoreGive(ADCSemMtx);
 				break;
 
 			case 20:
 				// Deshabilito int del DAC & ADC
-				DEBUGOUT("UART: Deshabilito DAC & ADC\r\n");
 				strcpy(BufferOutSTR,ACK);
-				DEBUGOUT("UART: ACKAbort = %s\r\n",BufferOutSTR);
+				DEBUGOUT("USB: Deshabilito DAC & ADC\r\n");
+
+				DEBUGOUT("USB: ACKAbort = %s\r\n",BufferOutSTR);
 				break;
 
 			case 30:
 				// Envio datos a PC de manera continua
-				DEBUGOUT("UART: Envio datos a PC\r\n");
+				DEBUGOUT("USB: Envio datos a QT\r\n");
 				//Leo el valor recibido por el adc
 				xQueueReceive( xACDqueue, &BufferOutSTR, 0);
 
@@ -243,11 +234,11 @@ char BufferOutSTR[] = "0000000000000000";
 
 			case 31:
 				// Finalizo el envio de datos a la PC
-				DEBUGOUT("UART: Finalizo el envio datos a PC\r\n");
+				DEBUGOUT("USB: Finalizo el envio datos a PC\r\n");
 				break;
 
 			default:
-				DEBUGOUT("UART: Estado invalido\r\n");
+				DEBUGOUT("USB: Estado invalido\r\n");
 				break;
 	       }
 
