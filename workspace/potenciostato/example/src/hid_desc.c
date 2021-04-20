@@ -46,8 +46,8 @@
  * Public types/enumerations/variables
  ****************************************************************************/
 
-#define HID_INPUT_REPORT_BYTES       6				/* size of report in Bytes */
-#define HID_OUTPUT_REPORT_BYTES      6				/* size of report in Bytes */
+#define HID_INPUT_REPORT_BYTES       8				/* size of report in Bytes */
+#define HID_OUTPUT_REPORT_BYTES      8				/* size of report in Bytes */
 #define HID_FEATURE_REPORT_BYTES     1				/* size of report in Bytes */
 
 /**
@@ -199,18 +199,22 @@ const uint8_t USB_StringDescriptor[] = {
 	/* Index 0x03: Serial Number */
 	(13 * 2 + 2),					/* bLength (13 Char + Type + lenght) */
 	USB_STRING_DESCRIPTOR_TYPE,		/* bDescriptorType */
-	'S', 0,
-	'i', 0,
-	'n', 0,
+	'P', 0,
+	'o', 0,
 	't', 0,
 	'e', 0,
-	't', 0,
+	'n', 0,
+	'c', 0,
 	'i', 0,
-	'z', 0,
-	'a', 0,
-	'd', 0,
 	'o', 0,
-	'r', 0,
+	's', 0,
+	't', 0,
+	'a', 0,
+	't', 0,
+	'o', 0,
+	'F', 0,
+	'R', 0,
+	'A', 0,
 	' ', 0,
 	/* Index 0x04: Interface 0, Alternate Setting 0 */
 	(3 * 2 + 2),					/* bLength (3 Char + Type + lenght) */
