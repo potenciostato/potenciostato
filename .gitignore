@@ -1,6 +1,6 @@
 */.metadata
 */.cproject
 */*.axf
-*/*.o
-*/*.d
+*.o
+*.d
 */*.mk
