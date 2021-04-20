@@ -54,8 +54,8 @@ xQueueHandle qUSBin, qUSBout, datoADC;
 
 #define InitMeasure "001"
 #define AbortMeasurement "002"
+#define SendData "003"
 #define ACK "099"
-#define SendData "0030"
 #define SendDataEnd "0031"
 
 
@@ -141,10 +141,15 @@ static void vInicializarUSB(void *pvParameters) {
 
 /*
 * Tarea para simular la INT del QT
-* interrumpo a la UART/USB para:
+* Interrumpo a la UART/USB para:
 * _comenzar a medir, paso el código de operacion y los valores a usar
-* _detener la medición, ppaso el código de operacion
-* _pedir datos de la medición, paso el código de operacion*/
+* _pedir datos de la medición, paso el código de operacion
+* _detener la medición, paso el código de operacion
+* El órden de envio de datos es
+* 1) datos de la medición, si estoy iniciando una medición, uso xQTqueue
+* 2) código de operación, uso xOPCodequeue
+*
+* */
 static void vINTSimTask(void *pvParameters) {
 	int i;
 	int a = 0;
@@ -182,14 +187,15 @@ static void vINTSimTask(void *pvParameters) {
 		vTaskDelay(1000/portTICK_RATE_MS);
 	}
 }
-/* UART
- * Iniciar medición 001
- * Abortar medición 002
- * Enviar datos de en curso 003 xx 0
- * Enviar datos fin 003 xx 1
+/*
+ * USB
+ * Es únicamente interrumpida por el QT para
+ * 	_Iniciar medición 001
+ * 	_Solicitar el envio de datos 003
+ * 	_Abortar medición 002
  * Uso BufferOutSTR para enviarle datos a QT
  * */
-static void vUARTTask(void *pvParameters) {
+static void vUSBTask(void *pvParameters) {
 //char ProgState= "0000000000000000";
 	int ProgState = 0;
 char BufferOutSTR[] = "0000000000000000";
@@ -351,14 +357,14 @@ int main(void)
 	qUSBin = xQueueCreate( 10, sizeof( uint8_t )* 6);
 	qUSBout = xQueueCreate( 10, sizeof( uint8_t )* 6);
 
-	/*
-	* Busco asegurar que pueda pasar un string del tamaño definido en el protocolo, no se que
-	* tan rapido sea el adc vs a la uart, por lo que a priori creo una cola que pueda
-	* almacenar hasta 4 envios del adc
-	* */
-	xACDqueue = xQueueCreate(4, sizeof(QTFlagSTR));
-	xQTqueue = xQueueCreate(4, sizeof(QTFlagSTR));
-	xOPCodequeue = xQueueCreate(4, sizeof("000"));
+	 /*
+	  * Busco asegurar que pueda pasar un string del tamaño definido en el protocolo, no se que
+	  * tan rapido sea el adc vs a la uart, por lo que a priori creo una cola que pueda
+	  * almacenar hasta 4 envios del adc
+	  * */
+	 xACDqueue = xQueueCreate(4, sizeof(QTFlagSTR));
+	 xQTqueue = xQueueCreate(4, sizeof(QTFlagSTR));
+	 xOPCodequeue = xQueueCreate(4, sizeof("000"));
 
 	prvSetupHardware();
 
@@ -370,8 +376,8 @@ int main(void)
 				configMINIMAL_STACK_SIZE, NULL, (tskIDLE_PRIORITY + 2UL),
 						(xTaskHandle *) NULL);
 
-	/* UART  */
-	xTaskCreate(vUARTTask, (signed char *) "vUARTTask",
+	/* USB ex UART  */
+	xTaskCreate(vUSBTask, (signed char *) "vUSBTask",
 				configMINIMAL_STACK_SIZE, NULL, (tskIDLE_PRIORITY + 2UL),
 				(xTaskHandle *) NULL);
 
