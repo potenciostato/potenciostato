@@ -115,18 +115,20 @@ static ErrorCode_t HID_Ep_Hdlr(USBD_HANDLE_T hUsb, void *data, uint32_t event)
 {
 	USB_HID_CTRL_T *pHidCtrl = (USB_HID_CTRL_T *) data;
 
-	uint8_t i, paquete[6]={0};
+	uint8_t i, paquete[8]={0};
 
 	switch (event) {
 	case USB_EVT_IN:
 		/* last report is successfully sent. Do something... */
 		// Aca se puede verificar que haya llegado bien
+		paquete[5] = 3;
+		USBD_API->hw->WriteEP(hUsb, pHidCtrl->epin_adr, paquete, 8);
 		break;
 
 	case USB_EVT_OUT:
 		/* Read the new report received. */
 		USBD_API->hw->ReadEP(hUsb, pHidCtrl->epout_adr, loopback_report);
-		for (i = 0; i < 6; i++){
+		for (i = 0; i < 8; i++){
 			paquete[i] = *(loopback_report+i);
 		}
 		/* loopback the report received. */
