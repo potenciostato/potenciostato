@@ -1,6 +1,6 @@
 EESchema Schematic File Version 4
 LIBS:potenciostato-cache
-EELAYER 26 0
+EELAYER 29 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
@@ -461,4 +461,10 @@ F 3 "" H 5450 5100 50  0001 C CNN
 	1    5450 5100
 	-1   0    0    1   
 $EndComp
+Text Notes 6950 5500 0    50   ~ 0
+Amplificador Transresistencia\n(AMP TR)
+Text Notes 4850 5500 0    50   ~ 0
+Amplificador Tension Inversor\n(AMP I1)
+Text Notes 6350 1700 0    50   ~ 0
+Amplificador Tension Inversor\n(AMP T3)
 $EndSCHEMATC
