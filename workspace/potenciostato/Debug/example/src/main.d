@@ -69,6 +69,7 @@ example/src/main.o example/src/main.d: ../example/src/main.c \
  C:\repo\ proyecto\ final\proyecto-final\workspace\potenciostato\example\inc/hid_generic.h \
  C:\repo\ proyecto\ final\proyecto-final\workspace\potenciostato\example\inc/app_usbd_cfg.h \
  C:\repo\ proyecto\ final\proyecto-final\workspace\potenciostato\example\inc/defines.h \
+ C:\repo\ proyecto\ final\proyecto-final\workspace\potenciostato\example\inc/constantes.h \
  C:\repo\ proyecto\ final\proyecto-final\workspace\potenciostato\example\inc/setup.h
 
 C:\repo\ proyecto\ final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\inc/board.h:
@@ -210,5 +211,7 @@ C:\repo\ proyecto\ final\proyecto-final\workspace\potenciostato\example\inc/hid_
 C:\repo\ proyecto\ final\proyecto-final\workspace\potenciostato\example\inc/app_usbd_cfg.h:
 
 C:\repo\ proyecto\ final\proyecto-final\workspace\potenciostato\example\inc/defines.h:
+
+C:\repo\ proyecto\ final\proyecto-final\workspace\potenciostato\example\inc/constantes.h:
 
 C:\repo\ proyecto\ final\proyecto-final\workspace\potenciostato\example\inc/setup.h:

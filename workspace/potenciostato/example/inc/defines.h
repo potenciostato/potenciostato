@@ -28,8 +28,8 @@
 #define PUERTO(X)             X
 #define PIN(X)                 X
 
-#define NUMERO_MUESTRAS     60
-#define DMA_SIZE            60
+#define NUMERO_MUESTRAS     120
+#define DMA_SIZE            120
 #define FMAX                880
 
 #define PRIMER_CUADRANTE 	15

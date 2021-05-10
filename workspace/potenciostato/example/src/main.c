@@ -21,6 +21,7 @@
 #include "hid_generic.h"
 
 #include <defines.h>
+#include <constantes.h>
 #include <setup.h>
 
 /*****************************************************************************
@@ -51,6 +52,7 @@ xQueueHandle xQTqueue,xACDqueue,xOPCodequeue;
 xSemaphoreHandle slectura_ok;
 xQueueHandle qUSBin, qUSBout, datoADC;
 
+DMA_TransferDescriptor_t DMA_LLI_buffer;
 
 #define InitMeasure "001"
 #define AbortMeasurement "002"
@@ -250,9 +252,28 @@ char BufferOutSTR[] = "0000000000000000";
 /* DAC parpadeo cada 0.1s */
 static void vDACTask(void *pvParameters) {
 	bool LedState = false;
-	int inDAC = 0;
+	int inDAC = 0, SG_OK = 0;
 	static portBASE_TYPE xHigherPriorityTaskWoken;
+	uint16_t tabla_salida [ NUMERO_MUESTRAS ], i;
+	uint16_t FREC = 1000, AMPLITUD = 1;
+	uint32_t CLOCK_DAC_HZ, timeoutDMA, Canal_Libre;
+	CLOCK_DAC_HZ = Chip_Clock_GetSystemClockRate()/4;
+	for ( i = 0 ; i < NUMERO_MUESTRAS ; i++ ) {
+						tabla_salida[i]= AMPLITUD * tabla_tria[i];
+						}
 
+	timeoutDMA = CLOCK_DAC_HZ / ( FREC * NUMERO_MUESTRAS );
+
+	Chip_GPDMA_PrepareDescriptor ( LPC_GPDMA , &DMA_LLI_buffer  , (uint32_t) tabla_salida ,
+									GPDMA_CONN_DAC , DMA_SIZE , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA , &DMA_LLI_buffer );
+
+	Canal_Libre = Chip_GPDMA_GetFreeChannel ( LPC_GPDMA , 0 );
+	Chip_DAC_SetDMATimeOut(LPC_DAC, timeoutDMA);
+	Chip_DAC_ConfigDAConverterControl(LPC_DAC, DAC_DBLBUF_ENA | DAC_CNT_ENA | DAC_DMA_ENA);
+	Chip_GPDMA_Init ( LPC_GPDMA );
+	//Chip_GPDMA_Stop(LPC_GPDMA, Canal_Libre);
+	SG_OK = Chip_GPDMA_SGTransfer (LPC_GPDMA , Canal_Libre ,
+								&DMA_LLI_buffer , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA);
 
 	while (1)	{
 		Board_LED_Set(0, LedState);
@@ -284,6 +305,9 @@ static void vADCTask(void *pvParameters) {
 	timerFreq = Chip_Clock_GetSystemClockRate()/4;
 	NVIC_ClearPendingIRQ(ADC_IRQn);
 	NVIC_EnableIRQ(ADC_IRQn);
+
+
+
 	while (1) {
 
 		DEBUGOUT("ADC: Voy a tomar el semaforo\n");
@@ -303,16 +327,15 @@ static void vADCTask(void *pvParameters) {
 		xQueueSendToBack(xACDqueue,&ADCBuff,0);
 		//le indico a la uart que debe mandar info
 		xSemaphoreGive( UARTSemMtx);
-		/*
+
+
 		NVIC_EnableIRQ(ADC_IRQn);
 		Chip_ADC_SetStartMode(LPC_ADC,ADC_START_NOW,ADC_TRIGGERMODE_RISING);
 		xSemaphoreTake(slectura_ok, ( portTickType ) portMAX_DELAY);
 		Chip_ADC_ReadValue(LPC_ADC,ADC_CH0,&lecturaADC);
-		duty =(uint32_t)lecturaADC*100/4096;
-		Chip_TIMER_SetMatch(LPC_TIMER0, 0, (uint32_t)(timerFreq-(timerFreq*duty)/100)/100);
 		xQueueSend( datoADC, ( void * ) &lecturaADC, ( portTickType ) 0 );
 		vTaskDelay(configTICK_RATE_HZ / 4);
-		*/
+
 
 		/* parpadeo cada 1s*/
 //		vTaskDelay(1000/portTICK_RATE_MS);

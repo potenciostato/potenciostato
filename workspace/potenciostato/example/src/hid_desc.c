@@ -139,14 +139,14 @@ ALIGNED(4) uint8_t USB_FsConfigDescriptor[] = {
 	USB_ENDPOINT_DESCRIPTOR_TYPE,	/* bDescriptorType */
 	HID_EP_IN,						/* bEndpointAddress */
 	USB_ENDPOINT_TYPE_INTERRUPT,	/* bmAttributes */
-	WBVAL(0x0006),					/* wMaxPacketSize */
+	WBVAL(0x0008),					/* wMaxPacketSize */
 	0x20,		/* 16ms */          /* bInterval */
 	/* Endpoint, HID Interrupt Out */
 	USB_ENDPOINT_DESC_SIZE,			/* bLength */
 	USB_ENDPOINT_DESCRIPTOR_TYPE,	/* bDescriptorType */
 	HID_EP_OUT,						/* bEndpointAddress */
 	USB_ENDPOINT_TYPE_INTERRUPT,	/* bmAttributes */
-	WBVAL(0x0006),					/* wMaxPacketSize */
+	WBVAL(0x0008),					/* wMaxPacketSize */
 	0x20,							/* bInterval: 16ms */
 	/* Terminator */
 	0								/* bLength */
