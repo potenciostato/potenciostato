@@ -497,26 +497,27 @@ void MainWindow::on_Conectar_Bt_clicked()
 
     libusb_claim_interface(dev_handle, 0);
 
-    unsigned char buffer[64] = {0x0};
-    unsigned char recv_data[64] = {0x0};
-    buffer[0] = 0xA;
+    unsigned char buffer[8] = {0x0};
+    unsigned char recv_data[8] = {0x0};
+    buffer[0] = 0xA; //0b00001010
     qDebug() << "antes de recibir buffer" << buffer[0];
     qDebug() << "antes de recibir: recv_data" << recv_data[0];
     int len;
     int send_ret, recv_ret;
 
-    send_ret = libusb_interrupt_transfer(dev_handle, 0x02, buffer, (sizeof(buffer)) * 1, &len, 1000);
-    recv_ret = libusb_interrupt_transfer(dev_handle, 0x82, recv_data, (sizeof(recv_data)) * 1, &len, 1000);
+    send_ret = libusb_interrupt_transfer(dev_handle, 0x01, buffer, (sizeof(buffer)) * 8, &len, 1000);
+    recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * 8, &len, 1000);
     //int
     //int recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * 64, &len, 1000);
 
     qDebug() << "codigo envio" << send_ret;
     qDebug() << "dato enviado" << buffer[0];
     qDebug() << "codigo recepcion" << recv_ret;
-    qDebug() << "dato recibido" << recv_data[0];
+    qDebug() << "dato recibido[0]" << recv_data[0];
+    qDebug() << "dato recibido[2]" << recv_data[2];
 
-    Enviados = libusb_interrupt_transfer(dev_handle , 0x02 , TxData , (sizeof (TxData)) * 4, &actual_length , 1000);
-    libusb_interrupt_transfer(dev_handle , 0x82 , RxData , (sizeof (RxData)) * 4, &actual_length , 1000);
+    Enviados = libusb_interrupt_transfer(dev_handle , 0x01 , TxData , (sizeof (TxData)) * 4, &actual_length , 1000);
+    libusb_interrupt_transfer(dev_handle , 0x81 , RxData , (sizeof (RxData)) * 4, &actual_length , 1000);
 
     //Datos = 0;
 

@@ -4,12 +4,12 @@
 #include "libusb.h"
 
 //LPC1769
-//#define MY_VENDOR  ((uint16_t) 0x1FC9)
-//#define MY_PRODUCT ((uint16_t) 0x0081)
+#define MY_VENDOR  ((uint16_t) 0x1FC9)
+#define MY_PRODUCT ((uint16_t) 0x0081)
 
 //CH340
-#define MY_VENDOR  ((uint16_t) 0x1a86)
-#define MY_PRODUCT ((uint16_t) 0x7523)
+//#define MY_VENDOR  ((uint16_t) 0x1a86)
+//#define MY_PRODUCT ((uint16_t) 0x7523)
 
 libusb_device **devs;
 libusb_context *ctx = NULL;

@@ -120,9 +120,6 @@ static ErrorCode_t HID_Ep_Hdlr(USBD_HANDLE_T hUsb, void *data, uint32_t event)
 	switch (event) {
 	case USB_EVT_IN:
 		/* last report is successfully sent. Do something... */
-		// Aca se puede verificar que haya llegado bien
-		paquete[5] = 3;
-		USBD_API->hw->WriteEP(hUsb, pHidCtrl->epin_adr, paquete, 8);
 		break;
 
 	case USB_EVT_OUT:
@@ -135,7 +132,10 @@ static ErrorCode_t HID_Ep_Hdlr(USBD_HANDLE_T hUsb, void *data, uint32_t event)
 
 		// si el codigo escrito coincide con el de mandar datos
 		//xQueueReceive(qUSBin, paquete, 0);
-		USBD_API->hw->WriteEP(hUsb, pHidCtrl->epin_adr, loopback_report, 1);
+		//USBD_API->hw->WriteEP(hUsb, pHidCtrl->epin_adr, loopback_report, 8);
+
+		paquete[2] = 3;
+		USBD_API->hw->WriteEP(hUsb, pHidCtrl->epin_adr, paquete, 8);
 		break;
 	}
 	return LPC_OK;
