@@ -1267,4 +1267,20 @@ Wire Wire Line
 	6850 5050 5750 5050
 Wire Wire Line
 	5750 5050 5750 5350
+Text Notes 2200 2700 0    50   ~ 0
+Salida DAC uC de 0 a 3V\nSalida módulo amplificador:\n0V = VEE (-5V)\n1.5V = 0V\n3V = VCC (5V)
+Text Notes 1400 7050 0    50   ~ 0
+Salida electrodo: VEE<0<VCC\nEntrada ADC: 0 a 5V (eventualmente 0 a 3.3V)
+Text Notes 2550 4800 0    50   ~ 0
+Amplificador Tension Inversor con selector\nde ganancia y offset\n(AMP I2)
+Text Notes 4100 1450 0    50   ~ 0
+Amplificador Tension Inversor con selector\nde ganancia y offset\n(AMP T1)
+Text Notes 7500 2200 0    50   ~ 0
+Amplificador Tension Inversor con selector\nde ganancia y offset\n(AMP T2)
+Text Notes 1500 4450 0    50   ~ 0
+El offset de este amplificador se regulará para tener valor medio nulo
+Text Notes 8150 5400 0    50   ~ 0
+El offset de este amplificador se regulará para tener\nvalor medio igual a la mitad del rango del ADC (0 a 3.3V)
+Text Notes 3800 6650 0    50   ~ 0
+El offset de este amplificador se regulará para tener\nvalor medio igual a la mitad del rango del ADC (0 a 3.3V)
 $EndSCHEMATC
