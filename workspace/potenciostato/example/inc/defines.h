@@ -55,5 +55,4 @@
 #define ADC_SAMPL_FREC      50000
 
 
-
 #endif /* DEFINES_H_ */
