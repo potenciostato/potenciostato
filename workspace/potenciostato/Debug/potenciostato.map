@@ -114,6 +114,7 @@ xQTqueue            0x4               ./example/src/main.o
 SystemCoreClock     0x4               C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(chip_17xx_40xx.o)
 DMA_LLI_buffer      0x10              ./example/src/main.o
 slectura_ok         0x4               ./example/src/main.o
+qDAC                0x4               ./example/src/main.o
 xQueueRegistry      0x50              ./freertos/src/queue.o
 qUSBin              0x4               ./example/src/main.o
 xACDqueue           0x4               ./example/src/main.o
@@ -1325,8 +1326,6 @@ Discarded input sections
                 0x00000000        0x4 ./example/src/main.o
  .text.hostDispositivo
                 0x00000000       0x14 ./example/src/main.o
- .bss.xHigherPriorityTaskWoken.9552
-                0x00000000        0x4 ./example/src/main.o
  .debug_macro   0x00000000      0x880 ./example/src/main.o
  .debug_macro   0x00000000       0x22 ./example/src/main.o
  .debug_macro   0x00000000       0x87 ./example/src/main.o
@@ -2194,12 +2193,8 @@ Discarded input sections
  .bss           0x00000000        0x0 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
  .text.Chip_GPDMA_DeInit
                 0x00000000       0x18 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
- .text.Chip_GPDMA_Stop
-                0x00000000       0x68 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
  .text.Chip_GPDMA_Interrupt
                 0x00000000       0x6c C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
- .text.Chip_GPDMA_ClearIntPending
-                0x00000000       0x40 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
  .text.Chip_GPDMA_Transfer
                 0x00000000       0xf4 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
  .debug_macro   0x00000000      0x886 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
@@ -3091,7 +3086,7 @@ END GROUP
                 0x20084000                __top_RamAHB32 = 0x20084000
                 0x20084000                __top_RAM2 = 0x20084000
 
-.text           0x00000000     0x7dc0
+.text           0x00000000     0x7e80
  FILL mask 0xff
                 0x00000000                __vectors_start__ = ABSOLUTE (.)
  *(.isr_vector)
@@ -3100,16 +3095,16 @@ END GROUP
                 0x000000cc                . = ALIGN (0x4)
                 0x000000cc                __section_table_start = .
                 0x000000cc                __data_section_table = .
-                0x000000cc        0x4 LONG 0x7dc0 LOADADDR (.data)
+                0x000000cc        0x4 LONG 0x7e80 LOADADDR (.data)
                 0x000000d0        0x4 LONG 0x10000000 ADDR (.data)
                 0x000000d4        0x4 LONG 0xa0 SIZEOF (.data)
-                0x000000d8        0x4 LONG 0x7dc0 LOADADDR (.data_RAM2)
+                0x000000d8        0x4 LONG 0x7e80 LOADADDR (.data_RAM2)
                 0x000000dc        0x4 LONG 0x2007c000 ADDR (.data_RAM2)
                 0x000000e0        0x4 LONG 0x0 SIZEOF (.data_RAM2)
                 0x000000e4                __data_section_table_end = .
                 0x000000e4                __bss_section_table = .
                 0x000000e4        0x4 LONG 0x100000a0 ADDR (.bss)
-                0x000000e8        0x4 LONG 0x2f0 SIZEOF (.bss)
+                0x000000e8        0x4 LONG 0x2f4 SIZEOF (.bss)
                 0x000000ec        0x4 LONG 0x2007c000 ADDR (.bss_RAM2)
                 0x000000f0        0x4 LONG 0x0 SIZEOF (.bss_RAM2)
                 0x000000f4                __bss_section_table_end = .
@@ -3341,671 +3336,676 @@ END GROUP
                 0x00001d18       0x34 ./example/src/main.o
  .text.NVIC_ClearPendingIRQ
                 0x00001d4c       0x34 ./example/src/main.o
- .text.Chip_DAC_ConfigDAConverterControl
-                0x00001d80       0x28 ./example/src/main.o
  .text.Chip_DAC_SetDMATimeOut
-                0x00001da8       0x1c ./example/src/main.o
+                0x00001d80       0x1c ./example/src/main.o
  .text.usb_pin_clk_init
-                0x00001dc4       0x14 ./example/src/main.o
+                0x00001d9c       0x14 ./example/src/main.o
  .text.USB_IRQHandler
-                0x00001dd8       0x20 ./example/src/main.o
-                0x00001dd8                USB_IRQHandler
+                0x00001db0       0x20 ./example/src/main.o
+                0x00001db0                USB_IRQHandler
  .text.ADC_IRQHandler
-                0x00001df8       0x40 ./example/src/main.o
-                0x00001df8                ADC_IRQHandler
+                0x00001dd0       0x40 ./example/src/main.o
+                0x00001dd0                ADC_IRQHandler
  .text.vInicializarUSB
-                0x00001e38       0xcc ./example/src/main.o
+                0x00001e10       0xcc ./example/src/main.o
  .text.vINTSimTask
-                0x00001f04       0xb8 ./example/src/main.o
+                0x00001edc       0xb8 ./example/src/main.o
  .text.vUSBTask
-                0x00001fbc      0x154 ./example/src/main.o
+                0x00001f94      0x178 ./example/src/main.o
  .text.vDACTask
-                0x00002110      0x13c ./example/src/main.o
+                0x0000210c      0x168 ./example/src/main.o
  .text.vADCTask
-                0x0000224c       0xf4 ./example/src/main.o
- .text.main     0x00002340      0x1c8 ./example/src/main.o
-                0x00002340                main
+                0x00002274       0xf4 ./example/src/main.o
+ .text.main     0x00002368      0x1dc ./example/src/main.o
+                0x00002368                main
  .text.Chip_IOCON_Init
-                0x00002508       0x18 ./example/src/setup.o
+                0x00002544       0x18 ./example/src/setup.o
  .text.Chip_DAC_ConfigDAConverterControl
-                0x00002520       0x28 ./example/src/setup.o
+                0x0000255c       0x28 ./example/src/setup.o
  .text.Chip_GPIO_Init
-                0x00002548       0x18 ./example/src/setup.o
+                0x00002584       0x18 ./example/src/setup.o
  .text.prvSetupHardware
-                0x00002560       0x8c ./example/src/setup.o
-                0x00002560                prvSetupHardware
+                0x0000259c       0x8c ./example/src/setup.o
+                0x0000259c                prvSetupHardware
  .text.SystemInit
-                0x000025ec       0x24 ./example/src/sysinit.o
-                0x000025ec                SystemInit
+                0x00002628       0x24 ./example/src/sysinit.o
+                0x00002628                SystemInit
  .text.Chip_IOCON_Init
-                0x00002610       0x18 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
+                0x0000264c       0x18 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
  .text.Chip_GPIO_Init
-                0x00002628       0x18 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
+                0x00002664       0x18 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
  .text.Chip_GPIO_SetPinState
-                0x00002640       0x68 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
+                0x0000267c       0x68 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
  .text.Chip_GPIO_WritePortBit
-                0x000026a8       0x2c C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
+                0x000026e4       0x2c C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
  .text.Chip_GPIO_SetPinDIROutput
-                0x000026d4       0x38 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
+                0x00002710       0x38 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
  .text.Chip_GPIO_SetPinDIRInput
-                0x0000270c       0x3c C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
+                0x00002748       0x3c C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
  .text.Chip_GPIO_SetPinDIR
-                0x00002748       0x44 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
+                0x00002784       0x44 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
  .text.Chip_GPIO_WriteDirBit
-                0x0000278c       0x30 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
+                0x000027c8       0x30 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
  .text.Chip_UART_SendByte
-                0x000027bc       0x1c C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
+                0x000027f8       0x1c C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
  .text.Chip_UART_ConfigData
-                0x000027d8       0x1c C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
+                0x00002814       0x1c C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
  .text.Chip_UART_ReadLineStatus
-                0x000027f4       0x18 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
+                0x00002830       0x18 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
  .text.__sys_write
-                0x0000280c       0x38 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
-                0x0000280c                __sys_write
+                0x00002848       0x38 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
+                0x00002848                __sys_write
  .text.Board_LED_Init
-                0x00002844       0x18 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
+                0x00002880       0x18 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
  .text.Board_UART_Init
-                0x0000285c       0x14 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
-                0x0000285c                Board_UART_Init
+                0x00002898       0x14 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
+                0x00002898                Board_UART_Init
  .text.Board_Debug_Init
-                0x00002870       0x30 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
-                0x00002870                Board_Debug_Init
+                0x000028ac       0x30 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
+                0x000028ac                Board_Debug_Init
  .text.Board_UARTPutChar
-                0x000028a0       0x34 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
-                0x000028a0                Board_UARTPutChar
+                0x000028dc       0x34 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
+                0x000028dc                Board_UARTPutChar
  .text.Board_LED_Set
-                0x000028d4       0x30 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
-                0x000028d4                Board_LED_Set
+                0x00002910       0x30 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
+                0x00002910                Board_LED_Set
  .text.Board_Init
-                0x00002904       0x24 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
-                0x00002904                Board_Init
+                0x00002940       0x24 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
+                0x00002940                Board_Init
  .text.Board_USBD_Init
-                0x00002928       0x60 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
-                0x00002928                Board_USBD_Init
+                0x00002964       0x60 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
+                0x00002964                Board_USBD_Init
  .text.Chip_SYSCTL_SetFLASHAccess
-                0x00002988       0x30 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board_sysinit.o)
+                0x000029c4       0x30 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board_sysinit.o)
  .text.Board_SetupMuxing
-                0x000029b8       0x1c C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board_sysinit.o)
-                0x000029b8                Board_SetupMuxing
+                0x000029f4       0x1c C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board_sysinit.o)
+                0x000029f4                Board_SetupMuxing
  .text.Board_SetupClocking
-                0x000029d4       0x14 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board_sysinit.o)
-                0x000029d4                Board_SetupClocking
+                0x00002a10       0x14 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board_sysinit.o)
+                0x00002a10                Board_SetupClocking
  .text.Board_SystemInit
-                0x000029e8       0x10 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board_sysinit.o)
-                0x000029e8                Board_SystemInit
+                0x00002a24       0x10 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board_sysinit.o)
+                0x00002a24                Board_SystemInit
  .text.getFullConvClk
-                0x000029f8       0x10 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(adc_17xx_40xx.o)
+                0x00002a34       0x10 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(adc_17xx_40xx.o)
  .text.getClkDiv
-                0x00002a08       0x4c C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(adc_17xx_40xx.o)
+                0x00002a44       0x4c C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(adc_17xx_40xx.o)
  .text.setStartMode
-                0x00002a54       0x2c C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(adc_17xx_40xx.o)
-                0x00002a54                setStartMode
+                0x00002a90       0x2c C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(adc_17xx_40xx.o)
+                0x00002a90                setStartMode
  .text.readAdcVal
-                0x00002a80       0x40 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(adc_17xx_40xx.o)
-                0x00002a80                readAdcVal
+                0x00002abc       0x40 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(adc_17xx_40xx.o)
+                0x00002abc                readAdcVal
  .text.Chip_ADC_Init
-                0x00002ac0       0x74 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(adc_17xx_40xx.o)
-                0x00002ac0                Chip_ADC_Init
+                0x00002afc       0x74 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(adc_17xx_40xx.o)
+                0x00002afc                Chip_ADC_Init
  .text.Chip_ADC_ReadValue
-                0x00002b34       0x24 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(adc_17xx_40xx.o)
-                0x00002b34                Chip_ADC_ReadValue
+                0x00002b70       0x24 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(adc_17xx_40xx.o)
+                0x00002b70                Chip_ADC_ReadValue
  .text.Chip_ADC_Int_SetChannelCmd
-                0x00002b58       0x48 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(adc_17xx_40xx.o)
-                0x00002b58                Chip_ADC_Int_SetChannelCmd
+                0x00002b94       0x48 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(adc_17xx_40xx.o)
+                0x00002b94                Chip_ADC_Int_SetChannelCmd
  .text.Chip_ADC_SetStartMode
-                0x00002ba0       0x50 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(adc_17xx_40xx.o)
-                0x00002ba0                Chip_ADC_SetStartMode
+                0x00002bdc       0x50 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(adc_17xx_40xx.o)
+                0x00002bdc                Chip_ADC_SetStartMode
  .text.Chip_ADC_SetSampleRate
-                0x00002bf0       0x50 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(adc_17xx_40xx.o)
-                0x00002bf0                Chip_ADC_SetSampleRate
+                0x00002c2c       0x50 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(adc_17xx_40xx.o)
+                0x00002c2c                Chip_ADC_SetSampleRate
  .text.Chip_ADC_EnableChannel
-                0x00002c40       0x54 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(adc_17xx_40xx.o)
-                0x00002c40                Chip_ADC_EnableChannel
+                0x00002c7c       0x54 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(adc_17xx_40xx.o)
+                0x00002c7c                Chip_ADC_EnableChannel
  .text.Chip_ADC_SetBurstCmd
-                0x00002c94       0x3c C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(adc_17xx_40xx.o)
-                0x00002c94                Chip_ADC_SetBurstCmd
+                0x00002cd0       0x3c C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(adc_17xx_40xx.o)
+                0x00002cd0                Chip_ADC_SetBurstCmd
  .text.Chip_Clock_IsUSBPLLLocked
-                0x00002cd0       0x24 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(chip_17xx_40xx.o)
+                0x00002d0c       0x24 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(chip_17xx_40xx.o)
  .text.Chip_Clock_IsUSBPLLConnected
-                0x00002cf4       0x24 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(chip_17xx_40xx.o)
+                0x00002d30       0x24 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(chip_17xx_40xx.o)
  .text.SystemCoreClockUpdate
-                0x00002d18       0x18 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(chip_17xx_40xx.o)
-                0x00002d18                SystemCoreClockUpdate
+                0x00002d54       0x18 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(chip_17xx_40xx.o)
+                0x00002d54                SystemCoreClockUpdate
  .text.Chip_USB_Init
-                0x00002d30       0x4c C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(chip_17xx_40xx.o)
-                0x00002d30                Chip_USB_Init
+                0x00002d6c       0x4c C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(chip_17xx_40xx.o)
+                0x00002d6c                Chip_USB_Init
  .text.Chip_Clock_IsMainPLLEnabled
-                0x00002d7c       0x24 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
+                0x00002db8       0x24 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
  .text.Chip_Clock_IsMainPLLConnected
-                0x00002da0       0x24 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
+                0x00002ddc       0x24 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
  .text.Chip_Clock_FeedPLL
-                0x00002dc4       0x34 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
+                0x00002e00       0x34 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
  .text.Chip_Clock_GetMainPLLSource
-                0x00002df8       0x20 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
+                0x00002e34       0x20 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
  .text.Chip_Clock_GetMainOscRate
-                0x00002e18       0x14 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
+                0x00002e54       0x14 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
  .text.Chip_Clock_GetIntOscRate
-                0x00002e2c       0x14 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
+                0x00002e68       0x14 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
  .text.Chip_Clock_GetRTCOscRate
-                0x00002e40       0x14 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
+                0x00002e7c       0x14 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
  .text.Chip_Clock_GetMainPLLInClockRate
-                0x00002e54       0x10 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
+                0x00002e90       0x10 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
  .text.Chip_Clock_EnablePLL
-                0x00002e64       0x44 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
-                0x00002e64                Chip_Clock_EnablePLL
+                0x00002ea0       0x44 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
+                0x00002ea0                Chip_Clock_EnablePLL
  .text.Chip_Clock_DisablePLL
-                0x00002ea8       0x48 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
-                0x00002ea8                Chip_Clock_DisablePLL
+                0x00002ee4       0x48 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
+                0x00002ee4                Chip_Clock_DisablePLL
  .text.Chip_Clock_SetupPLL
-                0x00002ef0       0x5c C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
-                0x00002ef0                Chip_Clock_SetupPLL
+                0x00002f2c       0x5c C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
+                0x00002f2c                Chip_Clock_SetupPLL
  .text.Chip_Clock_EnablePeriphClock
-                0x00002f4c       0x34 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
-                0x00002f4c                Chip_Clock_EnablePeriphClock
+                0x00002f88       0x34 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
+                0x00002f88                Chip_Clock_EnablePeriphClock
  .text.Chip_Clock_GetCPUClockSource
-                0x00002f80       0x24 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
-                0x00002f80                Chip_Clock_GetCPUClockSource
+                0x00002fbc       0x24 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
+                0x00002fbc                Chip_Clock_GetCPUClockSource
  .text.Chip_Clock_SetCPUClockDiv
-                0x00002fa4       0x20 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
-                0x00002fa4                Chip_Clock_SetCPUClockDiv
+                0x00002fe0       0x20 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
+                0x00002fe0                Chip_Clock_SetCPUClockDiv
  .text.Chip_Clock_GetCPUClockDiv
-                0x00002fc4       0x1c C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
-                0x00002fc4                Chip_Clock_GetCPUClockDiv
+                0x00003000       0x1c C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
+                0x00003000                Chip_Clock_GetCPUClockDiv
  .text.Chip_Clock_GetPCLKDiv
-                0x00002fe0       0x8c C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
-                0x00002fe0                Chip_Clock_GetPCLKDiv
+                0x0000301c       0x8c C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
+                0x0000301c                Chip_Clock_GetPCLKDiv
  .text.Chip_Clock_GetSYSCLKRate
-                0x0000306c       0x34 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
-                0x0000306c                Chip_Clock_GetSYSCLKRate
+                0x000030a8       0x34 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
+                0x000030a8                Chip_Clock_GetSYSCLKRate
  .text.Chip_Clock_GetMainPLLOutClockRate
-                0x000030a0       0x54 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
-                0x000030a0                Chip_Clock_GetMainPLLOutClockRate
+                0x000030dc       0x54 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
+                0x000030dc                Chip_Clock_GetMainPLLOutClockRate
  .text.Chip_Clock_GetMainClockRate
-                0x000030f4       0x28 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
-                0x000030f4                Chip_Clock_GetMainClockRate
+                0x00003130       0x28 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
+                0x00003130                Chip_Clock_GetMainClockRate
  .text.Chip_Clock_GetSystemClockRate
-                0x0000311c       0x18 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
-                0x0000311c                Chip_Clock_GetSystemClockRate
+                0x00003158       0x18 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
+                0x00003158                Chip_Clock_GetSystemClockRate
  .text.Chip_Clock_GetPeripheralClockRate
-                0x00003134       0x28 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
-                0x00003134                Chip_Clock_GetPeripheralClockRate
+                0x00003170       0x28 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
+                0x00003170                Chip_Clock_GetPeripheralClockRate
  .text.Chip_DAC_Init
-                0x0000315c       0x18 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(dac_17xx_40xx.o)
-                0x0000315c                Chip_DAC_Init
+                0x00003198       0x18 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(dac_17xx_40xx.o)
+                0x00003198                Chip_DAC_Init
  .text.Chip_DAC_SetBias
-                0x00003174       0x34 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(dac_17xx_40xx.o)
-                0x00003174                Chip_DAC_SetBias
+                0x000031b0       0x34 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(dac_17xx_40xx.o)
+                0x000031b0                Chip_DAC_SetBias
  .text.configDMAMux
-                0x000031a8       0x64 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
+                0x000031e4       0x64 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
  .text.makeCtrlWord
-                0x0000320c      0x124 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
-                0x0000320c                makeCtrlWord
+                0x00003248      0x124 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
+                0x00003248                makeCtrlWord
  .text.setupChannel
-                0x00003330       0xbc C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
-                0x00003330                setupChannel
+                0x0000336c       0xbc C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
+                0x0000336c                setupChannel
  .text.Chip_GPDMA_Init
-                0x000033ec       0x64 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
-                0x000033ec                Chip_GPDMA_Init
+                0x00003428       0x64 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
+                0x00003428                Chip_GPDMA_Init
+ .text.Chip_GPDMA_Stop
+                0x0000348c       0x68 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
+                0x0000348c                Chip_GPDMA_Stop
  .text.Chip_GPDMA_InitChannelCfg
-                0x00003450       0xe0 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
-                0x00003450                Chip_GPDMA_InitChannelCfg
+                0x000034f4       0xe0 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
+                0x000034f4                Chip_GPDMA_InitChannelCfg
  .text.Chip_GPDMA_IntGetStatus
-                0x00003530       0xbc C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
-                0x00003530                Chip_GPDMA_IntGetStatus
+                0x000035d4       0xbc C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
+                0x000035d4                Chip_GPDMA_IntGetStatus
+ .text.Chip_GPDMA_ClearIntPending
+                0x00003690       0x40 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
+                0x00003690                Chip_GPDMA_ClearIntPending
  .text.Chip_GPDMA_ChannelCmd
-                0x000035ec       0x48 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
-                0x000035ec                Chip_GPDMA_ChannelCmd
+                0x000036d0       0x48 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
+                0x000036d0                Chip_GPDMA_ChannelCmd
  .text.Chip_GPDMA_PrepareDescriptor
-                0x00003634       0xc4 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
-                0x00003634                Chip_GPDMA_PrepareDescriptor
+                0x00003718       0xc4 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
+                0x00003718                Chip_GPDMA_PrepareDescriptor
  .text.Chip_GPDMA_SGTransfer
-                0x000036f8       0xd4 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
-                0x000036f8                Chip_GPDMA_SGTransfer
+                0x000037dc       0xd4 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
+                0x000037dc                Chip_GPDMA_SGTransfer
  .text.Chip_GPDMA_GetFreeChannel
-                0x000037cc       0x58 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
-                0x000037cc                Chip_GPDMA_GetFreeChannel
+                0x000038b0       0x58 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
+                0x000038b0                Chip_GPDMA_GetFreeChannel
  .text.Chip_IOCON_PinMuxSet
-                0x00003824       0x38 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(iocon_17xx_40xx.o)
-                0x00003824                Chip_IOCON_PinMuxSet
+                0x00003908       0x38 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(iocon_17xx_40xx.o)
+                0x00003908                Chip_IOCON_PinMuxSet
  .text.Chip_IOCON_PinMux
-                0x0000385c       0x94 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(iocon_17xx_40xx.o)
-                0x0000385c                Chip_IOCON_PinMux
+                0x00003940       0x94 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(iocon_17xx_40xx.o)
+                0x00003940                Chip_IOCON_PinMux
  .text.Chip_IOCON_SetPinMuxing
-                0x000038f0       0x64 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(iocon_17xx_40xx.o)
-                0x000038f0                Chip_IOCON_SetPinMuxing
+                0x000039d4       0x64 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(iocon_17xx_40xx.o)
+                0x000039d4                Chip_IOCON_SetPinMuxing
  .text.Chip_Clock_IsMainPLLEnabled
-                0x00003954       0x24 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(sysinit_17xx_40xx.o)
+                0x00003a38       0x24 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(sysinit_17xx_40xx.o)
  .text.Chip_Clock_IsMainPLLLocked
-                0x00003978       0x24 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(sysinit_17xx_40xx.o)
+                0x00003a5c       0x24 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(sysinit_17xx_40xx.o)
  .text.Chip_Clock_IsMainPLLConnected
-                0x0000399c       0x24 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(sysinit_17xx_40xx.o)
+                0x00003a80       0x24 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(sysinit_17xx_40xx.o)
  .text.Chip_Clock_EnableCrystal
-                0x000039c0       0x20 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(sysinit_17xx_40xx.o)
+                0x00003aa4       0x20 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(sysinit_17xx_40xx.o)
  .text.Chip_Clock_IsCrystalEnabled
-                0x000039e0       0x24 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(sysinit_17xx_40xx.o)
+                0x00003ac4       0x24 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(sysinit_17xx_40xx.o)
  .text.Chip_Clock_SetMainPLLSource
-                0x00003a04       0x20 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(sysinit_17xx_40xx.o)
+                0x00003ae8       0x20 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(sysinit_17xx_40xx.o)
  .text.Chip_SetupXtalClocking
-                0x00003a24       0x90 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(sysinit_17xx_40xx.o)
-                0x00003a24                Chip_SetupXtalClocking
+                0x00003b08       0x90 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(sysinit_17xx_40xx.o)
+                0x00003b08                Chip_SetupXtalClocking
  .text.Chip_UART_SetupFIFOS
-                0x00003ab4       0x1c C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(uart_17xx_40xx.o)
+                0x00003b98       0x1c C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(uart_17xx_40xx.o)
  .text.Chip_UART_ConfigData
-                0x00003ad0       0x1c C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(uart_17xx_40xx.o)
+                0x00003bb4       0x1c C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(uart_17xx_40xx.o)
  .text.Chip_UART_EnableDivisorAccess
-                0x00003aec       0x20 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(uart_17xx_40xx.o)
+                0x00003bd0       0x20 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(uart_17xx_40xx.o)
  .text.Chip_UART_DisableDivisorAccess
-                0x00003b0c       0x20 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(uart_17xx_40xx.o)
+                0x00003bf0       0x20 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(uart_17xx_40xx.o)
  .text.Chip_UART_SetDivisorLatches
-                0x00003b2c       0x28 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(uart_17xx_40xx.o)
+                0x00003c10       0x28 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(uart_17xx_40xx.o)
  .text.Chip_UART_GetClockIndex
-                0x00003b54       0x50 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(uart_17xx_40xx.o)
+                0x00003c38       0x50 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(uart_17xx_40xx.o)
  .text.Chip_UART_GetClkIndex
-                0x00003ba4       0x50 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(uart_17xx_40xx.o)
+                0x00003c88       0x50 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(uart_17xx_40xx.o)
  .text.Chip_UART_Init
-                0x00003bf4       0x78 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(uart_17xx_40xx.o)
-                0x00003bf4                Chip_UART_Init
+                0x00003cd8       0x78 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(uart_17xx_40xx.o)
+                0x00003cd8                Chip_UART_Init
  .text.Chip_UART_TXEnable
-                0x00003c6c       0x18 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(uart_17xx_40xx.o)
-                0x00003c6c                Chip_UART_TXEnable
+                0x00003d50       0x18 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(uart_17xx_40xx.o)
+                0x00003d50                Chip_UART_TXEnable
  .text.Chip_UART_TXDisable
-                0x00003c84       0x18 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(uart_17xx_40xx.o)
-                0x00003c84                Chip_UART_TXDisable
+                0x00003d68       0x18 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(uart_17xx_40xx.o)
+                0x00003d68                Chip_UART_TXDisable
  .text.Chip_UART_SetBaud
-                0x00003c9c       0x64 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(uart_17xx_40xx.o)
-                0x00003c9c                Chip_UART_SetBaud
- .text.EPAdr    0x00003d00       0x10 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
-                0x00003d00                EPAdr
- .text.hwWrCmd  0x00003d10       0x10 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
-                0x00003d10                hwWrCmd
+                0x00003d80       0x64 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(uart_17xx_40xx.o)
+                0x00003d80                Chip_UART_SetBaud
+ .text.EPAdr    0x00003de4       0x10 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
+                0x00003de4                EPAdr
+ .text.hwWrCmd  0x00003df4       0x10 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
+                0x00003df4                hwWrCmd
  .text.hwWrCmdDat
-                0x00003d20       0x16 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
-                0x00003d20                hwWrCmdDat
+                0x00003e04       0x16 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
+                0x00003e04                hwWrCmdDat
  .text.hwWrCmdEP
-                0x00003d36       0x24 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
-                0x00003d36                hwWrCmdEP
+                0x00003e1a       0x24 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
+                0x00003e1a                hwWrCmdEP
  .text.hwRdCmdDat
-                0x00003d5a       0x12 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
-                0x00003d5a                hwRdCmdDat
+                0x00003e3e       0x12 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
+                0x00003e3e                hwRdCmdDat
  .text.hwUSB_GetMemSize
-                0x00003d6c        0x6 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
-                0x00003d6c                hwUSB_GetMemSize
- *fill*         0x00003d72        0x2 ff
+                0x00003e50        0x6 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
+                0x00003e50                hwUSB_GetMemSize
+ *fill*         0x00003e56        0x2 ff
  .text.hwUSB_Connect
-                0x00003d74       0x1c C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
-                0x00003d74                hwUSB_Connect
+                0x00003e58       0x1c C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
+                0x00003e58                hwUSB_Connect
  .text.hwUSB_Reset
-                0x00003d90       0x30 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
-                0x00003d90                hwUSB_Reset
+                0x00003e74       0x30 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
+                0x00003e74                hwUSB_Reset
  .text.hwUSB_WakeUp
-                0x00003dc0       0x20 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
-                0x00003dc0                hwUSB_WakeUp
+                0x00003ea4       0x20 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
+                0x00003ea4                hwUSB_WakeUp
  .text.hwUSB_WakeUpCfg
-                0x00003de0        0x2 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
-                0x00003de0                hwUSB_WakeUpCfg
- *fill*         0x00003de2        0x2 ff
+                0x00003ec4        0x2 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
+                0x00003ec4                hwUSB_WakeUpCfg
+ *fill*         0x00003ec6        0x2 ff
  .text.hwUSB_SetAddress
-                0x00003de4       0x30 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
-                0x00003de4                hwUSB_SetAddress
+                0x00003ec8       0x30 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
+                0x00003ec8                hwUSB_SetAddress
  .text.hwUSB_Init
-                0x00003e14       0x84 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
-                0x00003e14                hwUSB_Init
+                0x00003ef8       0x84 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
+                0x00003ef8                hwUSB_Init
  .text.hwUSB_Configure
-                0x00003e98       0x34 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
-                0x00003e98                hwUSB_Configure
+                0x00003f7c       0x34 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
+                0x00003f7c                hwUSB_Configure
  .text.hwUSB_ConfigEP
-                0x00003ecc       0x32 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
-                0x00003ecc                hwUSB_ConfigEP
+                0x00003fb0       0x32 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
+                0x00003fb0                hwUSB_ConfigEP
  .text.hwUSB_DirCtrlEP
-                0x00003efe        0x2 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
-                0x00003efe                hwUSB_DirCtrlEP
+                0x00003fe2        0x2 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
+                0x00003fe2                hwUSB_DirCtrlEP
  .text.hwUSB_EnableEP
-                0x00003f00       0x24 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
-                0x00003f00                hwUSB_EnableEP
+                0x00003fe4       0x24 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
+                0x00003fe4                hwUSB_EnableEP
  .text.hwUSB_DisableEP
-                0x00003f24       0x28 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
-                0x00003f24                hwUSB_DisableEP
+                0x00004008       0x28 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
+                0x00004008                hwUSB_DisableEP
  .text.hwUSB_ResetEP
-                0x00003f4c       0x24 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
-                0x00003f4c                hwUSB_ResetEP
+                0x00004030       0x24 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
+                0x00004030                hwUSB_ResetEP
  .text.hwUSB_SetStallEP
-                0x00003f70       0x28 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
-                0x00003f70                hwUSB_SetStallEP
+                0x00004054       0x28 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
+                0x00004054                hwUSB_SetStallEP
  .text.hwUSB_ClrStallEP
-                0x00003f98       0x24 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
-                0x00003f98                hwUSB_ClrStallEP
+                0x0000407c       0x24 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
+                0x0000407c                hwUSB_ClrStallEP
  .text.hwUSB_EnableEvent
-                0x00003fbc       0xd8 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
-                0x00003fbc                hwUSB_EnableEvent
+                0x000040a0       0xd8 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
+                0x000040a0                hwUSB_EnableEvent
  .text.hwUSB_ReadEP
-                0x00004094       0x80 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
-                0x00004094                hwUSB_ReadEP
+                0x00004178       0x80 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
+                0x00004178                hwUSB_ReadEP
  .text.hwUSB_ForceFullSpeed
-                0x00004114        0x2 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
-                0x00004114                hwUSB_ForceFullSpeed
+                0x000041f8        0x2 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
+                0x000041f8                hwUSB_ForceFullSpeed
  .text.hwUSB_SetTestMode
-                0x00004116        0x4 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
-                0x00004116                hwUSB_SetTestMode
+                0x000041fa        0x4 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
+                0x000041fa                hwUSB_SetTestMode
  .text.hwUSB_ReadReqEP
-                0x0000411a        0x4 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
-                0x0000411a                hwUSB_ReadReqEP
+                0x000041fe        0x4 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
+                0x000041fe                hwUSB_ReadReqEP
  .text.hwUSB_ReadSetupPkt
-                0x0000411e        0x4 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
-                0x0000411e                hwUSB_ReadSetupPkt
- *fill*         0x00004122        0x2 ff
+                0x00004202        0x4 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
+                0x00004202                hwUSB_ReadSetupPkt
+ *fill*         0x00004206        0x2 ff
  .text.hwUSB_WriteEP
-                0x00004124       0x44 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
-                0x00004124                hwUSB_WriteEP
+                0x00004208       0x44 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
+                0x00004208                hwUSB_WriteEP
  .text.hwUSB_ISR
-                0x00004168      0x1a0 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
-                0x00004168                hwUSB_ISR
+                0x0000424c      0x1a0 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
+                0x0000424c                hwUSB_ISR
  .text.USB_ReqGetConfiguration
-                0x00004308       0x20 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
-                0x00004308                USB_ReqGetConfiguration
+                0x000043ec       0x20 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
+                0x000043ec                USB_ReqGetConfiguration
  .text.USBD_virt_to_phys
-                0x00004328        0x2 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
-                0x00004328                USBD_virt_to_phys
+                0x0000440c        0x2 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
+                0x0000440c                USBD_virt_to_phys
  .text.USBD_cache_flush
-                0x0000432a        0x2 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
-                0x0000432a                USBD_cache_flush
+                0x0000440e        0x2 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
+                0x0000440e                USBD_cache_flush
  .text.USB_ReqGetStatus
-                0x0000432c       0x8c C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
-                0x0000432c                USB_ReqGetStatus
+                0x00004410       0x8c C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
+                0x00004410                USB_ReqGetStatus
  .text.USB_ReqGetDescriptor
-                0x000043b8       0x84 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
-                0x000043b8                USB_ReqGetDescriptor
+                0x0000449c       0x84 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
+                0x0000449c                USB_ReqGetDescriptor
  .text.USB_ReqGetInterface
-                0x0000443c       0x34 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
-                0x0000443c                USB_ReqGetInterface
+                0x00004520       0x34 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
+                0x00004520                USB_ReqGetInterface
  .text.USB_ReqSetClrFeature
-                0x00004470       0xb4 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
-                0x00004470                USB_ReqSetClrFeature
+                0x00004554       0xb4 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
+                0x00004554                USB_ReqSetClrFeature
  .text.USB_ReqSetConfiguration
-                0x00004524      0x194 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
-                0x00004524                USB_ReqSetConfiguration
+                0x00004608      0x194 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
+                0x00004608                USB_ReqSetConfiguration
  .text.USB_ReqSetInterface
-                0x000046b8      0x144 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
-                0x000046b8                USB_ReqSetInterface
+                0x0000479c      0x144 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
+                0x0000479c                USB_ReqSetInterface
  .text.mwUSB_SetupStage
-                0x000047fc        0xa C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
-                0x000047fc                mwUSB_SetupStage
+                0x000048e0        0xa C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
+                0x000048e0                mwUSB_SetupStage
  .text.mwUSB_DataInStage
-                0x00004806       0x2e C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
-                0x00004806                mwUSB_DataInStage
+                0x000048ea       0x2e C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
+                0x000048ea                mwUSB_DataInStage
  .text.mwUSB_DataOutStage
-                0x00004834       0x24 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
-                0x00004834                mwUSB_DataOutStage
+                0x00004918       0x24 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
+                0x00004918                mwUSB_DataOutStage
  .text.mwUSB_StatusInStage
-                0x00004858        0xa C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
-                0x00004858                mwUSB_StatusInStage
+                0x0000493c        0xa C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
+                0x0000493c                mwUSB_StatusInStage
  .text.mwUSB_StatusOutStage
-                0x00004862        0xa C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
-                0x00004862                mwUSB_StatusOutStage
+                0x00004946        0xa C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
+                0x00004946                mwUSB_StatusOutStage
  .text.mwUSB_StallEp0
-                0x0000486c       0x12 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
-                0x0000486c                mwUSB_StallEp0
- *fill*         0x0000487e        0x2 ff
+                0x00004950       0x12 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
+                0x00004950                mwUSB_StallEp0
+ *fill*         0x00004962        0x2 ff
  .text.USB_ReqSetAddress
-                0x00004880       0x24 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
-                0x00004880                USB_ReqSetAddress
+                0x00004964       0x24 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
+                0x00004964                USB_ReqSetAddress
  .text.USB_InvokeEp0Hdlrs
-                0x000048a4       0x44 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
-                0x000048a4                USB_InvokeEp0Hdlrs
+                0x00004988       0x44 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
+                0x00004988                USB_InvokeEp0Hdlrs
  .text.mwUSB_ResetCore
-                0x000048e8       0x26 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
-                0x000048e8                mwUSB_ResetCore
- *fill*         0x0000490e        0x2 ff
+                0x000049cc       0x26 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
+                0x000049cc                mwUSB_ResetCore
+ *fill*         0x000049f2        0x2 ff
  .text.USB_EvtSetupHandler
-                0x00004910      0x108 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
-                0x00004910                USB_EvtSetupHandler
+                0x000049f4      0x108 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
+                0x000049f4                USB_EvtSetupHandler
  .text.USB_EvtOutHandler
-                0x00004a18       0x68 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
-                0x00004a18                USB_EvtOutHandler
+                0x00004afc       0x68 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
+                0x00004afc                USB_EvtOutHandler
  .text.USB_EndPoint0
-                0x00004a80       0x94 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
-                0x00004a80                USB_EndPoint0
+                0x00004b64       0x94 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
+                0x00004b64                USB_EndPoint0
  .text.mwUSB_InitCore
-                0x00004b14       0xdc C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
-                0x00004b14                mwUSB_InitCore
+                0x00004bf8       0xdc C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
+                0x00004bf8                mwUSB_InitCore
  .text.mwUSB_RegisterClassHandler
-                0x00004bf0       0x28 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
-                0x00004bf0                mwUSB_RegisterClassHandler
+                0x00004cd4       0x28 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
+                0x00004cd4                mwUSB_RegisterClassHandler
  .text.mwUSB_RegisterEpHandler
-                0x00004c18       0x24 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
-                0x00004c18                mwUSB_RegisterEpHandler
+                0x00004cfc       0x24 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
+                0x00004cfc                mwUSB_RegisterEpHandler
  .text.mwHID_GetReportDesc
-                0x00004c3c       0x1c C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_hiduser.o)
-                0x00004c3c                mwHID_GetReportDesc
+                0x00004d20       0x1c C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_hiduser.o)
+                0x00004d20                mwHID_GetReportDesc
  .text.mwHID_GetIdle
-                0x00004c58       0x16 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_hiduser.o)
-                0x00004c58                mwHID_GetIdle
+                0x00004d3c       0x16 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_hiduser.o)
+                0x00004d3c                mwHID_GetIdle
  .text.mwHID_SetIdle
-                0x00004c6e       0x24 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_hiduser.o)
-                0x00004c6e                mwHID_SetIdle
+                0x00004d52       0x24 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_hiduser.o)
+                0x00004d52                mwHID_SetIdle
  .text.mwHID_SetProtocol
-                0x00004c92       0x1a C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_hiduser.o)
-                0x00004c92                mwHID_SetProtocol
+                0x00004d76       0x1a C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_hiduser.o)
+                0x00004d76                mwHID_SetProtocol
  .text.mwHID_ep0_hdlr
-                0x00004cac      0x188 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_hiduser.o)
-                0x00004cac                mwHID_ep0_hdlr
+                0x00004d90      0x188 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_hiduser.o)
+                0x00004d90                mwHID_ep0_hdlr
  .text.mwHID_GetMemSize
-                0x00004e34        0x8 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_hiduser.o)
-                0x00004e34                mwHID_GetMemSize
+                0x00004f18        0x8 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_hiduser.o)
+                0x00004f18                mwHID_GetMemSize
  .text.mwHID_init
-                0x00004e3c      0x174 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_hiduser.o)
-                0x00004e3c                mwHID_init
- .text.memcpy   0x00004fb0        0x4 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(memcpy.o)
-                0x00004fb0                memcpy
- .text.memset   0x00004fb4        0x4 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(memset.o)
-                0x00004fb4                memset
- .text.malloc   0x00004fb8       0xc8 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(alloc.o)
-                0x00004fb8                malloc
- .text.free     0x00005080       0x30 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(alloc.o)
-                0x00005080                free
+                0x00004f20      0x174 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_hiduser.o)
+                0x00004f20                mwHID_init
+ .text.memcpy   0x00005094        0x4 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(memcpy.o)
+                0x00005094                memcpy
+ .text.memset   0x00005098        0x4 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(memset.o)
+                0x00005098                memset
+ .text.malloc   0x0000509c       0xc8 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(alloc.o)
+                0x0000509c                malloc
+ .text.free     0x00005164       0x30 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(alloc.o)
+                0x00005164                free
  .text._Csys_alloc
-                0x000050b0       0x20 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(alloc.o)
-                0x000050b0                _Csys_alloc
+                0x00005194       0x20 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(alloc.o)
+                0x00005194                _Csys_alloc
  .text.fp_round
-                0x000050d0       0x4c c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(fpprintf.o)
+                0x000051b4       0x4c c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(fpprintf.o)
  .text.pr_dec.constprop.1
-                0x0000511c       0x26 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(fpprintf.o)
- *fill*         0x00005142        0x2 ff
- .text.sprintf  0x00005144       0x6c c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(fpprintf.o)
-                0x00005144                sprintf
+                0x00005200       0x26 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(fpprintf.o)
+ *fill*         0x00005226        0x2 ff
+ .text.sprintf  0x00005228       0x6c c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(fpprintf.o)
+                0x00005228                sprintf
+ *fill*         0x00005294        0x4 ff
  .text.fp_display
-                0x000051b0      0x8ec c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(fpprintf.o)
+                0x00005298      0x8ec c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(fpprintf.o)
  .text.vsnprintf
-                0x00005a9c       0x5c c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(fpprintf.o)
-                0x00005a9c                vsnprintf
- .text.printf   0x00005af8       0x54 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(fpprintf.o)
-                0x00005af8                printf
+                0x00005b84       0x5c c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(fpprintf.o)
+                0x00005b84                vsnprintf
+ .text.printf   0x00005be0       0x54 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(fpprintf.o)
+                0x00005be0                printf
  .text.__vfprintf
-                0x00005b4c      0xd28 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(printf.o)
-                0x00005b4c                __vfprintf
- .text.ch_val   0x00006874       0x30 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(scanf.o)
+                0x00005c34      0xd28 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(printf.o)
+                0x00005c34                __vfprintf
+ .text.ch_val   0x0000695c       0x30 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(scanf.o)
  .text._strtoul
-                0x000068a4       0xbc c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(scanf.o)
- .text.strtol   0x00006960       0x7c c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(scanf.o)
-                0x00006960                strtol
- .text.atoi     0x000069dc       0x18 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(scanf.o)
-                0x000069dc                atoi
- .text.strcpy   0x000069f4       0x42 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(strcpy.o)
-                0x000069f4                strcpy
- .text.strlen   0x00006a36       0x4a c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(strlen.o)
-                0x00006a36                strlen
- .text._sbrk    0x00006a80       0x40 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(_cr_sbrk.o)
-                0x00006a80                _sbrk
+                0x0000698c       0xbc c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(scanf.o)
+ .text.strtol   0x00006a48       0x7c c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(scanf.o)
+                0x00006a48                strtol
+ .text.atoi     0x00006ac4       0x18 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(scanf.o)
+                0x00006ac4                atoi
+ .text.strcpy   0x00006adc       0x42 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(strcpy.o)
+                0x00006adc                strcpy
+ .text.strlen   0x00006b1e       0x4a c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(strlen.o)
+                0x00006b1e                strlen
+ .text._sbrk    0x00006b68       0x40 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(_cr_sbrk.o)
+                0x00006b68                _sbrk
  .text._deferredlazyseek
-                0x00006ac0       0x44 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(_deferredlazyseek.o)
-                0x00006ac0                _deferredlazyseek
+                0x00006ba8       0x44 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(_deferredlazyseek.o)
+                0x00006ba8                _deferredlazyseek
  .text.__flsbuf
-                0x00006b04      0x140 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(_deferredlazyseek.o)
-                0x00006b04                __flsbuf
- .text._fflush  0x00006c44       0x58 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(_fflush.o)
-                0x00006c44                _fflush
- .text._frexpl  0x00006c9c       0x5a c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(_frexpl.o)
-                0x00006c9c                _frexpl
- *fill*         0x00006cf6        0x2 ff
- .text._ldexpl  0x00006cf8       0x4c c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(_ldexpl.o)
-                0x00006cf8                _ldexpl
+                0x00006bec      0x140 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(_deferredlazyseek.o)
+                0x00006bec                __flsbuf
+ .text._fflush  0x00006d2c       0x58 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(_fflush.o)
+                0x00006d2c                _fflush
+ .text._frexpl  0x00006d84       0x5a c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(_frexpl.o)
+                0x00006d84                _frexpl
+ *fill*         0x00006dde        0x2 ff
+ .text._ldexpl  0x00006de0       0x4c c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(_ldexpl.o)
+                0x00006de0                _ldexpl
  .text._Cwritebuf
-                0x00006d44       0x68 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(_writebuf.o)
-                0x00006d44                _Cwritebuf
- .text.fseek    0x00006dac      0x110 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(fseek.o)
-                0x00006dac                fseek
- .text.ftell    0x00006ebc       0x4c c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(ftell.o)
-                0x00006ebc                ftell
+                0x00006e2c       0x68 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(_writebuf.o)
+                0x00006e2c                _Cwritebuf
+ .text.fseek    0x00006e94      0x110 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(fseek.o)
+                0x00006e94                fseek
+ .text.ftell    0x00006fa4       0x4c c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(ftell.o)
+                0x00006fa4                ftell
  .text.__check_heap_overflow
-                0x00006f08       0x18 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(_cr_check_heap.o)
-                0x00006f08                __check_heap_overflow
+                0x00006ff0       0x18 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(_cr_check_heap.o)
+                0x00006ff0                __check_heap_overflow
  .text.__aeabi_dmul
-                0x00006f20      0x110 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m\libcr_eabihelpers.a(double.o)
-                0x00006f20                __aeabi_dmul
+                0x00007008      0x110 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m\libcr_eabihelpers.a(double.o)
+                0x00007008                __aeabi_dmul
  .text.__aeabi_ddiv
-                0x00007030      0x138 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m\libcr_eabihelpers.a(double.o)
-                0x00007030                __aeabi_ddiv
+                0x00007118      0x138 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m\libcr_eabihelpers.a(double.o)
+                0x00007118                __aeabi_ddiv
  .text.__aeabi_dsub
-                0x00007168      0x1a0 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m\libcr_eabihelpers.a(double.o)
-                0x00007168                __aeabi_dsub
+                0x00007250      0x1a0 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m\libcr_eabihelpers.a(double.o)
+                0x00007250                __aeabi_dsub
  .text.__aeabi_dadd
-                0x00007308      0x10c c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m\libcr_eabihelpers.a(double.o)
-                0x00007308                __aeabi_dadd
+                0x000073f0      0x10c c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m\libcr_eabihelpers.a(double.o)
+                0x000073f0                __aeabi_dadd
  .text.__aeabi_d2iz
-                0x00007414       0x40 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m\libcr_eabihelpers.a(double.o)
-                0x00007414                __aeabi_d2iz
+                0x000074fc       0x40 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m\libcr_eabihelpers.a(double.o)
+                0x000074fc                __aeabi_d2iz
  .text.__bhs_ui2d
-                0x00007454       0x46 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m\libcr_eabihelpers.a(double.o)
-                0x00007454                __bhs_ui2d
+                0x0000753c       0x46 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m\libcr_eabihelpers.a(double.o)
+                0x0000753c                __bhs_ui2d
  .text.__aeabi_i2d
-                0x0000749a       0x10 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m\libcr_eabihelpers.a(double.o)
-                0x0000749a                __aeabi_i2d
+                0x00007582       0x10 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m\libcr_eabihelpers.a(double.o)
+                0x00007582                __aeabi_i2d
  .text.__aeabi_dcmpeq
-                0x000074aa       0x2c c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m\libcr_eabihelpers.a(double.o)
-                0x000074aa                __aeabi_dcmpeq
+                0x00007592       0x2c c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m\libcr_eabihelpers.a(double.o)
+                0x00007592                __aeabi_dcmpeq
  .text.__aeabi_dcmplt
-                0x000074d6       0x54 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m\libcr_eabihelpers.a(double.o)
-                0x000074d6                __aeabi_dcmplt
+                0x000075be       0x54 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m\libcr_eabihelpers.a(double.o)
+                0x000075be                __aeabi_dcmplt
  .text.__aeabi_dcmple
-                0x0000752a       0x54 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m\libcr_eabihelpers.a(double.o)
-                0x0000752a                __aeabi_dcmple
+                0x00007612       0x54 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m\libcr_eabihelpers.a(double.o)
+                0x00007612                __aeabi_dcmple
  .text.__aeabi_dcmpge
-                0x0000757e       0x54 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m\libcr_eabihelpers.a(double.o)
-                0x0000757e                __aeabi_dcmpge
+                0x00007666       0x54 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m\libcr_eabihelpers.a(double.o)
+                0x00007666                __aeabi_dcmpge
  .text.__aeabi_memcpy
-                0x000075d2       0x34 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m\libcr_eabihelpers.a(memcpy.o)
-                0x000075d2                __aeabi_memcpy
-                0x000075dc                __aeabi_memcpy8
-                0x000075dc                __aeabi_memcpy4
+                0x000076ba       0x34 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m\libcr_eabihelpers.a(memcpy.o)
+                0x000076ba                __aeabi_memcpy
+                0x000076c4                __aeabi_memcpy8
+                0x000076c4                __aeabi_memcpy4
  .text.__aeabi_memset_lowlevel
-                0x00007606       0x32 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m\libcr_eabihelpers.a(memcpy.o)
-                0x00007606                __aeabi_lowlevel_memset
+                0x000076ee       0x32 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m\libcr_eabihelpers.a(memcpy.o)
+                0x000076ee                __aeabi_lowlevel_memset
  .text.__sys_appexit
-                0x00007638        0x2 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_nohost.a(__sys_appexit.o)
-                0x00007638                __sys_appexit
-                0x00007638                __exit
+                0x00007720        0x2 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_nohost.a(__sys_appexit.o)
+                0x00007720                __sys_appexit
+                0x00007720                __exit
  .text.__sys_flen
-                0x0000763a        0x6 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_nohost.a(__sys_flen.o)
-                0x0000763a                __sys_flen
+                0x00007722        0x6 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_nohost.a(__sys_flen.o)
+                0x00007722                __sys_flen
  .text.__sys_istty
-                0x00007640        0x6 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_nohost.a(__sys_istty.o)
-                0x00007640                __sys_istty
+                0x00007728        0x6 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_nohost.a(__sys_istty.o)
+                0x00007728                __sys_istty
  .text.__sys_seek
-                0x00007646        0x6 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_nohost.a(__sys_seek.o)
-                0x00007646                __sys_seek
+                0x0000772e        0x6 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_nohost.a(__sys_seek.o)
+                0x0000772e                __sys_seek
  *(.rodata .rodata.* .constdata .constdata.*)
- .rodata        0x0000764c       0x58 ./freertos/src/FreeRTOSCommonHooks.o
- .rodata        0x000076a4        0x5 ./freertos/src/tasks.o
- *fill*         0x000076a9        0x3 ff
+ .rodata        0x00007734       0x58 ./freertos/src/FreeRTOSCommonHooks.o
+ .rodata        0x0000778c        0x5 ./freertos/src/tasks.o
+ *fill*         0x00007791        0x3 ff
  .rodata.HID_ReportDescriptor
-                0x000076ac       0x21 ./example/src/hid_desc.o
-                0x000076ac                HID_ReportDescriptor
- *fill*         0x000076cd        0x1 ff
+                0x00007794       0x21 ./example/src/hid_desc.o
+                0x00007794                HID_ReportDescriptor
+ *fill*         0x000077b5        0x1 ff
  .rodata.HID_ReportDescSize
-                0x000076ce        0x2 ./example/src/hid_desc.o
-                0x000076ce                HID_ReportDescSize
+                0x000077b6        0x2 ./example/src/hid_desc.o
+                0x000077b6                HID_ReportDescSize
  .rodata.USB_DeviceDescriptor
-                0x000076d0       0x12 ./example/src/hid_desc.o
-                0x000076d0                USB_DeviceDescriptor
- *fill*         0x000076e2        0x2 ff
+                0x000077b8       0x12 ./example/src/hid_desc.o
+                0x000077b8                USB_DeviceDescriptor
+ *fill*         0x000077ca        0x2 ff
  .rodata.USB_StringDescriptor
-                0x000076e4       0x7a ./example/src/hid_desc.o
-                0x000076e4                USB_StringDescriptor
- *fill*         0x0000775e        0x2 ff
+                0x000077cc       0x7a ./example/src/hid_desc.o
+                0x000077cc                USB_StringDescriptor
+ *fill*         0x00007846        0x2 ff
  .rodata.tabla_tria
-                0x00007760       0xf0 ./example/src/main.o
-                0x00007760                tabla_tria
+                0x00007848       0xf0 ./example/src/main.o
+                0x00007848                tabla_tria
  .rodata.g_usbApi
-                0x00007850       0x20 ./example/src/main.o
- .rodata        0x00007870      0x22d ./example/src/main.o
- *fill*         0x00007a9d        0x3 ff
+                0x00007938       0x20 ./example/src/main.o
+ .rodata        0x00007958      0x201 ./example/src/main.o
+ *fill*         0x00007b59        0x3 ff
  .rodata.OscRateIn
-                0x00007aa0        0x4 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
-                0x00007aa0                OscRateIn
+                0x00007b5c        0x4 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
+                0x00007b5c                OscRateIn
  .rodata.RTCOscRateIn
-                0x00007aa4        0x4 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
-                0x00007aa4                RTCOscRateIn
+                0x00007b60        0x4 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
+                0x00007b60                RTCOscRateIn
  .rodata.pinmuxing
-                0x00007aa8       0x5c C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board_sysinit.o)
+                0x00007b64       0x5c C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board_sysinit.o)
  .rodata.GPDMA_LUTPerBurst
-                0x00007b04       0x18 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
-                0x00007b04                GPDMA_LUTPerBurst
+                0x00007bc0       0x18 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
+                0x00007bc0                GPDMA_LUTPerBurst
  .rodata.GPDMA_LUTPerWid
-                0x00007b1c       0x18 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
-                0x00007b1c                GPDMA_LUTPerWid
+                0x00007bd8       0x18 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
+                0x00007bd8                GPDMA_LUTPerWid
  .rodata.hw_api
-                0x00007b34       0x5c C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_rom_api.o)
-                0x00007b34                hw_api
+                0x00007bf0       0x5c C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_rom_api.o)
+                0x00007bf0                hw_api
  .rodata.core_api
-                0x00007b90       0x20 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_rom_api.o)
-                0x00007b90                core_api
+                0x00007c4c       0x20 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_rom_api.o)
+                0x00007c4c                core_api
  .rodata.hid_api
-                0x00007bb0        0x8 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_rom_api.o)
-                0x00007bb0                hid_api
+                0x00007c6c        0x8 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_rom_api.o)
+                0x00007c6c                hid_api
  .rodata.str1.1
-                0x00007bb8       0x18 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(alloc.o)
+                0x00007c74       0x18 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(alloc.o)
  .rodata.str1.1
-                0x00007bd0       0x34 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(fpprintf.o)
+                0x00007c8c       0x34 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(fpprintf.o)
                                  0x35 (size before relaxing)
  .rodata.str1.1
-                0x00007c04       0x31 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(printf.o)
+                0x00007cc0       0x31 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(printf.o)
                                  0x38 (size before relaxing)
- *fill*         0x00007c35        0x3 ff
+ *fill*         0x00007cf1        0x7 ff
  .rodata.__huge_vall
-                0x00007c38        0x8 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(_hugeval.o)
-                0x00007c38                __huge_vall
+                0x00007cf8        0x8 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(_hugeval.o)
+                0x00007cf8                __huge_vall
  .rodata.__ctype
-                0x00007c40      0x180 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(ctype.o)
-                0x00007c40                __ctype
-                0x00007dc0                . = ALIGN (0x4)
+                0x00007d00      0x180 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(ctype.o)
+                0x00007d00                __ctype
+                0x00007e80                . = ALIGN (0x4)
 
-.glue_7         0x00007dc0        0x0
- .glue_7        0x00007dc0        0x0 linker stubs
+.glue_7         0x00007e80        0x0
+ .glue_7        0x00007e80        0x0 linker stubs
 
-.glue_7t        0x00007dc0        0x0
- .glue_7t       0x00007dc0        0x0 linker stubs
+.glue_7t        0x00007e80        0x0
+ .glue_7t       0x00007e80        0x0 linker stubs
 
-.vfp11_veneer   0x00007dc0        0x0
- .vfp11_veneer  0x00007dc0        0x0 linker stubs
+.vfp11_veneer   0x00007e80        0x0
+ .vfp11_veneer  0x00007e80        0x0 linker stubs
 
-.v4_bx          0x00007dc0        0x0
- .v4_bx         0x00007dc0        0x0 linker stubs
+.v4_bx          0x00007e80        0x0
+ .v4_bx         0x00007e80        0x0 linker stubs
 
-.iplt           0x00007dc0        0x0
- .iplt          0x00007dc0        0x0 ./freertos/src/FreeRTOSCommonHooks.o
+.iplt           0x00007e80        0x0
+ .iplt          0x00007e80        0x0 ./freertos/src/FreeRTOSCommonHooks.o
 
-.rel.dyn        0x00007dc0        0x0
- .rel.iplt      0x00007dc0        0x0 ./freertos/src/FreeRTOSCommonHooks.o
+.rel.dyn        0x00007e80        0x0
+ .rel.iplt      0x00007e80        0x0 ./freertos/src/FreeRTOSCommonHooks.o
 
 .ARM.extab
  *(.ARM.extab* .gnu.linkonce.armextab.*)
-                0x00007dc0                __exidx_start = .
+                0x00007e80                __exidx_start = .
 
 .ARM.exidx
  *(.ARM.exidx* .gnu.linkonce.armexidx.*)
-                0x00007dc0                __exidx_end = .
-                0x00007dc0                _etext = .
+                0x00007e80                __exidx_end = .
+                0x00007e80                _etext = .
 
-.data_RAM2      0x2007c000        0x0 load address 0x00007dc0
+.data_RAM2      0x2007c000        0x0 load address 0x00007e80
  FILL mask 0xff
                 [!provide]                PROVIDE (__start_data_RAM2, .)
  *(.ramfunc.$RAM2)
@@ -4021,7 +4021,7 @@ END GROUP
                 0x10000000                . = ALIGN (0x4)
                 0x10000000                _end_uninit_RESERVED = .
 
-.data           0x10000000       0xa0 load address 0x00007dc0
+.data           0x10000000       0xa0 load address 0x00007e80
  FILL mask 0xff
                 0x10000000                _data = .
  *(vtable)
@@ -4048,7 +4048,7 @@ END GROUP
                 0x100000a0                . = ALIGN (0x4)
                 0x100000a0                _edata = .
 
-.igot.plt       0x100000a0        0x0 load address 0x00007e60
+.igot.plt       0x100000a0        0x0 load address 0x00007f20
  .igot.plt      0x100000a0        0x0 ./freertos/src/FreeRTOSCommonHooks.o
 
 .bss_RAM2       0x2007c000        0x0
@@ -4058,7 +4058,7 @@ END GROUP
                 0x2007c000                . = ALIGN ((. != 0x0)?0x4:0x1)
                 [!provide]                PROVIDE (__end_bss_RAM2, .)
 
-.bss            0x100000a0      0x2f0
+.bss            0x100000a0      0x2f4
                 0x100000a0                _bss = .
  *(.bss*)
  .bss.ulTimerCountsForOneTick
@@ -4109,9 +4109,9 @@ END GROUP
  .bss.loopback_report
                 0x100001e4        0x4 ./example/src/hid_generic.o
  .bss.g_hUsb    0x100001e8        0x4 ./example/src/main.o
- .bss.xHigherPriorityTaskWoken.9517
+ .bss.xHigherPriorityTaskWoken.9522
                 0x100001ec        0x4 ./example/src/main.o
- .bss.lecturaADC.9568
+ .bss.lecturaADC.9573
                 0x100001f0        0x2 ./example/src/main.o
  *fill*         0x100001f2        0x2 
  .bss.ADCSetup  0x100001f4        0x8 ./example/src/setup.o
@@ -4127,23 +4127,24 @@ END GROUP
  .bss.errno     0x1000034c        0x4 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_c.a(errno.o)
                 0x1000034c                errno
  *(COMMON)
- COMMON         0x10000350       0x3c ./example/src/main.o
+ COMMON         0x10000350       0x40 ./example/src/main.o
                 0x10000350                xOPCodequeue
                 0x10000354                datoADC
                 0x10000358                xQTqueue
                 0x1000035c                DMA_LLI_buffer
                 0x1000036c                slectura_ok
-                0x10000370                qUSBin
-                0x10000374                xACDqueue
-                0x10000378                UARTSemMtx
-                0x1000037c                DACSemMtx
-                0x10000380                ADCSemMtx
-                0x10000384                UARTSendMtx
-                0x10000388                qUSBout
- COMMON         0x1000038c        0x4 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(chip_17xx_40xx.o)
-                0x1000038c                SystemCoreClock
-                0x10000390                . = ALIGN (0x4)
-                0x10000390                _ebss = .
+                0x10000370                qDAC
+                0x10000374                qUSBin
+                0x10000378                xACDqueue
+                0x1000037c                UARTSemMtx
+                0x10000380                DACSemMtx
+                0x10000384                ADCSemMtx
+                0x10000388                UARTSendMtx
+                0x1000038c                qUSBout
+ COMMON         0x10000390        0x4 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(chip_17xx_40xx.o)
+                0x10000390                SystemCoreClock
+                0x10000394                . = ALIGN (0x4)
+                0x10000394                _ebss = .
                 [!provide]                PROVIDE (end, .)
 
 .noinit_RAM2    0x2007c000        0x0
@@ -4151,17 +4152,17 @@ END GROUP
  *(.noinit.$RamAHB32*)
                 0x2007c000                . = ALIGN (0x4)
 
-.noinit         0x10000390        0x0
-                0x10000390                _noinit = .
+.noinit         0x10000394        0x0
+                0x10000394                _noinit = .
  *(.noinit*)
-                0x10000390                . = ALIGN (0x4)
-                0x10000390                _end_noinit = .
-                0x10000390                PROVIDE (_pvHeapStart, DEFINED (__user_heap_base)?__user_heap_base:.)
+                0x10000394                . = ALIGN (0x4)
+                0x10000394                _end_noinit = .
+                0x10000394                PROVIDE (_pvHeapStart, DEFINED (__user_heap_base)?__user_heap_base:.)
                 0x10008000                PROVIDE (_vStackTop, DEFINED (__user_stack_top)?__user_stack_top:(__top_RamLoc32 - 0x0))
                 [!provide]                PROVIDE (__valid_user_code_checksum, (0x0 - ((((((_vStackTop + (ResetISR + 0x1)) + (NMI_Handler + 0x1)) + (HardFault_Handler + 0x1)) + (DEFINED (MemManage_Handler)?MemManage_Handler:0x0 + 0x1)) + (DEFINED (BusFault_Handler)?BusFault_Handler:0x0 + 0x1)) + (DEFINED (UsageFault_Handler)?UsageFault_Handler:0x0 + 0x1))))
 OUTPUT(potenciostato.axf elf32-littlearm)
 
-.debug_info     0x00000000    0x1345b
+.debug_info     0x00000000    0x13464
  .debug_info    0x00000000      0x1b5 ./freertos/src/FreeRTOSCommonHooks.o
  .debug_info    0x000001b5      0x14a ./freertos/src/heap_3.o
  .debug_info    0x000002ff      0x2e5 ./freertos/src/list.o
@@ -4171,25 +4172,25 @@ OUTPUT(potenciostato.axf elf32-littlearm)
  .debug_info    0x00002824      0x250 ./example/src/cr_startup_lpc175x_6x.o
  .debug_info    0x00002a74      0x150 ./example/src/hid_desc.o
  .debug_info    0x00002bc4     0x1b01 ./example/src/hid_generic.o
- .debug_info    0x000046c5     0x20b5 ./example/src/main.o
- .debug_info    0x0000677a      0x5c2 ./example/src/setup.o
- .debug_info    0x00006d3c      0x126 ./example/src/sysinit.o
- .debug_info    0x00006e62     0x13d3 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
- .debug_info    0x00008235      0x591 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board_sysinit.o)
- .debug_info    0x000087c6      0x88d C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(adc_17xx_40xx.o)
- .debug_info    0x00009053      0x51e C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(chip_17xx_40xx.o)
- .debug_info    0x00009571      0xb62 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
- .debug_info    0x0000a0d3      0x1e0 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(dac_17xx_40xx.o)
- .debug_info    0x0000a2b3     0x1323 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
- .debug_info    0x0000b5d6      0x2e9 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(iocon_17xx_40xx.o)
- .debug_info    0x0000b8bf      0x439 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(sysinit_17xx_40xx.o)
- .debug_info    0x0000bcf8      0xeda C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(uart_17xx_40xx.o)
- .debug_info    0x0000cbd2     0x14f8 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_rom_api.o)
- .debug_info    0x0000e0ca     0x1f77 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
- .debug_info    0x00010041     0x1f80 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
- .debug_info    0x00011fc1     0x149a C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_hiduser.o)
+ .debug_info    0x000046c5     0x20be ./example/src/main.o
+ .debug_info    0x00006783      0x5c2 ./example/src/setup.o
+ .debug_info    0x00006d45      0x126 ./example/src/sysinit.o
+ .debug_info    0x00006e6b     0x13d3 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
+ .debug_info    0x0000823e      0x591 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board_sysinit.o)
+ .debug_info    0x000087cf      0x88d C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(adc_17xx_40xx.o)
+ .debug_info    0x0000905c      0x51e C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(chip_17xx_40xx.o)
+ .debug_info    0x0000957a      0xb62 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
+ .debug_info    0x0000a0dc      0x1e0 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(dac_17xx_40xx.o)
+ .debug_info    0x0000a2bc     0x1323 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
+ .debug_info    0x0000b5df      0x2e9 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(iocon_17xx_40xx.o)
+ .debug_info    0x0000b8c8      0x439 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(sysinit_17xx_40xx.o)
+ .debug_info    0x0000bd01      0xeda C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(uart_17xx_40xx.o)
+ .debug_info    0x0000cbdb     0x14f8 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_rom_api.o)
+ .debug_info    0x0000e0d3     0x1f77 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
+ .debug_info    0x0001004a     0x1f80 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
+ .debug_info    0x00011fca     0x149a C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_hiduser.o)
 
-.debug_abbrev   0x00000000     0x31eb
+.debug_abbrev   0x00000000     0x31fa
  .debug_abbrev  0x00000000      0x129 ./freertos/src/FreeRTOSCommonHooks.o
  .debug_abbrev  0x00000129       0xd4 ./freertos/src/heap_3.o
  .debug_abbrev  0x000001fd       0xec ./freertos/src/list.o
@@ -4199,25 +4200,25 @@ OUTPUT(potenciostato.axf elf32-littlearm)
  .debug_abbrev  0x00000914       0xf5 ./example/src/cr_startup_lpc175x_6x.o
  .debug_abbrev  0x00000a09       0x60 ./example/src/hid_desc.o
  .debug_abbrev  0x00000a69      0x227 ./example/src/hid_generic.o
- .debug_abbrev  0x00000c90      0x398 ./example/src/main.o
- .debug_abbrev  0x00001028      0x157 ./example/src/setup.o
- .debug_abbrev  0x0000117f       0xa3 ./example/src/sysinit.o
- .debug_abbrev  0x00001222      0x379 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
- .debug_abbrev  0x0000159b      0x15c C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board_sysinit.o)
- .debug_abbrev  0x000016f7      0x1bc C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(adc_17xx_40xx.o)
- .debug_abbrev  0x000018b3      0x13c C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(chip_17xx_40xx.o)
- .debug_abbrev  0x000019ef      0x2ec C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
- .debug_abbrev  0x00001cdb      0x10a C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(dac_17xx_40xx.o)
- .debug_abbrev  0x00001de5      0x27a C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
- .debug_abbrev  0x0000205f      0x126 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(iocon_17xx_40xx.o)
- .debug_abbrev  0x00002185      0x175 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(sysinit_17xx_40xx.o)
- .debug_abbrev  0x000022fa      0x2e8 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(uart_17xx_40xx.o)
- .debug_abbrev  0x000025e2      0x143 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_rom_api.o)
- .debug_abbrev  0x00002725      0x3b8 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
- .debug_abbrev  0x00002add      0x3f6 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
- .debug_abbrev  0x00002ed3      0x318 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_hiduser.o)
+ .debug_abbrev  0x00000c90      0x3a7 ./example/src/main.o
+ .debug_abbrev  0x00001037      0x157 ./example/src/setup.o
+ .debug_abbrev  0x0000118e       0xa3 ./example/src/sysinit.o
+ .debug_abbrev  0x00001231      0x379 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
+ .debug_abbrev  0x000015aa      0x15c C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board_sysinit.o)
+ .debug_abbrev  0x00001706      0x1bc C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(adc_17xx_40xx.o)
+ .debug_abbrev  0x000018c2      0x13c C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(chip_17xx_40xx.o)
+ .debug_abbrev  0x000019fe      0x2ec C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
+ .debug_abbrev  0x00001cea      0x10a C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(dac_17xx_40xx.o)
+ .debug_abbrev  0x00001df4      0x27a C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
+ .debug_abbrev  0x0000206e      0x126 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(iocon_17xx_40xx.o)
+ .debug_abbrev  0x00002194      0x175 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(sysinit_17xx_40xx.o)
+ .debug_abbrev  0x00002309      0x2e8 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(uart_17xx_40xx.o)
+ .debug_abbrev  0x000025f1      0x143 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_rom_api.o)
+ .debug_abbrev  0x00002734      0x3b8 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
+ .debug_abbrev  0x00002aec      0x3f6 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
+ .debug_abbrev  0x00002ee2      0x318 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_hiduser.o)
 
-.debug_aranges  0x00000000      0xdb0
+.debug_aranges  0x00000000      0xda8
  .debug_aranges
                 0x00000000       0x40 ./freertos/src/FreeRTOSCommonHooks.o
  .debug_aranges
@@ -4237,41 +4238,41 @@ OUTPUT(potenciostato.axf elf32-littlearm)
  .debug_aranges
                 0x00000438       0x38 ./example/src/hid_generic.o
  .debug_aranges
-                0x00000470       0x90 ./example/src/main.o
+                0x00000470       0x88 ./example/src/main.o
  .debug_aranges
-                0x00000500       0x38 ./example/src/setup.o
+                0x000004f8       0x38 ./example/src/setup.o
  .debug_aranges
-                0x00000538       0x20 ./example/src/sysinit.o
+                0x00000530       0x20 ./example/src/sysinit.o
  .debug_aranges
-                0x00000558      0x160 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
+                0x00000550      0x160 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
  .debug_aranges
-                0x000006b8       0x38 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board_sysinit.o)
+                0x000006b0       0x38 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board_sysinit.o)
  .debug_aranges
-                0x000006f0       0x88 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(adc_17xx_40xx.o)
+                0x000006e8       0x88 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(adc_17xx_40xx.o)
  .debug_aranges
-                0x00000778       0x38 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(chip_17xx_40xx.o)
+                0x00000770       0x38 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(chip_17xx_40xx.o)
  .debug_aranges
-                0x000007b0      0x120 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
+                0x000007a8      0x120 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
  .debug_aranges
-                0x000008d0       0x38 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(dac_17xx_40xx.o)
+                0x000008c8       0x38 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(dac_17xx_40xx.o)
  .debug_aranges
-                0x00000908       0x90 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
+                0x00000900       0x90 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
  .debug_aranges
-                0x00000998       0x30 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(iocon_17xx_40xx.o)
+                0x00000990       0x30 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(iocon_17xx_40xx.o)
  .debug_aranges
-                0x000009c8       0x60 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(sysinit_17xx_40xx.o)
+                0x000009c0       0x60 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(sysinit_17xx_40xx.o)
  .debug_aranges
-                0x00000a28      0x128 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(uart_17xx_40xx.o)
+                0x00000a20      0x128 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(uart_17xx_40xx.o)
  .debug_aranges
-                0x00000b50       0x18 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_rom_api.o)
+                0x00000b48       0x18 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_rom_api.o)
  .debug_aranges
-                0x00000b68      0x118 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
+                0x00000b60      0x118 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
  .debug_aranges
-                0x00000c80       0xd8 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
+                0x00000c78       0xd8 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
  .debug_aranges
-                0x00000d58       0x58 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_hiduser.o)
+                0x00000d50       0x58 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_hiduser.o)
 
-.debug_ranges   0x00000000      0xc18
+.debug_ranges   0x00000000      0xc10
  .debug_ranges  0x00000000       0x30 ./freertos/src/FreeRTOSCommonHooks.o
  .debug_ranges  0x00000030       0x18 ./freertos/src/heap_3.o
  .debug_ranges  0x00000048       0x30 ./freertos/src/list.o
@@ -4280,22 +4281,22 @@ OUTPUT(potenciostato.axf elf32-littlearm)
  .debug_ranges  0x000001d8      0x168 ./freertos/src/tasks.o
  .debug_ranges  0x00000340       0x70 ./example/src/cr_startup_lpc175x_6x.o
  .debug_ranges  0x000003b0       0x28 ./example/src/hid_generic.o
- .debug_ranges  0x000003d8       0x80 ./example/src/main.o
- .debug_ranges  0x00000458       0x28 ./example/src/setup.o
- .debug_ranges  0x00000480       0x10 ./example/src/sysinit.o
- .debug_ranges  0x00000490      0x150 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
- .debug_ranges  0x000005e0       0x28 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board_sysinit.o)
- .debug_ranges  0x00000608       0x78 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(adc_17xx_40xx.o)
- .debug_ranges  0x00000680       0x28 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(chip_17xx_40xx.o)
- .debug_ranges  0x000006a8      0x110 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
- .debug_ranges  0x000007b8       0x28 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(dac_17xx_40xx.o)
- .debug_ranges  0x000007e0       0x80 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
- .debug_ranges  0x00000860       0x20 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(iocon_17xx_40xx.o)
- .debug_ranges  0x00000880       0x50 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(sysinit_17xx_40xx.o)
- .debug_ranges  0x000008d0      0x118 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(uart_17xx_40xx.o)
- .debug_ranges  0x000009e8      0x108 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
- .debug_ranges  0x00000af0       0xe0 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
- .debug_ranges  0x00000bd0       0x48 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_hiduser.o)
+ .debug_ranges  0x000003d8       0x78 ./example/src/main.o
+ .debug_ranges  0x00000450       0x28 ./example/src/setup.o
+ .debug_ranges  0x00000478       0x10 ./example/src/sysinit.o
+ .debug_ranges  0x00000488      0x150 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
+ .debug_ranges  0x000005d8       0x28 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board_sysinit.o)
+ .debug_ranges  0x00000600       0x78 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(adc_17xx_40xx.o)
+ .debug_ranges  0x00000678       0x28 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(chip_17xx_40xx.o)
+ .debug_ranges  0x000006a0      0x110 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
+ .debug_ranges  0x000007b0       0x28 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(dac_17xx_40xx.o)
+ .debug_ranges  0x000007d8       0x80 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
+ .debug_ranges  0x00000858       0x20 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(iocon_17xx_40xx.o)
+ .debug_ranges  0x00000878       0x50 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(sysinit_17xx_40xx.o)
+ .debug_ranges  0x000008c8      0x118 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(uart_17xx_40xx.o)
+ .debug_ranges  0x000009e0      0x108 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
+ .debug_ranges  0x00000ae8       0xe0 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
+ .debug_ranges  0x00000bc8       0x48 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_hiduser.o)
 
 .debug_macro    0x00000000     0xa942
  .debug_macro   0x00000000      0x3de ./freertos/src/FreeRTOSCommonHooks.o
@@ -4428,7 +4429,7 @@ OUTPUT(potenciostato.axf elf32-littlearm)
  .debug_macro   0x0000a5a8      0x1cd C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(sysinit_17xx_40xx.o)
  .debug_macro   0x0000a775      0x1cd C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(uart_17xx_40xx.o)
 
-.debug_line     0x00000000     0xa505
+.debug_line     0x00000000     0xa4db
  .debug_line    0x00000000      0x7df ./freertos/src/FreeRTOSCommonHooks.o
  .debug_line    0x000007df      0x79c ./freertos/src/heap_3.o
  .debug_line    0x00000f7b      0x7e8 ./freertos/src/list.o
@@ -4438,25 +4439,25 @@ OUTPUT(potenciostato.axf elf32-littlearm)
  .debug_line    0x000039eb       0xdb ./example/src/cr_startup_lpc175x_6x.o
  .debug_line    0x00003ac6      0x393 ./example/src/hid_desc.o
  .debug_line    0x00003e59      0x925 ./example/src/hid_generic.o
- .debug_line    0x0000477e      0xafc ./example/src/main.o
- .debug_line    0x0000527a      0x572 ./example/src/setup.o
- .debug_line    0x000057ec      0x65b ./example/src/sysinit.o
- .debug_line    0x00005e47      0x841 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
- .debug_line    0x00006688      0x4c5 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board_sysinit.o)
- .debug_line    0x00006b4d      0x529 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(adc_17xx_40xx.o)
- .debug_line    0x00007076      0x451 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(chip_17xx_40xx.o)
- .debug_line    0x000074c7      0x6cd C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
- .debug_line    0x00007b94      0x439 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(dac_17xx_40xx.o)
- .debug_line    0x00007fcd      0x5f2 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
- .debug_line    0x000085bf      0x43d C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(iocon_17xx_40xx.o)
- .debug_line    0x000089fc      0x4c7 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(sysinit_17xx_40xx.o)
- .debug_line    0x00008ec3      0x779 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(uart_17xx_40xx.o)
- .debug_line    0x0000963c      0x198 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_rom_api.o)
- .debug_line    0x000097d4      0x54e C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
- .debug_line    0x00009d22      0x4ca C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
- .debug_line    0x0000a1ec      0x319 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_hiduser.o)
+ .debug_line    0x0000477e      0xad2 ./example/src/main.o
+ .debug_line    0x00005250      0x572 ./example/src/setup.o
+ .debug_line    0x000057c2      0x65b ./example/src/sysinit.o
+ .debug_line    0x00005e1d      0x841 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
+ .debug_line    0x0000665e      0x4c5 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board_sysinit.o)
+ .debug_line    0x00006b23      0x529 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(adc_17xx_40xx.o)
+ .debug_line    0x0000704c      0x451 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(chip_17xx_40xx.o)
+ .debug_line    0x0000749d      0x6cd C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
+ .debug_line    0x00007b6a      0x439 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(dac_17xx_40xx.o)
+ .debug_line    0x00007fa3      0x5f2 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
+ .debug_line    0x00008595      0x43d C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(iocon_17xx_40xx.o)
+ .debug_line    0x000089d2      0x4c7 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(sysinit_17xx_40xx.o)
+ .debug_line    0x00008e99      0x779 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(uart_17xx_40xx.o)
+ .debug_line    0x00009612      0x198 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_rom_api.o)
+ .debug_line    0x000097aa      0x54e C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
+ .debug_line    0x00009cf8      0x4ca C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
+ .debug_line    0x0000a1c2      0x319 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_hiduser.o)
 
-.debug_str      0x00000000    0x23a83
+.debug_str      0x00000000    0x23a91
  .debug_str     0x00000000    0x1596b ./freertos/src/FreeRTOSCommonHooks.o
                               0x15bd0 (size before relaxing)
  .debug_str     0x0001596b      0x152 ./freertos/src/heap_3.o
@@ -4475,39 +4476,39 @@ OUTPUT(potenciostato.axf elf32-littlearm)
                                0x73a3 (size before relaxing)
  .debug_str     0x0001cac1     0x1a9f ./example/src/hid_generic.o
                               0x1c11a (size before relaxing)
- .debug_str     0x0001e560      0xad9 ./example/src/main.o
-                              0x1c8b0 (size before relaxing)
- .debug_str     0x0001f039      0x38d ./example/src/setup.o
+ .debug_str     0x0001e560      0xab7 ./example/src/main.o
+                              0x1c88e (size before relaxing)
+ .debug_str     0x0001f017      0x3bd ./example/src/setup.o
                               0x10424 (size before relaxing)
- .debug_str     0x0001f3c6       0x23 ./example/src/sysinit.o
+ .debug_str     0x0001f3d4       0x23 ./example/src/sysinit.o
                               0x13ab4 (size before relaxing)
- .debug_str     0x0001f3e9     0x22a1 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
+ .debug_str     0x0001f3f7     0x22a1 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
                               0x11921 (size before relaxing)
- .debug_str     0x0002168a      0x22d C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board_sysinit.o)
+ .debug_str     0x00021698      0x22d C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board_sysinit.o)
                               0x10e5b (size before relaxing)
- .debug_str     0x000218b7      0x464 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(adc_17xx_40xx.o)
+ .debug_str     0x000218c5      0x464 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(adc_17xx_40xx.o)
                               0x10df5 (size before relaxing)
- .debug_str     0x00021d1b       0x73 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(chip_17xx_40xx.o)
+ .debug_str     0x00021d29       0x73 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(chip_17xx_40xx.o)
                               0x10b52 (size before relaxing)
- .debug_str     0x00021d8e      0x623 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
+ .debug_str     0x00021d9c      0x623 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
                               0x111c0 (size before relaxing)
- .debug_str     0x000223b1       0xb1 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(dac_17xx_40xx.o)
+ .debug_str     0x000223bf       0xb1 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(dac_17xx_40xx.o)
                               0x10614 (size before relaxing)
- .debug_str     0x00022462      0x40a C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
+ .debug_str     0x00022470      0x40a C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
                               0x11285 (size before relaxing)
- .debug_str     0x0002286c       0x74 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(iocon_17xx_40xx.o)
+ .debug_str     0x0002287a       0x74 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(iocon_17xx_40xx.o)
                               0x1063d (size before relaxing)
- .debug_str     0x000228e0       0xc4 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(sysinit_17xx_40xx.o)
+ .debug_str     0x000228ee       0xc4 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(sysinit_17xx_40xx.o)
                               0x10825 (size before relaxing)
- .debug_str     0x000229a4      0x37e C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(uart_17xx_40xx.o)
+ .debug_str     0x000229b2      0x37e C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(uart_17xx_40xx.o)
                               0x11095 (size before relaxing)
- .debug_str     0x00022d22      0x6ee C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_rom_api.o)
+ .debug_str     0x00022d30      0x6ee C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_rom_api.o)
                                0x18af (size before relaxing)
- .debug_str     0x00023410      0x35c C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
+ .debug_str     0x0002341e      0x35c C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
                                0x1ab2 (size before relaxing)
- .debug_str     0x0002376c      0x1e2 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
+ .debug_str     0x0002377a      0x1e2 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
                                0x19a7 (size before relaxing)
- .debug_str     0x0002394e      0x135 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_hiduser.o)
+ .debug_str     0x0002395c      0x135 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_hiduser.o)
                                0x1975 (size before relaxing)
 
 .comment        0x00000000      0x14c
@@ -4679,7 +4680,7 @@ OUTPUT(potenciostato.axf elf32-littlearm)
  .ARM.attributes
                 0x00000a7d       0x33 c:/nxp/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libcr_nohost.a(__sys_seek.o)
 
-.debug_frame    0x00000000     0x303c
+.debug_frame    0x00000000     0x3014
  .debug_frame   0x00000000       0xb0 ./freertos/src/FreeRTOSCommonHooks.o
  .debug_frame   0x000000b0       0x58 ./freertos/src/heap_3.o
  .debug_frame   0x00000108       0xd8 ./freertos/src/list.o
@@ -4688,22 +4689,22 @@ OUTPUT(potenciostato.axf elf32-littlearm)
  .debug_frame   0x0000077c      0x654 ./freertos/src/tasks.o
  .debug_frame   0x00000dd0      0x170 ./example/src/cr_startup_lpc175x_6x.o
  .debug_frame   0x00000f40       0xac ./example/src/hid_generic.o
- .debug_frame   0x00000fec      0x228 ./example/src/main.o
- .debug_frame   0x00001214       0xa4 ./example/src/setup.o
- .debug_frame   0x000012b8       0x34 ./example/src/sysinit.o
- .debug_frame   0x000012ec      0x5d4 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
- .debug_frame   0x000018c0       0x8c C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board_sysinit.o)
- .debug_frame   0x0000194c      0x218 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(adc_17xx_40xx.o)
- .debug_frame   0x00001b64       0x88 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(chip_17xx_40xx.o)
- .debug_frame   0x00001bec      0x490 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
- .debug_frame   0x0000207c       0xac C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(dac_17xx_40xx.o)
- .debug_frame   0x00002128      0x25c C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
- .debug_frame   0x00002384       0x80 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(iocon_17xx_40xx.o)
- .debug_frame   0x00002404      0x12c C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(sysinit_17xx_40xx.o)
- .debug_frame   0x00002530      0x538 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(uart_17xx_40xx.o)
- .debug_frame   0x00002a68      0x2cc C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
- .debug_frame   0x00002d34      0x234 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
- .debug_frame   0x00002f68       0xd4 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_hiduser.o)
+ .debug_frame   0x00000fec      0x200 ./example/src/main.o
+ .debug_frame   0x000011ec       0xa4 ./example/src/setup.o
+ .debug_frame   0x00001290       0x34 ./example/src/sysinit.o
+ .debug_frame   0x000012c4      0x5d4 C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
+ .debug_frame   0x00001898       0x8c C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board_sysinit.o)
+ .debug_frame   0x00001924      0x218 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(adc_17xx_40xx.o)
+ .debug_frame   0x00001b3c       0x88 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(chip_17xx_40xx.o)
+ .debug_frame   0x00001bc4      0x490 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
+ .debug_frame   0x00002054       0xac C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(dac_17xx_40xx.o)
+ .debug_frame   0x00002100      0x25c C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
+ .debug_frame   0x0000235c       0x80 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(iocon_17xx_40xx.o)
+ .debug_frame   0x000023dc      0x12c C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(sysinit_17xx_40xx.o)
+ .debug_frame   0x00002508      0x538 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(uart_17xx_40xx.o)
+ .debug_frame   0x00002a40      0x2cc C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
+ .debug_frame   0x00002d0c      0x234 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
+ .debug_frame   0x00002f40       0xd4 C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_hiduser.o)
 
 .debug_loc      0x00000000     0x249d
  .debug_loc     0x00000000      0xf0b C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)

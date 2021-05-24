@@ -34,6 +34,7 @@ extern const  USBD_HW_API_T hw_api;
 extern const  USBD_CORE_API_T core_api;
 extern const  USBD_HID_API_T hid_api;
 /* Since this example only uses HID class link functions for that class only */
+
 static const  USBD_API_T g_usbApi = {
 	&hw_api,
 	&core_api,
@@ -47,10 +48,19 @@ static const  USBD_API_T g_usbApi = {
 
 const  USBD_API_T *g_pUsbApi = &g_usbApi;
 
+struct DACmsj {
+  bool set;
+  uint32_t frec;
+  uint16_t amp;
+};
+
+
+// OBJETOS FreeRTOS
+
 xSemaphoreHandle UARTSemMtx,UARTSendMtx,DACSemMtx,ADCSemMtx;
 xQueueHandle xQTqueue,xACDqueue,xOPCodequeue;
 xSemaphoreHandle slectura_ok;
-xQueueHandle qUSBin, qUSBout, datoADC;
+xQueueHandle qUSBin, qUSBout, datoADC, qDAC;
 
 DMA_TransferDescriptor_t DMA_LLI_buffer;
 
@@ -196,8 +206,10 @@ static void vINTSimTask(void *pvParameters) {
 static void vUSBTask(void *pvParameters) {
 //char ProgState= "0000000000000000";
 	int ProgState = 0;
-char BufferOutSTR[] = "0000000000000000",OpCode[]="000";
+	char BufferOutSTR[] = "0000000000000000",OpCode[]="000";
+	struct DACmsj conf = {true,1000,1};
 
+	xQueueSendToBack(qDAC,&conf,0);
 
 	while (1) {
 		DEBUGOUT("USB: Leo xOPCodequeue\n");
@@ -248,51 +260,47 @@ char BufferOutSTR[] = "0000000000000000",OpCode[]="000";
 }
 /* DAC parpadeo cada 0.1s */
 static void vDACTask(void *pvParameters) {
-	bool LedState = false;
-	int inDAC = 0, SG_OK = 0;
-	static portBASE_TYPE xHigherPriorityTaskWoken;
-	uint16_t tabla_salida [ NUMERO_MUESTRAS ], i;
-	uint16_t FREC = 1000, AMPLITUD = 1;
+	bool DACset = false;
+	uint16_t tabla_salida[ NUMERO_MUESTRAS ], i, SG_OK = 0;
+	uint16_t FREC = 0, AMPLITUD = 0;
 	uint32_t CLOCK_DAC_HZ, timeoutDMA, Canal_Libre;
+	struct DACmsj conf;
+
+	// Config DAC
 	CLOCK_DAC_HZ = Chip_Clock_GetSystemClockRate()/4;
-	for ( i = 0 ; i < NUMERO_MUESTRAS ; i++ ) {
-						tabla_salida[i]= AMPLITUD * tabla_tria[i];
-						}
-
-	timeoutDMA = CLOCK_DAC_HZ / ( FREC * NUMERO_MUESTRAS );
-
 	Chip_GPDMA_PrepareDescriptor ( LPC_GPDMA , &DMA_LLI_buffer  , (uint32_t) tabla_salida ,
 									GPDMA_CONN_DAC , DMA_SIZE , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA , &DMA_LLI_buffer );
-
 	Canal_Libre = Chip_GPDMA_GetFreeChannel ( LPC_GPDMA , 0 );
-	Chip_DAC_SetDMATimeOut(LPC_DAC, timeoutDMA);
-	Chip_DAC_ConfigDAConverterControl(LPC_DAC, DAC_DBLBUF_ENA | DAC_CNT_ENA | DAC_DMA_ENA);
 	Chip_GPDMA_Init ( LPC_GPDMA );
-	//Chip_GPDMA_Stop(LPC_GPDMA, Canal_Libre);
-	SG_OK = Chip_GPDMA_SGTransfer (LPC_GPDMA , Canal_Libre ,
-								&DMA_LLI_buffer , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA);
 
 	while (1)	{
-		Board_LED_Set(0, LedState);
-		LedState = (bool) !LedState;
-		inDAC++;
 
-		/*
-		 * tomo el semáforo para poder darlo
-		 * lo tomo 2 veces así se bloquea hasta que la uart lo habilite
-		 * cuando implementemos dma vamos a resolver de otra forma
-		 * */
-		DEBUGOUT("DAC: Voy a tomar el semaforo\n");
-		xSemaphoreTake( DACSemMtx, portMAX_DELAY );
-		DEBUGOUT("DAC: Tengo el semaforo\n");
+		xQueueReceive(qDAC,&conf,portMAX_DELAY);
 
-
-		/* parpadeo cada 0.1s*/
-//		vTaskDelay(100/portTICK_RATE_MS);
-
-//		taskYIELD();
+		if(conf.frec != FREC){
+			FREC = conf.frec;
+			timeoutDMA = CLOCK_DAC_HZ / ( FREC * NUMERO_MUESTRAS );
+			Chip_DAC_SetDMATimeOut(LPC_DAC, timeoutDMA);
+		}
+		if (conf.amp != AMPLITUD){
+			AMPLITUD = conf.amp;
+			for ( i = 0 ; i < NUMERO_MUESTRAS ; i++ ) {
+				tabla_salida[i]= AMPLITUD * tabla_tria[i];
+			}
+		}
+		if(conf.set != DACset){
+			DACset = conf.set;
+			if(DACset){
+				SG_OK = Chip_GPDMA_SGTransfer (LPC_GPDMA , Canal_Libre ,&DMA_LLI_buffer , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA);
+				Board_LED_Set(0, true);
+			} else {
+				Chip_GPDMA_Stop(LPC_GPDMA, Canal_Libre);
+				Board_LED_Set(0, false);
+			}
+		}
 	}
 }
+
 /* ADC parpadeo cada 1s */
 static void vADCTask(void *pvParameters) {
 	char ADCBuff[] = "0000000000000666";
@@ -370,6 +378,7 @@ int main(void)
 
 	qUSBin = xQueueCreate( 10, sizeof( uint8_t )* 6);
 	qUSBout = xQueueCreate( 10, sizeof( uint8_t )* 6);
+	qDAC = xQueueCreate( 1, sizeof( struct DACmsj ));
 
 	 /*
 	  * Busco asegurar que pueda pasar un string del tamaño definido en el protocolo, no se que
