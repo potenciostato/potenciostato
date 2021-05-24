@@ -1,6 +1,5 @@
 EESchema Schematic File Version 4
-LIBS:potenciostato-cache
-EELAYER 26 0
+EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
@@ -515,10 +514,10 @@ Wire Wire Line
 Wire Wire Line
 	2050 3100 2050 3200
 $Comp
-L power:GND #PWR?
+L power:GND #PWR0130
 U 1 1 609B9D8E
 P 2050 3200
-F 0 "#PWR?" H 2050 2950 50  0001 C CNN
+F 0 "#PWR0130" H 2050 2950 50  0001 C CNN
 F 1 "GND" H 2055 3027 50  0000 C CNN
 F 2 "" H 2050 3200 50  0001 C CNN
 F 3 "" H 2050 3200 50  0001 C CNN
