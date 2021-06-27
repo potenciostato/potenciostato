@@ -34,6 +34,7 @@ void prvSetupHardware(void)
 	Chip_ADC_Int_SetChannelCmd(LPC_ADC,ADC_CH0,ENABLE);
 	Chip_ADC_SetBurstCmd(LPC_ADC,DISABLE);
 
+
     // Setup DAC
 	Chip_IOCON_PinMux (LPC_IOCON , PUERTO(0) , PIN(26) , MD_PLN, IOCON_FUNC2 );
 	Chip_DAC_Init(LPC_DAC);

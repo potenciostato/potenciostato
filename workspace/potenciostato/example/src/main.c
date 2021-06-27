@@ -59,10 +59,11 @@ struct DACmsj {
 
 xSemaphoreHandle UARTSemMtx,UARTSendMtx,DACSemMtx,ADCSemMtx;
 xQueueHandle xQTqueue,xACDqueue,xOPCodequeue;
-xSemaphoreHandle slectura_ok;
+xSemaphoreHandle sBufferADC;
 xQueueHandle qUSBin, qUSBout, datoADC, qDAC;
 
 DMA_TransferDescriptor_t DMA_LLI_buffer;
+DMA_TransferDescriptor_t DMA_LLI_buffer_ADC;
 
 #define InitMeasure "001"
 #define AbortMeasurement "002"
@@ -72,6 +73,9 @@ DMA_TransferDescriptor_t DMA_LLI_buffer;
 
 
 char QTFlagSTR[] = "000000000000000000", UARTAKTSTR[] = "0000", pruebahernan[]="080";
+
+static uint8_t Burst_Mode_Flag = 0, Interrupt_Continue_Flag;
+static uint8_t ADC_Interrupt_Done_Flag, channelTC, dmaChannelNum;
 
 /*****************************************************************************
  * Declaracion de funciones
@@ -99,7 +103,21 @@ void ADC_IRQHandler(void){
 	static signed portBASE_TYPE xHigherPriorityTaskWoken;
 	xHigherPriorityTaskWoken = pdFALSE;
 	NVIC_DisableIRQ(ADC_IRQn);
-	xSemaphoreGiveFromISR(slectura_ok, &xHigherPriorityTaskWoken);
+	xSemaphoreGiveFromISR(sBufferADC, &xHigherPriorityTaskWoken);
+	portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+}
+
+void DMA_IRQHandler(void)
+{
+	static signed portBASE_TYPE xHigherPriorityTaskWoken;
+	xHigherPriorityTaskWoken = pdFALSE;
+	if (Chip_GPDMA_Interrupt(LPC_GPDMA, dmaChannelNum) == SUCCESS) {
+		channelTC++;
+	}
+	else {
+		/* Process error here */
+	}
+	xSemaphoreGiveFromISR(sBufferADC, &xHigherPriorityTaskWoken);
 	portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 }
 
@@ -207,7 +225,7 @@ static void vUSBTask(void *pvParameters) {
 //char ProgState= "0000000000000000";
 	int ProgState = 0;
 	char BufferOutSTR[] = "0000000000000000",OpCode[]="000";
-	struct DACmsj conf = {true,1000,1};
+	struct DACmsj conf = {false,1000,1};
 
 	xQueueSendToBack(qDAC,&conf,0);
 
@@ -255,7 +273,6 @@ static void vUSBTask(void *pvParameters) {
 				DEBUGOUT("USB: Estado invalido\r\n");
 				break;
 	       }
-
 	}
 }
 /* DAC parpadeo cada 0.1s */
@@ -266,7 +283,7 @@ static void vDACTask(void *pvParameters) {
 	uint32_t CLOCK_DAC_HZ, timeoutDMA, Canal_Libre;
 	struct DACmsj conf;
 
-	// Config DAC
+	// Config DAC DMA
 	CLOCK_DAC_HZ = Chip_Clock_GetSystemClockRate()/4;
 	Chip_GPDMA_PrepareDescriptor ( LPC_GPDMA , &DMA_LLI_buffer  , (uint32_t) tabla_salida ,
 									GPDMA_CONN_DAC , DMA_SIZE , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA , &DMA_LLI_buffer );
@@ -303,50 +320,41 @@ static void vDACTask(void *pvParameters) {
 
 /* ADC parpadeo cada 1s */
 static void vADCTask(void *pvParameters) {
-	char ADCBuff[] = "0000000000000666";
+		uint16_t dataADC;
+		uint32_t ADCbuffer1[ADC_N_LECTURAS], ADCbuffer2[ADC_N_LECTURAS];
 
-	static uint16_t lecturaADC;
-	uint32_t timerFreq, duty;
-	timerFreq = Chip_Clock_GetSystemClockRate()/4;
-	NVIC_ClearPendingIRQ(ADC_IRQn);
-	NVIC_EnableIRQ(ADC_IRQn);
+		/* Initialize GPDMA controller */
+		Chip_GPDMA_Init(LPC_GPDMA);
+		/* Setting GPDMA interrupt */
+		NVIC_DisableIRQ(DMA_IRQn);
+		NVIC_SetPriority(DMA_IRQn, ((0x01 << 3) | 0x01));
+		NVIC_EnableIRQ(DMA_IRQn);
+		/* Setting ADC interrupt, ADC Interrupt must be disable in DMA mode */
+		NVIC_DisableIRQ(ADC_IRQn);
+		/* Get the free channel for DMA transfer */
+		dmaChannelNum = Chip_GPDMA_GetFreeChannel(LPC_GPDMA, GPDMA_CONN_ADC);
 
+		while (1)	{
 
+			NVIC_EnableIRQ(DMA_IRQn);
+			Chip_GPDMA_Transfer(LPC_GPDMA, dmaChannelNum,
+							  GPDMA_CONN_ADC,
+							  (uint32_t) lecturasADC,
+							  GPDMA_TRANSFERTYPE_P2M_CONTROLLER_DMA,
+							  ADC_N_LECTURAS);
+			Chip_ADC_SetBurstCmd(LPC_ADC, ENABLE);
+			/* Espera que termine la lectura */
+			xSemaphoreTake(sBufferADC, portMAX_DELAY);
 
-	while (1) {
+			/* Get the ADC value fron Data register*/
+			dataADC = ADC_DR_RESULT(lecturasADC[0]);
+			/* Disable interrupts, release DMA channel */
+			Chip_GPDMA_Stop(LPC_GPDMA, dmaChannelNum);
+			NVIC_DisableIRQ(DMA_IRQn);
+			/* Disable burst mode if any */
+			Chip_ADC_SetBurstCmd(LPC_ADC, DISABLE);
 
-		DEBUGOUT("ADC: Voy a tomar el semaforo\n");
-		/*
-		 * tomo el semáforo para poder darlo
-		 * lo tomo 2 veces así se bloquea hasta que la uart lo habilite
-		 * cuando implementemos dma vamos a resolver de otra forma
-		 * */
-		xSemaphoreTake( ADCSemMtx, portMAX_DELAY );
-		DEBUGOUT("ADC: Doy el semaforo de la UART\n");
-		strcpy(UARTAKTSTR,SendData);
-		/*
-		 * Envio
-		 * _código de operación
-		 * _datos de la medición*/
-		xQueueSendToBack(xOPCodequeue,&SendData,0);
-		xQueueSendToBack(xACDqueue,&ADCBuff,0);
-		//le indico a la uart que debe mandar info
-		xSemaphoreGive( UARTSemMtx);
-
-
-		NVIC_EnableIRQ(ADC_IRQn);
-		Chip_ADC_SetStartMode(LPC_ADC,ADC_START_NOW,ADC_TRIGGERMODE_RISING);
-		xSemaphoreTake(slectura_ok, ( portTickType ) portMAX_DELAY);
-		Chip_ADC_ReadValue(LPC_ADC,ADC_CH0,&lecturaADC);
-		xQueueSend( datoADC, ( void * ) &lecturaADC, ( portTickType ) 0 );
-		vTaskDelay(configTICK_RATE_HZ / 4);
-
-
-		/* parpadeo cada 1s*/
-//		vTaskDelay(1000/portTICK_RATE_MS);
-
-//		taskYIELD();
-	}
+		}
 }
 
 
@@ -372,8 +380,8 @@ int main(void)
 	ADCSemMtx = xSemaphoreCreateMutex();
 	DACSemMtx = xSemaphoreCreateMutex();
 
-	vSemaphoreCreateBinary(slectura_ok);
-	xSemaphoreTake(slectura_ok, ( portTickType ) 10 );
+	vSemaphoreCreateBinary(sBufferADC);
+	xSemaphoreTake(sBufferADC, ( portTickType ) 10 );
 	datoADC = xQueueCreate( 1, sizeof( uint16_t ) );
 
 	qUSBin = xQueueCreate( 10, sizeof( uint8_t )* 6);

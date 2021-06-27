@@ -53,6 +53,7 @@
 // Defines ADC
 
 #define ADC_SAMPL_FREC      50000
+#define ADC_N_LECTURAS		10
 
 
 #endif /* DEFINES_H_ */

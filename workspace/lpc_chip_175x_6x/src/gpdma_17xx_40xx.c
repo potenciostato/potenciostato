@@ -663,7 +663,51 @@ Status Chip_GPDMA_SGTransfer(LPC_GPDMA_T *pGPDMA,
 	dst = (uint32_t) GPDMA_CONN_DAC; // Se debe forzar ésta condición. Caso contrario no funcionaría porque
 									 // la función Chip_GPDMA_InitChannegCfg acepta un índice de periferico
 									 // y no la posición absoluta. IDEM línea 684 aquí debajo.
+	int ret;
 
+	ret = Chip_GPDMA_InitChannelCfg(pGPDMA, &GPDMACfg, ChannelNum, src, dst, 0, TransferType);
+	if (ret < 0) {
+		return ERROR;
+	}
+
+	/* Adjust src/dst index if they are memory */
+	if (ret & 1) {
+		src = 0;
+	}
+	else {
+		SrcPeripheral = configDMAMux(src);
+	}
+
+	if (ret & 2) {
+		dst = 0;
+	}
+	else {
+		DstPeripheral = configDMAMux(dst);
+	}
+
+	if (setupChannel(pGPDMA, &GPDMACfg, dsc->ctrl, dsc->lli, SrcPeripheral, DstPeripheral) == ERROR) {
+		return ERROR;
+	}
+
+	/* Start the Channel */
+	Chip_GPDMA_ChannelCmd(pGPDMA, ChannelNum, ENABLE);
+	return SUCCESS;
+}
+
+/* Do a DMA scatter-gather transfer M2M, M2P,P2M or P2P using DMA descriptors */
+Status Chip_GPDMA_SGTransfer_ADC(LPC_GPDMA_T *pGPDMA,
+							 uint8_t ChannelNum,
+							 const DMA_TransferDescriptor_t *DMADescriptor,
+							 GPDMA_FLOW_CONTROL_T TransferType)
+{
+	const DMA_TransferDescriptor_t *dsc = DMADescriptor;
+	GPDMA_CH_CFG_T GPDMACfg;
+	uint8_t SrcPeripheral = 0, DstPeripheral = 0;
+	uint32_t src = DMADescriptor->src, dst = DMADescriptor->dst;
+
+	src = (uint32_t) GPDMA_CONN_ADC; // Se debe forzar ésta condición. Caso contrario no funcionaría porque
+									 // la función Chip_GPDMA_InitChannegCfg acepta un índice de periferico
+									 // y no la posición absoluta. IDEM línea 684 aquí debajo.
 	int ret;
 
 	ret = Chip_GPDMA_InitChannelCfg(pGPDMA, &GPDMACfg, ChannelNum, src, dst, 0, TransferType);

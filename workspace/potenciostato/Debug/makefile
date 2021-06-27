@@ -30,7 +30,7 @@ all: potenciostato.axf
 potenciostato.axf: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: MCU Linker'
-	arm-none-eabi-gcc -nostdlib -L"C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\Debug" -L"C:\repo proyecto final\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug" -L"C:\repo proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\libs" -Xlinker -Map="potenciostato.map" -Xlinker --gc-sections -mcpu=cortex-m3 -mthumb -T "potenciostato_Debug.ld" -o "potenciostato.axf" $(OBJS) $(USER_OBJS) $(LIBS)
+	arm-none-eabi-gcc -nostdlib -L"C:\repotenciostato\proyecto-final\workspace\lpc_chip_175x_6x\Debug" -L"C:\repotenciostato\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug" -L"C:\repotenciostato\proyecto-final\workspace\lpc_chip_175x_6x\libs" -Xlinker -Map="potenciostato.map" -Xlinker --gc-sections -mcpu=cortex-m3 -mthumb -T "potenciostato_Debug.ld" -o "potenciostato.axf" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 	$(MAKE) --no-print-directory post-build

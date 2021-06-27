@@ -245,21 +245,22 @@ int main(void)
 	/*ADC Init */
 	Chip_ADC_Init(_LPC_ADC_ID, &ADCSetup);
 	Chip_ADC_EnableChannel(_LPC_ADC_ID, _ADC_CHANNLE, ENABLE);
-
+	bufferUART = 'c';
 	while (!end_Flag) {
 		DEBUGOUT(WelcomeMenu);
 		while (!end_Flag) {
 			bufferUART = 0xFF;
-			bufferUART = DEBUGIN();
+			bufferUART = 'c';
 			if (bufferUART == 'c') {
 				DEBUGOUT(SelectMenu);
-				bufferUART = 0xFF;
+				bufferUART = '3';
 				while (bufferUART == 0xFF) {
 					bufferUART = DEBUGIN();
 					if ((bufferUART != '1') && (bufferUART != '2') && (bufferUART != '3')) {
 						bufferUART = 0xFF;
 					}
 				}
+				bufferUART = '3';
 				switch (bufferUART) {
 				case '1':		/* Polling Mode */
 					App_Polling_Test();
