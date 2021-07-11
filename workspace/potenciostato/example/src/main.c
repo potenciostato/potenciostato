@@ -68,7 +68,7 @@ struct ADCmsj {
 xSemaphoreHandle UARTSemMtx,UARTSendMtx,DACSemMtx,ADCSemMtx;
 xQueueHandle xQTqueue,xACDqueue,xOPCodequeue;
 xSemaphoreHandle sBufferADC;
-xQueueHandle qUSBin, qUSBout, qADC, qDAC, qADCdata;
+xQueueHandle qUSBin, qUSBout, qADC, qDAC, qADCdata, qADCsend;
 
 DMA_TransferDescriptor_t DMA_LLI_buffer;
 DMA_TransferDescriptor_t DMA_LLI_buffer_ADC;
@@ -108,10 +108,13 @@ void USB_IRQHandler(void){
 }
 
 void ADC_IRQHandler(void){
+	uint32_t dataADC, valorADC ;
 	static signed portBASE_TYPE xHigherPriorityTaskWoken;
 	xHigherPriorityTaskWoken = pdFALSE;
 	NVIC_DisableIRQ(ADC_IRQn);
-	xSemaphoreGiveFromISR(sBufferADC, &xHigherPriorityTaskWoken);
+	Chip_ADC_ReadValue(LPC_ADC, ADC_CH0, &dataADC);
+	valorADC = ADC_DR_RESULT(dataADC);
+	xQueueSendToBackFromISR( qADCdata, &valorADC, &xHigherPriorityTaskWoken );
 	portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 }
 
@@ -279,10 +282,6 @@ static void vUSBTask(void *pvParameters) {
 				break;
 
 			case 32:
-				xQueueReceive(qADCdata,ADCbuffer,portMAX_DELAY);
-				for(i=0;i<ADC_N_LECTURAS;i++){
-					valoresADC[i] = ADC_DR_RESULT(ADCbuffer[i]);
-				}
 				DEBUGOUT("DATOS ADC");
 				break;
 
@@ -338,17 +337,13 @@ static void vDACTask(void *pvParameters) {
 /* ADC parpadeo cada 1s */
 static void vADCTask(void *pvParameters) {
 
-	uint16_t FREC = ADC_SAMPL_FREC,i, dataADC;
+	uint16_t FREC = ADC_SAMPL_FREC, i, dataADC;
 	struct ADCmsj conf;
-	uint32_t ADCbuffer[ADC_N_LECTURAS], ADCbuffer2[ADC_N_LECTURAS];
-	uint32_t Canal_Libre;
+	uint16_t ADCbuffer[ADC_N_COLA], ADCbuffer2[ADC_N_LECTURAS];
 
-	NVIC_EnableIRQ(DMA_IRQn);
-	/* Setting ADC interrupt, ADC Interrupt must be disable in DMA mode */
-	NVIC_DisableIRQ(ADC_IRQn);
 	Chip_ADC_Int_SetChannelCmd(LPC_ADC, ADC_CH0, ENABLE);
-	/* Get the free channel for DMA transfer */
-	CanalADC = Chip_GPDMA_GetFreeChannel(LPC_GPDMA, GPDMA_CONN_ADC);
+	NVIC_EnableIRQ(ADC_IRQn);
+
 	while (1){
 		xQueueReceive(qADC,&conf,portMAX_DELAY);
 
@@ -356,33 +351,24 @@ static void vADCTask(void *pvParameters) {
 			FREC = conf.frec;
 			Chip_ADC_SetSampleRate(LPC_ADC,&ADCSetup,FREC);
 		}
-		NVIC_EnableIRQ(DMA_IRQn);
-		Chip_ADC_SetBurstCmd(LPC_ADC, ENABLE);
-
-		while (conf.set){
-			xQueueReceive(qADC,&conf,( portTickType ) 0);
-			Chip_GPDMA_Transfer(LPC_GPDMA,
-					CanalADC,
-					GPDMA_CONN_ADC,
-					(uint32_t) &ADCbuffer,
-					GPDMA_TRANSFERTYPE_P2M_CONTROLLER_DMA,
-					ADC_N_LECTURAS);
+		if (conf.set){
 			Chip_ADC_SetBurstCmd(LPC_ADC, ENABLE);
-			/* Espera que termine la lectura */
-			vTaskDelay(1000/portTICK_RATE_MS);
-			xSemaphoreTake(sBufferADC, portMAX_DELAY);
-			//Chip_ADC_SetBurstCmd(LPC_ADC, DISABLE);
-			xQueueSendToBack(qADCdata,ADCbuffer,0);
+			i = 0;
+			while (conf.set){
+				xQueueReceive(qADC,&conf,( portTickType ) 0);
+				xQueueReceive(qADCdata,&dataADC,portMAX_DELAY);
+				NVIC_EnableIRQ(ADC_IRQn);
+				ADCbuffer[i] = dataADC;
+				i++;
+				if(i>=ADC_N_COLA){
+					i = 0;
+					xQueueSendToBack(qADCsend,ADCbuffer,10);
+				}
+			}
+			Chip_ADC_SetBurstCmd(LPC_ADC, DISABLE);
 		}
-
-		//dataADC = ADC_DR_RESULT(lecturasADC[0]);
-		Chip_GPDMA_Stop(LPC_GPDMA, dmaChannelNum);
-		NVIC_DisableIRQ(DMA_IRQn);
-		/* Disable burst mode if any */
-		Chip_ADC_SetBurstCmd(LPC_ADC, DISABLE);
 	}
 }
-
 
 
 /*****************************************************************************
@@ -413,7 +399,8 @@ int main(void)
 	qUSBout = xQueueCreate( 10, sizeof( uint8_t )* 6);
 	qDAC = xQueueCreate( 1, sizeof( struct DACmsj ));
 	qADC = xQueueCreate( 1, sizeof( struct ADCmsj ));
-	qADCdata = xQueueCreate( 10, sizeof( uint32_t ) * ADC_N_LECTURAS);
+	qADCdata = xQueueCreate(ADC_N_COLA, sizeof( uint16_t ));
+	qADCsend = xQueueCreate(1, sizeof( uint16_t ) * ADC_N_COLA);
 
 	 /*
 	  * Busco asegurar que pueda pasar un string del tamaño definido en el protocolo, no se que

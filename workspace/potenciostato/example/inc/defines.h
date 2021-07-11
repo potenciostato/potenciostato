@@ -54,6 +54,9 @@
 
 #define ADC_SAMPL_FREC      50000
 #define ADC_N_LECTURAS		30
+#define ADC_N_COLA 			50
+
+#define ADC_DR_RESULT(n)        ((((n) >> 4) & 0xFFF))
 
 
 #endif /* DEFINES_H_ */
