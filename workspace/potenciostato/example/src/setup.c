@@ -10,7 +10,7 @@
 #include <chip.h>
 
 // Variable necesaria para config ADC
-static ADC_CLOCK_SETUP_T ADCSetup;
+ADC_CLOCK_SETUP_T ADCSetup;
 
 
 /*****************************************************************************
@@ -32,7 +32,7 @@ void prvSetupHardware(void)
 	Chip_ADC_EnableChannel(LPC_ADC, ADC_CH0, ENABLE);
 	Chip_ADC_SetSampleRate(LPC_ADC,&ADCSetup,ADC_SAMPL_FREC);
 	Chip_ADC_Int_SetChannelCmd(LPC_ADC,ADC_CH0,ENABLE);
-	Chip_ADC_SetBurstCmd(LPC_ADC,DISABLE);
+	//Chip_ADC_SetBurstCmd(LPC_ADC,DISABLE);
 
 
     // Setup DAC
