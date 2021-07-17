@@ -26,5 +26,11 @@ const libusb_endpoint_descriptor *epdesc;
 uint8_t connected = 0;
 uint8_t Dispositivo = 0;
 
+// Definiciones de los códigos de operación
+#define OC_INITMEASUREMENT 0xA
+#define OC_ABORTMEASUREMENT 0xB
+#define OC_SENDDATA 0xC
+#define OC_SENDDATAEND 0xD
+#define OC_ACK 0xE
 
 #endif // GLOBALES_H

@@ -169,6 +169,11 @@ void MainWindow::onTimeout(){
     double tempX[CANT_VALORES] = {0};
     double tempY[CANT_VALORES] = {0};
 
+    unsigned char buffer[8] = {0x0};
+    unsigned char recv_data[8] = {0x0};
+    int len;
+    int send_ret, recv_ret;
+
     if (demostracion == true){
         for (int i=0; i < p_refresco; ++i)
         {
@@ -176,11 +181,37 @@ void MainWindow::onTimeout(){
             tempY[i] = primer_curva_paracetamolY[i];
         }
     }else{
-        //obtener el dato del buffer de entrada
+        //Se envia inicio de medición al LPC
+        //envio....
+        //se queda esperando al Recibido
+        // si llega recibido OK continuar
+
+        if (connected == 1 && medicion_habilitada == 1){
+            //se enviara un SEND DATA
+            buffer[0] = OC_SENDDATA;
+
+            send_ret = libusb_interrupt_transfer(dev_handle, 0x01, buffer, (sizeof(buffer)) * 8, &len, 1000);
+            recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * 8, &len, 1000);
+            //int recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * 64, &len, 1000);
+
+            qDebug() << "codigo envio" << send_ret;
+            qDebug() << "dato enviado" << buffer[0];
+            qDebug() << "codigo recepcion" << recv_ret;
+            qDebug() << "dato recibido" << recv_data[1] << recv_data[0];
+            qDebug() << "lecturas ADC 1 a 3"
+                     << recv_data[7]
+                     << recv_data[6]
+                     << recv_data[5]
+                     << recv_data[4]
+                     << recv_data[3]
+                     << recv_data[2];
+
+            //obtener el dato del buffer de entrada
+        }
     }
 
     // ESTE IF TODAVIA NO ESTA PROBADO
-    if (demostracion == false){
+    /*if (demostracion == false){
         if (strcmp(metodo,"BarridoLineal") == 0 && medicion_habilitada == 1){
             //este if debera ser la condicion para el termino de la medicion
             //es decir, se recibe el dato, si no es el fin de la medicion se appendea el dato
@@ -195,7 +226,7 @@ void MainWindow::onTimeout(){
                 MainWindow::refrescarValores(tempX, tempY);
             }
         }
-    }
+    }*/
 
     if (demostracion == true){
         if (strcmp(metodo,"BarridoLineal") == 0 && medicion_habilitada == 1){
@@ -303,15 +334,36 @@ void MainWindow::on_pushButton_clicked()
 
 void MainWindow::on_Bt_Iniciar_clicked()
 {
+    if (connected != 1){
+        qDebug() << "Dispositivo no conectado";
+    }
+
     qDebug() << "Iniciar Medición";
     //Deshabilita Iniciar
     ui->Bt_Iniciar->setEnabled(false);
     ui->Bt_Exportar->setEnabled(false);
 
+    unsigned char buffer[8] = {0x0};
+    unsigned char recv_data[8] = {0x0};
+    int len;
+    int send_ret, recv_ret;
+
     //Se envia inicio de medición al LPC
     //envio....
     //se queda esperando al Recibido
     // si llega recibido OK continuar
+
+    //se enviara un INIT MEASUREMENT
+    buffer[0] = OC_INITMEASUREMENT;
+
+    send_ret = libusb_interrupt_transfer(dev_handle, 0x01, buffer, (sizeof(buffer)) * 8, &len, 1000);
+    recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * 8, &len, 1000);
+    //int recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * 64, &len, 1000);
+
+    qDebug() << "codigo envio" << send_ret;
+    qDebug() << "dato enviado" << buffer[0];
+    qDebug() << "codigo recepcion" << recv_ret;
+    qDebug() << "dato recibido[0]" << recv_data[0];
 
     //Limpia el gráfico y lo inicializa
     MainWindow::limpiarGraficos();
@@ -341,7 +393,31 @@ void MainWindow::on_Bt_Abortar_clicked()
     //se queda esperando al Recibido
     // si llega recibido OK continuar
 
+    unsigned char buffer[8] = {0x0};
+    unsigned char recv_data[8] = {0x0};
+    int len;
+    int send_ret, recv_ret;
+
+    //Se envia inicio de medición al LPC
+    //envio....
+    //se queda esperando al Recibido
+    // si llega recibido OK continuar
+
+    //se enviara un INIT MEASUREMENT
+    buffer[0] = OC_ABORTMEASUREMENT;
+
+    send_ret = libusb_interrupt_transfer(dev_handle, 0x01, buffer, (sizeof(buffer)) * 8, &len, 1000);
+    recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * 8, &len, 1000);
+    //int recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * 64, &len, 1000);
+
+    qDebug() << "codigo envio" << send_ret;
+    qDebug() << "dato enviado" << buffer[0];
+    qDebug() << "codigo recepcion" << recv_ret;
+    qDebug() << "dato recibido[0]" << recv_data[0];
+
     //Se termina la medición
+    qDebug() << "Termino la medicion";
+    medicion_habilitada = 0;
     MainWindow::terminoMedicion();
     if (demostracion == true){
         p_refresco = 0;
@@ -497,26 +573,24 @@ void MainWindow::on_Conectar_Bt_clicked()
 
     libusb_claim_interface(dev_handle, 0);
 
-    unsigned char buffer[8] = {0x0};
+/*    unsigned char buffer[8] = {0x0};
     unsigned char recv_data[8] = {0x0};
-    buffer[0] = 0xA; //0b00001010
-    qDebug() << "antes de recibir buffer" << buffer[0];
-    qDebug() << "antes de recibir: recv_data" << recv_data[0];
     int len;
     int send_ret, recv_ret;
 
+    //se enviara un INIT MEASUREMENT
+    buffer[0] = OC_INITMEASUREMENT;
+
     send_ret = libusb_interrupt_transfer(dev_handle, 0x01, buffer, (sizeof(buffer)) * 8, &len, 1000);
     recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * 8, &len, 1000);
-    //int
     //int recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * 64, &len, 1000);
 
     qDebug() << "codigo envio" << send_ret;
     qDebug() << "dato enviado" << buffer[0];
     qDebug() << "codigo recepcion" << recv_ret;
-    qDebug() << "dato recibido[0]" << recv_data[0];
-    qDebug() << "dato recibido[2]" << recv_data[2];
+    qDebug() << "dato recibido[0]" << recv_data[0];*/
 
-    Enviados = libusb_interrupt_transfer(dev_handle , 0x01 , TxData , (sizeof (TxData)) * 4, &actual_length , 1000);
+    /*Enviados = libusb_interrupt_transfer(dev_handle , 0x01 , TxData , (sizeof (TxData)) * 4, &actual_length , 1000);
     libusb_interrupt_transfer(dev_handle , 0x81 , RxData , (sizeof (RxData)) * 4, &actual_length , 1000);
 
     //Datos = 0;
@@ -536,7 +610,7 @@ void MainWindow::on_Conectar_Bt_clicked()
     qDebug() << RxData[1];
     qDebug() << RxData[2];
     qDebug() << RxData[3];
-    qDebug() << "-----Fin Bytes Recibidos-----";
+    qDebug() << "-----Fin Bytes Recibidos-----";*/
     qDebug() << Dispositivo;
     qDebug() << Enviados;
 }

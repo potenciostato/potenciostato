@@ -32,7 +32,7 @@
 #include "board.h"
 #include "string.h"
 
-#include "retarget.h"
+//#include "retarget.h"
 
 /*****************************************************************************
  * Private types/enumerations/variables

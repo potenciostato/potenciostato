@@ -54,9 +54,15 @@
 
 #define ADC_SAMPL_FREC      50000
 #define ADC_N_LECTURAS		30
-#define ADC_N_COLA 			50
+#define ADC_N_COLA 			3 //se pone 3 mediciones por cada mensaje de 8 bytes (6 bytes útiles)
 
 #define ADC_DR_RESULT(n)        (((n) & 0xFFF))
 
+// Definiciones de los códigos de operación
+#define OC_INITMEASUREMENT 0xA
+#define OC_ABORTMEASUREMENT 0xB
+#define OC_SENDDATA 0xC
+#define OC_SENDDATAEND 0xD
+#define OC_ACK 0xE
 
 #endif /* DEFINES_H_ */

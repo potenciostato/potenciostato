@@ -49,6 +49,8 @@
 #include <string.h>
 #include "usbd_rom_api.h"
 
+#include <defines.h>
+
 /*****************************************************************************
  * Private types/enumerations/variables
  ****************************************************************************/
@@ -115,27 +117,68 @@ static ErrorCode_t HID_Ep_Hdlr(USBD_HANDLE_T hUsb, void *data, uint32_t event)
 {
 	USB_HID_CTRL_T *pHidCtrl = (USB_HID_CTRL_T *) data;
 
-	uint8_t i, paquete[8]={0};
+	uint8_t i, mensaje[8]={0};
+	uint8_t medicion[6]={0}, respuesta[8]={0};
 
+
+	static portBASE_TYPE xHigherPriorityTaskWoken;
+	xHigherPriorityTaskWoken = pdFALSE;
 	switch (event) {
 	case USB_EVT_IN:
 		/* last report is successfully sent. Do something... */
 		break;
 
 	case USB_EVT_OUT:
-		/* Read the new report received. */
+		/* Leo el mensaje del QT */
 		USBD_API->hw->ReadEP(hUsb, pHidCtrl->epout_adr, loopback_report);
 		for (i = 0; i < 8; i++){
-			paquete[i] = *(loopback_report+i);
+			mensaje[i] = *(loopback_report+i);
 		}
-		/* loopback the report received. */
+		/* El mensaje sera procesado */
 
-		// si el codigo escrito coincide con el de mandar datos
+		// Si QT pidio datos, que el LPC envie e1 dato que
+		// tiene sin tener que pasar por USBTask (para agilizar)
+		// qUSBout tendra los datos a pasar
+
+		// Si el QT envia cualquier otra cosa se pasan todos los datos
+		// a la tarea de USB por medio de la cola qUSBout
+		switch (mensaje[0]){
+			// si el codigo de operacion recibido coincide con el de recibir datos
+			case OC_SENDDATA:
+				xQueueReceiveFromISR( qUSBout, &medicion, &xHigherPriorityTaskWoken );
+				respuesta[0] = OC_SENDDATA;
+				respuesta[1] = 0x0;
+				for (i = 0; i < 6; i ++){
+					respuesta[i+2] = medicion[i];
+				}
+				DEBUGOUT("INT: SEND DATA\n");
+				USBD_API->hw->WriteEP(hUsb, pHidCtrl->epin_adr, respuesta, 8);
+				break;
+			case OC_INITMEASUREMENT:
+			case OC_ABORTMEASUREMENT:
+				xQueueSendToBackFromISR( qUSBin, &mensaje, &xHigherPriorityTaskWoken );
+				respuesta[0] = mensaje[0]; //el ACK sera el codigo de operacion recibido y nada mas
+				for (i = 0; i < 7; i ++){
+					respuesta[i+1] = 0;
+				}
+				DEBUGOUT("INT: INIT OR ABORT\n");
+				USBD_API->hw->WriteEP(hUsb, pHidCtrl->epin_adr, respuesta, 8);
+				break;
+			default:
+				mensaje[0] = 0xFF;
+				mensaje[1] = 0xAA;
+				mensaje[2] = 0xFF;
+				mensaje[3] = 0xAA;
+				mensaje[4] = 0xFF;
+				mensaje[5] = 0xAA;
+				mensaje[6] = 0xFF;
+				mensaje[7] = 0xAA;
+				USBD_API->hw->WriteEP(hUsb, pHidCtrl->epin_adr, mensaje, 8);
+				break;
+		}
+
 		//xQueueReceive(qUSBin, paquete, 0);
 		//USBD_API->hw->WriteEP(hUsb, pHidCtrl->epin_adr, loopback_report, 8);
-
-		paquete[2] = 3;
-		USBD_API->hw->WriteEP(hUsb, pHidCtrl->epin_adr, paquete, 8);
 		break;
 	}
 	return LPC_OK;
