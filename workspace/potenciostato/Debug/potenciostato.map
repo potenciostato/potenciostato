@@ -4416,7 +4416,7 @@ OUTPUT(potenciostato.axf elf32-littlearm)
  .debug_line    0x00009c2e      0x4ca C:\repotenciostato\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
  .debug_line    0x0000a0f8      0x319 C:\repotenciostato\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_hiduser.o)
 
-.debug_str      0x00000000    0x23b44
+.debug_str      0x00000000    0x23b65
  .debug_str     0x00000000    0x15967 ./freertos/src/FreeRTOSCommonHooks.o
                               0x15bcc (size before relaxing)
  .debug_str     0x00015967      0x152 ./freertos/src/heap_3.o
@@ -4435,39 +4435,39 @@ OUTPUT(potenciostato.axf elf32-littlearm)
                                0x739f (size before relaxing)
  .debug_str     0x0001cabd     0x1a9f ./example/src/hid_generic.o
                               0x1c116 (size before relaxing)
- .debug_str     0x0001e55c      0xae0 ./example/src/main.o
-                              0x1c8b9 (size before relaxing)
- .debug_str     0x0001f03c      0x374 ./example/src/setup.o
-                              0x10440 (size before relaxing)
- .debug_str     0x0001f3b0       0x23 ./example/src/sysinit.o
+ .debug_str     0x0001e55c      0xb01 ./example/src/main.o
+                              0x1c8da (size before relaxing)
+ .debug_str     0x0001f05d      0x374 ./example/src/setup.o
+                              0x10461 (size before relaxing)
+ .debug_str     0x0001f3d1       0x23 ./example/src/sysinit.o
                               0x13ab0 (size before relaxing)
- .debug_str     0x0001f3d3     0x229d C:\repotenciostato\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
+ .debug_str     0x0001f3f4     0x229d C:\repotenciostato\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board.o)
                               0x1191d (size before relaxing)
- .debug_str     0x00021670      0x22d C:\repotenciostato\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board_sysinit.o)
+ .debug_str     0x00021691      0x22d C:\repotenciostato\proyecto-final\workspace\lpc_board_nxp_lpcxpresso_1769\Debug\liblpc_board_nxp_lpcxpresso_1769.a(board_sysinit.o)
                               0x10e57 (size before relaxing)
- .debug_str     0x0002189d      0x530 C:\repotenciostato\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(adc_17xx_40xx.o)
+ .debug_str     0x000218be      0x530 C:\repotenciostato\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(adc_17xx_40xx.o)
                               0x10df1 (size before relaxing)
- .debug_str     0x00021dcd       0x73 C:\repotenciostato\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(chip_17xx_40xx.o)
+ .debug_str     0x00021dee       0x73 C:\repotenciostato\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(chip_17xx_40xx.o)
                               0x10b4e (size before relaxing)
- .debug_str     0x00021e40      0x623 C:\repotenciostato\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
+ .debug_str     0x00021e61      0x623 C:\repotenciostato\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(clock_17xx_40xx.o)
                               0x111bc (size before relaxing)
- .debug_str     0x00022463       0xb1 C:\repotenciostato\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(dac_17xx_40xx.o)
+ .debug_str     0x00022484       0xb1 C:\repotenciostato\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(dac_17xx_40xx.o)
                               0x10610 (size before relaxing)
- .debug_str     0x00022514      0x419 C:\repotenciostato\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
+ .debug_str     0x00022535      0x419 C:\repotenciostato\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(gpdma_17xx_40xx.o)
                               0x1129b (size before relaxing)
- .debug_str     0x0002292d       0x74 C:\repotenciostato\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(iocon_17xx_40xx.o)
+ .debug_str     0x0002294e       0x74 C:\repotenciostato\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(iocon_17xx_40xx.o)
                               0x10639 (size before relaxing)
- .debug_str     0x000229a1       0xc4 C:\repotenciostato\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(sysinit_17xx_40xx.o)
+ .debug_str     0x000229c2       0xc4 C:\repotenciostato\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(sysinit_17xx_40xx.o)
                               0x10821 (size before relaxing)
- .debug_str     0x00022a65      0x37e C:\repotenciostato\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(uart_17xx_40xx.o)
+ .debug_str     0x00022a86      0x37e C:\repotenciostato\proyecto-final\workspace\lpc_chip_175x_6x\Debug\liblpc_chip_175x_6x.a(uart_17xx_40xx.o)
                               0x11091 (size before relaxing)
- .debug_str     0x00022de3      0x6ee C:\repotenciostato\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_rom_api.o)
+ .debug_str     0x00022e04      0x6ee C:\repotenciostato\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_rom_api.o)
                                0x18af (size before relaxing)
- .debug_str     0x000234d1      0x35c C:\repotenciostato\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
+ .debug_str     0x000234f2      0x35c C:\repotenciostato\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(hw_usbd_ip3503.o)
                                0x1ab2 (size before relaxing)
- .debug_str     0x0002382d      0x1e2 C:\repotenciostato\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
+ .debug_str     0x0002384e      0x1e2 C:\repotenciostato\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_core.o)
                                0x19a7 (size before relaxing)
- .debug_str     0x00023a0f      0x135 C:\repotenciostato\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_hiduser.o)
+ .debug_str     0x00023a30      0x135 C:\repotenciostato\proyecto-final\workspace\lpc_chip_175x_6x\libs\libusbd_175x_6x_lib.a(mw_usbd_hiduser.o)
                                0x1975 (size before relaxing)
 
 .comment        0x00000000      0x14c

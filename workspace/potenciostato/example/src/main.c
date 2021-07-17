@@ -108,7 +108,8 @@ void USB_IRQHandler(void){
 }
 
 void ADC_IRQHandler(void){
-	uint32_t dataADC, valorADC ;
+	uint32_t dataADC;
+	uint16_t valorADC;
 	static signed portBASE_TYPE xHigherPriorityTaskWoken;
 	xHigherPriorityTaskWoken = pdFALSE;
 	NVIC_DisableIRQ(ADC_IRQn);

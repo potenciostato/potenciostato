@@ -56,7 +56,7 @@
 #define ADC_N_LECTURAS		30
 #define ADC_N_COLA 			50
 
-#define ADC_DR_RESULT(n)        ((((n) >> 4) & 0xFFF))
+#define ADC_DR_RESULT(n)        (((n) & 0xFFF))
 
 
 #endif /* DEFINES_H_ */
