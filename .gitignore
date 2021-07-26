@@ -110,3 +110,7 @@ workspace/potenciostato/Debug/potenciostato_Debug.ld
 workspace/potenciostato/Debug/potenciostato_Debug_library.ld
 workspace/potenciostato/Debug/potenciostato_Debug_memory.ld
 workspace/potenciostato/potenciostato Debug.launch
+workspace/potenciostato/Debug/potenciostato_Debug.ld
+workspace/potenciostato/Debug/potenciostato_Debug_library.ld
+workspace/potenciostato/Debug/potenciostato_Debug_memory.ld
+qt/potenciostato_inicial.pro.user
