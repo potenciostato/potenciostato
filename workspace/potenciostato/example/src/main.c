@@ -239,7 +239,7 @@ static void vUSBTask(void *pvParameters) {
 		DEBUGOUT("USB: Leo xOPCodequeue\n");
 
 		//se lee la cola, si no se recibe nada la tarea se quedará esperando
-		xQueueReceive( qUSBin, &lecturaQT, portMAX_DELAY);
+		xQueueReceive( qUSBout, &lecturaQT, portMAX_DELAY);
 
 		switch(lecturaQT[0])
 		{
@@ -260,9 +260,9 @@ static void vUSBTask(void *pvParameters) {
 				midiendo = true;
 				while (midiendo == true){
 					xQueueReceive( qADCsend, &ADCbuffer, portMAX_DELAY);
-					xQueueSendToBack( qUSBout, &ADCbuffer, 0);
+					xQueueSendToBack( qUSBin, &ADCbuffer, 0);
 
-					xQueueReceive( qUSBin, &lecturaQT, 0);
+					xQueueReceive( qUSBout, &lecturaQT, 0);
 					if (lecturaQT[0] == OC_ABORTMEASUREMENT)
 						midiendo = false;
 				}
@@ -408,8 +408,8 @@ int main(void)
 	vSemaphoreCreateBinary(sBufferADC);
 	xSemaphoreTake(sBufferADC, ( portTickType ) 10 );
 
-	qUSBin = xQueueCreate( 10, sizeof( uint8_t )* ADC_N_COLA * 2);
-	qUSBout = xQueueCreate( 10, sizeof( uint8_t )* ADC_N_COLA * 2);
+	qUSBin = xQueueCreate( 20, sizeof( uint8_t )* ADC_N_COLA * 2);
+	qUSBout = xQueueCreate( 20, sizeof( uint8_t )* ADC_N_COLA * 2);
 	qDAC = xQueueCreate( 1, sizeof( struct DACmsj ));
 	qADC = xQueueCreate( 1, sizeof( struct ADCmsj ));
 	qADCdata = xQueueCreate(ADC_N_COLA, sizeof( uint16_t ));

@@ -64,5 +64,6 @@
 #define OC_SENDDATA 0xC
 #define OC_SENDDATAEND 0xD
 #define OC_ACK 0xE
+#define OC_SENDDATA_ERR 0xF
 
 #endif /* DEFINES_H_ */
