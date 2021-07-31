@@ -1,5 +1,5 @@
 /*
- * Sintetizador Grupo 1
+ * Potenciostate Grupo 1
  *
  */
 // 1.0
