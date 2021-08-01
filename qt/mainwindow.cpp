@@ -55,7 +55,7 @@ MainWindow::MainWindow(QWidget *parent)
     auto timer = new QTimer(this);
     timer->setSingleShot(false);
     connect(timer, &QTimer::timeout, this, &MainWindow::onTimeout);
-    timer->start(100);
+    timer->start(50);
     //el timer se usara para refrescar el grafico en base a la medicion obtenida por USB del potenciostato
 
     /* DEPRECADO */
@@ -205,6 +205,11 @@ void MainWindow::onTimeout(){
                      << recv_data[4]
                      << recv_data[3]
                      << recv_data[2];
+
+            //TODO: si no hay mas datos esperar un tiempo para pedir
+            //if (recv_data[0] == OC_SENDDATA_ERR){
+                //APLICAR RETARDO
+            //}
 
             //obtener el dato del buffer de entrada
         }

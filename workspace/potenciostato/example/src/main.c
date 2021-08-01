@@ -27,6 +27,10 @@
 /*****************************************************************************
  * Variables Globales
  ****************************************************************************/
+
+//Para habilitar (o no) imprimir por consola
+bool debugging = DISABLED;
+
 extern ADC_CLOCK_SETUP_T ADCSetup;
 
 uint32_t CanalDAC, CanalADC;
@@ -62,21 +66,23 @@ struct ADCmsj {
   uint32_t frec;
 };
 
+struct USBmsj {
+	uint16_t corriente;
+	uint16_t tension;
+};
+
 
 // OBJETOS FreeRTOS
 
 xSemaphoreHandle DACSemMtx,ADCSemMtx;
 xQueueHandle xQTqueue,xACDqueue,xOPCodequeue;
 xSemaphoreHandle sBufferADC;
-xQueueHandle qUSBin, qUSBout, qADC, qDAC, qADCdata, qADCsend;
+xQueueHandle qUSBin, qUSBout, qADC, qDAC, qADCcorriente, qADCtension, qADCsend;
 
 DMA_TransferDescriptor_t DMA_LLI_buffer;
 DMA_TransferDescriptor_t DMA_LLI_buffer_ADC;
 
 char QTFlagSTR[] = "000000000000000000", UARTAKTSTR[] = "0000", pruebahernan[]="080";
-
-static uint8_t Burst_Mode_Flag = 0, Interrupt_Continue_Flag;
-static uint8_t ADC_Interrupt_Done_Flag, channelTC, dmaChannelNum;
 
 /*****************************************************************************
  * Declaracion de funciones
@@ -98,6 +104,9 @@ void hostDispositivo(uint32_t id, uint32_t valor){
  ****************************************************************************/
 void USB_IRQHandler(void){
 	USBD_API->hw->ISR(g_hUsb);
+	int countADCsend = uxQueueMessagesWaiting( qADCsend );
+	int countUSBin = uxQueueMessagesWaiting( qUSBin );
+	int countUSBout = uxQueueMessagesWaiting( qUSBout );
 }
 
 void ADC_IRQHandler(void){
@@ -106,9 +115,19 @@ void ADC_IRQHandler(void){
 	static signed portBASE_TYPE xHigherPriorityTaskWoken;
 	xHigherPriorityTaskWoken = pdFALSE;
 	NVIC_DisableIRQ(ADC_IRQn);
-	Chip_ADC_ReadValue(LPC_ADC, ADC_CH0, &dataADC);
-	valorADC = ADC_DR_RESULT(dataADC);
-	xQueueSendToBackFromISR( qADCdata, &valorADC, &xHigherPriorityTaskWoken );
+	if (Chip_ADC_ReadStatus(LPC_ADC,CANAL_CORRIENTE,ADC_DR_ADINT_STAT)){
+		Chip_ADC_ReadValue(LPC_ADC, CANAL_CORRIENTE, &dataADC);
+		valorADC = ADC_DR_RESULT(dataADC);
+		xQueueSendToBackFromISR( qADCcorriente, &valorADC, &xHigherPriorityTaskWoken );
+	}
+	if (Chip_ADC_ReadStatus(LPC_ADC,CANAL_TENSION,ADC_DR_ADINT_STAT)){
+		Chip_ADC_ReadValue(LPC_ADC, CANAL_TENSION, &dataADC);
+		valorADC = ADC_DR_RESULT(dataADC);
+		xQueueSendToBackFromISR( qADCtension, &valorADC, &xHigherPriorityTaskWoken );
+	}
+	//Chip_ADC_ReadValue(LPC_ADC, ADC_CH0, &dataADC);
+	//valorADC = ADC_DR_RESULT(dataADC);
+	//xQueueSendToBackFromISR( qADCdata, &valorADC, &xHigherPriorityTaskWoken );
 	portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 }
 
@@ -194,7 +213,8 @@ static void vINTSimTask(void *pvParameters) {
 
 		/*
 		 * Envio el código para iniciar la medición*/
-		DEBUGOUT("INT: Iniciar medicion\n");
+		if (debugging == ENABLED)
+			DEBUGOUT("INT: Iniciar medicion\n");
 		strcpy(USBBuff,"0010050001000010");
 		/*
 		 * Para la ISR usar
@@ -205,13 +225,15 @@ static void vINTSimTask(void *pvParameters) {
 		vTaskDelay(3000/portTICK_RATE_MS);
 
 		/* Envío el código para pedir datos*/
-		DEBUGOUT("INT: Pedir datos\n");
+		if (debugging == ENABLED)
+			DEBUGOUT("INT: Pedir datos\n");
 		xQueueSendToBack(xOPCodequeue,OC_SENDDATA,0);
 		/* Espero 3s*/
 		vTaskDelay(3000/portTICK_RATE_MS);
 
 		/* Envio el código para abortar la medición*/
-		DEBUGOUT("INT: Abortar medicion\n");
+		if (debugging == ENABLED)
+			DEBUGOUT("INT: Abortar medicion\n");
 		xQueueSendToBack(xQTqueue,OC_ABORTMEASUREMENT,0);
 		/* Espero 1s*/
 		vTaskDelay(1000/portTICK_RATE_MS);
@@ -233,10 +255,11 @@ static void vUSBTask(void *pvParameters) {
 	struct ADCmsj conf_adc = {true,10}; //estado del modulo, frecuencia[Hz], amplitud[V]
 	uint8_t midiendo=false;
 
-	uint16_t ADCbuffer[ADC_N_COLA];
+	int countADCsend, countUSBin, countUSBout;
 
 	while (1) {
-		DEBUGOUT("USB: Leo xOPCodequeue\n");
+		if (debugging == ENABLED)
+			DEBUGOUT("USB: Leo xOPCodequeue\n");
 
 		//se lee la cola, si no se recibe nada la tarea se quedará esperando
 		xQueueReceive( qUSBout, &lecturaQT, portMAX_DELAY);
@@ -244,13 +267,17 @@ static void vUSBTask(void *pvParameters) {
 		switch(lecturaQT[0])
 		{
 			case OC_INITMEASUREMENT:
+				if (midiendo == true){
+					break;
+				}
 				/*
 				 * 1)Habilito int del DAC
 				 * 2)Habilito int del ADC
 				 * NVIC_EnableIRQ(ADC_IRQn);
 				 * ADC_StartCmd(LPC_ADC,ADC_START_NOW);
 				 */
-				DEBUGOUT("USB: Habilito DAC & ADC\n");
+				if (debugging == ENABLED)
+					DEBUGOUT("USB: Habilito DAC & ADC\n");
 				//Todo tomar la config del init del QT
 
 				//se habilitan DAC y ADC
@@ -258,28 +285,29 @@ static void vUSBTask(void *pvParameters) {
 				xQueueSendToBack(qADC,&conf_adc,0);
 
 				midiendo = true;
-				while (midiendo == true){
-					xQueueReceive( qADCsend, &ADCbuffer, portMAX_DELAY);
-					xQueueSendToBack( qUSBin, &ADCbuffer, 0);
-
-					xQueueReceive( qUSBout, &lecturaQT, 0);
-					if (lecturaQT[0] == OC_ABORTMEASUREMENT)
-						midiendo = false;
-				}
-
 				break;
 
 			case OC_ABORTMEASUREMENT:
+				if (midiendo == false){
+					break;
+				}
 				// Deshabilito int del DAC & ADC
 				//strcpy(BufferOutSTR,OC_ACK);
-				DEBUGOUT("USB: Deshabilito DAC & ADC\r\n");
-
+				if (debugging == ENABLED)
+					DEBUGOUT("USB: Deshabilito DAC & ADC\r\n");
+				midiendo = false;
+				//se deshabilitan DAC y ADC
+				conf_dac.set = false;
+				conf_adc.set = false;
+				xQueueSendToBack(qDAC,&conf_dac,0);
+				xQueueSendToBack(qADC,&conf_adc,0);
 				//DEBUGOUT("USB: ACKAbort = %s\r\n",BufferOutSTR);
 				break;
 
 			case 30:
 				// Envio datos a PC de manera continua
-				DEBUGOUT("USB: Envio datos a QT\r\n");
+				//if (debugging == ENABLED)
+				//	DEBUGOUT("USB: Envio datos a QT\r\n");
 				//Leo el valor recibido por el adc
 				//xQueueReceive( xACDqueue, &BufferOutSTR, 0);
 
@@ -287,15 +315,18 @@ static void vUSBTask(void *pvParameters) {
 
 			case 31:
 				// Finalizo el envio de datos a la PC
-				DEBUGOUT("USB: Finalizo el envio datos a PC\r\n");
+				if (debugging == ENABLED)
+					DEBUGOUT("USB: Finalizo el envio datos a PC\r\n");
 				break;
 
 			case 32:
-				DEBUGOUT("DATOS ADC");
+				if (debugging == ENABLED)
+					DEBUGOUT("DATOS ADC");
 				break;
 
 			default:
-				DEBUGOUT("USB: Estado invalido\r\n");
+				if (debugging == ENABLED)
+					DEBUGOUT("USB: Estado invalido\r\n");
 				break;
 		}
 	}
@@ -319,7 +350,8 @@ static void vDACTask(void *pvParameters) {
 
 		//se lee la cola, si no se recibe nada la tarea se quedará esperando
 		xQueueReceive(qDAC,&conf,portMAX_DELAY);
-		DEBUGOUT("DAC: Entre DAC\n");
+		if (debugging == ENABLED)
+			DEBUGOUT("DAC: Entre DAC\n");
 
 		if(conf.frec != FREC){
 			FREC = conf.frec;
@@ -348,18 +380,19 @@ static void vDACTask(void *pvParameters) {
 /* ADC parpadeo cada 1s */
 static void vADCTask(void *pvParameters) {
 
-	uint16_t FREC = ADC_SAMPL_FREC, i, dataADC;
+	uint16_t FREC = ADC_SAMPL_FREC, i, corrienteADC, tensionADC;
 	struct ADCmsj conf;
-	uint16_t ADCbuffer[ADC_N_COLA], ADCbuffer2[ADC_N_LECTURAS];
+	//uint16_t ADCbuffer[ADC_N_COLA];
+	struct USBmsj msjUSB;
 
-	Chip_ADC_Int_SetChannelCmd(LPC_ADC, ADC_CH0, ENABLE);
 	NVIC_EnableIRQ(ADC_IRQn);
 
 	while (1){
 
 		//se lee la cola, si no se recibe nada la tarea se quedará esperando
 		xQueueReceive(qADC,&conf,portMAX_DELAY);
-		DEBUGOUT("ADC: Entre ADC\n");
+		if (debugging == ENABLED)
+			DEBUGOUT("ADC: Entre ADC\n");
 
 		if(conf.frec != FREC){
 			FREC = conf.frec;
@@ -370,15 +403,25 @@ static void vADCTask(void *pvParameters) {
 			i = 0;
 			while (conf.set){
 				xQueueReceive(qADC,&conf,( portTickType ) 0);
-				xQueueReceive(qADCdata,&dataADC,portMAX_DELAY);
+
+				xQueueReceive(qADCcorriente,&corrienteADC,portMAX_DELAY);
 				NVIC_EnableIRQ(ADC_IRQn);
-				ADCbuffer[i] = dataADC;
-				i++;
+				xQueueReceive(qADCtension,&tensionADC,portMAX_DELAY);
+				NVIC_EnableIRQ(ADC_IRQn);
+
+				msjUSB.corriente = corrienteADC;
+				msjUSB.tension = tensionADC;
+				xQueueSendToBack(qADCsend, &msjUSB, 10);
+
+				if (debugging == ENABLED)
+					DEBUGOUT("ADC: ADC Send\n");
+				/*i++;
 				if(i>=ADC_N_COLA){
 					i = 0;
 					xQueueSendToBack(qADCsend,ADCbuffer,10);
-					DEBUGOUT("ADC: ADC Send\n");
-				}
+					if (debugging == ENABLED)
+						DEBUGOUT("ADC: ADC Send\n");
+				}*/
 			}
 			Chip_ADC_SetBurstCmd(LPC_ADC, DISABLE);
 		}
@@ -400,7 +443,8 @@ int main(void)
 	//ADC conf
 	//DAC conf
 
-	DEBUGOUT("Potenciostato UTN FRA\r\n");
+	if (debugging == ENABLED)
+		DEBUGOUT("Potenciostato UTN FRA\r\n");
 
 	ADCSemMtx = xSemaphoreCreateMutex();
 	DACSemMtx = xSemaphoreCreateMutex();
@@ -408,12 +452,13 @@ int main(void)
 	vSemaphoreCreateBinary(sBufferADC);
 	xSemaphoreTake(sBufferADC, ( portTickType ) 10 );
 
-	qUSBin = xQueueCreate( 20, sizeof( uint8_t )* ADC_N_COLA * 2);
-	qUSBout = xQueueCreate( 20, sizeof( uint8_t )* ADC_N_COLA * 2);
+	qUSBin = xQueueCreate( TAMANIO_MAX_COLA, sizeof( uint8_t )* LARGO_MENSAJE);
+	qUSBout = xQueueCreate( TAMANIO_MAX_COLA, sizeof( uint8_t ) * LARGO_MENSAJE);
 	qDAC = xQueueCreate( 1, sizeof( struct DACmsj ));
 	qADC = xQueueCreate( 1, sizeof( struct ADCmsj ));
-	qADCdata = xQueueCreate(ADC_N_COLA, sizeof( uint16_t ));
-	qADCsend = xQueueCreate(1, sizeof( uint16_t ) * ADC_N_COLA);
+	qADCcorriente = xQueueCreate(ADC_N_COLA, sizeof( uint16_t ));
+	qADCtension = xQueueCreate(ADC_N_COLA, sizeof( uint16_t ));
+	qADCsend = xQueueCreate(1, sizeof( struct USBmsj ) * ADC_N_COLA);
 
 	 /*
 	  * Busco asegurar que pueda pasar un string del tamaño definido en el protocolo, no se que

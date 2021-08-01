@@ -8,7 +8,8 @@
 #ifndef DEFINES_H_
 #define DEFINES_H_
 
-
+#define ENABLED			1
+#define DISABLED		0
 
 #define SALIDA			1
 #define ENTRADA			0
@@ -18,8 +19,6 @@
 #define PORT2			2
 #define PORT3			3
 #define PORT4			4
-
-
 
 // Defines DAC
 
@@ -52,9 +51,13 @@
 
 // Defines ADC
 
+#define CANAL_CORRIENTE		ADC_CH0
+#define CANAL_TENSION		ADC_CH1
+
 #define ADC_SAMPL_FREC      50000
-#define ADC_N_LECTURAS		30
-#define ADC_N_COLA 			3 //se pone 3 mediciones por cada mensaje de 8 bytes (6 bytes útiles)
+#define ADC_N_COLA 			1 //se pone 1 medicion (punto) por cada mensaje de USB
+#define TAMANIO_MAX_COLA	100
+#define LARGO_MENSAJE		8 //igual a la cantidad de bytes de los reports de entrada y de salida de USB
 
 #define ADC_DR_RESULT(n)        (((n) & 0xFFF))
 

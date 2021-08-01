@@ -29,9 +29,11 @@ void prvSetupHardware(void)
 
 	// Setup ADC
 	Chip_ADC_Init(LPC_ADC, &ADCSetup);
-	Chip_ADC_EnableChannel(LPC_ADC, ADC_CH0, ENABLE);
+	Chip_ADC_EnableChannel(LPC_ADC, CANAL_CORRIENTE, ENABLE);
+	Chip_ADC_EnableChannel(LPC_ADC, CANAL_TENSION, ENABLE);
 	Chip_ADC_SetSampleRate(LPC_ADC,&ADCSetup,ADC_SAMPL_FREC);
-	Chip_ADC_Int_SetChannelCmd(LPC_ADC,ADC_CH0,ENABLE);
+	Chip_ADC_Int_SetChannelCmd(LPC_ADC,CANAL_CORRIENTE,ENABLE);
+	Chip_ADC_Int_SetChannelCmd(LPC_ADC,CANAL_TENSION,ENABLE);
 	//Chip_ADC_SetBurstCmd(LPC_ADC,DISABLE);
 
 

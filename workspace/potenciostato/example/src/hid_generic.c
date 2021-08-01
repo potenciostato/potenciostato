@@ -60,11 +60,17 @@ static uint8_t *loopback_report;
 /*****************************************************************************
  * Public types/enumerations/variables
  ****************************************************************************/
+extern bool debugging;
 
 extern const uint8_t HID_ReportDescriptor[];
 extern const uint16_t HID_ReportDescSize;
 
-extern xQueueHandle qUSBin, qUSBout;
+extern xQueueHandle qADCsend, qUSBin, qUSBout;
+
+struct USBmsj {
+	uint16_t corriente;
+	uint16_t tension;
+};
 
 /*****************************************************************************
  * Private functions
@@ -118,7 +124,8 @@ static ErrorCode_t HID_Ep_Hdlr(USBD_HANDLE_T hUsb, void *data, uint32_t event)
 	USB_HID_CTRL_T *pHidCtrl = (USB_HID_CTRL_T *) data;
 
 	uint8_t i, mensaje[8]={0};
-	uint8_t medicion[6]={0}, respuesta[8]={0};
+	uint8_t respuesta[8]={0};
+	struct USBmsj medicion;
 
 
 	static portBASE_TYPE xHigherPriorityTaskWoken;
@@ -145,19 +152,24 @@ static ErrorCode_t HID_Ep_Hdlr(USBD_HANDLE_T hUsb, void *data, uint32_t event)
 		switch (mensaje[0]){
 			// si el codigo de operacion recibido coincide con el de recibir datos
 			case OC_SENDDATA:
-				if(xQueueReceiveFromISR( qUSBin, &medicion, &xHigherPriorityTaskWoken) == pdFAIL) {
-					DEBUGOUT("INT: NO HAY DATOS PARA MANDAR\n");
+				if(xQueueReceiveFromISR( qADCsend, &medicion, &xHigherPriorityTaskWoken) == pdFAIL) {
+					if (debugging == ENABLED)
+						DEBUGOUT("INT: NO HAY DATOS PARA MANDAR\n");
 					respuesta[0] = OC_SENDDATA_ERR;
 					for (i = 1; i < 8; i ++){
 						respuesta[i] = 0x0;
 					}
 				} else {
-					DEBUGOUT("INT: SEND DATA\n");
+					if (debugging == ENABLED)
+						DEBUGOUT("INT: SEND DATA\n");
 					respuesta[0] = OC_SENDDATA;
 					respuesta[1] = 0x0;
-					for (i = 0; i < 6; i ++){
-						respuesta[i+2] = medicion[i];
-					}
+					respuesta[2] = (medicion.corriente & 0xFF);
+					respuesta[3] = ((medicion.corriente >> 8) & 0xFF);
+					respuesta[4] = (medicion.tension & 0xFF);
+					respuesta[5] = ((medicion.tension >> 8) & 0xFF);
+					respuesta[6] = 0x0;
+					respuesta[7] = 0x0;
 				}
 				USBD_API->hw->WriteEP(hUsb, pHidCtrl->epin_adr, respuesta, 8);
 				break;
@@ -168,7 +180,8 @@ static ErrorCode_t HID_Ep_Hdlr(USBD_HANDLE_T hUsb, void *data, uint32_t event)
 				for (i = 0; i < 7; i ++){
 					respuesta[i+1] = 0;
 				}
-				DEBUGOUT("INT: INIT OR ABORT\n");
+				if (debugging == ENABLED)
+					DEBUGOUT("INT: INIT OR ABORT\n");
 				USBD_API->hw->WriteEP(hUsb, pHidCtrl->epin_adr, respuesta, 8);
 				break;
 			default:

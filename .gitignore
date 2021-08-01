@@ -1,9 +1,12 @@
 */.metadata
 */.cproject
+*/*/.cproject
 *.axf
 *.o
 *.d
 *.mk
+build-potenciostato_inicial-Desktop_Qt_5_12_11_MinGW_32_bit-Debug/*
+build-potenciostato_inicial-Desktop_Qt_5_15_1_MinGW_32_bit-Debug/*
 workspace/lpc_board_nxp_lpcxpresso_1769/Debug/liblpc_board_nxp_lpcxpresso_1769.a
 workspace/lpc_board_nxp_lpcxpresso_1769/Debug/src/board.d
 workspace/lpc_board_nxp_lpcxpresso_1769/Debug/src/board.o
