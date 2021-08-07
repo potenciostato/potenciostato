@@ -29,7 +29,7 @@
  ****************************************************************************/
 
 //Para habilitar (o no) imprimir por consola
-bool debugging = DISABLED;
+bool debugging = ENABLED;
 
 extern ADC_CLOCK_SETUP_T ADCSetup;
 
@@ -75,14 +75,11 @@ struct USBmsj {
 // OBJETOS FreeRTOS
 
 xSemaphoreHandle DACSemMtx,ADCSemMtx;
-xQueueHandle xQTqueue,xACDqueue,xOPCodequeue;
 xSemaphoreHandle sBufferADC;
 xQueueHandle qUSBin, qUSBout, qADC, qDAC, qADCcorriente, qADCtension, qADCsend;
 
 DMA_TransferDescriptor_t DMA_LLI_buffer;
 DMA_TransferDescriptor_t DMA_LLI_buffer_ADC;
-
-char QTFlagSTR[] = "000000000000000000", UARTAKTSTR[] = "0000", pruebahernan[]="080";
 
 /*****************************************************************************
  * Declaracion de funciones
@@ -193,53 +190,6 @@ static void vInicializarUSB(void *pvParameters) {
 }
 
 /*
-* Tarea para simular la INT del QT
-* Interrumpo a la UART/USB para:
-* _comenzar a medir, paso el código de operacion y los valores a usar
-* _pedir datos de la medición, paso el código de operacion
-* _detener la medición, paso el código de operacion
-* El órden de envio de datos es
-* 1) datos de la medición, si estoy iniciando una medición, uso xQTqueue
-* 2) código de operación, uso xOPCodequeue
-*
-* */
-static void vINTSimTask(void *pvParameters) {
-	int i;
-	int a = 0;
-	char USBBuff[] = "0000000000000777";
-
-
-	while (1) {
-
-		/*
-		 * Envio el código para iniciar la medición*/
-		if (debugging == ENABLED)
-			DEBUGOUT("INT: Iniciar medicion\n");
-		strcpy(USBBuff,"0010050001000010");
-		/*
-		 * Para la ISR usar
-		 * xQueueSendToBackFromISR( xQTqueue, &USBBuff, pdFALSE );*/
-		xQueueSendToBack(xQTqueue,&USBBuff,0);
-		xQueueSendToBack(xOPCodequeue,OC_INITMEASUREMENT,0);
-		/* Espero 3s*/
-		vTaskDelay(3000/portTICK_RATE_MS);
-
-		/* Envío el código para pedir datos*/
-		if (debugging == ENABLED)
-			DEBUGOUT("INT: Pedir datos\n");
-		xQueueSendToBack(xOPCodequeue,OC_SENDDATA,0);
-		/* Espero 3s*/
-		vTaskDelay(3000/portTICK_RATE_MS);
-
-		/* Envio el código para abortar la medición*/
-		if (debugging == ENABLED)
-			DEBUGOUT("INT: Abortar medicion\n");
-		xQueueSendToBack(xQTqueue,OC_ABORTMEASUREMENT,0);
-		/* Espero 1s*/
-		vTaskDelay(1000/portTICK_RATE_MS);
-	}
-}
-/*
  * USB
  * Es únicamente interrumpida por el QT para
  * 	_Iniciar medición 001
@@ -292,16 +242,24 @@ static void vUSBTask(void *pvParameters) {
 					break;
 				}
 				// Deshabilito int del DAC & ADC
-				//strcpy(BufferOutSTR,OC_ACK);
 				if (debugging == ENABLED)
 					DEBUGOUT("USB: Deshabilito DAC & ADC\r\n");
 				midiendo = false;
-				//se deshabilitan DAC y ADC
+
+				// Se deshabilitan DAC y ADC
 				conf_dac.set = false;
 				conf_adc.set = false;
 				xQueueSendToBack(qDAC,&conf_dac,0);
 				xQueueSendToBack(qADC,&conf_adc,0);
-				//DEBUGOUT("USB: ACKAbort = %s\r\n",BufferOutSTR);
+
+				// Se limpian las colas de las mediciones
+				if (debugging == ENABLED)
+					DEBUGOUT("USB: Se limpian las colas\r\n");
+				xQueueReset( qADCsend );
+				xQueueReset( qADCcorriente );
+				xQueueReset( qADCtension );
+				xQueueReset( qUSBin );
+
 				break;
 
 			case 30:
@@ -346,7 +304,7 @@ static void vDACTask(void *pvParameters) {
 	CanalDAC = Chip_GPDMA_GetFreeChannel ( LPC_GPDMA , 0 );
 	Chip_GPDMA_Init ( LPC_GPDMA );
 
-	while (1)	{
+	while(1) {
 
 		//se lee la cola, si no se recibe nada la tarea se quedará esperando
 		xQueueReceive(qDAC,&conf,portMAX_DELAY);
@@ -368,10 +326,12 @@ static void vDACTask(void *pvParameters) {
 			DACset = conf.set;
 			if(DACset){
 				SG_OK = Chip_GPDMA_SGTransfer (LPC_GPDMA , CanalDAC ,&DMA_LLI_buffer , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA);
-				Board_LED_Set(0, true);
+				if (debugging == ENABLED)
+					DEBUGOUT("DAC: Habilite DAC\n");
 			} else {
 				Chip_GPDMA_Stop(LPC_GPDMA, CanalDAC);
-				Board_LED_Set(0, false);
+				if (debugging == ENABLED)
+					DEBUGOUT("DAC: Deshabilite DAC\n");
 			}
 		}
 	}
@@ -387,7 +347,7 @@ static void vADCTask(void *pvParameters) {
 
 	NVIC_EnableIRQ(ADC_IRQn);
 
-	while (1){
+	while(1) {
 
 		//se lee la cola, si no se recibe nada la tarea se quedará esperando
 		xQueueReceive(qADC,&conf,portMAX_DELAY);
@@ -398,11 +358,12 @@ static void vADCTask(void *pvParameters) {
 			FREC = conf.frec;
 			Chip_ADC_SetSampleRate(LPC_ADC,&ADCSetup,FREC);
 		}
-		if (conf.set){
+		if (conf.set == true){
+			if (debugging == ENABLED)
+				DEBUGOUT("ADC: Habilita medicion ADC\n");
 			Chip_ADC_SetBurstCmd(LPC_ADC, ENABLE);
 			i = 0;
 			while (conf.set){
-				xQueueReceive(qADC,&conf,( portTickType ) 0);
 
 				xQueueReceive(qADCcorriente,&corrienteADC,portMAX_DELAY);
 				NVIC_EnableIRQ(ADC_IRQn);
@@ -415,15 +376,17 @@ static void vADCTask(void *pvParameters) {
 
 				if (debugging == ENABLED)
 					DEBUGOUT("ADC: ADC Send\n");
-				/*i++;
-				if(i>=ADC_N_COLA){
-					i = 0;
-					xQueueSendToBack(qADCsend,ADCbuffer,10);
-					if (debugging == ENABLED)
-						DEBUGOUT("ADC: ADC Send\n");
-				}*/
+
+				// Se recibe la config para saber si se debera
+				// seguir midiendo o terminar
+				xQueueReceive(qADC,&conf,( portTickType ) 0);
 			}
+			if (debugging == ENABLED)
+				DEBUGOUT("ADC: Deshabilita medicion ADC\n");
 			Chip_ADC_SetBurstCmd(LPC_ADC, DISABLE);
+		}else{
+			if (debugging == ENABLED)
+				DEBUGOUT("ADC: Esta deshabilitado ADC\n");
 		}
 	}
 }
@@ -460,27 +423,13 @@ int main(void)
 	qADCtension = xQueueCreate(ADC_N_COLA, sizeof( uint16_t ));
 	qADCsend = xQueueCreate(1, sizeof( struct USBmsj ) * ADC_N_COLA);
 
-	 /*
-	  * Busco asegurar que pueda pasar un string del tamaño definido en el protocolo, no se que
-	  * tan rapido sea el adc vs a la uart, por lo que a priori creo una cola que pueda
-	  * almacenar hasta 4 envios del adc
-	  * */
-	 xACDqueue = xQueueCreate(4, sizeof(QTFlagSTR));
-	 xQTqueue = xQueueCreate(4, sizeof(QTFlagSTR));
-	 xOPCodequeue = xQueueCreate(4, sizeof(uint8_t));
-
 	prvSetupHardware();
 
 	xTaskCreate(vInicializarUSB, (signed char *) "InicializarUSB",
 						configMINIMAL_STACK_SIZE, NULL, (tskIDLE_PRIORITY + 3UL),
 						(xTaskHandle *) NULL);
-	/* QT */
-	/*xTaskCreate(vINTSimTask, (signed char *) "vINTSimTask",
-				configMINIMAL_STACK_SIZE, NULL, (tskIDLE_PRIORITY + 2UL),
-						(xTaskHandle *) NULL);
-	*/
 
-	/* USB ex UART  */
+	/* USB  */
 	xTaskCreate(vUSBTask, (signed char *) "vUSBTask",
 				configMINIMAL_STACK_SIZE, NULL, (tskIDLE_PRIORITY + 2UL),
 				(xTaskHandle *) NULL);
