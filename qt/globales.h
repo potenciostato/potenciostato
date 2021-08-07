@@ -32,5 +32,12 @@ uint8_t Dispositivo = 0;
 #define OC_SENDDATA 0xC
 #define OC_SENDDATAEND 0xD
 #define OC_ACK 0xE
+#define OC_SENDDATA_ERR 0xF
+
+#define ADC_TENSION_MAX 30
+#define ADC_CORRIENTE_MAX 30
+#define ADC_TENSION_BITS 12
+#define ADC_CORRIENTE_BITS 12
+
 
 #endif // GLOBALES_H

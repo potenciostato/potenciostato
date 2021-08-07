@@ -28,7 +28,11 @@ double primer_curva_paracetamolY[CANT_VALORES] = {
     3.000
 };
 int p_refresco = 0;
-char metodo[30] = "BarridoLineal";
+double puntosX[CANT_VALORES] = {0};
+double puntosY[CANT_VALORES] = {0};
+
+//char metodo[30] = "BarridoLineal";
+char metodo[30] = "Ciclico"; //TODO: rehacer la verificacion del modo con defines
 int medicion_habilitada = 0;
 bool demostracion = false;
 bool grafico_inicial = false;
@@ -166,21 +170,15 @@ void MainWindow::refrescarValores(double x[CANT_VALORES], double y[CANT_VALORES]
 }
 
 void MainWindow::onTimeout(){
-    double tempX[CANT_VALORES] = {0};
-    double tempY[CANT_VALORES] = {0};
-
     unsigned char buffer[8] = {0x0};
     unsigned char recv_data[8] = {0x0};
-    int len;
+    int len, i=0;
     int send_ret, recv_ret;
 
-    if (demostracion == true){
-        for (int i=0; i < p_refresco; ++i)
-        {
-            tempX[i] = primer_curva_paracetamolX[i];
-            tempY[i] = primer_curva_paracetamolY[i];
-        }
-    }else{
+    unsigned int cuentas_corriente, cuentas_tension;
+    float volts_tension, volts_corriente;
+
+    if (demostracion == false){
         //Se envia inicio de medición al LPC
         //envio....
         //se queda esperando al Recibido
@@ -197,21 +195,38 @@ void MainWindow::onTimeout(){
             qDebug() << "codigo envio" << send_ret;
             qDebug() << "dato enviado" << buffer[0];
             qDebug() << "codigo recepcion" << recv_ret;
-            qDebug() << "dato recibido" << recv_data[1] << recv_data[0];
-            qDebug() << "lecturas ADC 1 a 3"
-                     << recv_data[7]
-                     << recv_data[6]
-                     << recv_data[5]
-                     << recv_data[4]
-                     << recv_data[3]
-                     << recv_data[2];
+            qDebug() << "OP Code recibido" << recv_data[0];
+            qDebug() << "Byte libre" << recv_data[1];
+            qDebug() << "Corriente: " << recv_data[3] << recv_data[2];
+            qDebug() << "Tension: " << recv_data[5] << recv_data[4];
+            qDebug() << "Bytes libres: " << recv_data[7] << recv_data[6];
+
+            cuentas_corriente = ((recv_data[3] << 8) | (recv_data[2]));
+            cuentas_tension = ((recv_data[5] << 8) | (recv_data[4]));
+            qDebug() << "Cuentas corriente: " << cuentas_corriente;
+            qDebug() << "Cuentas tension: " << cuentas_tension;
+
+            volts_corriente = (cuentas_corriente * ADC_CORRIENTE_MAX) / pow(2,ADC_CORRIENTE_BITS) / 10;
+            volts_tension = (cuentas_tension * ADC_TENSION_MAX) / pow(2,ADC_TENSION_BITS) / 10;
+            qDebug() << "Corriente [V]: " << volts_corriente;
+            qDebug() << "Tension [V]: " << volts_tension;
+
+
+            puntosX[p_refresco] = volts_tension + 0.5; //el rango en el grafico va desde 0 a 1
+            puntosY[p_refresco] = volts_corriente + 1.5; //el rango en el grafico va desde 0 a 3
 
             //TODO: si no hay mas datos esperar un tiempo para pedir
             //if (recv_data[0] == OC_SENDDATA_ERR){
-                //APLICAR RETARDO
+            //APLICAR RETARDO
             //}
 
-            //obtener el dato del buffer de entrada
+        }
+    }
+    if (demostracion == true){
+        for (i=0; i < p_refresco; ++i)
+        {
+            puntosX[i] = primer_curva_paracetamolX[i];
+            puntosY[i] = primer_curva_paracetamolY[i];
         }
     }
 
@@ -233,6 +248,21 @@ void MainWindow::onTimeout(){
         }
     }*/
 
+    if (demostracion == false){
+        if (strcmp(metodo,"Ciclico") == 0  && medicion_habilitada == 1){ //antes era Reiterativo
+            if (p_refresco >= CANT_VALORES){
+                p_refresco = 0;
+                qDebug() << "Limpieza de graficos";
+                MainWindow::limpiarGraficos();
+                qDebug() << "Inicializacion del grafico 0";
+                MainWindow::inicializarGraficos();
+            }else{
+                p_refresco ++;
+                qDebug() << "Envio de refresco al grafico";
+                MainWindow::refrescarValores(puntosX, puntosY);
+            }
+        }
+    }
     if (demostracion == true){
         if (strcmp(metodo,"BarridoLineal") == 0 && medicion_habilitada == 1){
             if (p_refresco >= CANT_VALORES && grafico_demostracion == 0){
@@ -261,14 +291,14 @@ void MainWindow::onTimeout(){
             }else{
                 p_refresco ++;
                 qDebug() << "Envio de refresco al grafico";
-                MainWindow::refrescarValores(tempX, tempY,
+                MainWindow::refrescarValores(puntosX, puntosY,
                                              grafico_demostracion,
                                              1,
                                              10*(1-grafico_demostracion*0.15));
             }
         }
 
-        if (strcmp(metodo,"Reiterativo") == 0  && medicion_habilitada == 1){
+        if (strcmp(metodo,"Ciclico") == 0  && medicion_habilitada == 1){ //antes era Reiterativo
             if (p_refresco >= CANT_VALORES){
                 p_refresco = 0;
                 qDebug() << "Limpieza de graficos";
@@ -278,7 +308,7 @@ void MainWindow::onTimeout(){
             }else{
                 p_refresco ++;
                 qDebug() << "Envio de refresco al grafico";
-                MainWindow::refrescarValores(tempX, tempY);
+                MainWindow::refrescarValores(puntosX, puntosY);
             }
         }
     }
@@ -374,8 +404,12 @@ void MainWindow::on_Bt_Iniciar_clicked()
     MainWindow::limpiarGraficos();
     MainWindow::inicializarGraficos();
 
+    //TODO: verificar que el LPC responda con el OP_CODE correspondiente
+    //      y asi, iniciar la medicion
+
     //Se activa la medicion en el Timer
     medicion_habilitada = 1;
+
     if (demostracion == true){
         p_refresco = 0;
     }
@@ -384,7 +418,6 @@ void MainWindow::on_Bt_Iniciar_clicked()
     ui->Bt_Abortar->setEnabled(true);
     ui->Bt_Capturar->setEnabled(true);
 
-    //Escucha los datos que llegan (valores).
 }
 
 void MainWindow::on_Bt_Abortar_clicked()
@@ -424,6 +457,14 @@ void MainWindow::on_Bt_Abortar_clicked()
     qDebug() << "Termino la medicion";
     medicion_habilitada = 0;
     MainWindow::terminoMedicion();
+    if (demostracion == false){
+        p_refresco = 0;
+        medicion_habilitada = 0;
+        for(int i=0; i<CANT_VALORES; i++){
+            puntosX[i] = 0;
+            puntosY[i] = 0;
+        }
+    }
     if (demostracion == true){
         p_refresco = 0;
         medicion_habilitada = 0;
