@@ -228,9 +228,11 @@ static void vUSBTask(void *pvParameters) {
 				 */
 				if (debugging == ENABLED)
 					DEBUGOUT("USB: Habilito DAC & ADC\n");
-				//Todo tomar la config del init del QT
 
-				//se habilitan DAC y ADC
+				//Todo tomar la config del init del QT
+				// Se habilitan DAC y ADC
+				conf_dac.set = true;
+				conf_adc.set = true;
 				xQueueSendToBack(qDAC,&conf_dac,0);
 				xQueueSendToBack(qADC,&conf_adc,0);
 
@@ -241,6 +243,7 @@ static void vUSBTask(void *pvParameters) {
 				if (midiendo == false){
 					break;
 				}
+
 				// Deshabilito int del DAC & ADC
 				if (debugging == ENABLED)
 					DEBUGOUT("USB: Deshabilito DAC & ADC\r\n");
@@ -340,8 +343,8 @@ static void vDACTask(void *pvParameters) {
 /* ADC parpadeo cada 1s */
 static void vADCTask(void *pvParameters) {
 
-	uint16_t FREC = ADC_SAMPL_FREC, i, corrienteADC, tensionADC;
-	struct ADCmsj conf;
+	static uint16_t FREC = ADC_SAMPL_FREC, i, corrienteADC, tensionADC;
+	static struct ADCmsj conf;
 	//uint16_t ADCbuffer[ADC_N_COLA];
 	struct USBmsj msjUSB;
 
@@ -349,7 +352,7 @@ static void vADCTask(void *pvParameters) {
 
 	while(1) {
 
-		//se lee la cola, si no se recibe nada la tarea se quedará esperando
+		// Se lee la cola, si no se recibe nada la tarea se quedará esperando
 		xQueueReceive(qADC,&conf,portMAX_DELAY);
 		if (debugging == ENABLED)
 			DEBUGOUT("ADC: Entre ADC\n");
@@ -361,6 +364,8 @@ static void vADCTask(void *pvParameters) {
 		if (conf.set == true){
 			if (debugging == ENABLED)
 				DEBUGOUT("ADC: Habilita medicion ADC\n");
+
+			NVIC_EnableIRQ(ADC_IRQn);
 			Chip_ADC_SetBurstCmd(LPC_ADC, ENABLE);
 			i = 0;
 			while (conf.set){
