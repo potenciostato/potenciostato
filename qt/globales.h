@@ -39,5 +39,6 @@ uint8_t Dispositivo = 0;
 #define ADC_TENSION_BITS 12
 #define ADC_CORRIENTE_BITS 12
 
+#define MILISEGUNDOS_POLLING 50
 
 #endif // GLOBALES_H

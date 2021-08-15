@@ -101,6 +101,10 @@ void hostDispositivo(uint32_t id, uint32_t valor){
  ****************************************************************************/
 void USB_IRQHandler(void){
 	USBD_API->hw->ISR(g_hUsb);
+
+	//Todo: poner un mensaje cuando se logra conectar correctamente
+
+	// Conteos para debugging
 	int countADCsend = uxQueueMessagesWaiting( qADCsend );
 	int countUSBin = uxQueueMessagesWaiting( qUSBin );
 	int countUSBout = uxQueueMessagesWaiting( qUSBout );
@@ -192,13 +196,13 @@ static void vInicializarUSB(void *pvParameters) {
 /*
  * USB
  * Es únicamente interrumpida por el QT para
- * 	_Iniciar medición 001
- * 	_Solicitar el envio de datos 003
- * 	_Abortar medición 002
- * Uso BufferOutSTR para enviarle datos a QT
+ * 	_Iniciar medición
+ * 	_Abortar medición
+ * 	_Solicitar el envio de datos => esto lo hace el handler de USB directamente
+ * 	_A DEFINIR
  * */
 static void vUSBTask(void *pvParameters) {
-//char ProgState= "0000000000000000";
+
 	uint8_t lecturaQT[8]={0};
 	int i;
 	struct DACmsj conf_dac = {true,1000,1}; //estado del modulo, frecuencia[Hz], amplitud[V]
@@ -209,10 +213,13 @@ static void vUSBTask(void *pvParameters) {
 
 	while (1) {
 		if (debugging == ENABLED)
-			DEBUGOUT("USB: Leo xOPCodequeue\n");
+			DEBUGOUT("USB: Se va a leer xOPCodequeue\n");
 
-		//se lee la cola, si no se recibe nada la tarea se quedará esperando
+		// Se lee la cola, si no se recibe nada la tarea se quedará esperando
 		xQueueReceive( qUSBout, &lecturaQT, portMAX_DELAY);
+
+		if (debugging == ENABLED)
+			DEBUGOUT("USB: Se obtuvo xOPCodequeue\n");
 
 		switch(lecturaQT[0])
 		{
@@ -246,7 +253,7 @@ static void vUSBTask(void *pvParameters) {
 
 				// Deshabilito int del DAC & ADC
 				if (debugging == ENABLED)
-					DEBUGOUT("USB: Deshabilito DAC & ADC\r\n");
+					DEBUGOUT("USB: Deshabilito DAC & ADC\n");
 				midiendo = false;
 
 				// Se deshabilitan DAC y ADC
@@ -257,7 +264,7 @@ static void vUSBTask(void *pvParameters) {
 
 				// Se limpian las colas de las mediciones
 				if (debugging == ENABLED)
-					DEBUGOUT("USB: Se limpian las colas\r\n");
+					DEBUGOUT("USB: Se limpian las colas\n");
 				xQueueReset( qADCsend );
 				xQueueReset( qADCcorriente );
 				xQueueReset( qADCtension );
@@ -343,8 +350,8 @@ static void vDACTask(void *pvParameters) {
 /* ADC parpadeo cada 1s */
 static void vADCTask(void *pvParameters) {
 
-	static uint16_t FREC = ADC_SAMPL_FREC, i, corrienteADC, tensionADC;
-	static struct ADCmsj conf;
+	uint16_t FREC = ADC_SAMPL_FREC, i, corrienteADC, tensionADC;
+	struct ADCmsj conf;
 	//uint16_t ADCbuffer[ADC_N_COLA];
 	struct USBmsj msjUSB;
 
@@ -441,7 +448,7 @@ int main(void)
 
 	/* DAC  */
 	xTaskCreate(vDACTask, (signed char *) "vDACTask",
-				configMINIMAL_STACK_SIZE, NULL, (tskIDLE_PRIORITY + 1UL),
+				configMINIMAL_STACK_SIZE * 2, NULL, (tskIDLE_PRIORITY + 1UL),
 				(xTaskHandle *) NULL);
 
 	/* ADC  */

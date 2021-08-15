@@ -7,7 +7,7 @@
 #include "globales.h"
 #include "libusb.h"
 
-#define CANT_VALORES 51
+#define CANT_VALORES 500
 
 QVector<double> valoresX(CANT_VALORES), valoresY(CANT_VALORES); // declara vectores con 10 posiciones (0..9)
 
@@ -59,31 +59,10 @@ MainWindow::MainWindow(QWidget *parent)
     auto timer = new QTimer(this);
     timer->setSingleShot(false);
     connect(timer, &QTimer::timeout, this, &MainWindow::onTimeout);
-    timer->start(50);
+    timer->start(MILISEGUNDOS_POLLING);
+    //Todo: configurar los milisegundos de polling desde el entorno
+
     //el timer se usara para refrescar el grafico en base a la medicion obtenida por USB del potenciostato
-
-    /* DEPRECADO */
-    /*
-    //Configuracion real time plot
-    ui->customPlot->addGraph(); // blue line
-    ui->customPlot->graph(0)->setPen(QPen(QColor(40, 110, 255)));
-    ui->customPlot->addGraph(); // red line
-    ui->customPlot->graph(1)->setPen(QPen(QColor(255, 110, 40)));
-
-    QSharedPointer<QCPAxisTickerTime> timeTicker(new QCPAxisTickerTime);
-    timeTicker->setTimeFormat("%h:%m:%s");
-    ui->customPlot->xAxis->setTicker(timeTicker);
-    ui->customPlot->axisRect()->setupFullAxesBox();
-    ui->customPlot->yAxis->setRange(-1.2, 1.2);
-
-    // make left and bottom axes transfer their ranges to right and top axes:
-    connect(ui->customPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), ui->customPlot->xAxis2, SLOT(setRange(QCPRange)));
-    connect(ui->customPlot->yAxis, SIGNAL(rangeChanged(QCPRange)), ui->customPlot->yAxis2, SLOT(setRange(QCPRange)));
-
-    // setup a timer that repeatedly calls MainWindow::realtimeData:
-    connect(timer, &QTimer::timeout, this, &MainWindow::realtimeData);
-    timer->start(0); // Interval 0 means to refresh as fast as possible
-    */
 }
 
 MainWindow::~MainWindow() //al cerrar la ventana se llama a este metodo
@@ -250,7 +229,7 @@ void MainWindow::onTimeout(){
 
     if (demostracion == false){
         if (strcmp(metodo,"Ciclico") == 0  && medicion_habilitada == 1){ //antes era Reiterativo
-            if (p_refresco >= CANT_VALORES){
+            if (p_refresco >= (CANT_VALORES-1)){
                 p_refresco = 0;
                 qDebug() << "Limpieza de graficos";
                 MainWindow::limpiarGraficos();
@@ -333,7 +312,9 @@ void MainWindow::inicializarGraficos(int curva){
     // modificar apariencia del grafico
     if (curva == 0){
         ui->customPlot->graph(curva)->setPen(QPen(Qt::red));
-        ui->customPlot->graph(curva)->setBrush(QBrush(QColor(255, 0, 0, 20)));
+        //ui->customPlot->graph(curva)->setBrush(QBrush(QColor(255, 0, 0, 20)));
+        ui->customPlot->graph(curva)->setLineStyle(QCPGraph::lsNone);
+        ui->customPlot->graph(curva)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 4));
     }
     if (curva == 1){
         ui->customPlot->graph(curva)->setPen(QPen(Qt::green));
