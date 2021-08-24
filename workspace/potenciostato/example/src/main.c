@@ -211,6 +211,10 @@ static void vUSBTask(void *pvParameters) {
 
 	int countADCsend, countUSBin, countUSBout;
 
+	xQueueSendToBack(qDAC,&conf_dac,0);
+	xQueueSendToBack(qADC,&conf_adc,0);
+
+
 	while (1) {
 		if (debugging == ENABLED)
 			DEBUGOUT("USB: Se va a leer xOPCodequeue\n");

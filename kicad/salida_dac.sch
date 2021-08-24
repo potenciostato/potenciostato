@@ -1,6 +1,5 @@
 EESchema Schematic File Version 4
-LIBS:potenciostato-cache
-EELAYER 26 0
+EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
@@ -1088,11 +1087,11 @@ F 3 "http://www.ti.com/lit/ds/symlink/cd4016b.pdf" H 2100 3550 50  0001 C CNN
 	0    1    -1   0   
 $EndComp
 Text HLabel 2650 3550 2    50   Input ~ 0
-OFF_I_2
+OFF_DAC_2
 Wire Wire Line
 	2650 3550 2400 3550
 Text HLabel 4350 3550 2    50   Input ~ 0
-OFF_I_1
+OFF_DAC_1
 Wire Wire Line
 	4350 3550 4050 3550
 $Comp
@@ -1271,8 +1270,6 @@ Text Notes 2200 2700 0    50   ~ 0
 Salida DAC uC de 0 a 3V\nSalida módulo amplificador:\n0V = VEE (-5V)\n1.5V = 0V\n3V = VCC (5V)
 Text Notes 1400 7050 0    50   ~ 0
 Salida electrodo: VEE<0<VCC\nEntrada ADC: 0 a 5V (eventualmente 0 a 3.3V)
-Text Notes 2550 4800 0    50   ~ 0
-Amplificador Tension Inversor con selector\nde ganancia y offset\n(AMP I2)
 Text Notes 4100 1450 0    50   ~ 0
 Amplificador Tension Inversor con selector\nde ganancia y offset\n(AMP T1)
 Text Notes 7500 2200 0    50   ~ 0
@@ -1283,4 +1280,6 @@ Text Notes 8150 5400 0    50   ~ 0
 El offset de este amplificador se regulará para tener\nvalor medio igual a la mitad del rango del ADC (0 a 3.3V)
 Text Notes 3800 6650 0    50   ~ 0
 El offset de este amplificador se regulará para tener\nvalor medio igual a la mitad del rango del ADC (0 a 3.3V)
+Text Notes 2550 4800 0    50   ~ 0
+Amplificador Tension Inversor con selector\nde ganancia y offset\n(AMP I2)
 $EndSCHEMATC
