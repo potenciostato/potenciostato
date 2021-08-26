@@ -69,4 +69,18 @@
 #define OC_ACK 0xE
 #define OC_SENDDATA_ERR 0xF
 
+// Defines llaves
+#define SW_I_GAIN1 1
+#define SW_I_GAIN2 0
+#define SW_GAIN1 1
+#define SW_GAIN2 0
+#define SW_V_GAIN1 1
+#define SW_V_GAIN2 0
+#define OFF_DAC_1 1
+#define OFF_DAC_2 0
+#define OFF_V_1 1
+#define OFF_V_2 0
+#define OFF_I_1 1
+#define OFF_I_2 0
+
 #endif /* DEFINES_H_ */
