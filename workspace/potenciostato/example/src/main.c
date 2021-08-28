@@ -462,7 +462,7 @@ int main(void)
 
 	/* DAC  */
 	xTaskCreate(vDACTask, (signed char *) "vDACTask",
-				configMINIMAL_STACK_SIZE * 2, NULL, (tskIDLE_PRIORITY + 1UL),
+				configMINIMAL_STACK_SIZE * 5, NULL, (tskIDLE_PRIORITY + 1UL),
 				(xTaskHandle *) NULL);
 
 	/* ADC  */
