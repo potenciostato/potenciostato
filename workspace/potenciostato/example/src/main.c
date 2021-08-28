@@ -211,8 +211,8 @@ static void vUSBTask(void *pvParameters) {
 
 	int countADCsend, countUSBin, countUSBout;
 
-	xQueueSendToBack(qDAC,&conf_dac,0);
-	xQueueSendToBack(qADC,&conf_adc,0);
+	//xQueueSendToBack(qDAC,&conf_dac,0);
+	//xQueueSendToBack(qADC,&conf_adc,0);
 
 
 	while (1) {

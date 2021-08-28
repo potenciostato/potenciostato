@@ -80,7 +80,7 @@ void prvSetupHardware(void)
 
     // Setup P2.4 OFF_DAC_2
 	Chip_IOCON_PinMux(LPC_IOCON, PORT2, PIN(4), MD_PUP, IOCON_FUNC0);
-    Chip_GPIO_SetPinDIROutput(LPC_GPIO, PORT2, PIN(4));Setup
+    Chip_GPIO_SetPinDIROutput(LPC_GPIO, PORT2, PIN(4));
 //    Chip_GPIO_SetPinOutHigh(LPC_GPIO, PORT2, PIN(4));
 
     // Setup P2.5 SW_V_GAIN1
@@ -103,6 +103,7 @@ void prvSetupHardware(void)
     Chip_GPIO_SetPinDIROutput(LPC_GPIO, PORT2, PIN(8));
 //    Chip_GPIO_SetPinOutHigh(LPC_GPIO, PORT2, PIN(8));
 
+    /*
     if (SW_GAIN1 == 1)
     {
     	//Prendo SW_GAIN1 & OFF_DAC_1 y apago SW_GAIN2 y OFF_DAC_2
@@ -185,6 +186,6 @@ void prvSetupHardware(void)
         // P2.4 OFF_V_2
         Chip_GPIO_SetPinOutLow(LPC_GPIO, PORT2, PIN(8));
 
-    }
+    }*/
 
 }

@@ -5,6 +5,7 @@
 *.mk
 build-potenciostato_inicial-Desktop_Qt_5_12_11_MinGW_32_bit-Debug/*
 build-potenciostato_inicial-Desktop_Qt_5_15_1_MinGW_32_bit-Debug/*
+build-potenciostato_inicial-Desktop_Qt_5_12_11_GCC_64bit-Debug/*
 workspace/lpc_board_nxp_lpcxpresso_1769/Debug/liblpc_board_nxp_lpcxpresso_1769.a
 workspace/lpc_board_nxp_lpcxpresso_1769/Debug/src/board.d
 workspace/lpc_board_nxp_lpcxpresso_1769/Debug/src/board.o
@@ -115,3 +116,8 @@ workspace/potenciostato/Debug/potenciostato_Debug.ld
 workspace/potenciostato/Debug/potenciostato_Debug_library.ld
 workspace/potenciostato/Debug/potenciostato_Debug_memory.ld
 qt/potenciostato_inicial.pro.user
+workspace/Sintetizador_v1.0/.settings/language.settings.xml
+workspace/freertos_blinky/.settings/language.settings.xml
+workspace/potenciostato/potenciostato Release (1).launch
+workspace/usbd_lib_hid_generic/.settings/language.settings.xml
+workspace/usbd_lib_hid_keyboard/.settings/language.settings.xml
