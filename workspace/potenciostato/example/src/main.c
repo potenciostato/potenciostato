@@ -29,7 +29,7 @@
  ****************************************************************************/
 
 //Para habilitar (o no) imprimir por consola
-bool debugging = ENABLED;
+bool debugging = DISABLED;
 
 extern ADC_CLOCK_SETUP_T ADCSetup;
 
@@ -211,8 +211,8 @@ static void vUSBTask(void *pvParameters) {
 
 	int countADCsend, countUSBin, countUSBout;
 
-	//xQueueSendToBack(qDAC,&conf_dac,0);
-	//xQueueSendToBack(qADC,&conf_adc,0);
+	xQueueSendToBack(qDAC,&conf_dac,0);
+	xQueueSendToBack(qADC,&conf_adc,0);
 
 
 	while (1) {
@@ -313,8 +313,7 @@ static void vDACTask(void *pvParameters) {
 
 	// Config DAC DMA
 	CLOCK_DAC_HZ = Chip_Clock_GetSystemClockRate()/4;
-	Chip_GPDMA_PrepareDescriptor ( LPC_GPDMA , &DMA_LLI_buffer  , (uint32_t) tabla_salida ,
-									GPDMA_CONN_DAC , DMA_SIZE , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA , &DMA_LLI_buffer );
+
 	CanalDAC = Chip_GPDMA_GetFreeChannel ( LPC_GPDMA , 0 );
 	Chip_GPDMA_Init ( LPC_GPDMA );
 
@@ -333,13 +332,24 @@ static void vDACTask(void *pvParameters) {
 		if (conf.amp != AMPLITUD){
 			AMPLITUD = conf.amp;
 			for ( i = 0 ; i < NUMERO_MUESTRAS ; i++ ) {
-				tabla_salida[i]= AMPLITUD * tabla_tria[i];
+				tabla_salida[i]= (AMPLITUD * tabla_tria[i]) << 6;
+
 			}
+			Chip_GPDMA_PrepareDescriptor ( LPC_GPDMA , &DMA_LLI_buffer  , (uint32_t) tabla_salida ,
+											GPDMA_CONN_DAC , DMA_SIZE , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA , &DMA_LLI_buffer );
 		}
 		if(conf.set != DACset){
 			DACset = conf.set;
 			if(DACset){
 				SG_OK = Chip_GPDMA_SGTransfer (LPC_GPDMA , CanalDAC ,&DMA_LLI_buffer , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA);
+
+				// Testeando DAC
+				/*Chip_DAC_UpdateValue(LPC_DAC, 512);
+				Chip_DAC_UpdateValue(LPC_DAC, 0);
+				Chip_DAC_UpdateValue(LPC_DAC, 1023);
+				Chip_DAC_UpdateValue(LPC_DAC, 0);
+				Chip_DAC_UpdateValue(LPC_DAC, 1023);
+				Chip_DAC_UpdateValue(LPC_DAC, 0);*/
 				if (debugging == ENABLED)
 					DEBUGOUT("DAC: Habilite DAC\n");
 			} else {
