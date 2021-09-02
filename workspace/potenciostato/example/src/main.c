@@ -240,6 +240,10 @@ static void vUSBTask(void *pvParameters) {
 				if (debugging == ENABLED)
 					DEBUGOUT("USB: Habilito DAC & ADC\n");
 
+
+				//Configuro los gains y los offsets
+				configGains(SW_GAIN1,SW_I_GAIN1,SW_V_GAIN1);
+
 				//Todo tomar la config del init del QT
 				// Se habilitan DAC y ADC
 				conf_dac.set = true;
