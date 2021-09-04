@@ -3,7 +3,7 @@ EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 1 1
+Sheet 2 3
 Title ""
 Date ""
 Rev ""
@@ -721,7 +721,7 @@ AR Path="/5F9D897F" Ref="R18"  Part="1"
 AR Path="/5F899696/5F9D897F" Ref="R23"  Part="1" 
 AR Path="/6013BA2D/5F9D897F" Ref="R23"  Part="1" 
 F 0 "R23" V 10293 4950 50  0000 C CNN
-F 1 "10K" V 10384 4950 50  0000 C CNN
+F 1 "1K" V 10384 4950 50  0000 C CNN
 F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 10430 4950 50  0001 C CNN
 F 3 "~" H 10500 4950 50  0001 C CNN
 	1    10500 4950
