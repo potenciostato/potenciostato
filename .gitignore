@@ -122,3 +122,17 @@ workspace/freertos_blinky/.settings/language.settings.xml
 workspace/potenciostato/potenciostato Release (1).launch
 workspace/usbd_lib_hid_generic/.settings/language.settings.xml
 workspace/usbd_lib_hid_keyboard/.settings/language.settings.xml
+workspace/.mcuxpressoide_packages_support/
+workspace/AzureRTOS_TAD_logs/
+workspace/FreeRTOS_TAD_logs/
+workspace/lpc_board_nxp_lpcxpresso_1769/.settings/
+workspace/lpc_chip_175x_6x/.settings/
+workspace/periph_adc/.settings/
+workspace/potenciostato/Debug/example/src/cr_startup_lpc175x_6x.su
+workspace/potenciostato/Debug/example/src/hid_desc.su
+workspace/potenciostato/Debug/example/src/hid_generic.su
+workspace/potenciostato/Debug/example/src/main.su
+workspace/potenciostato/Debug/example/src/setup.su
+workspace/potenciostato/Debug/example/src/sysinit.su
+workspace/potenciostato/Debug/freertos/
+workspace/potenciostato/potenciostato LinkServer Debug.launch
