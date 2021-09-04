@@ -1,6 +1,5 @@
 EESchema Schematic File Version 4
-LIBS:potenciostato-cache
-EELAYER 26 0
+EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
@@ -40,9 +39,11 @@ Wire Wire Line
 Text HLabel 2200 3400 0    50   Input ~ 0
 DAC
 $Comp
-L Connector:USB_B_Micro J2
+L potenciostato-rescue:USB_B_Micro-Connector J2
 U 1 1 609A40C2
 P 6850 2600
+AR Path="/609A40C2" Ref="J2"  Part="1" 
+AR Path="/60147E53/609A40C2" Ref="J2"  Part="1" 
 F 0 "J2" H 6620 2496 50  0000 R CNN
 F 1 "USB_B_Micro" H 6620 2589 50  0000 R CNN
 F 2 "Connector_USB:USB_A_CNCTech_1001-011-01101_Horizontal" H 7000 2550 50  0001 C CNN
@@ -93,12 +94,12 @@ Wire Wire Line
 Wire Wire Line
 	5500 3400 5950 3400
 Wire Wire Line
-	5500 3300 5950 3300
-Wire Wire Line
 	5500 3200 5950 3200
-Text HLabel 5950 3300 2    50   Input ~ 0
-P2.1
+Wire Wire Line
+	5500 3300 5950 3300
 Text HLabel 5950 3200 2    50   Input ~ 0
+P2.1
+Text HLabel 5950 3300 2    50   Input ~ 0
 P2.2
 Text HLabel 5950 3400 2    50   Input ~ 0
 P2.3

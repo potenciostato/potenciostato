@@ -1,11 +1,11 @@
 EESchema-LIBRARY Version 2.4
 #encoding utf-8
 #
-# salida_dac-rescue_+5V-power
+# +5V-power
 #
-DEF salida_dac-rescue_+5V-power #PWR 0 0 Y Y 1 F P
+DEF +5V-power #PWR 0 0 Y Y 1 F P
 F0 "#PWR" 0 -150 50 H I C CNN
-F1 "salida_dac-rescue_+5V-power" 0 140 50 H V C CNN
+F1 "+5V-power" 0 140 50 H V C CNN
 F2 "" 0 0 50 H I C CNN
 F3 "" 0 0 50 H I C CNN
 DRAW
@@ -16,11 +16,11 @@ X +5V 1 0 0 0 U 50 50 1 1 W N
 ENDDRAW
 ENDDEF
 #
-# salida_dac-rescue_-5V-power
+# -5V-power
 #
-DEF salida_dac-rescue_-5V-power #PWR 0 0 Y Y 1 F P
+DEF -5V-power #PWR 0 0 Y Y 1 F P
 F0 "#PWR" 0 100 50 H I C CNN
-F1 "salida_dac-rescue_-5V-power" 0 150 50 H V C CNN
+F1 "-5V-power" 0 150 50 H V C CNN
 F2 "" 0 0 50 H I C CNN
 F3 "" 0 0 50 H I C CNN
 DRAW
@@ -29,11 +29,11 @@ X -5V 1 0 0 0 U 50 50 0 0 W N
 ENDDRAW
 ENDDEF
 #
-# salida_dac-rescue_4016-4xxx
+# 4016-4xxx
 #
-DEF salida_dac-rescue_4016-4xxx U 0 40 Y Y 5 L N
+DEF 4016-4xxx U 0 40 Y Y 5 L N
 F0 "U" -300 350 50 H V C CNN
-F1 "salida_dac-rescue_4016-4xxx" -300 -350 50 H V C CNN
+F1 "4016-4xxx" -300 -350 50 H V C CNN
 F2 "" 0 0 50 H I C CNN
 F3 "" 0 0 50 H I C CNN
 $FPLIST
@@ -70,11 +70,11 @@ X VSS 7 0 -500 200 U 50 50 5 0 W
 ENDDRAW
 ENDDEF
 #
-# salida_dac-rescue_GND-power
+# GND-power
 #
-DEF salida_dac-rescue_GND-power #PWR 0 0 Y Y 1 F P
+DEF GND-power #PWR 0 0 Y Y 1 F P
 F0 "#PWR" 0 -250 50 H I C CNN
-F1 "salida_dac-rescue_GND-power" 0 -150 50 H V C CNN
+F1 "GND-power" 0 -150 50 H V C CNN
 F2 "" 0 0 50 H I C CNN
 F3 "" 0 0 50 H I C CNN
 DRAW
@@ -83,11 +83,11 @@ X GND 1 0 0 0 D 50 50 1 1 W N
 ENDDRAW
 ENDDEF
 #
-# salida_dac-rescue_R-Device
+# R-Device
 #
-DEF salida_dac-rescue_R-Device R 0 0 N Y 1 F N
+DEF R-Device R 0 0 N Y 1 F N
 F0 "R" 80 0 50 V V C CNN
-F1 "salida_dac-rescue_R-Device" 0 0 50 V V C CNN
+F1 "R-Device" 0 0 50 V V C CNN
 F2 "" -70 0 50 V I C CNN
 F3 "" 0 0 50 H I C CNN
 $FPLIST
@@ -100,11 +100,11 @@ X ~ 2 0 -150 50 U 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
-# salida_dac-rescue_R_POT-Device
+# R_POT-Device
 #
-DEF salida_dac-rescue_R_POT-Device RV 0 40 Y N 1 F N
+DEF R_POT-Device RV 0 40 Y N 1 F N
 F0 "RV" -175 0 50 V V C CNN
-F1 "salida_dac-rescue_R_POT-Device" -100 0 50 V V C CNN
+F1 "R_POT-Device" -100 0 50 V V C CNN
 F2 "" 0 0 50 H I C CNN
 F3 "" 0 0 50 H I C CNN
 $FPLIST
@@ -120,11 +120,11 @@ X 3 3 0 -150 50 U 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
-# salida_dac-rescue_TL064-Amplifier_Operational
+# TL064-Amplifier_Operational
 #
-DEF salida_dac-rescue_TL064-Amplifier_Operational U 0 5 Y Y 5 L N
+DEF TL064-Amplifier_Operational U 0 5 Y Y 5 L N
 F0 "U" 0 200 50 H V L CNN
-F1 "salida_dac-rescue_TL064-Amplifier_Operational" 0 -200 50 H V L CNN
+F1 "TL064-Amplifier_Operational" 0 -200 50 H V L CNN
 F2 "" -50 100 50 H I C CNN
 F3 "" 50 200 50 H I C CNN
 $FPLIST
