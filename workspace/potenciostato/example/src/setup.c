@@ -65,13 +65,21 @@ void prvSetupHardware(void)
 //    Chip_GPIO_SetPinOutHigh(LPC_GPIO, PORT0, PIN(22));
 //    Chip_GPIO_SetPinOutLow(LPC_GPIO, PORT0, PIN(22));
 
-    // Setup P2.1 SW_GAIN1 -  En el kickcad estaba al reves y era el P.2.2
-	Chip_IOCON_PinMux(LPC_IOCON, PORT2, PIN(1), MD_PUP, IOCON_FUNC0);
+    /*
+     * Setup P2.1 SW_GAIN1 -  En el kickcad estaba al reves
+     * 	Para la revisión 1 de la placa SW_GAIN1 es P.2.2
+     * 	Para la revisión 2 en adelante SW_GAIN1 es P.2.1
+     * */
+	Chip_IOCON_PinMux(LPC_IOCON, PORT2, PIN(2), MD_PUP, IOCON_FUNC0);
     Chip_GPIO_SetPinDIROutput(LPC_GPIO, PORT2, PIN(2));
 //   Chip_GPIO_SetPinOutLow(LPC_GPIO, PORT2, PIN(2));
 
-    // Setup P2.2 SW_GAIN2 -  En el kickcad estaba al reves y era el P.2.1
-	Chip_IOCON_PinMux(LPC_IOCON, PORT2, PIN(2), MD_PUP, IOCON_FUNC0);
+    /*
+     * Setup P2.2 SW_GAIN2 -  En el kickcad estaba al reves
+     * 	Para la revisión 1 de la placa SW_GAIN2 es P.2.1
+     * 	Para la revisión 2 en adelante SW_GAIN2 es P.2.2
+     * */
+	Chip_IOCON_PinMux(LPC_IOCON, PORT2, PIN(1), MD_PUP, IOCON_FUNC0);
     Chip_GPIO_SetPinDIROutput(LPC_GPIO, PORT2, PIN(1));
 //    Chip_GPIO_SetPinOutHigh(LPC_GPIO, PORT2, PIN(1));
 //    Chip_GPIO_SetPinOutLow(LPC_GPIO, PORT2, PIN(1));
@@ -205,13 +213,19 @@ void configGains(uint8_t SW_GAIN,uint8_t SW_I_GAIN,uint8_t SW_V_GAIN)
 
 	    if (SW_GAIN == SW_GAIN1)
 	    {
+	        /*
+	         * 	SW_GAIN1 -  En el kickcad estaba al reves
+	         * 	Para la revisión 1 de la placa SW_GAIN1 es P.2.2
+	         * 	Para la revisión 2 en adelante SW_GAIN1 es P.2.1
+	         * */
+
 	    	//Prendo SW_GAIN1 & OFF_DAC_1 y apago SW_GAIN2 y OFF_DAC_2
-	    	// P2.1 SW_GAIN1
-	        Chip_GPIO_SetPinOutHigh(LPC_GPIO, PORT2, PIN(1));
+	    	// P2.2 SW_GAIN1
+	        Chip_GPIO_SetPinOutHigh(LPC_GPIO, PORT2, PIN(2));
 	        // P2.3 OFF_DAC_1
 	        Chip_GPIO_SetPinOutHigh(LPC_GPIO, PORT2, PIN(3));
-	        // P2.2 SW_GAIN2
-	        Chip_GPIO_SetPinOutLow(LPC_GPIO, PORT2, PIN(2));
+	        // P2.1 SW_GAIN2
+	        Chip_GPIO_SetPinOutLow(LPC_GPIO, PORT2, PIN(1));
 	        // P2.4 OFF_DAC_2
 	        Chip_GPIO_SetPinOutLow(LPC_GPIO, PORT2, PIN(4));
 
@@ -219,13 +233,19 @@ void configGains(uint8_t SW_GAIN,uint8_t SW_I_GAIN,uint8_t SW_V_GAIN)
 
 	    if (SW_GAIN == SW_GAIN2)
 	    {
+	        /*
+	         * 	SW_GAIN2 -  En el kickcad estaba al reves
+	         * 	Para la revisión 1 de la placa SW_GAIN2 es P.2.1
+	         * 	Para la revisión 2 en adelante SW_GAIN2 es P.2.2
+	         * */
+
 	    	//Apago SW_GAIN2 & OFF_DAC_2 y prendo SW_GAIN1 y OFF_DAC_1
-	    	// P2.1 SW_GAIN1
-	    	Chip_GPIO_SetPinOutLow(LPC_GPIO, PORT2, PIN(1));
+	    	// P2.2 SW_GAIN1
+	    	Chip_GPIO_SetPinOutLow(LPC_GPIO, PORT2, PIN(2));
 	        // P2.3 OFF_DAC_1
 	    	Chip_GPIO_SetPinOutLow(LPC_GPIO, PORT2, PIN(3));
-	        // P2.2 SW_GAIN2
-	        Chip_GPIO_SetPinOutHigh(LPC_GPIO, PORT2, PIN(2));
+	        // P2.1 SW_GAIN2
+	        Chip_GPIO_SetPinOutHigh(LPC_GPIO, PORT2, PIN(1));
 	        // P2.4 OFF_DAC_12
 	        Chip_GPIO_SetPinOutHigh(LPC_GPIO, PORT2, PIN(4));
 
