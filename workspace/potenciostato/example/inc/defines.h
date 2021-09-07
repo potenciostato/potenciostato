@@ -49,6 +49,9 @@
 
 #define FREC_TIMER          80
 
+#define BARRIDO_CICLICO 	0
+#define BARRIDO_LINEAL 		1
+
 // Defines ADC
 
 #define CANAL_CORRIENTE		ADC_CH1

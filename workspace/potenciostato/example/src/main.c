@@ -57,6 +57,7 @@ const  USBD_API_T *g_pUsbApi = &g_usbApi;
 
 struct DACmsj {
   bool set;
+  uint16_t mode;
   uint32_t frec;
   uint16_t amp;
 };
@@ -79,7 +80,7 @@ xSemaphoreHandle sBufferADC;
 xQueueHandle qUSBin, qUSBout, qADC, qDAC, qADCcorriente, qADCtension, qADCsend;
 
 DMA_TransferDescriptor_t DMA_LLI_buffer;
-DMA_TransferDescriptor_t DMA_LLI_buffer_ADC;
+DMA_TransferDescriptor_t DMA_NLI_buffer;
 
 /*****************************************************************************
  * Declaracion de funciones
@@ -136,7 +137,7 @@ void DMA_IRQHandler(void)
 {
 	static signed portBASE_TYPE xHigherPriorityTaskWoken;
 	xHigherPriorityTaskWoken = pdFALSE;
-	if (Chip_GPDMA_Interrupt(LPC_GPDMA, CanalADC) == SUCCESS) {
+	if (Chip_GPDMA_Interrupt(LPC_GPDMA, CanalDAC) == SUCCESS) {
 		xSemaphoreGiveFromISR(sBufferADC, &xHigherPriorityTaskWoken);
 	}
 	else {
@@ -205,7 +206,7 @@ static void vUSBTask(void *pvParameters) {
 
 	uint8_t lecturaQT[8]={0};
 	int i;
-	struct DACmsj conf_dac = {true,1000,1}; //estado del modulo, frecuencia[Hz], amplitud[V]
+	struct DACmsj conf_dac = {true, BARRIDO_CICLICO, 1000,1}; //estado del modulo, frecuencia[Hz], amplitud[V]
 	struct ADCmsj conf_adc = {true,10}; //estado del modulo, frecuencia[Hz], amplitud[V]
 	uint8_t midiendo=false;
 
@@ -310,23 +311,27 @@ static void vUSBTask(void *pvParameters) {
 	}
 }
 /* DAC parpadeo cada 0.1s */
+/* DAC parpadeo cada 0.1s */
 static void vDACTask(void *pvParameters) {
 	bool DACset = false;
 	uint16_t tabla_salida[ NUMERO_MUESTRAS ], i, SG_OK = 0;
-	uint16_t FREC = 0, AMPLITUD = 0;
+	uint16_t FREC = 0, AMPLITUD = 0, MODO = 2;
 	uint32_t CLOCK_DAC_HZ, timeoutDMA;
 	struct DACmsj conf;
 
 	// Config DAC DMA
 	CLOCK_DAC_HZ = Chip_Clock_GetSystemClockRate()/4;
-
 	CanalDAC = Chip_GPDMA_GetFreeChannel ( LPC_GPDMA , 0 );
 	Chip_GPDMA_Init ( LPC_GPDMA );
+	NVIC_EnableIRQ(DMA_IRQn);
+
+
 
 	while(1) {
 
 		//se lee la cola, si no se recibe nada la tarea se quedará esperando
 		xQueueReceive(qDAC,&conf,portMAX_DELAY);
+
 		if (debugging == ENABLED)
 			DEBUGOUT("DAC: Entre DAC\n");
 
@@ -334,28 +339,45 @@ static void vDACTask(void *pvParameters) {
 			FREC = conf.frec;
 			timeoutDMA = CLOCK_DAC_HZ / ( FREC * NUMERO_MUESTRAS );
 			Chip_DAC_SetDMATimeOut(LPC_DAC, timeoutDMA);
+			timeoutDMA = 50;
+		}
+		if (conf.mode != MODO){
+			Chip_GPDMA_Stop(LPC_GPDMA, CanalDAC);
+			AMPLITUD = 0; // fuerza a que cuando cambie el modo verifique la tabla de salida
+			DACset = false;
+			if (conf.mode == BARRIDO_CICLICO){
+				Chip_GPDMA_PrepareDescriptor ( LPC_GPDMA , &DMA_LLI_buffer  , (uint32_t) tabla_salida ,
+												GPDMA_CONN_DAC , DMA_SIZE , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA , &DMA_LLI_buffer );
+			}
+			if (conf.mode == BARRIDO_LINEAL){
+				Chip_GPDMA_PrepareDescriptor ( LPC_GPDMA , &DMA_NLI_buffer  , (uint32_t) tabla_salida ,
+												GPDMA_CONN_DAC , DMA_SIZE , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA , 0 );
+			}
 		}
 		if (conf.amp != AMPLITUD){
 			AMPLITUD = conf.amp;
-			for ( i = 0 ; i < NUMERO_MUESTRAS ; i++ ) {
-				tabla_salida[i]= (AMPLITUD * tabla_tria[i]) << 6;
-
+			if (conf.mode == BARRIDO_CICLICO){
+				for ( i = 0 ; i < NUMERO_MUESTRAS ; i++ ) {
+					tabla_salida[i]= (AMPLITUD * tabla_tria[i]) << 6;
+				}
 			}
-			Chip_GPDMA_PrepareDescriptor ( LPC_GPDMA , &DMA_LLI_buffer  , (uint32_t) tabla_salida ,
-											GPDMA_CONN_DAC , DMA_SIZE , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA , &DMA_LLI_buffer );
+			if (conf.mode == BARRIDO_LINEAL){
+				for ( i = 0 ; i < NUMERO_MUESTRAS ; i++ ) {
+					tabla_salida[i]= (AMPLITUD * tabla_sier[i]) << 6;
+				}
+			}
 		}
 		if(conf.set != DACset){
 			DACset = conf.set;
 			if(DACset){
-				SG_OK = Chip_GPDMA_SGTransfer (LPC_GPDMA , CanalDAC ,&DMA_LLI_buffer , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA);
+				if (conf.mode == BARRIDO_CICLICO){
+					Board_LED_Set(0, true);
+					SG_OK = Chip_GPDMA_SGTransfer (LPC_GPDMA , CanalDAC ,&DMA_LLI_buffer , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA);
+				}
+				if (conf.mode == BARRIDO_LINEAL) {
+					SG_OK = Chip_GPDMA_SGTransfer (LPC_GPDMA , CanalDAC ,&DMA_NLI_buffer , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA);
+				}
 
-				// Testeando DAC
-				/*Chip_DAC_UpdateValue(LPC_DAC, 512);
-				Chip_DAC_UpdateValue(LPC_DAC, 0);
-				Chip_DAC_UpdateValue(LPC_DAC, 1023);
-				Chip_DAC_UpdateValue(LPC_DAC, 0);
-				Chip_DAC_UpdateValue(LPC_DAC, 1023);
-				Chip_DAC_UpdateValue(LPC_DAC, 0);*/
 				if (debugging == ENABLED)
 					DEBUGOUT("DAC: Habilite DAC\n");
 			} else {
@@ -437,7 +459,7 @@ int main(void)
 	prvSetupHardware();
 	//ADC conf
 	//DAC conf
-
+	Board_LED_Set(0, false);
 	if (debugging == ENABLED)
 		DEBUGOUT("Potenciostato UTN FRA\r\n");
 
