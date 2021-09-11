@@ -32,7 +32,7 @@ double puntosX[CANT_VALORES] = {0};
 double puntosY[CANT_VALORES] = {0};
 
 //char metodo[30] = "BarridoLineal";
-char metodo[30] = "Ciclico"; //TODO: rehacer la verificacion del modo con defines
+char metodo[30] = "BarridoCiclico"; //TODO: rehacer la verificacion del modo con defines
 int medicion_habilitada = 0;
 bool demostracion = false;
 bool grafico_inicial = false;
@@ -69,10 +69,20 @@ MainWindow::~MainWindow() //al cerrar la ventana se llama a este metodo
 {
     delete ui;
 
+    MainWindow::desconectarUSB();
+}
+
+// Funcion para desconectar el USB
+void MainWindow::desconectarUSB(){
     if(connected > 0)
     {
         libusb_free_device_list(devs,1);
         libusb_exit(ctx);
+
+        connected = 0;
+        Dispositivo = 0;
+
+        qDebug() << "Se ha desconectado el Dispositivo: " << Dispositivo;
     }
 }
 
@@ -228,7 +238,7 @@ void MainWindow::onTimeout(){
     }*/
 
     if (demostracion == false){
-        if (strcmp(metodo,"Ciclico") == 0  && medicion_habilitada == 1){ //antes era Reiterativo
+        if (strcmp(metodo,"BarridoCiclico") == 0  && medicion_habilitada == 1){ //antes era Reiterativo
             if (p_refresco >= (CANT_VALORES-1)){
                 p_refresco = 0;
                 qDebug() << "Limpieza de graficos";
@@ -277,7 +287,7 @@ void MainWindow::onTimeout(){
             }
         }
 
-        if (strcmp(metodo,"Ciclico") == 0  && medicion_habilitada == 1){ //antes era Reiterativo
+        if (strcmp(metodo,"BarridoCiclico") == 0  && medicion_habilitada == 1){ //antes era Reiterativo
             if (p_refresco >= CANT_VALORES){
                 p_refresco = 0;
                 qDebug() << "Limpieza de graficos";
@@ -337,7 +347,7 @@ void MainWindow::limpiarGraficos(){
 
 // Es llamada cuando el LPC y el QT estan al tanto del termino de la medición
 void MainWindow::terminoMedicion(){
-    ui->Bt_Iniciar->setEnabled(true);
+    ui->Bt_IniciarLineal->setEnabled(true);
     ui->Bt_Abortar->setEnabled(false);
     ui->Bt_Capturar->setEnabled(false);
     ui->Bt_Exportar->setEnabled(true);
@@ -348,29 +358,37 @@ void MainWindow::on_pushButton_clicked()
     qDebug() << "hola";
 }
 
-void MainWindow::on_Bt_Iniciar_clicked()
+void MainWindow::on_Bt_IniciarLineal_clicked()
 {
     if (connected != 1){
         qDebug() << "Dispositivo no conectado";
+        return;
     }
 
     qDebug() << "Iniciar Medición";
     //Deshabilita Iniciar
-    ui->Bt_Iniciar->setEnabled(false);
+    ui->Bt_IniciarLineal->setEnabled(false);
     ui->Bt_Exportar->setEnabled(false);
 
     unsigned char buffer[8] = {0x0};
     unsigned char recv_data[8] = {0x0};
     int len;
     int send_ret, recv_ret;
+    uint8_t tension_pico = 0;
+    //int tension_pico = 0;
+    uint16_t frecuencia = 0;
 
-    //Se envia inicio de medición al LPC
-    //envio....
-    //se queda esperando al Recibido
-    // si llega recibido OK continuar
+    //Se procesa la configuración elegida
+    tension_pico = (255 * (1000 * ui->Num_VLineal->value())) / MV_TENSION_MAXIMA;
+    frecuencia = ui->Num_HzLineal->value();
+
+    qDebug() << "tension_pico: " << tension_pico;
+    qDebug() << "frecuencia: " << frecuencia;
 
     //se enviara un INIT MEASUREMENT
     buffer[0] = OC_INITMEASUREMENT;
+    buffer[2] = tension_pico;
+    buffer[3] = frecuencia;
 
     send_ret = libusb_interrupt_transfer(dev_handle, 0x01, buffer, (sizeof(buffer)) * 8, &len, 1000);
     recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * 8, &len, 1000);
@@ -558,6 +576,14 @@ void MainWindow::on_Conectar_Bt_clicked()
         }
     }
 
+    // Se habilita el inicio de medición
+    ui->Bt_IniciarLineal->setEnabled(true);
+    ui->Bt_Abortar->setEnabled(false);
+    ui->Bt_Capturar->setEnabled(false);
+    ui->Bt_Exportar->setEnabled(false);
+    ui->Conectar_Bt->setEnabled(false);
+    ui->Desconectar_Bt->setEnabled(true);
+
     //QString Buff;
 
     unsigned int Datos;
@@ -717,3 +743,18 @@ void MainWindow::realtimeData(){
 
 
 
+
+void MainWindow::on_Desconectar_Bt_clicked()
+{
+    MainWindow::desconectarUSB();
+
+    //Habilita la conexión
+    ui->Conectar_Bt->setEnabled(true);
+    ui->Bt_IniciarLineal->setEnabled(false);
+    ui->Bt_Abortar->setEnabled(false);
+    ui->Bt_Capturar->setEnabled(false);
+    ui->Bt_Exportar->setEnabled(false);
+    ui->Desconectar_Bt->setEnabled(false);
+
+
+}

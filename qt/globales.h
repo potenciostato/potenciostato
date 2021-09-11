@@ -41,4 +41,6 @@ uint8_t Dispositivo = 0;
 
 #define MILISEGUNDOS_POLLING 50
 
+#define MV_TENSION_MAXIMA 3300
+
 #endif // GLOBALES_H
