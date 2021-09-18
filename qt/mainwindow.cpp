@@ -247,7 +247,7 @@ void MainWindow::onTimeout(){
                 MainWindow::inicializarGraficos();
             }else{
                 p_refresco ++;
-                qDebug() << "Envio de refresco al grafico";
+                qDebug() << "Envío de refresco al gráfico";
                 MainWindow::refrescarValores(puntosX, puntosY);
             }
         }
@@ -279,7 +279,7 @@ void MainWindow::onTimeout(){
                 MainWindow::terminoMedicion();
             }else{
                 p_refresco ++;
-                qDebug() << "Envio de refresco al grafico";
+                qDebug() << "Envío de refresco al gráfico";
                 MainWindow::refrescarValores(puntosX, puntosY,
                                              grafico_demostracion,
                                              1,
@@ -296,7 +296,7 @@ void MainWindow::onTimeout(){
                 MainWindow::inicializarGraficos();
             }else{
                 p_refresco ++;
-                qDebug() << "Envio de refresco al grafico";
+                qDebug() << "Envío de refresco al gráfico";
                 MainWindow::refrescarValores(puntosX, puntosY);
             }
         }
@@ -748,6 +748,8 @@ void MainWindow::on_Desconectar_Bt_clicked()
 {
     MainWindow::desconectarUSB();
 
+    medicion_habilitada = 0;
+
     //Habilita la conexión
     ui->Conectar_Bt->setEnabled(true);
     ui->Bt_IniciarLineal->setEnabled(false);
@@ -755,6 +757,5 @@ void MainWindow::on_Desconectar_Bt_clicked()
     ui->Bt_Capturar->setEnabled(false);
     ui->Bt_Exportar->setEnabled(false);
     ui->Desconectar_Bt->setEnabled(false);
-
 
 }
