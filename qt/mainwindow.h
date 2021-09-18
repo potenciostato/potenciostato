@@ -41,6 +41,8 @@ private slots:
     void desconectarUSB();
 
 
+    void on_Bt_IniciarCiclico_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

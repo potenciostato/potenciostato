@@ -254,13 +254,13 @@ void configGains(uint8_t SW_GAIN,uint8_t SW_I_GAIN,uint8_t SW_V_GAIN)
 	    if (SW_I_GAIN == SW_I_GAIN1)
 	    {
 	    	//Prendo SW_I_GAIN1 & OFF_I_1 y apago SW_I_GAIN2 y OFF_I_2
-	    	// P2.1 SW_I_GAIN1
+	    	// P0.1 SW_I_GAIN1
 	        Chip_GPIO_SetPinOutHigh(LPC_GPIO, PORT0, PIN(2));
-	        // P2.3 OFF_I_1
+	        // P0.21 OFF_I_1
 	        Chip_GPIO_SetPinOutHigh(LPC_GPIO, PORT0, PIN(21));
-	        // P2.2 SW_I_GAIN2
+	        // P0.3 SW_I_GAIN2
 	        Chip_GPIO_SetPinOutLow(LPC_GPIO, PORT0, PIN(3));
-	        // P2.4 OFF_I_2
+	        // P0.22 OFF_I_2
 	        Chip_GPIO_SetPinOutLow(LPC_GPIO, PORT0, PIN(22));
 
 	    }
@@ -268,13 +268,13 @@ void configGains(uint8_t SW_GAIN,uint8_t SW_I_GAIN,uint8_t SW_V_GAIN)
 	    if (SW_I_GAIN == SW_I_GAIN2)
 	    {
 	    	//Apago SW_I_GAIN1 & OFF_I_1 y prendo SW_I_GAIN2 y OFF_I_2
-	    	// P2.1 SW_I_GAIN1
+	    	// P0.1 SW_I_GAIN1
 	    	Chip_GPIO_SetPinOutLow(LPC_GPIO, PORT0, PIN(2));
-	        // P2.3 OFF_I_1
+	        // P0.21 OFF_I_1
 	        Chip_GPIO_SetPinOutLow(LPC_GPIO, PORT0, PIN(21));
-	        // P2.2 SW_I_GAIN2
+	        // P0.3 SW_I_GAIN2
 	        Chip_GPIO_SetPinOutHigh(LPC_GPIO, PORT0, PIN(3));
-	        // P2.4 OFF_I_2
+	        // P0.22 OFF_I_2
 	        Chip_GPIO_SetPinOutHigh(LPC_GPIO, PORT0, PIN(22));
 
 	    }
@@ -282,13 +282,13 @@ void configGains(uint8_t SW_GAIN,uint8_t SW_I_GAIN,uint8_t SW_V_GAIN)
 	    if (SW_V_GAIN == SW_V_GAIN1)
 	    {
 	    	//Prendo SW_V_GAIN1 & OFF_V_1 y apago SW_V_GAIN2 y OFF_V_2
-	    	// P2.1 SW_V_GAIN1
+	    	// P2.5 SW_V_GAIN1
 	        Chip_GPIO_SetPinOutHigh(LPC_GPIO, PORT2, PIN(5));
-	        // P2.3 OFF_V_1
+	        // P2.7 OFF_V_1
 	        Chip_GPIO_SetPinOutHigh(LPC_GPIO, PORT2, PIN(7));
-	        // P2.2 SW_V_GAIN2
+	        // P2.6 SW_V_GAIN2
 	        Chip_GPIO_SetPinOutLow(LPC_GPIO, PORT2, PIN(6));
-	        // P2.4 OFF_V_2
+	        // P2.8 OFF_V_2
 	        Chip_GPIO_SetPinOutLow(LPC_GPIO, PORT2, PIN(8));
 
 	    }
@@ -296,13 +296,13 @@ void configGains(uint8_t SW_GAIN,uint8_t SW_I_GAIN,uint8_t SW_V_GAIN)
 	    if (SW_V_GAIN == SW_V_GAIN2)
 	    {
 	    	//Apago SW_V_GAIN1 & OFF_V_1 y prendo SW_V_GAIN2 y OFF_V_2
-	    	// P2.1 SW_V_GAIN1
+	    	// P2.5 SW_V_GAIN1
 	    	Chip_GPIO_SetPinOutLow(LPC_GPIO, PORT2, PIN(5));
-	        // P2.3 OFF_V_1
+	        // P2.7 OFF_V_1
 	    	Chip_GPIO_SetPinOutLow(LPC_GPIO, PORT2, PIN(7));
-	        // P2.2 SW_V_GAIN2
+	        // P2.6 SW_V_GAIN2
 	        Chip_GPIO_SetPinOutHigh(LPC_GPIO, PORT2, PIN(6));
-	        // P2.4 OFF_V_2
+	        // P2.8 OFF_V_2
 	        Chip_GPIO_SetPinOutLow(LPC_GPIO, PORT2, PIN(8));
 
 	    }

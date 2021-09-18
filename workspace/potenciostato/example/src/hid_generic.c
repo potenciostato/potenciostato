@@ -173,7 +173,8 @@ static ErrorCode_t HID_Ep_Hdlr(USBD_HANDLE_T hUsb, void *data, uint32_t event)
 				}
 				USBD_API->hw->WriteEP(hUsb, pHidCtrl->epin_adr, respuesta, 8);
 				break;
-			case OC_INITMEASUREMENT:
+			case OC_INITMEASUREMENTLINEAL:
+			case OC_INITMEASUREMENTCYCLICAL:
 			case OC_ABORTMEASUREMENT:
 				xQueueSendToBackFromISR( qUSBout, &mensaje, &xHigherPriorityTaskWoken );
 				respuesta[0] = mensaje[0]; //el ACK sera el codigo de operacion recibido y nada mas

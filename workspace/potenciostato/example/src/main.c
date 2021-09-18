@@ -206,7 +206,7 @@ static void vUSBTask(void *pvParameters) {
 
 	uint8_t lecturaQT[8]={0};
 	int i;
-	struct DACmsj conf_dac = {true, BARRIDO_CICLICO, 1000,1}; //estado del modulo, frecuencia[Hz], amplitud[V]
+	struct DACmsj conf_dac = {true, BARRIDO_CICLICO, 1000, 1}; //estado del modulo, frecuencia[Hz], amplitud[V]
 	struct ADCmsj conf_adc = {true,10}; //estado del modulo, frecuencia[Hz], amplitud[V]
 	uint8_t midiendo=false;
 
@@ -214,8 +214,8 @@ static void vUSBTask(void *pvParameters) {
 
 	//Solo para pruebas
 		configGains(SW_GAIN2,SW_I_GAIN2,SW_V_GAIN2);
-		xQueueSendToBack(qDAC,&conf_dac,0);
-		xQueueSendToBack(qADC,&conf_adc,0);
+	//	xQueueSendToBack(qDAC,&conf_dac,0);
+	//	xQueueSendToBack(qADC,&conf_adc,0);
 
 
 	while (1) {
@@ -230,7 +230,34 @@ static void vUSBTask(void *pvParameters) {
 
 		switch(lecturaQT[0])
 		{
-			case OC_INITMEASUREMENT:
+			case OC_INITMEASUREMENTLINEAL:
+				if (midiendo == true){
+					break;
+				}
+				/*
+				 * 1)Habilito int del DAC
+				 * 2)Habilito int del ADC
+				 * NVIC_EnableIRQ(ADC_IRQn);
+				 * ADC_StartCmd(LPC_ADC,ADC_START_NOW);
+				 */
+				if (debugging == ENABLED)
+					DEBUGOUT("USB: Habilito DAC & ADC\n");
+
+
+				//Configuro los gains y los offsets
+				configGains(SW_GAIN1,SW_I_GAIN1,SW_V_GAIN1);
+
+				//Todo tomar la config del init del QT
+				// Se habilitan DAC y ADC
+				conf_dac.set = true;
+				conf_adc.set = true;
+				xQueueSendToBack(qDAC,&conf_dac,0);
+				xQueueSendToBack(qADC,&conf_adc,0);
+
+				midiendo = true;
+				break;
+
+			case OC_INITMEASUREMENTCYCLICAL:
 				if (midiendo == true){
 					break;
 				}
@@ -315,7 +342,7 @@ static void vUSBTask(void *pvParameters) {
 static void vDACTask(void *pvParameters) {
 	bool DACset = false;
 	uint16_t tabla_salida[ NUMERO_MUESTRAS ], i, SG_OK = 0;
-	uint16_t FREC = 0, AMPLITUD = 0, MODO = 2;
+	uint16_t FREC = 0, AMPLITUD = 0, AMPLITUD_DIV = 10, MODO = 2;
 	uint32_t CLOCK_DAC_HZ, timeoutDMA;
 	struct DACmsj conf;
 
@@ -358,12 +385,12 @@ static void vDACTask(void *pvParameters) {
 			AMPLITUD = conf.amp;
 			if (conf.mode == BARRIDO_CICLICO){
 				for ( i = 0 ; i < NUMERO_MUESTRAS ; i++ ) {
-					tabla_salida[i]= (AMPLITUD * tabla_tria[i]) << 6;
+					tabla_salida[i]= ((AMPLITUD * tabla_tria[i])/AMPLITUD_DIV) << 6;
 				}
 			}
 			if (conf.mode == BARRIDO_LINEAL){
 				for ( i = 0 ; i < NUMERO_MUESTRAS ; i++ ) {
-					tabla_salida[i]= (AMPLITUD * tabla_sier[i]) << 6;
+					tabla_salida[i]= ((AMPLITUD * tabla_sier[i])/AMPLITUD_DIV) << 6;
 				}
 			}
 		}
