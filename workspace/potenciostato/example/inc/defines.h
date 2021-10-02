@@ -30,6 +30,7 @@
 #define NUMERO_MUESTRAS     1000
 #define DMA_SIZE            1000
 #define FMAX                880
+#define VALOR_MEDIO_DAC     512
 
 #define PRIMER_CUADRANTE 	15
 #define SEGUNDO_CUADRANTE 	30
