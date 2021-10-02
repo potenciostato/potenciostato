@@ -1,0 +1,1 @@
+../src/sysctl_17xx_40xx.c:46:10:Chip_SYSCTL_GetClrSleepFlags	24	static

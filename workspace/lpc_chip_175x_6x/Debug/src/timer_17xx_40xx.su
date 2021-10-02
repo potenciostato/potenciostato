@@ -1,0 +1,5 @@
+../src/timer_17xx_40xx.c:47:28:Chip_Timer_GetClockIndex	24	static
+../src/timer_17xx_40xx.c:72:6:Chip_TIMER_Init	16	static
+../src/timer_17xx_40xx.c:78:6:Chip_TIMER_DeInit	16	static
+../src/timer_17xx_40xx.c:84:6:Chip_TIMER_Reset	24	static
+../src/timer_17xx_40xx.c:104:6:Chip_TIMER_ExtMatchControlSet	24	static

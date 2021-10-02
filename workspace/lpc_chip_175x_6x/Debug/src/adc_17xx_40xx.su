@@ -1,0 +1,14 @@
+../src/adc_17xx_40xx.c:47:23:getFullConvClk	4	static
+../src/adc_17xx_40xx.c:60:16:getClkDiv	40	static
+../src/adc_17xx_40xx.c:93:6:setStartMode	24	static
+../src/adc_17xx_40xx.c:101:8:readAdcVal	32	static
+../src/adc_17xx_40xx.c:119:6:Chip_ADC_Init	32	static
+../src/adc_17xx_40xx.c:147:6:Chip_ADC_DeInit	16	static
+../src/adc_17xx_40xx.c:155:8:Chip_ADC_ReadValue	24	static
+../src/adc_17xx_40xx.c:161:12:Chip_ADC_ReadStatus	24	static
+../src/adc_17xx_40xx.c:181:6:Chip_ADC_Int_SetChannelCmd	16	static
+../src/adc_17xx_40xx.c:192:6:Chip_ADC_SetStartMode	16	static
+../src/adc_17xx_40xx.c:206:6:Chip_ADC_SetSampleRate	32	static
+../src/adc_17xx_40xx.c:222:6:Chip_ADC_EnableChannel	16	static
+../src/adc_17xx_40xx.c:234:6:Chip_ADC_SetBurstCmd	16	static
+../src/adc_17xx_40xx.c:247:8:Chip_ADC_ReadByte	32	static

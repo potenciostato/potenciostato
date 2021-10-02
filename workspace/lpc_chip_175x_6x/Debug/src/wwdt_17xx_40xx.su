@@ -1,0 +1,2 @@
+../src/wwdt_17xx_40xx.c:51:6:Chip_WWDT_Init	16	static
+../src/wwdt_17xx_40xx.c:63:6:Chip_WWDT_ClearStatusFlag	16	static

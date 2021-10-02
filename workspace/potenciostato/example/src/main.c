@@ -243,10 +243,6 @@ static void vUSBTask(void *pvParameters) {
                 if (debugging == ENABLED)
                     DEBUGOUT("USB: Habilito DAC & ADC\n");
 
-
-                //Configuro los gains y los offsets
-                configGains(SW_GAIN1,SW_I_GAIN1,SW_V_GAIN1);
-
                 //Todo tomar la config del init del QT
                 // Se habilitan DAC y ADC
 
@@ -260,13 +256,13 @@ static void vUSBTask(void *pvParameters) {
                 conf_dac.set = true;
                 conf_dac.mode = BARRIDO_LINEAL;
                 conf_dac.frec =(lecturaQT[3]<<8)+lecturaQT[4];
-                conf_dac.amp =lecturaQT[2]/100;
+                conf_dac.amp =lecturaQT[2];
 
                 if(lecturaQT[2]<30)
-                    //>1v
+                    //<1v
                     configGains(SW_GAIN2,SW_I_GAIN2,SW_V_GAIN2);
                 else
-                    //<1v
+                    //>1v
                     configGains(SW_GAIN1,SW_I_GAIN1,SW_V_GAIN1);
 
 
@@ -292,23 +288,19 @@ static void vUSBTask(void *pvParameters) {
                 if (debugging == ENABLED)
                     DEBUGOUT("USB: Habilito DAC & ADC\n");
 
-
-                //Configuro los gains y los offsets
-                configGains(SW_GAIN1,SW_I_GAIN1,SW_V_GAIN1);
-
                 //Todo tomar la config del init del QT
                 // Se habilitan DAC y ADC
 
                 conf_dac.set = true;
-                conf_dac.mode = BARRIDO_LINEAL;
+                conf_dac.mode = BARRIDO_CICLICO;
                 conf_dac.frec =(lecturaQT[3]<<8)+lecturaQT[4];
-                conf_dac.amp =lecturaQT[2]/100;
+                conf_dac.amp =lecturaQT[2];
 
                 if(lecturaQT[2]<30)
-                    //>1v
+                    //<1v
                     configGains(SW_GAIN2,SW_I_GAIN2,SW_V_GAIN2);
                 else
-                    //<1v
+                    //>1v
                     configGains(SW_GAIN1,SW_I_GAIN1,SW_V_GAIN1);
 
                 conf_adc.set = true;
@@ -376,7 +368,7 @@ static void vUSBTask(void *pvParameters) {
 static void vDACTask(void *pvParameters) {
     bool DACset = false;
     uint16_t tabla_salida[ NUMERO_MUESTRAS ], i, SG_OK = 0;
-    uint16_t FREC = 0, AMPLITUD = 0, AMPLITUD_DIV = 10, MODO = 2;
+    uint16_t FREC = 0, AMPLITUD = 0, AMPLITUD_DIV = 100, MODO = 2;
     uint32_t CLOCK_DAC_HZ, timeoutDMA;
     struct DACmsj conf;
 
@@ -415,14 +407,14 @@ static void vDACTask(void *pvParameters) {
                                                 GPDMA_CONN_DAC , DMA_SIZE , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA , 0 );
             }
         }
-        if (conf.amp != AMPLITUD){
-                    AMPLITUD = conf.amp;
+        if (conf.amp != AMPLITUD ){
+        	AMPLITUD = conf.amp;
                     if (conf.mode == BARRIDO_CICLICO){
                         for ( i = 0 ; i < NUMERO_MUESTRAS ; i++ ) {
-                            if (tabla_salida[i] > VALOR_MEDIO_DAC){
-                                tabla_salida[i]= (uint16_t) ((AMPLITUD * (tabla_tria[i] - VALOR_MEDIO_DAC)) + VALOR_MEDIO_DAC) << 6;
+                            if (tabla_tria[i] > VALOR_MEDIO_DAC){
+                                tabla_salida[i]= (uint16_t) ((AMPLITUD * (tabla_tria[i] - VALOR_MEDIO_DAC))/AMPLITUD_DIV + VALOR_MEDIO_DAC) << 6;
                             } else {
-                                tabla_salida[i]= (uint16_t) ((AMPLITUD * (VALOR_MEDIO_DAC - tabla_tria[i])) + VALOR_MEDIO_DAC) << 6;
+                                tabla_salida[i]= (uint16_t) ((AMPLITUD * (VALOR_MEDIO_DAC - tabla_tria[i]))/AMPLITUD_DIV + VALOR_MEDIO_DAC) << 6;
                             }
                         }
                     }

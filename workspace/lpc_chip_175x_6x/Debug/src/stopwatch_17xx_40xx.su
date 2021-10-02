@@ -1,0 +1,10 @@
+C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/timer_17xx_40xx.h:159:20:Chip_TIMER_Enable	16	static
+C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/timer_17xx_40xx.h:181:24:Chip_TIMER_ReadCount	16	static
+C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/timer_17xx_40xx.h:204:20:Chip_TIMER_PrescaleSet	16	static
+../src/stopwatch_17xx_40xx.c:57:6:StopWatch_Init	16	static
+../src/stopwatch_17xx_40xx.c:75:10:StopWatch_Start	8	static
+../src/stopwatch_17xx_40xx.c:82:10:StopWatch_TicksPerSecond	4	static
+../src/stopwatch_17xx_40xx.c:88:10:StopWatch_TicksToMs	16	static
+../src/stopwatch_17xx_40xx.c:94:10:StopWatch_TicksToUs	16	static
+../src/stopwatch_17xx_40xx.c:100:10:StopWatch_MsToTicks	16	static
+../src/stopwatch_17xx_40xx.c:106:10:StopWatch_UsToTicks	16	static
