@@ -29,7 +29,7 @@
  ****************************************************************************/
 
 //Para habilitar (o no) imprimir por consola
-bool debugging = DISABLED;
+bool debugging = ENABLED;
 
 extern ADC_CLOCK_SETUP_T ADCSetup;
 
@@ -368,7 +368,7 @@ static void vUSBTask(void *pvParameters) {
 static void vDACTask(void *pvParameters) {
     bool DACset = false;
     uint16_t tabla_salida[ NUMERO_MUESTRAS ], i, SG_OK = 0;
-    uint16_t FREC = 0, AMPLITUD = 0, AMPLITUD_DIV = 100, MODO = 2;
+    uint16_t FREC = 0, AMPLITUD = 0, AMPLITUD_DIV = 255, MODO = 2;
     uint32_t CLOCK_DAC_HZ, timeoutDMA;
     struct DACmsj conf;
 
@@ -411,11 +411,7 @@ static void vDACTask(void *pvParameters) {
         	AMPLITUD = conf.amp;
                     if (conf.mode == BARRIDO_CICLICO){
                         for ( i = 0 ; i < NUMERO_MUESTRAS ; i++ ) {
-                            if (tabla_tria[i] > VALOR_MEDIO_DAC){
-                                tabla_salida[i]= (uint16_t) ((AMPLITUD * (tabla_tria[i] - VALOR_MEDIO_DAC))/AMPLITUD_DIV + VALOR_MEDIO_DAC) << 6;
-                            } else {
-                                tabla_salida[i]= (uint16_t) ((AMPLITUD * (VALOR_MEDIO_DAC - tabla_tria[i]))/AMPLITUD_DIV + VALOR_MEDIO_DAC) << 6;
-                            }
+                            tabla_salida[i]= (uint16_t) ((AMPLITUD * (tabla_tria[i] - VALOR_MEDIO_DAC))/AMPLITUD_DIV + VALOR_MEDIO_DAC) << 6;
                         }
                     }
                     if (conf.mode == BARRIDO_LINEAL){

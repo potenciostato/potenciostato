@@ -285,9 +285,9 @@ void configGains(uint8_t SW_GAIN,uint8_t SW_I_GAIN,uint8_t SW_V_GAIN)
 	    	// P2.5 SW_V_GAIN1
 	        Chip_GPIO_SetPinOutHigh(LPC_GPIO, PORT2, PIN(5));
 	        // P2.7 OFF_V_1
-	        Chip_GPIO_SetPinOutHigh(LPC_GPIO, PORT2, PIN(7));
+	        Chip_GPIO_SetPinOutHigh(LPC_GPIO, PORT2, PIN(6));
 	        // P2.6 SW_V_GAIN2
-	        Chip_GPIO_SetPinOutLow(LPC_GPIO, PORT2, PIN(6));
+	        Chip_GPIO_SetPinOutLow(LPC_GPIO, PORT2, PIN(7));
 	        // P2.8 OFF_V_2
 	        Chip_GPIO_SetPinOutLow(LPC_GPIO, PORT2, PIN(8));
 
@@ -299,11 +299,11 @@ void configGains(uint8_t SW_GAIN,uint8_t SW_I_GAIN,uint8_t SW_V_GAIN)
 	    	// P2.5 SW_V_GAIN1
 	    	Chip_GPIO_SetPinOutLow(LPC_GPIO, PORT2, PIN(5));
 	        // P2.7 OFF_V_1
-	    	Chip_GPIO_SetPinOutLow(LPC_GPIO, PORT2, PIN(7));
+	    	Chip_GPIO_SetPinOutLow(LPC_GPIO, PORT2, PIN(6));
 	        // P2.6 SW_V_GAIN2
-	        Chip_GPIO_SetPinOutHigh(LPC_GPIO, PORT2, PIN(6));
+	        Chip_GPIO_SetPinOutHigh(LPC_GPIO, PORT2, PIN(7));
 	        // P2.8 OFF_V_2
-	        Chip_GPIO_SetPinOutLow(LPC_GPIO, PORT2, PIN(8));
+	        Chip_GPIO_SetPinOutHigh(LPC_GPIO, PORT2, PIN(8));
 
 	    }
 }

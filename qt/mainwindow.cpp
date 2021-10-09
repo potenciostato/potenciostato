@@ -201,8 +201,8 @@ void MainWindow::onTimeout(){
             qDebug() << "Tension [V]: " << volts_tension;
 
 
-            puntosX[p_refresco] = volts_tension + 0.5; //el rango en el grafico va desde 0 a 1
-            puntosY[p_refresco] = volts_corriente + 1.5; //el rango en el grafico va desde 0 a 3
+            puntosX[p_refresco] = volts_tension; //ANTES: el rango en el grafico va desde 0 a 1
+            puntosY[p_refresco] = volts_corriente; //ANTES: el rango en el grafico va desde 0 a 3
 
             //TODO: si no hay mas datos esperar un tiempo para pedir
             //if (recv_data[0] == OC_SENDDATA_ERR){
