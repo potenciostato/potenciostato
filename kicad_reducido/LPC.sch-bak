@@ -3,7 +3,7 @@ EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 3 3
+Sheet 2 3
 Title ""
 Date ""
 Rev ""
@@ -46,7 +46,7 @@ AR Path="/609A40C2" Ref="J2"  Part="1"
 AR Path="/60147E53/609A40C2" Ref="J2"  Part="1" 
 F 0 "J2" H 6620 2496 50  0000 R CNN
 F 1 "USB_B_Micro" H 6620 2589 50  0000 R CNN
-F 2 "Connector_USB:USB_A_CNCTech_1001-011-01101_Horizontal" H 7000 2550 50  0001 C CNN
+F 2 "Connector_USB:USB_Mini-B_Wuerth_65100516121_Horizontal" H 7000 2550 50  0001 C CNN
 F 3 "~" H 7000 2550 50  0001 C CNN
 	1    6850 2600
 	-1   0    0    1   

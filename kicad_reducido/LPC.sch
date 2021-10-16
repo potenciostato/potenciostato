@@ -26,14 +26,12 @@ F 3 "" H 4000 3100 50  0001 L BNN
 	1    4000 3100
 	1    0    0    -1  
 $EndComp
-Text HLabel 2550 1700 0    50   Input ~ 0
+Text HLabel 2200 1700 0    50   Input ~ 0
 GND
-Text HLabel 6050 1650 2    50   Input ~ 0
+Text HLabel 6050 1700 2    50   Input ~ 0
 3.3V
 Wire Wire Line
 	5500 1700 6050 1700
-Wire Wire Line
-	6050 1700 6050 1650
 Wire Wire Line
 	2800 3400 2200 3400
 Text HLabel 2200 3400 0    50   Input ~ 0
@@ -69,58 +67,8 @@ Text HLabel 2200 3200 0    50   Input ~ 0
 ADC1
 Text HLabel 2200 3100 0    50   Input ~ 0
 ADC0
-Wire Wire Line
-	2800 1800 2550 1800
-Text HLabel 2550 1800 0    50   Input ~ 0
+Text HLabel 2200 1800 0    50   Input ~ 0
 5V
-Wire Wire Line
-	2800 3700 2200 3700
-Wire Wire Line
-	2800 3800 2200 3800
-Wire Wire Line
-	2800 4000 2200 4000
-Wire Wire Line
-	2800 3900 2200 3900
-Wire Wire Line
-	5500 3900 5950 3900
-Wire Wire Line
-	5500 3800 5950 3800
-Wire Wire Line
-	5500 3700 5950 3700
-Wire Wire Line
-	5500 3600 5950 3600
-Wire Wire Line
-	5500 3500 5950 3500
-Wire Wire Line
-	5500 3400 5950 3400
-Wire Wire Line
-	5500 3200 5950 3200
-Wire Wire Line
-	5500 3300 5950 3300
-Text HLabel 5950 3200 2    50   Input ~ 0
-P2.1
-Text HLabel 5950 3300 2    50   Input ~ 0
-P2.2
-Text HLabel 5950 3400 2    50   Input ~ 0
-P2.3
-Text HLabel 5950 3500 2    50   Input ~ 0
-P2.4
-Text HLabel 5950 3600 2    50   Input ~ 0
-P2.5
-Text HLabel 5950 3800 2    50   Input ~ 0
-P2.7
-Text HLabel 5950 3700 2    50   Input ~ 0
-P2.6
-Text HLabel 5950 3900 2    50   Input ~ 0
-P2.8
-Text HLabel 2200 3700 0    50   Input ~ 0
-P0.2
-Text HLabel 2200 3800 0    50   Input ~ 0
-P0.3
-Text HLabel 2200 3900 0    50   Input ~ 0
-P0.21
-Text HLabel 2200 4000 0    50   Input ~ 0
-P0.22
 $Comp
 L potenciostato-rescue:GND-power #PWR0131
 U 1 1 60A0C4F1
@@ -132,8 +80,6 @@ F 3 "" H 5700 4300 50  0001 C CNN
 	1    5700 4300
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	2550 1700 2650 1700
 $Comp
 L potenciostato-rescue:GND-power #PWR0132
 U 1 1 60A0D2ED
@@ -160,9 +106,6 @@ Wire Wire Line
 	2800 1400 2650 1400
 Wire Wire Line
 	2650 1400 2650 1700
-Connection ~ 2650 1700
-Wire Wire Line
-	2650 1700 2800 1700
 Wire Wire Line
 	6950 2200 6950 2050
 Connection ~ 6950 2050
@@ -176,4 +119,8 @@ Text Label 4200 3750 0    50   ~ 0
 Pin6_U8
 Text Label 4200 3950 0    50   ~ 0
 Pin12_U8
+Wire Wire Line
+	2200 1700 2650 1700
+Wire Wire Line
+	2200 1800 2800 1800
 $EndSCHEMATC

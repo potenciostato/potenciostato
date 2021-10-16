@@ -3,7 +3,7 @@ EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 2 3
+Sheet 3 3
 Title ""
 Date ""
 Rev ""
@@ -611,12 +611,12 @@ $EndComp
 Wire Wire Line
 	7000 3200 7800 3200
 $Comp
-L Device:R R?
+L Device:R R10
 U 1 1 6174BBEA
 P 9150 3850
-F 0 "R?" V 9250 3850 50  0000 C CNN
+F 0 "R10" V 9250 3850 50  0000 C CNN
 F 1 "1K" V 9350 3850 50  0000 C CNN
-F 2 "" V 9080 3850 50  0001 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 9080 3850 50  0001 C CNN
 F 3 "~" H 9150 3850 50  0001 C CNN
 	1    9150 3850
 	0    1    1    0   
@@ -624,12 +624,12 @@ $EndComp
 Wire Wire Line
 	9300 3850 10100 3850
 $Comp
-L Device:R R?
+L Device:R R8
 U 1 1 6174E172
 P 4400 6400
-F 0 "R?" V 4500 6400 50  0000 C CNN
+F 0 "R8" V 4500 6400 50  0000 C CNN
 F 1 "1K" V 4600 6400 50  0000 C CNN
-F 2 "" V 4330 6400 50  0001 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 4330 6400 50  0001 C CNN
 F 3 "~" H 4400 6400 50  0001 C CNN
 	1    4400 6400
 	0    1    1    0   
