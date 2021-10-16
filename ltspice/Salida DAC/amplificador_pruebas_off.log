@@ -1,0 +1,22 @@
+Circuit: * C:\Users\Gus\Desktop\proyecto-final\ltspice\Salida DAC\amplificador_pruebas_off.asc
+
+Direct Newton iteration for .op point succeeded.
+Heightened Def Con from 0.253996 to 0.253996
+
+Date: Sat Oct 09 21:51:09 2021
+Total elapsed time: 24.115 seconds.
+
+tnom = 27
+temp = 27
+method = modified trap
+totiter = 74345
+traniter = 74321
+tranpoints = 24309
+accept = 16579
+rejected = 7731
+matrix size = 48
+fillins = 49
+solver = Normal
+Matrix Compiler1: 5.29 KB object code size  38.7/20.8/[1.2]
+Matrix Compiler2: off  [6.2]/7.0/8.5
+

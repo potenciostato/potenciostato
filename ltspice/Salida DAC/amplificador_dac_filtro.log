@@ -1,0 +1,103 @@
+Circuit: * C:\Users\Gus\Desktop\proyecto-final\ltspice\Salida DAC\amplificador_dac_filtro.asc
+
+Early termination of direct N-R iteration.
+Direct Newton iteration failed to find .op point.  (Use ".option noopiter" to skip.)
+Starting Gmin stepping
+Gmin = 10
+vernier = 0.5
+vernier = 0.25
+Gmin = 2.62144
+vernier = 0.125
+vernier = 0.0625
+vernier = 0.03125
+vernier = 0.015625
+Gmin = 2.5611
+vernier = 0.0078125
+vernier = 0.0104167
+vernier = 0.00520833
+vernier = 0.00260417
+Gmin = 2.53459
+vernier = 0.00347222
+Gmin = 2.51487
+vernier = 0.00462963
+vernier = 0.00231481
+vernier = 0.00115741
+vernier = 0.00154321
+Gmin = 2.5093
+vernier = 0.00205761
+vernier = 0.00102881
+vernier = 0.000514403
+Gmin = 2.50253
+vernier = 0.00068587
+Gmin = 2.49867
+vernier = 0.000914493
+vernier = 0.00121932
+vernier = 0.000609662
+Gmin = 2.49373
+vernier = 0.000457246
+vernier = 0.000609662
+Gmin = 2.49078
+vernier = 0.000812882
+vernier = 0.00108384
+vernier = 0.000541921
+Gmin = 2.48699
+vernier = 0.000406441
+vernier = 0.000541921
+Gmin = 2.48438
+vernier = 0.000722561
+vernier = 0.000541921
+vernier = 0.000406441
+Gmin = 2.48245
+vernier = 0.000541921
+vernier = 0.000722561
+vernier = 0.000541921
+vernier = 0.000406441
+Gmin = 2.48018
+vernier = 0.000541921
+vernier = 0.00040644
+Gmin = 0
+Gmin stepping failed
+
+Starting source stepping with srcstepmethod=0
+Source Step = 3.0303%
+Source Step = 33.3333%
+Source Step = 63.6364%
+Source Step = 93.9394%
+Source stepping succeeded in finding the operating point.
+
+N-Period=1
+Fourier components of V(out)
+DC component:5.19569
+
+Harmonic	Frequency	 Fourier 	Normalized	 Phase  	Normalized
+ Number 	  [Hz]   	Component	 Component	[degree]	Phase [deg]
+    1   	1.000e+03	5.780e-04	1.000e+00	    1.02°	    0.00°
+    2   	2.000e+03	2.857e-04	4.943e-01	    1.81°	    0.79°
+    3   	3.000e+03	1.875e-04	3.244e-01	    2.19°	    1.18°
+    4   	4.000e+03	1.384e-04	2.395e-01	    2.12°	    1.10°
+    5   	5.000e+03	1.094e-04	1.893e-01	    1.67°	    0.65°
+    6   	6.000e+03	9.069e-05	1.569e-01	    1.03°	    0.01°
+    7   	7.000e+03	7.783e-05	1.347e-01	    0.44°	   -0.58°
+    8   	8.000e+03	6.847e-05	1.185e-01	    0.08°	   -0.94°
+    9   	9.000e+03	6.125e-05	1.060e-01	    0.01°	   -1.01°
+Total Harmonic Distortion: 71.472818%(77.872549%)
+
+
+
+Date: Sat Oct 16 14:59:36 2021
+Total elapsed time: 4.393 seconds.
+
+tnom = 27
+temp = 27
+method = modified trap
+totiter = 30110
+traniter = 21864
+tranpoints = 10933
+accept = 8772
+rejected = 2161
+matrix size = 64
+fillins = 376
+solver = Normal
+Matrix Compiler1: 27.27 KB object code size  10.0/7.0/[7.3]
+Matrix Compiler2: 12.06 KB object code size  3.3/3.2/[1.4]
+
