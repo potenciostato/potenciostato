@@ -83,8 +83,6 @@ Wire Wire Line
 Wire Wire Line
 	7950 3250 8100 3250
 Wire Wire Line
-	8950 4050 8950 4600
-Wire Wire Line
 	8950 4600 8600 4600
 Wire Wire Line
 	7850 4050 7500 4050
@@ -182,8 +180,6 @@ F 3 "" H 1150 1200 50  0001 C CNN
 	1    1150 1200
 	-1   0    0    1   
 $EndComp
-Wire Wire Line
-	8150 4050 8950 4050
 NoConn ~ 5700 7300
 $Comp
 L potenciostato-rescue:OP77-Amplifier_Operational U1
@@ -478,4 +474,43 @@ F5 "I_ADC" I L 3800 3900 50
 F6 "V_IN" I R 4800 3350 50 
 F7 "V_ADC" I L 3800 3350 50 
 $EndSheet
+$Comp
+L potenciostato-rescue:+5V-power #PWR0109
+U 1 1 617B6A7C
+P 2050 2350
+F 0 "#PWR0109" H 2050 2200 50  0001 C CNN
+F 1 "+5V" H 2065 2527 50  0000 C CNN
+F 2 "" H 2050 2350 50  0001 C CNN
+F 3 "" H 2050 2350 50  0001 C CNN
+	1    2050 2350
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2300 2350 2050 2350
+$Comp
+L salida_dac-rescue:R_POT-Device RV?
+U 1 1 617C0F32
+P 8650 4050
+AR Path="/6013BA2D/617C0F32" Ref="RV?"  Part="1" 
+AR Path="/617C0F32" Ref="RV4"  Part="1" 
+F 0 "RV4" V 8534 4050 50  0000 C CNN
+F 1 "1K" V 8441 4050 50  0000 C CNN
+F 2 "Potentiometer_THT:Potentiometer_Bourns_3266Y_Vertical" H 8650 4050 50  0001 C CNN
+F 3 "~" H 8650 4050 50  0001 C CNN
+	1    8650 4050
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	8150 4050 8500 4050
+Wire Wire Line
+	8800 4050 8950 4050
+Wire Wire Line
+	8650 3800 8950 3800
+Connection ~ 8950 4050
+Wire Wire Line
+	8950 4050 8950 4600
+Wire Wire Line
+	8950 3800 8950 4050
+Wire Wire Line
+	8650 3800 8650 3900
 $EndSCHEMATC

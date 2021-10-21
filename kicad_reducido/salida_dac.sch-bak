@@ -336,7 +336,7 @@ AR Path="/604B7F16" Ref="U7"  Part="1"
 AR Path="/6013BA2D/604B7F16" Ref="U7"  Part="1" 
 F 0 "U7" H 4550 3250 50  0000 C CNN
 F 1 "TL064" H 4750 3050 50  0000 C CNN
-F 2 "Package_DIP:DIP-14_W10.16mm_LongPads" H 4450 3050 50  0001 C CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_Socket_LongPads" H 4450 3050 50  0001 C CNN
 F 3 "http://www.ti.com/lit/ds/symlink/tl061.pdf" H 4550 3150 50  0001 C CNN
 	1    4500 2950
 	1    0    0    1   
@@ -349,7 +349,7 @@ AR Path="/604BA8D0" Ref="U7"  Part="2"
 AR Path="/6013BA2D/604BA8D0" Ref="U7"  Part="2" 
 F 0 "U7" H 7800 4000 50  0000 C CNN
 F 1 "TL064" H 7800 3850 50  0000 C CNN
-F 2 "Package_DIP:DIP-14_W10.16mm_LongPads" H 7550 3850 50  0001 C CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_Socket_LongPads" H 7550 3850 50  0001 C CNN
 F 3 "http://www.ti.com/lit/ds/symlink/tl061.pdf" H 7650 3950 50  0001 C CNN
 	2    7600 3750
 	-1   0    0    1   
@@ -362,7 +362,7 @@ AR Path="/604BBA82" Ref="U7"  Part="3"
 AR Path="/6013BA2D/604BBA82" Ref="U7"  Part="3" 
 F 0 "U7" H 2850 6667 50  0000 C CNN
 F 1 "TL064" H 2850 6576 50  0000 C CNN
-F 2 "Package_DIP:DIP-14_W10.16mm_LongPads" H 2800 6400 50  0001 C CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_Socket_LongPads" H 2800 6400 50  0001 C CNN
 F 3 "http://www.ti.com/lit/ds/symlink/tl061.pdf" H 2900 6500 50  0001 C CNN
 	3    2850 6300
 	-1   0    0    1   
@@ -375,7 +375,7 @@ AR Path="/604BCA31" Ref="U7"  Part="4"
 AR Path="/6013BA2D/604BCA31" Ref="U7"  Part="4" 
 F 0 "U7" H 6350 5650 50  0000 C CNN
 F 1 "TL064" H 6300 5726 50  0000 C CNN
-F 2 "Package_DIP:DIP-14_W10.16mm_LongPads" H 6250 5550 50  0001 C CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_Socket_LongPads" H 6250 5550 50  0001 C CNN
 F 3 "http://www.ti.com/lit/ds/symlink/tl061.pdf" H 6350 5650 50  0001 C CNN
 	4    6300 5450
 	1    0    0    -1  
@@ -416,7 +416,7 @@ AR Path="/604BE6F2" Ref="U7"  Part="5"
 AR Path="/6013BA2D/604BE6F2" Ref="U7"  Part="5" 
 F 0 "U7" H 4650 2650 50  0000 L CNN
 F 1 "TL064" H 4600 2750 50  0000 L CNN
-F 2 "Package_DIP:DIP-14_W10.16mm_LongPads" H 4500 3050 50  0001 C CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_Socket_LongPads" H 4500 3050 50  0001 C CNN
 F 3 "http://www.ti.com/lit/ds/symlink/tl061.pdf" H 4600 3150 50  0001 C CNN
 	5    4550 2950
 	1    0    0    -1  

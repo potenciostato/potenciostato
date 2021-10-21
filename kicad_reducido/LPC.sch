@@ -28,10 +28,6 @@ F 3 "" H 4000 3100 50  0001 L BNN
 $EndComp
 Text HLabel 2200 1700 0    50   Input ~ 0
 GND
-Text HLabel 6050 1700 2    50   Input ~ 0
-3.3V
-Wire Wire Line
-	5500 1700 6050 1700
 Wire Wire Line
 	2800 3400 2200 3400
 Text HLabel 2200 3400 0    50   Input ~ 0
@@ -91,21 +87,6 @@ F 3 "" H 7400 2050 50  0001 C CNN
 	1    7400 2050
 	1    0    0    -1  
 $EndComp
-$Comp
-L potenciostato-rescue:GND-power #PWR0133
-U 1 1 60A0D30E
-P 2800 1400
-F 0 "#PWR0133" H 2800 1150 50  0001 C CNN
-F 1 "GND" H 2805 1223 50  0000 C CNN
-F 2 "" H 2800 1400 50  0001 C CNN
-F 3 "" H 2800 1400 50  0001 C CNN
-	1    2800 1400
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	2800 1400 2650 1400
-Wire Wire Line
-	2650 1400 2650 1700
 Wire Wire Line
 	6950 2200 6950 2050
 Connection ~ 6950 2050
@@ -120,7 +101,7 @@ Pin6_U8
 Text Label 4200 3950 0    50   ~ 0
 Pin12_U8
 Wire Wire Line
-	2200 1700 2650 1700
-Wire Wire Line
 	2200 1800 2800 1800
+Wire Wire Line
+	2200 1700 2800 1700
 $EndSCHEMATC
