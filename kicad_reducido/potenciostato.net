@@ -1,7 +1,7 @@
 (export (version D)
   (design
     (source C:\repotenciostato\proyecto-final\kicad_reducido\potenciostato.sch)
-    (date "22/10/2021 02:16:45")
+    (date "22/10/2021 18:09:26")
     (tool "Eeschema (5.1.10)-1")
     (sheet (number 1) (name /) (tstamps /)
       (title_block
@@ -171,7 +171,7 @@
       (tstamp 6014AC32))
     (comp (ref J2)
       (value USB_B_Micro)
-      (footprint Connector_USB:USB_Mini-B_Wuerth_65100516121_Horizontal)
+      (footprint Connector_USB:USB_Mini-B_Tensility_54-00023_Vertical)
       (datasheet ~)
       (libsource (lib potenciostato-rescue) (part USB_B_Micro-Connector) (description ""))
       (sheetpath (names /LPC/) (tstamps /60147E53/))
