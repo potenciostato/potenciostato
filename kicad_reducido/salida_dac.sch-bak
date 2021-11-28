@@ -22,7 +22,7 @@ AR Path="/5F899696/5F8A81B2" Ref="R7"  Part="1"
 AR Path="/6013BA2D/5F8A81B2" Ref="R7"  Part="1" 
 F 0 "R7" V 3400 3050 50  0000 C CNN
 F 1 "1K" V 3300 3050 50  0000 C CNN
-F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 3130 3050 50  0001 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal" V 3130 3050 50  0001 C CNN
 F 3 "~" H 3200 3050 50  0001 C CNN
 	1    3200 3050
 	0    1    1    0   
@@ -424,8 +424,6 @@ $EndComp
 Entry Wire Line
 	2300 12550 2400 12450
 Wire Wire Line
-	6850 5450 6850 5050
-Wire Wire Line
 	6850 5050 5750 5050
 Wire Wire Line
 	5750 5050 5750 5350
@@ -636,4 +634,6 @@ F 3 "~" H 4400 6400 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	4550 6400 5350 6400
+Wire Wire Line
+	6850 5450 6850 5050
 $EndSCHEMATC

@@ -41,7 +41,7 @@ U 1 1 5CC2629B
 P 6950 2750
 F 0 "R3" V 6743 2750 50  0000 C CNN
 F 1 "100K" V 6834 2750 50  0000 C CNN
-F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 6880 2750 50  0001 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal" V 6880 2750 50  0001 C CNN
 F 3 "~" H 6950 2750 50  0001 C CNN
 	1    6950 2750
 	1    0    0    -1  
@@ -282,12 +282,12 @@ Wire Wire Line
 	6950 3250 6650 3250
 Connection ~ 6950 3250
 Wire Wire Line
-	4800 2200 6450 2200
+	4800 2200 5550 2200
 Wire Wire Line
-	5900 3350 4800 3350
+	5900 3350 5300 3350
 Connection ~ 5900 3350
 Wire Wire Line
-	4800 3800 5500 3800
+	4800 3800 5150 3800
 Wire Wire Line
 	5500 3800 5500 4200
 Connection ~ 5500 4200
@@ -512,4 +512,85 @@ Wire Wire Line
 	8950 3800 8950 4050
 Wire Wire Line
 	8650 3800 8650 3900
+$Comp
+L Connector:Conn_01x01_Female J4
+U 1 1 6185139C
+P 5150 3600
+F 0 "J4" V 5088 3512 50  0000 R CNN
+F 1 "Conn_01x01_Female" V 4997 3512 50  0000 R CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical" H 5150 3600 50  0001 C CNN
+F 3 "~" H 5150 3600 50  0001 C CNN
+	1    5150 3600
+	0    -1   -1   0   
+$EndComp
+Connection ~ 5150 3800
+Wire Wire Line
+	5150 3800 5500 3800
+$Comp
+L Connector:Conn_01x01_Female J5
+U 1 1 61851AC8
+P 5300 3150
+F 0 "J5" V 5238 3062 50  0000 R CNN
+F 1 "Conn_01x01_Female" V 5147 3062 50  0000 R CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical" H 5300 3150 50  0001 C CNN
+F 3 "~" H 5300 3150 50  0001 C CNN
+	1    5300 3150
+	0    -1   -1   0   
+$EndComp
+Connection ~ 5300 3350
+Wire Wire Line
+	5300 3350 4800 3350
+$Comp
+L Connector:Conn_01x01_Female J6
+U 1 1 61851D11
+P 5550 2000
+F 0 "J6" V 5488 1912 50  0000 R CNN
+F 1 "Conn_01x01_Female" V 5397 1912 50  0000 R CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical" H 5550 2000 50  0001 C CNN
+F 3 "~" H 5550 2000 50  0001 C CNN
+	1    5550 2000
+	0    -1   -1   0   
+$EndComp
+Connection ~ 5550 2200
+Wire Wire Line
+	5550 2200 6450 2200
+$Comp
+L Connector:Conn_01x01_Female J12
+U 1 1 6185D9DF
+P 2050 2900
+F 0 "J12" V 1988 2812 50  0000 R CNN
+F 1 "Conn_01x01_Female" V 1897 2812 50  0000 R CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical" H 2050 2900 50  0001 C CNN
+F 3 "~" H 2050 2900 50  0001 C CNN
+	1    2050 2900
+	0    -1   -1   0   
+$EndComp
+Connection ~ 2050 3100
+$Comp
+L Connector:Conn_01x01_Female J11
+U 1 1 6185DEE6
+P 1800 2900
+F 0 "J11" V 1738 2812 50  0000 R CNN
+F 1 "Conn_01x01_Female" V 1647 2812 50  0000 R CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical" H 1800 2900 50  0001 C CNN
+F 3 "~" H 1800 2900 50  0001 C CNN
+	1    1800 2900
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Connector:Conn_01x01_Female J10
+U 1 1 6185E017
+P 1450 2900
+F 0 "J10" V 1388 2812 50  0000 R CNN
+F 1 "Conn_01x01_Female" V 1297 2812 50  0000 R CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical" H 1450 2900 50  0001 C CNN
+F 3 "~" H 1450 2900 50  0001 C CNN
+	1    1450 2900
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	1800 3100 2050 3100
+Wire Wire Line
+	1450 3100 1800 3100
+Connection ~ 1800 3100
 $EndSCHEMATC

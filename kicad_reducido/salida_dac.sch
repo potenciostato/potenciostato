@@ -21,7 +21,7 @@ AR Path="/5F8A81B2" Ref="R2"  Part="1"
 AR Path="/5F899696/5F8A81B2" Ref="R7"  Part="1" 
 AR Path="/6013BA2D/5F8A81B2" Ref="R7"  Part="1" 
 F 0 "R7" V 3400 3050 50  0000 C CNN
-F 1 "1K" V 3300 3050 50  0000 C CNN
+F 1 "10K" V 3300 3050 50  0000 C CNN
 F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal" V 3130 3050 50  0001 C CNN
 F 3 "~" H 3200 3050 50  0001 C CNN
 	1    3200 3050
@@ -301,7 +301,7 @@ AR Path="/5F8A5925" Ref="R1"  Part="1"
 AR Path="/5F899696/5F8A5925" Ref="R6"  Part="1" 
 AR Path="/6013BA2D/5F8A5925" Ref="R6"  Part="1" 
 F 0 "R6" V 2993 2850 50  0000 C CNN
-F 1 "1K" V 3084 2850 50  0000 C CNN
+F 1 "10K" V 3084 2850 50  0000 C CNN
 F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 3130 2850 50  0001 C CNN
 F 3 "~" H 3200 2850 50  0001 C CNN
 	1    3200 2850
@@ -428,7 +428,7 @@ Wire Wire Line
 Wire Wire Line
 	5750 5050 5750 5350
 Text Notes 2200 2700 0    50   ~ 0
-Salida DAC uC de 0 a 3V\nSalida módulo amplificador:\n0V = VEE (-5V)\n1.5V = 0V\n3V = VCC (5V)
+Salida DAC uC de 0 a 3.3V\nSalida módulo amplificador:\n0V = VEE (-5V)\n1.5V = 0V\n3.3V = VCC (5V)
 Text Notes 1400 7050 0    50   ~ 0
 Salida electrodo: VEE<0<VCC\nEntrada ADC: 0 a 5V (eventualmente 0 a 3.3V)
 Text Notes 4100 1450 0    50   ~ 0
@@ -460,17 +460,6 @@ Wire Wire Line
 Wire Wire Line
 	4650 2450 4700 2450
 $Comp
-L salida_dac-rescue:R_POT-Device RV5
-U 1 1 5F9C3DAC
-P 4850 2450
-F 0 "RV5" V 4734 2450 50  0000 C CNN
-F 1 "R_POT" V 4641 2450 50  0000 C CNN
-F 2 "Potentiometer_THT:Potentiometer_Bourns_3266Y_Vertical" H 4850 2450 50  0001 C CNN
-F 3 "~" H 4850 2450 50  0001 C CNN
-	1    4850 2450
-	0    -1   -1   0   
-$EndComp
-$Comp
 L salida_dac-rescue:R-Device R8
 U 1 1 5F8A592F
 P 4500 2450
@@ -478,7 +467,7 @@ AR Path="/5F8A592F" Ref="R8"  Part="1"
 AR Path="/5F899696/5F8A592F" Ref="R13"  Part="1" 
 AR Path="/6013BA2D/5F8A592F" Ref="R13"  Part="1" 
 F 0 "R13" V 4293 2450 50  0000 C CNN
-F 1 "4K7" V 4384 2450 50  0000 C CNN
+F 1 "5K6" V 4384 2450 50  0000 C CNN
 F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 4430 2450 50  0001 C CNN
 F 3 "~" H 4500 2450 50  0001 C CNN
 	1    4500 2450
@@ -501,7 +490,7 @@ AR Path="/605448B2" Ref="R?"  Part="1"
 AR Path="/5F899696/605448B2" Ref="R?"  Part="1" 
 AR Path="/6013BA2D/605448B2" Ref="R26"  Part="1" 
 F 0 "R26" V 2443 3500 50  0000 C CNN
-F 1 "10K" V 2534 3500 50  0000 C CNN
+F 1 "8.2K" V 2534 3500 50  0000 C CNN
 F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 2580 3500 50  0001 C CNN
 F 3 "~" H 2650 3500 50  0001 C CNN
 	1    2650 3500
@@ -515,7 +504,7 @@ AR Path="/605448BD" Ref="R?"  Part="1"
 AR Path="/5F899696/605448BD" Ref="R?"  Part="1" 
 AR Path="/6013BA2D/605448BD" Ref="R27"  Part="1" 
 F 0 "R27" V 3243 3500 50  0000 C CNN
-F 1 "1K" V 3334 3500 50  0000 C CNN
+F 1 "10K" V 3334 3500 50  0000 C CNN
 F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 3380 3500 50  0001 C CNN
 F 3 "~" H 3450 3500 50  0001 C CNN
 	1    3450 3500
@@ -636,4 +625,15 @@ Wire Wire Line
 	4550 6400 5350 6400
 Wire Wire Line
 	6850 5450 6850 5050
+$Comp
+L salida_dac-rescue:R_POT-Device RV5
+U 1 1 5F9C3DAC
+P 4850 2450
+F 0 "RV5" V 4734 2450 50  0000 C CNN
+F 1 "1K" V 4641 2450 50  0000 C CNN
+F 2 "Potentiometer_THT:Potentiometer_Bourns_3266Y_Vertical" H 4850 2450 50  0001 C CNN
+F 3 "~" H 4850 2450 50  0001 C CNN
+	1    4850 2450
+	0    -1   -1   0   
+$EndComp
 $EndSCHEMATC

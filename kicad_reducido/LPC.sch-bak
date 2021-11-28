@@ -29,7 +29,7 @@ $EndComp
 Text HLabel 2200 1700 0    50   Input ~ 0
 GND
 Wire Wire Line
-	2800 3400 2200 3400
+	2800 3400 2450 3400
 Text HLabel 2200 3400 0    50   Input ~ 0
 DAC
 $Comp
@@ -56,14 +56,14 @@ Wire Wire Line
 Wire Wire Line
 	6850 2050 6850 2200
 Wire Wire Line
-	2800 3100 2200 3100
+	2800 3100 2450 3100
 Wire Wire Line
-	2800 3200 2200 3200
+	2800 3200 2300 3200
 Text HLabel 2200 3200 0    50   Input ~ 0
 ADC1
 Text HLabel 2200 3100 0    50   Input ~ 0
 ADC0
-Text HLabel 2200 1800 0    50   Input ~ 0
+Text HLabel 1600 1800 0    50   Input ~ 0
 5V
 $Comp
 L potenciostato-rescue:GND-power #PWR0131
@@ -104,4 +104,57 @@ Wire Wire Line
 	2200 1800 2800 1800
 Wire Wire Line
 	2200 1700 2800 1700
+$Comp
+L Device:Jumper JP1
+U 1 1 6184E96B
+P 1900 1800
+F 0 "JP1" H 1900 2064 50  0000 C CNN
+F 1 "Jumper" H 1900 1973 50  0000 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" H 1900 1800 50  0001 C CNN
+F 3 "~" H 1900 1800 50  0001 C CNN
+	1    1900 1800
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector:Conn_01x01_Female J8
+U 1 1 6184FD8B
+P 2450 2900
+F 0 "J8" V 2388 2812 50  0000 R CNN
+F 1 "Conn_01x01_Female" V 2297 2812 50  0000 R CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical" H 2450 2900 50  0001 C CNN
+F 3 "~" H 2450 2900 50  0001 C CNN
+	1    2450 2900
+	0    -1   -1   0   
+$EndComp
+Connection ~ 2450 3100
+Wire Wire Line
+	2450 3100 2200 3100
+$Comp
+L Connector:Conn_01x01_Female J9
+U 1 1 618507D3
+P 2450 3600
+F 0 "J9" V 2296 3648 50  0000 L CNN
+F 1 "Conn_01x01_Female" V 2387 3648 50  0000 L CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical" H 2450 3600 50  0001 C CNN
+F 3 "~" H 2450 3600 50  0001 C CNN
+	1    2450 3600
+	0    1    1    0   
+$EndComp
+Connection ~ 2450 3400
+Wire Wire Line
+	2450 3400 2200 3400
+$Comp
+L Connector:Conn_01x01_Female J7
+U 1 1 61850C4C
+P 2300 3000
+F 0 "J7" V 2238 2912 50  0000 R CNN
+F 1 "Conn_01x01_Female" V 2147 2912 50  0000 R CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical" H 2300 3000 50  0001 C CNN
+F 3 "~" H 2300 3000 50  0001 C CNN
+	1    2300 3000
+	0    -1   -1   0   
+$EndComp
+Connection ~ 2300 3200
+Wire Wire Line
+	2300 3200 2200 3200
 $EndSCHEMATC
