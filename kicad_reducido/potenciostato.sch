@@ -51,7 +51,7 @@ L potenciostato-rescue:R-Device R5
 U 1 1 5CC26B83
 P 8000 4050
 F 0 "R5" V 7793 4050 50  0000 C CNN
-F 1 "1M" V 7884 4050 50  0000 C CNN
+F 1 "0K" V 7884 4050 50  0000 C CNN
 F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 7930 4050 50  0001 C CNN
 F 3 "~" H 8000 4050 50  0001 C CNN
 	1    8000 4050
@@ -197,7 +197,7 @@ L potenciostato-rescue:R-Device R1
 U 1 1 5F9FAD44
 P 6050 4200
 F 0 "R1" V 5843 4200 50  0000 C CNN
-F 1 "15K" V 5934 4200 50  0000 C CNN
+F 1 "33K" V 5934 4200 50  0000 C CNN
 F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 5980 4200 50  0001 C CNN
 F 3 "~" H 6050 4200 50  0001 C CNN
 	1    6050 4200
@@ -223,7 +223,7 @@ L potenciostato-rescue:R-Device R4
 U 1 1 5F9FD20A
 P 7100 4700
 F 0 "R4" V 6893 4700 50  0000 C CNN
-F 1 "1K" V 6984 4700 50  0000 C CNN
+F 1 "10K" V 6984 4700 50  0000 C CNN
 F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 7030 4700 50  0001 C CNN
 F 3 "~" H 7100 4700 50  0001 C CNN
 	1    7100 4700
@@ -593,4 +593,6 @@ Wire Wire Line
 Wire Wire Line
 	1450 3100 1800 3100
 Connection ~ 1800 3100
+Text Notes 9000 4850 0    50   ~ 0
+Calculamos para una entrada de 1mA \npara que no sature en las primeras mediciones
 $EndSCHEMATC

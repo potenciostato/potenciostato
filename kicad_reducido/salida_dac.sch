@@ -40,20 +40,6 @@ SW_FILTRO2
 Text HLabel 5650 2950 2    50   Input ~ 0
 VIN
 $Comp
-L salida_dac-rescue:R-Device R9
-U 1 1 5F9506D4
-P 4400 6200
-AR Path="/5F9506D4" Ref="R9"  Part="1" 
-AR Path="/5F899696/5F9506D4" Ref="R14"  Part="1" 
-AR Path="/6013BA2D/5F9506D4" Ref="R14"  Part="1" 
-F 0 "R14" V 4193 6200 50  0000 C CNN
-F 1 "1K" V 4284 6200 50  0000 C CNN
-F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 4330 6200 50  0001 C CNN
-F 3 "~" H 4400 6200 50  0001 C CNN
-	1    4400 6200
-	0    -1   1    0   
-$EndComp
-$Comp
 L salida_dac-rescue:R-Device R4
 U 1 1 5F9506DA
 P 3200 5750
@@ -61,7 +47,7 @@ AR Path="/5F9506DA" Ref="R4"  Part="1"
 AR Path="/5F899696/5F9506DA" Ref="R9"  Part="1" 
 AR Path="/6013BA2D/5F9506DA" Ref="R9"  Part="1" 
 F 0 "R9" V 2993 5750 50  0000 C CNN
-F 1 "4K7" V 3084 5750 50  0000 C CNN
+F 1 "10K" V 3084 5750 50  0000 C CNN
 F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 3130 5750 50  0001 C CNN
 F 3 "~" H 3200 5750 50  0001 C CNN
 	1    3200 5750
@@ -615,7 +601,7 @@ L Device:R R8
 U 1 1 6174E172
 P 4400 6400
 F 0 "R8" V 4500 6400 50  0000 C CNN
-F 1 "1K" V 4600 6400 50  0000 C CNN
+F 1 "10K" V 4600 6400 50  0000 C CNN
 F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 4330 6400 50  0001 C CNN
 F 3 "~" H 4400 6400 50  0001 C CNN
 	1    4400 6400
@@ -635,5 +621,19 @@ F 2 "Potentiometer_THT:Potentiometer_Bourns_3266Y_Vertical" H 4850 2450 50  0001
 F 3 "~" H 4850 2450 50  0001 C CNN
 	1    4850 2450
 	0    -1   -1   0   
+$EndComp
+$Comp
+L salida_dac-rescue:R-Device R9
+U 1 1 5F9506D4
+P 4400 6200
+AR Path="/5F9506D4" Ref="R9"  Part="1" 
+AR Path="/5F899696/5F9506D4" Ref="R14"  Part="1" 
+AR Path="/6013BA2D/5F9506D4" Ref="R14"  Part="1" 
+F 0 "R14" V 4193 6200 50  0000 C CNN
+F 1 "10K" V 4284 6200 50  0000 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 4330 6200 50  0001 C CNN
+F 3 "~" H 4400 6200 50  0001 C CNN
+	1    4400 6200
+	0    -1   1    0   
 $EndComp
 $EndSCHEMATC
