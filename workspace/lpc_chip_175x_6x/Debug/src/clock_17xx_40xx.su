@@ -1,14 +1,14 @@
-C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/clock_17xx_40xx.h:120:20:Chip_Clock_IsMainPLLEnabled	4	static
-C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/clock_17xx_40xx.h:133:20:Chip_Clock_IsUSBPLLEnabled	4	static
-C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/clock_17xx_40xx.h:173:20:Chip_Clock_IsMainPLLConnected	4	static
-C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/clock_17xx_40xx.h:182:20:Chip_Clock_IsUSBPLLConnected	4	static
-C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/clock_17xx_40xx.h:229:20:Chip_Clock_FeedPLL	16	static
-C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/clock_17xx_40xx.h:497:39:Chip_Clock_GetMainPLLSource	4	static
-C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/clock_17xx_40xx.h:736:24:Chip_Clock_GetMainOscRate	4	static
-C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/clock_17xx_40xx.h:745:24:Chip_Clock_GetIntOscRate	4	static
-C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/clock_17xx_40xx.h:754:24:Chip_Clock_GetRTCOscRate	4	static
-C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/clock_17xx_40xx.h:771:24:Chip_Clock_GetMainPLLInClockRate	8	static
-C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/clock_17xx_40xx.h:786:24:Chip_Clock_GetUSBPLLInClockRate	8	static
+C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/clock_17xx_40xx.h:120:20:Chip_Clock_IsMainPLLEnabled	4	static
+C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/clock_17xx_40xx.h:133:20:Chip_Clock_IsUSBPLLEnabled	4	static
+C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/clock_17xx_40xx.h:173:20:Chip_Clock_IsMainPLLConnected	4	static
+C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/clock_17xx_40xx.h:182:20:Chip_Clock_IsUSBPLLConnected	4	static
+C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/clock_17xx_40xx.h:229:20:Chip_Clock_FeedPLL	16	static
+C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/clock_17xx_40xx.h:497:39:Chip_Clock_GetMainPLLSource	4	static
+C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/clock_17xx_40xx.h:736:24:Chip_Clock_GetMainOscRate	4	static
+C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/clock_17xx_40xx.h:745:24:Chip_Clock_GetIntOscRate	4	static
+C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/clock_17xx_40xx.h:754:24:Chip_Clock_GetRTCOscRate	4	static
+C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/clock_17xx_40xx.h:771:24:Chip_Clock_GetMainPLLInClockRate	8	static
+C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/clock_17xx_40xx.h:786:24:Chip_Clock_GetUSBPLLInClockRate	8	static
 ../src/clock_17xx_40xx.c:51:6:Chip_Clock_EnablePLL	24	static
 ../src/clock_17xx_40xx.c:61:6:Chip_Clock_DisablePLL	24	static
 ../src/clock_17xx_40xx.c:71:6:Chip_Clock_SetupPLL	32	static

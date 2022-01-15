@@ -1,5 +1,5 @@
-C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/ritimer_17xx_40xx.h:145:20:Chip_RIT_SetCOMPVAL	16	static
-C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/ritimer_17xx_40xx.h:156:20:Chip_RIT_EnableCTRL	16	static
+C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/ritimer_17xx_40xx.h:145:20:Chip_RIT_SetCOMPVAL	16	static
+C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/ritimer_17xx_40xx.h:156:20:Chip_RIT_EnableCTRL	16	static
 ../src/ritimer_17xx_40xx.c:53:6:Chip_RIT_Init	16	static
 ../src/ritimer_17xx_40xx.c:63:6:Chip_RIT_DeInit	16	static
 ../src/ritimer_17xx_40xx.c:70:6:Chip_RIT_SetTimerInterval	24	static

@@ -1,12 +1,12 @@
-C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/ssp_17xx_40xx.h:249:20:Chip_SSP_Disable	16	static
-C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/ssp_17xx_40xx.h:289:26:Chip_SSP_GetStatus	16	static
-C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/ssp_17xx_40xx.h:316:25:Chip_SSP_GetRawIntStatus	16	static
-C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/ssp_17xx_40xx.h:327:23:Chip_SSP_GetDataSize	16	static
-C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/ssp_17xx_40xx.h:341:20:Chip_SSP_ClearIntPending	16	static
-C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/ssp_17xx_40xx.h:371:24:Chip_SSP_ReceiveFrame	16	static
-C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/ssp_17xx_40xx.h:382:20:Chip_SSP_SendFrame	16	static
-C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/ssp_17xx_40xx.h:413:20:Chip_SSP_SetFormat	24	static
-C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/ssp_17xx_40xx.h:426:20:Chip_SSP_Set_Mode	16	static
+C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/ssp_17xx_40xx.h:249:20:Chip_SSP_Disable	16	static
+C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/ssp_17xx_40xx.h:289:26:Chip_SSP_GetStatus	16	static
+C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/ssp_17xx_40xx.h:316:25:Chip_SSP_GetRawIntStatus	16	static
+C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/ssp_17xx_40xx.h:327:23:Chip_SSP_GetDataSize	16	static
+C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/ssp_17xx_40xx.h:341:20:Chip_SSP_ClearIntPending	16	static
+C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/ssp_17xx_40xx.h:371:24:Chip_SSP_ReceiveFrame	16	static
+C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/ssp_17xx_40xx.h:382:20:Chip_SSP_SendFrame	16	static
+C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/ssp_17xx_40xx.h:413:20:Chip_SSP_SetFormat	24	static
+C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/ssp_17xx_40xx.h:426:20:Chip_SSP_Set_Mode	16	static
 ../src/ssp_17xx_40xx.c:46:13:SSP_Write2BFifo	16	static
 ../src/ssp_17xx_40xx.c:60:13:SSP_Write1BFifo	16	static
 ../src/ssp_17xx_40xx.c:73:13:SSP_Read2BFifo	24	static

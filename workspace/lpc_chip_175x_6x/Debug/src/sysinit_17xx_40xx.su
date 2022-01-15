@@ -1,9 +1,9 @@
-C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/clock_17xx_40xx.h:120:20:Chip_Clock_IsMainPLLEnabled	4	static
-C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/clock_17xx_40xx.h:146:20:Chip_Clock_IsMainPLLLocked	4	static
-C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/clock_17xx_40xx.h:173:20:Chip_Clock_IsMainPLLConnected	4	static
-C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/clock_17xx_40xx.h:192:20:Chip_Clock_EnableCrystal	4	static
-C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/clock_17xx_40xx.h:201:20:Chip_Clock_IsCrystalEnabled	4	static
-C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/clock_17xx_40xx.h:488:20:Chip_Clock_SetMainPLLSource	16	static
+C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/clock_17xx_40xx.h:120:20:Chip_Clock_IsMainPLLEnabled	4	static
+C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/clock_17xx_40xx.h:146:20:Chip_Clock_IsMainPLLLocked	4	static
+C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/clock_17xx_40xx.h:173:20:Chip_Clock_IsMainPLLConnected	4	static
+C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/clock_17xx_40xx.h:192:20:Chip_Clock_EnableCrystal	4	static
+C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/clock_17xx_40xx.h:201:20:Chip_Clock_IsCrystalEnabled	4	static
+C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/clock_17xx_40xx.h:488:20:Chip_Clock_SetMainPLLSource	16	static
 ../src/sysinit_17xx_40xx.c:50:6:Chip_SetupIrcClocking	8	static
 ../src/sysinit_17xx_40xx.c:76:6:Chip_SetupXtalClocking	8	static
 ../src/sysinit_17xx_40xx.c:174:6:Chip_SystemInit	8	static

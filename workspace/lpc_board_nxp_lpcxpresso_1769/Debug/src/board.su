@@ -1,19 +1,19 @@
-C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/iocon_17xx_40xx.h:151:20:Chip_IOCON_Init	16	static
-C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/iocon_17xx_40xx.h:190:20:Chip_IOCON_EnableOD	16	static
-C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/iocon_17xx_40xx.h:223:20:Chip_IOCON_SetI2CPad	16	static
-C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/gpio_17xx_40xx.h:64:20:Chip_GPIO_Init	16	static
-C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/gpio_17xx_40xx.h:88:20:Chip_GPIO_SetPinState	16	static
-C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/gpio_17xx_40xx.h:106:20:Chip_GPIO_WritePortBit	24	static
-C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/gpio_17xx_40xx.h:119:20:Chip_GPIO_GetPinState	16	static
-C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/gpio_17xx_40xx.h:132:20:Chip_GPIO_ReadPortBit	24	static
-C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/gpio_17xx_40xx.h:144:20:Chip_GPIO_SetPinDIROutput	16	static
-C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/gpio_17xx_40xx.h:156:20:Chip_GPIO_SetPinDIRInput	16	static
-C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/gpio_17xx_40xx.h:169:20:Chip_GPIO_SetPinDIR	16	static
-C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/gpio_17xx_40xx.h:190:20:Chip_GPIO_WriteDirBit	16	static
-C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/uart_17xx_40xx.h:309:20:Chip_UART_SendByte	16	static
-C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/uart_17xx_40xx.h:322:23:Chip_UART_ReadByte	16	static
-C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/uart_17xx_40xx.h:405:20:Chip_UART_ConfigData	16	static
-C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/uart_17xx_40xx.h:492:24:Chip_UART_ReadLineStatus	16	static
+C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/iocon_17xx_40xx.h:151:20:Chip_IOCON_Init	16	static
+C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/iocon_17xx_40xx.h:190:20:Chip_IOCON_EnableOD	16	static
+C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/iocon_17xx_40xx.h:223:20:Chip_IOCON_SetI2CPad	16	static
+C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/gpio_17xx_40xx.h:64:20:Chip_GPIO_Init	16	static
+C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/gpio_17xx_40xx.h:88:20:Chip_GPIO_SetPinState	16	static
+C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/gpio_17xx_40xx.h:106:20:Chip_GPIO_WritePortBit	24	static
+C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/gpio_17xx_40xx.h:119:20:Chip_GPIO_GetPinState	16	static
+C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/gpio_17xx_40xx.h:132:20:Chip_GPIO_ReadPortBit	24	static
+C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/gpio_17xx_40xx.h:144:20:Chip_GPIO_SetPinDIROutput	16	static
+C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/gpio_17xx_40xx.h:156:20:Chip_GPIO_SetPinDIRInput	16	static
+C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/gpio_17xx_40xx.h:169:20:Chip_GPIO_SetPinDIR	16	static
+C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/gpio_17xx_40xx.h:190:20:Chip_GPIO_WriteDirBit	16	static
+C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/uart_17xx_40xx.h:309:20:Chip_UART_SendByte	16	static
+C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/uart_17xx_40xx.h:322:23:Chip_UART_ReadByte	16	static
+C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/uart_17xx_40xx.h:405:20:Chip_UART_ConfigData	16	static
+C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/uart_17xx_40xx.h:492:24:Chip_UART_ReadLineStatus	16	static
 ../src/board.c:68:13:Board_LED_Init	8	static
 ../src/board.c:80:6:Board_UART_Init	16	static
 ../src/board.c:86:6:Board_Debug_Init	8	static

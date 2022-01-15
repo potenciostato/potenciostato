@@ -60,6 +60,7 @@ struct DACmsj {
   uint16_t mode;
   uint32_t frec;
   uint16_t amp;
+  uint8_t ncic;
 };
 
 struct ADCmsj {
@@ -127,9 +128,6 @@ void ADC_IRQHandler(void){
         valorADC = ADC_DR_RESULT(dataADC);
         xQueueSendToBackFromISR( qADCtension, &valorADC, &xHigherPriorityTaskWoken );
     }
-    //Chip_ADC_ReadValue(LPC_ADC, ADC_CH0, &dataADC);
-    //valorADC = ADC_DR_RESULT(dataADC);
-    //xQueueSendToBackFromISR( qADCdata, &valorADC, &xHigherPriorityTaskWoken );
     portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 }
 
@@ -206,14 +204,13 @@ static void vUSBTask(void *pvParameters) {
 
     uint8_t lecturaQT[8]={0};
     int i;
-    struct DACmsj conf_dac = {true, BARRIDO_CICLICO, 1000, 1}; //estado del modulo, frecuencia[Hz], amplitud[V]
+    struct DACmsj conf_dac = {true, BARRIDO_CICLICO, 1000, 255}; //estado del modulo, frecuencia[Hz], amplitud[V]
     struct ADCmsj conf_adc = {true,10}; //estado del modulo, frecuencia[Hz], amplitud[V]
     uint8_t midiendo=false;
 
     int countADCsend, countUSBin, countUSBout;
 
     //Solo para pruebas
-        configGains(SW_GAIN2,SW_I_GAIN2,SW_V_GAIN2);
     //  xQueueSendToBack(qDAC,&conf_dac,0);
     //  xQueueSendToBack(qADC,&conf_adc,0);
 
@@ -295,15 +292,10 @@ static void vUSBTask(void *pvParameters) {
                 conf_dac.mode = BARRIDO_CICLICO;
                 conf_dac.frec =(lecturaQT[3]<<8)+lecturaQT[4];
                 conf_dac.amp =lecturaQT[2];
-
-                if(lecturaQT[2]<30)
-                    //<1v
-                    configGains(SW_GAIN2,SW_I_GAIN2,SW_V_GAIN2);
-                else
-                    //>1v
-                    configGains(SW_GAIN1,SW_I_GAIN1,SW_V_GAIN1);
+                conf_dac.ncic = lecturaQT[5]
 
                 conf_adc.set = true;
+
                 xQueueSendToBack(qDAC,&conf_dac,0);
                 xQueueSendToBack(qADC,&conf_adc,0);
 
@@ -469,7 +461,8 @@ static void vADCTask(void *pvParameters) {
                 DEBUGOUT("ADC: Habilita medicion ADC\n");
 
             NVIC_EnableIRQ(ADC_IRQn);
-            Chip_ADC_SetBurstCmd(LPC_ADC, ENABLE);
+        	Chip_ADC_SetBurstCmd(LPC_ADC, ENABLE);
+
             i = 0;
             while (conf.set){
 
@@ -492,7 +485,8 @@ static void vADCTask(void *pvParameters) {
             if (debugging == ENABLED)
                 DEBUGOUT("ADC: Deshabilita medicion ADC\n");
             Chip_ADC_SetBurstCmd(LPC_ADC, DISABLE);
-        }else{
+        }
+        else {
             if (debugging == ENABLED)
                 DEBUGOUT("ADC: Esta deshabilitado ADC\n");
         }
