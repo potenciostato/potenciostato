@@ -1,11 +1,9 @@
 /*
- * Potenciostate Grupo 1
+ * Potenciostato Grupo 1
  *
  */
 // 1.0
-//TODO: -buferear salida para que no haga ruido ->listo
-//      -mejorar amplitud de onda segun las potencias
-//      -chequear el bug de que se cuelga, creo que tiene que ver con el hardware
+//TODO: - Todo lo que dice en Minutas al día de la fecha
 
 #include <board.h>
 #include <FreeRTOS.h>
@@ -252,7 +250,7 @@ static void vUSBTask(void *pvParameters) {
 
                 conf_dac.set = true;
                 conf_dac.mode = BARRIDO_LINEAL;
-                conf_dac.frec =(lecturaQT[3]<<8)+lecturaQT[4];
+                conf_dac.frec =(lecturaQT[3]<<16) | (lecturaQT[4]<<8) | lecturaQT[5]; //me parece debería ir un OR | (había un +)
                 conf_dac.amp =lecturaQT[2];
 
                 if(lecturaQT[2]<30)
@@ -290,9 +288,9 @@ static void vUSBTask(void *pvParameters) {
 
                 conf_dac.set = true;
                 conf_dac.mode = BARRIDO_CICLICO;
-                conf_dac.frec =(lecturaQT[3]<<8)+lecturaQT[4];
+                conf_dac.frec =(lecturaQT[3]<<16) | (lecturaQT[4]<<8) | lecturaQT[5]; //me parece debería ir un OR | (había un +)
                 conf_dac.amp =lecturaQT[2];
-                conf_dac.ncic = lecturaQT[5]
+                conf_dac.ncic = lecturaQT[6];
 
                 conf_adc.set = true;
 
@@ -355,7 +353,7 @@ static void vUSBTask(void *pvParameters) {
         }
     }
 }
-/* DAC parpadeo cada 0.1s */
+
 /* DAC parpadeo cada 0.1s */
 static void vDACTask(void *pvParameters) {
     bool DACset = false;
@@ -382,7 +380,10 @@ static void vDACTask(void *pvParameters) {
 
         if(conf.frec != FREC){
             FREC = conf.frec;
-            timeoutDMA = CLOCK_DAC_HZ / ( FREC * NUMERO_MUESTRAS );
+            timeoutDMA = CLOCK_DAC_HZ / ((FREC / 1000) * NUMERO_MUESTRAS );
+            // Nota:
+            // el dividir 1000 se debe a que la frecuencia desde QT se envia multiplicada
+            // por 1000 para pasar 0,001 a 1 y tener todo en unsigned int 24 bits
             Chip_DAC_SetDMATimeOut(LPC_DAC, timeoutDMA);
             timeoutDMA = 50;
         }

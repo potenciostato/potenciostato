@@ -1,8 +1,8 @@
-C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/can_17xx_40xx.h:762:20:Chip_CAN_SetCmd	16	static
-C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/can_17xx_40xx.h:803:24:Chip_CAN_GetStatus	16	static
-C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/can_17xx_40xx.h:870:26:Chip_CAN_GetMode	16	static
-C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/can_17xx_40xx.h:881:20:Chip_CAN_SetAFMode	16	static
-C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/can_17xx_40xx.h:891:29:Chip_CAN_GetAFMode	16	static
+D:\UTN\Proyecto Final\drive\desarrollo\software\repo\proyecto-final\workspace\lpc_chip_175x_6x\inc/can_17xx_40xx.h:762:20:Chip_CAN_SetCmd	16	static
+D:\UTN\Proyecto Final\drive\desarrollo\software\repo\proyecto-final\workspace\lpc_chip_175x_6x\inc/can_17xx_40xx.h:803:24:Chip_CAN_GetStatus	16	static
+D:\UTN\Proyecto Final\drive\desarrollo\software\repo\proyecto-final\workspace\lpc_chip_175x_6x\inc/can_17xx_40xx.h:870:26:Chip_CAN_GetMode	16	static
+D:\UTN\Proyecto Final\drive\desarrollo\software\repo\proyecto-final\workspace\lpc_chip_175x_6x\inc/can_17xx_40xx.h:881:20:Chip_CAN_SetAFMode	16	static
+D:\UTN\Proyecto Final\drive\desarrollo\software\repo\proyecto-final\workspace\lpc_chip_175x_6x\inc/can_17xx_40xx.h:891:29:Chip_CAN_GetAFMode	16	static
 ../src/can_17xx_40xx.c:47:13:setBusTiming	16	static
 ../src/can_17xx_40xx.c:66:13:getSectionAddress	24	static
 ../src/can_17xx_40xx.c:86:24:getTotalEntryNum	16	static

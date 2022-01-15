@@ -381,7 +381,7 @@ void MainWindow::on_Bt_IniciarLineal_clicked()
 
     //Se procesa la configuración elegida
     tension_pico = (255 * (1000 * ui->Num_VLineal->value())) / MV_TENSION_MAXIMA;
-    frecuencia = ui->Num_HzLineal->value();
+    frecuencia = ui->Num_HzLineal->value() * 1000;
 
     qDebug() << "tension_pico: " << tension_pico;
     qDebug() << "frecuencia: " << frecuencia;
@@ -390,9 +390,9 @@ void MainWindow::on_Bt_IniciarLineal_clicked()
     buffer[0] = OC_INITMEASUREMENTLINEAL;
     buffer[1] = 0x00;
     buffer[2] = tension_pico;
-    buffer[3] = (uint8_t) ((frecuencia & 0xFF00) >> 8);
-    buffer[4] = (uint8_t) (frecuencia & 0xFF);
-    buffer[5] = 0x00;
+    buffer[3] = (uint8_t) ((frecuencia & 0xFF0000) >> 16);
+    buffer[4] = (uint8_t) ((frecuencia & 0x00FF00) >> 8);
+    buffer[5] = (uint8_t) (frecuencia & 0x0000FF);
     buffer[6] = 0x00;
     buffer[7] = 0x00;
 
@@ -450,7 +450,7 @@ void MainWindow::on_Bt_IniciarCiclico_clicked()
 
     //Se procesa la configuración elegida
     tension_pico = (255 * (1000 * ui->Num_VCiclico->value())) / MV_TENSION_MAXIMA;
-    frecuencia = ui->Num_HzCiclico->value();
+    frecuencia = ui->Num_HzCiclico->value() * 1000;
     ciclos = ui->Num_CicCiclico->value();
 
     qDebug() << "tension_pico: " << tension_pico;
@@ -461,10 +461,10 @@ void MainWindow::on_Bt_IniciarCiclico_clicked()
     buffer[0] = OC_INITMEASUREMENTCYCLICAL;
     buffer[1] = 0x00;
     buffer[2] = (uint8_t) tension_pico;
-    buffer[3] = (uint8_t) ((frecuencia & 0xFF00) >> 8);
-    buffer[4] = (uint8_t) (frecuencia & 0xFF);
-    buffer[5] = (uint8_t) ciclos;
-    buffer[6] = 0x00;
+    buffer[3] = (uint8_t) ((frecuencia & 0xFF0000) >> 16);
+    buffer[4] = (uint8_t) ((frecuencia & 0x00FF00) >> 8);
+    buffer[5] = (uint8_t) (frecuencia & 0x0000FF);
+    buffer[6] = (uint8_t) ciclos;
     buffer[7] = 0x00;
 
 

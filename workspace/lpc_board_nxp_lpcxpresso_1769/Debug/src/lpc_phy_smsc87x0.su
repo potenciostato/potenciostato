@@ -1,4 +1,4 @@
-C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/enet_17xx_40xx.h:563:20:Chip_ENET_IsMIIBusy	16	static
+D:\UTN\Proyecto Final\drive\desarrollo\software\repo\proyecto-final\workspace\lpc_chip_175x_6x\inc/enet_17xx_40xx.h:563:20:Chip_ENET_IsMIIBusy	16	static
 ../src/lpc_phy_smsc87x0.c:94:15:lpc_mii_write	24	static
 ../src/lpc_phy_smsc87x0.c:119:15:lpc_mii_read	24	static
 ../src/lpc_phy_smsc87x0.c:144:13:smsc_update_phy_sts	16	static

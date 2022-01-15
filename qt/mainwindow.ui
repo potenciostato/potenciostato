@@ -133,7 +133,7 @@
        </rect>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -260,13 +260,13 @@
          </rect>
         </property>
         <property name="decimals">
-         <number>0</number>
+         <number>3</number>
         </property>
         <property name="maximum">
-         <double>10000.000000000000000</double>
+         <double>16777.215000000000146</double>
         </property>
         <property name="singleStep">
-         <double>1.000000000000000</double>
+         <double>0.001000000000000</double>
         </property>
        </widget>
        <widget class="QPushButton" name="Bt_IniciarCiclico">

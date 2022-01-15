@@ -1,5 +1,5 @@
-C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/clock_17xx_40xx.h:874:24:Chip_Clock_GetENETClockRate	8	static
-C:\Facultad\proyecto final\proyecto-final\workspace\lpc_chip_175x_6x\inc/enet_17xx_40xx.h:499:20:Chip_ENET_Reset	16	static
+D:\UTN\Proyecto Final\drive\desarrollo\software\repo\proyecto-final\workspace\lpc_chip_175x_6x\inc/clock_17xx_40xx.h:874:24:Chip_Clock_GetENETClockRate	8	static
+D:\UTN\Proyecto Final\drive\desarrollo\software\repo\proyecto-final\workspace\lpc_chip_175x_6x\inc/enet_17xx_40xx.h:499:20:Chip_ENET_Reset	16	static
 ../src/enet_17xx_40xx.c:53:20:resetENET	24	static
 ../src/enet_17xx_40xx.c:71:6:Chip_ENET_Init	16	static
 ../src/enet_17xx_40xx.c:105:6:Chip_ENET_DeInit	16	static
