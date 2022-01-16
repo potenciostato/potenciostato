@@ -24,7 +24,7 @@ const libusb_interface_descriptor *interdesc;
 const libusb_endpoint_descriptor *epdesc;
 
 uint8_t connected = 0;
-uint8_t Dispositivo = 0;
+int8_t Dispositivo = -1;
 
 // Definiciones de los códigos de operación
 #define OC_INITMEASUREMENTLINEAL 0xA1
@@ -43,5 +43,8 @@ uint8_t Dispositivo = 0;
 #define MILISEGUNDOS_POLLING 50
 
 #define MV_TENSION_MAXIMA 3300
+
+#define FRECUENCIA 0
+#define PERIODO 1
 
 #endif // GLOBALES_H

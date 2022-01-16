@@ -40,8 +40,8 @@ private slots:
     void terminoMedicion();
     void desconectarUSB();
 
-
     void on_Bt_IniciarCiclico_clicked();
+    void on_Bt_FTCiclico_clicked();
 
 private:
     Ui::MainWindow *ui;

@@ -250,8 +250,8 @@ static void vUSBTask(void *pvParameters) {
 
                 conf_dac.set = true;
                 conf_dac.mode = BARRIDO_LINEAL;
-                conf_dac.frec =(lecturaQT[3]<<16) | (lecturaQT[4]<<8) | lecturaQT[5]; //me parece debería ir un OR | (había un +)
-                conf_dac.amp =lecturaQT[2];
+                conf_dac.frec = (lecturaQT[3]<<16) | (lecturaQT[4]<<8) | lecturaQT[5]; //me parece debería ir un OR | (había un +)
+                conf_dac.amp = lecturaQT[2];
 
                 if(lecturaQT[2]<30)
                     //<1v
@@ -289,7 +289,7 @@ static void vUSBTask(void *pvParameters) {
                 conf_dac.set = true;
                 conf_dac.mode = BARRIDO_CICLICO;
                 conf_dac.frec =(lecturaQT[3]<<16) | (lecturaQT[4]<<8) | lecturaQT[5]; //me parece debería ir un OR | (había un +)
-                conf_dac.amp =lecturaQT[2];
+                conf_dac.amp = lecturaQT[2];
                 conf_dac.ncic = lecturaQT[6];
 
                 conf_adc.set = true;
@@ -310,12 +310,6 @@ static void vUSBTask(void *pvParameters) {
                     DEBUGOUT("USB: Deshabilito DAC & ADC\n");
                 midiendo = false;
 
-                // Se deshabilitan DAC y ADC
-                conf_dac.set = false;
-                conf_adc.set = false;
-                xQueueSendToBack(qDAC,&conf_dac,0);
-                xQueueSendToBack(qADC,&conf_adc,0);
-
                 // Se limpian las colas de las mediciones
                 if (debugging == ENABLED)
                     DEBUGOUT("USB: Se limpian las colas\n");
@@ -323,6 +317,18 @@ static void vUSBTask(void *pvParameters) {
                 xQueueReset( qADCcorriente );
                 xQueueReset( qADCtension );
                 xQueueReset( qUSBin );
+
+                // Se limpian las configuraciones
+                conf_dac.mode = BARRIDO_CICLICO;
+                conf_dac.frec = 1000;
+				conf_dac.amp = 255;
+                conf_adc.frec = 10;
+
+                // Se deshabilitan DAC y ADC
+                conf_dac.set = false;
+                conf_adc.set = false;
+                xQueueSendToBack(qDAC,&conf_dac,0);
+                xQueueSendToBack(qADC,&conf_adc,0);
 
                 break;
 
@@ -358,7 +364,8 @@ static void vUSBTask(void *pvParameters) {
 static void vDACTask(void *pvParameters) {
     bool DACset = false;
     uint16_t tabla_salida[ NUMERO_MUESTRAS ], i, SG_OK = 0;
-    uint16_t FREC = 0, AMPLITUD = 0, AMPLITUD_DIV = 255, MODO = 2;
+    uint16_t AMPLITUD = 0, AMPLITUD_DIV = 255, MODO = 2;
+    uint32_t FREC = 0;
     uint32_t CLOCK_DAC_HZ, timeoutDMA;
     struct DACmsj conf;
 
@@ -379,12 +386,24 @@ static void vDACTask(void *pvParameters) {
             DEBUGOUT("DAC: Entre DAC\n");
 
         if(conf.frec != FREC){
-            FREC = conf.frec;
-            timeoutDMA = CLOCK_DAC_HZ / ((FREC / 1000) * NUMERO_MUESTRAS );
+            FREC = conf.frec; //este valor esta multiplicado por 1000 desde el Qt
+            if (FREC == 0){
+            	DEBUGOUT("DAC: Frecuencia incorrecta, no puede valer 0\n");
+            }
+            timeoutDMA = (((((CLOCK_DAC_HZ * 10) / FREC) * 10) / NUMERO_MUESTRAS ) * 10);
             // Nota:
-            // el dividir 1000 se debe a que la frecuencia desde QT se envia multiplicada
-            // por 1000 para pasar 0,001 a 1 y tener todo en unsigned int 24 bits
-            Chip_DAC_SetDMATimeOut(LPC_DAC, timeoutDMA);
+            // el multiplicar 3 veces por 10 se debe a que la frecuencia desde QT se envia multiplicada
+            // por 1000 para pasar 0,001 a 1 y tener todo en unsigned int en 24 (32) bits
+            if (timeoutDMA > 65535){
+            	timeoutDMA = 65535; //esto soluciona el problema del envío del Qt que,
+            	// a veces, le resta 1 a 1000 * frecuencia a enviar.
+            	// => timeoutDMA resultaría mayor al máximo
+            }
+            if (timeoutDMA == 0){
+            	DEBUGOUT("DAC: El timeoutDMA no puede valer 0\n");
+            }else{
+            	Chip_DAC_SetDMATimeOut(LPC_DAC, timeoutDMA);
+            }
             timeoutDMA = 50;
         }
         if (conf.mode != MODO){
@@ -402,17 +421,17 @@ static void vDACTask(void *pvParameters) {
         }
         if (conf.amp != AMPLITUD ){
         	AMPLITUD = conf.amp;
-                    if (conf.mode == BARRIDO_CICLICO){
-                        for ( i = 0 ; i < NUMERO_MUESTRAS ; i++ ) {
-                            tabla_salida[i]= (uint16_t) ((AMPLITUD * (tabla_tria[i] - VALOR_MEDIO_DAC))/AMPLITUD_DIV + VALOR_MEDIO_DAC) << 6;
-                        }
-                    }
-                    if (conf.mode == BARRIDO_LINEAL){
-                        for ( i = 0 ; i < NUMERO_MUESTRAS ; i++ ) {
-                            tabla_salida[i]= (uint16_t) (AMPLITUD * tabla_sier[i]) << 6;
-                        }
-                    }
-                }
+			if (conf.mode == BARRIDO_CICLICO){
+				for ( i = 0 ; i < NUMERO_MUESTRAS ; i++ ) {
+					tabla_salida[i]= (uint16_t) ((AMPLITUD * (tabla_tria[i] - VALOR_MEDIO_DAC))/AMPLITUD_DIV + VALOR_MEDIO_DAC) << 6;
+				}
+			}
+			if (conf.mode == BARRIDO_LINEAL){
+				for ( i = 0 ; i < NUMERO_MUESTRAS ; i++ ) {
+					tabla_salida[i]= (uint16_t) (AMPLITUD * tabla_sier[i]) << 6;
+				}
+			}
+		}
 
         if(conf.set != DACset){
             DACset = conf.set;

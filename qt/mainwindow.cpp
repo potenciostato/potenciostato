@@ -34,6 +34,7 @@ double puntosY[CANT_VALORES] = {0};
 //char metodo[30] = "BarridoLineal";
 char metodo[30] = "BarridoCiclico"; //TODO: rehacer la verificacion del modo con defines
 int medicion_habilitada = 0;
+char frec_periodo = FRECUENCIA;
 bool demostracion = false;
 bool grafico_inicial = false;
 int grafico_demostracion;
@@ -79,10 +80,10 @@ void MainWindow::desconectarUSB(){
         libusb_free_device_list(devs,1);
         libusb_exit(ctx);
 
-        connected = 0;
-        Dispositivo = 0;
-
         qDebug() << "Se ha desconectado el Dispositivo: " << Dispositivo;
+
+        connected = 0;
+        Dispositivo = -1;
     }
 }
 
@@ -377,7 +378,7 @@ void MainWindow::on_Bt_IniciarLineal_clicked()
     int send_ret, recv_ret;
     uint8_t tension_pico = 0;
     //int tension_pico = 0;
-    uint16_t frecuencia = 0;
+    uint32_t frecuencia = 0;
 
     //Se procesa la configuración elegida
     tension_pico = (255 * (1000 * ui->Num_VLineal->value())) / MV_TENSION_MAXIMA;
@@ -445,12 +446,16 @@ void MainWindow::on_Bt_IniciarCiclico_clicked()
     int send_ret, recv_ret;
     uint8_t tension_pico = 0;
     //int tension_pico = 0;
-    uint16_t frecuencia = 0;
+    uint32_t frecuencia = 0;
     uint8_t ciclos = 0;
 
     //Se procesa la configuración elegida
     tension_pico = (255 * (1000 * ui->Num_VCiclico->value())) / MV_TENSION_MAXIMA;
-    frecuencia = ui->Num_HzCiclico->value() * 1000;
+    if (frec_periodo == FRECUENCIA){
+        frecuencia = ui->Num_HzCiclico->value() * 1000;
+    }else{
+        frecuencia = (1/ui->Num_SegCiclico->value()) * 1000;
+    }
     ciclos = ui->Num_CicCiclico->value();
 
     qDebug() << "tension_pico: " << tension_pico;
@@ -579,15 +584,13 @@ void MainWindow::on_Conectar_Bt_clicked()
     unsigned char i;
     signed int j, k, p;
 
-    connected = 1;
-
     r = libusb_init(&ctx);
 
     //libusb_set_debug(ctx, 3); //set verbosity level to 3, as suggested in the documentation
 
     cnt = libusb_get_device_list(ctx,&devs);
 
-    qDebug() << "Hay" << cnt << "dispositivos conectados";
+    qDebug() << "INFO: Hay" << cnt << "dispositivos conectados";
 
     for (i = 0; i < cnt; i++)
     {
@@ -646,7 +649,6 @@ void MainWindow::on_Conectar_Bt_clicked()
 
             libusb_free_config_descriptor(config);
 
-
             r = libusb_open(devs[Dispositivo],&dev_handle);
 
             if(r<0)
@@ -656,6 +658,15 @@ void MainWindow::on_Conectar_Bt_clicked()
             }
         }
     }
+
+    if (Dispositivo == -1){
+        qDebug() << "ERROR: Error al querer conectar con el dispositivo";
+        qDebug() << "¿Está conectado el LPC por USB?";
+        return;
+    }
+
+    // Si llega hasta aca es porque esta conectado
+    connected = 1;
 
     // Se habilita el inicio de medición
     ui->Bt_IniciarLineal->setEnabled(true);
@@ -842,3 +853,19 @@ void MainWindow::on_Desconectar_Bt_clicked()
     ui->Desconectar_Bt->setEnabled(false);
 
 }
+
+void MainWindow::on_Bt_FTCiclico_clicked()
+{
+    if (frec_periodo == FRECUENCIA){
+        frec_periodo = PERIODO;
+        ui->Num_SegCiclico->setEnabled(true);
+        ui->Num_HzCiclico->setEnabled(false);
+    }
+    else
+    {
+        frec_periodo = FRECUENCIA;
+        ui->Num_SegCiclico->setEnabled(false);
+        ui->Num_HzCiclico->setEnabled(true);
+    }
+}
+
