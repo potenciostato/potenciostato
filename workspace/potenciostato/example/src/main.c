@@ -74,8 +74,7 @@ struct USBmsj {
 
 // OBJETOS FreeRTOS
 
-xSemaphoreHandle DACSemMtx,ADCSemMtx;
-xSemaphoreHandle sBufferADC;
+xSemaphoreHandle sDACncic;
 xQueueHandle qUSBin, qUSBout, qADC, qDAC, qADCcorriente, qADCtension, qADCsend;
 
 DMA_TransferDescriptor_t DMA_LLI_buffer;
@@ -134,7 +133,7 @@ void DMA_IRQHandler(void)
     static signed portBASE_TYPE xHigherPriorityTaskWoken;
     xHigherPriorityTaskWoken = pdFALSE;
     if (Chip_GPDMA_Interrupt(LPC_GPDMA, CanalDAC) == SUCCESS) {
-        xSemaphoreGiveFromISR(sBufferADC, &xHigherPriorityTaskWoken);
+        xSemaphoreGiveFromISR(sDACncic, &xHigherPriorityTaskWoken);
     }
     else {
         /* Process error here */
@@ -253,16 +252,6 @@ static void vUSBTask(void *pvParameters) {
                 conf_dac.frec = (lecturaQT[3]<<16) | (lecturaQT[4]<<8) | lecturaQT[5]; //me parece debería ir un OR | (había un +)
                 conf_dac.amp = lecturaQT[2];
 
-                if(lecturaQT[2]<30)
-                    //<1v
-                    configGains(SW_GAIN2,SW_I_GAIN2,SW_V_GAIN2);
-                else
-                    //>1v
-                    configGains(SW_GAIN1,SW_I_GAIN1,SW_V_GAIN1);
-
-
-
-
                 conf_adc.set = true;
                 xQueueSendToBack(qDAC,&conf_dac,0);
                 xQueueSendToBack(qADC,&conf_adc,0);
@@ -370,14 +359,18 @@ static void vDACTask(void *pvParameters) {
     struct DACmsj conf;
 
     // Config DAC DMA
-    CLOCK_DAC_HZ = Chip_Clock_GetSystemClockRate()/4;
+    CLOCK_DAC_HZ = Chip_Clock_GetSystemClockRate()/8;
     CanalDAC = Chip_GPDMA_GetFreeChannel ( LPC_GPDMA , 0 );
     Chip_GPDMA_Init ( LPC_GPDMA );
     NVIC_EnableIRQ(DMA_IRQn);
 
 
 
+
     while(1) {
+
+        // Anular salida DAC
+        Chip_DAC_UpdateValue(LPC_DAC, 512);
 
         //se lee la cola, si no se recibe nada la tarea se quedará esperando
         xQueueReceive(qDAC,&conf,portMAX_DELAY);
@@ -412,7 +405,7 @@ static void vDACTask(void *pvParameters) {
             DACset = false;
             if (conf.mode == BARRIDO_CICLICO){
                 Chip_GPDMA_PrepareDescriptor ( LPC_GPDMA , &DMA_LLI_buffer  , (uint32_t) tabla_salida ,
-                                                GPDMA_CONN_DAC , DMA_SIZE , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA , &DMA_LLI_buffer );
+                                                GPDMA_CONN_DAC , DMA_SIZE , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA , 0);
             }
             if (conf.mode == BARRIDO_LINEAL){
                 Chip_GPDMA_PrepareDescriptor ( LPC_GPDMA , &DMA_NLI_buffer  , (uint32_t) tabla_salida ,
@@ -428,7 +421,7 @@ static void vDACTask(void *pvParameters) {
 			}
 			if (conf.mode == BARRIDO_LINEAL){
 				for ( i = 0 ; i < NUMERO_MUESTRAS ; i++ ) {
-					tabla_salida[i]= (uint16_t) (AMPLITUD * tabla_sier[i]) << 6;
+					tabla_salida[i]= (uint16_t) (AMPLITUD * tabla_sier[i] / AMPLITUD_DIV ) << 6;
 				}
 			}
 		}
@@ -436,9 +429,13 @@ static void vDACTask(void *pvParameters) {
         if(conf.set != DACset){
             DACset = conf.set;
             if(DACset){
-                if (conf.mode == BARRIDO_CICLICO){
-                    Board_LED_Set(0, true);
-                    SG_OK = Chip_GPDMA_SGTransfer (LPC_GPDMA , CanalDAC ,&DMA_LLI_buffer , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA);
+                if (conf.mode == BARRIDO_CICLICO) {
+                	for(i=0;i<conf.ncic;i++) {
+                		Board_LED_Toggle(0);
+                		SG_OK = Chip_GPDMA_SGTransfer (LPC_GPDMA , CanalDAC ,&DMA_LLI_buffer , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA);
+                		xSemaphoreTake(sDACncic, ( portTickType ) portMAX_DELAY);
+                	}
+
                 }
                 if (conf.mode == BARRIDO_LINEAL) {
                     SG_OK = Chip_GPDMA_SGTransfer (LPC_GPDMA , CanalDAC ,&DMA_NLI_buffer , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA);
@@ -531,11 +528,8 @@ int main(void)
     if (debugging == ENABLED)
         DEBUGOUT("Potenciostato UTN FRA\r\n");
 
-    ADCSemMtx = xSemaphoreCreateMutex();
-    DACSemMtx = xSemaphoreCreateMutex();
-
-    vSemaphoreCreateBinary(sBufferADC);
-    xSemaphoreTake(sBufferADC, ( portTickType ) 10 );
+    vSemaphoreCreateBinary(sDACncic);
+    xSemaphoreTake(sDACncic, ( portTickType ) 10 );
 
     qUSBin = xQueueCreate( TAMANIO_MAX_COLA, sizeof( uint8_t )* LARGO_MENSAJE);
     qUSBout = xQueueCreate( TAMANIO_MAX_COLA, sizeof( uint8_t ) * LARGO_MENSAJE);
