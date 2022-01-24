@@ -55,8 +55,8 @@
 
 // Defines ADC
 
-#define CANAL_CORRIENTE		ADC_CH1
-#define CANAL_TENSION		ADC_CH0
+#define CANAL_CORRIENTE		ADC_CH0
+#define CANAL_TENSION		ADC_CH1
 
 #define ADC_SAMPL_FREC      50000
 #define ADC_N_COLA 			1 //se pone 1 medicion (punto) por cada mensaje de USB

@@ -191,24 +191,44 @@ void MainWindow::onTimeout(){
             qDebug() << "Tension: " << recv_data[5] << recv_data[4];
             qDebug() << "Bytes libres: " << recv_data[7] << recv_data[6];
 
-            cuentas_corriente = ((recv_data[3] << 8) | (recv_data[2]));
-            cuentas_tension = ((recv_data[5] << 8) | (recv_data[4]));
-            qDebug() << "Cuentas corriente: " << cuentas_corriente;
-            qDebug() << "Cuentas tension: " << cuentas_tension;
+            if (recv_data[0] == OC_SENDDATA){ //si hay datos
+                cuentas_corriente = ((recv_data[3] << 8) | (recv_data[2]));
+                cuentas_tension = ((recv_data[5] << 8) | (recv_data[4]));
+                qDebug() << "Cuentas corriente: " << cuentas_corriente;
+                qDebug() << "Cuentas tension: " << cuentas_tension;
 
-            volts_corriente = (cuentas_corriente * ADC_CORRIENTE_MAX) / pow(2,ADC_CORRIENTE_BITS) / 10;
-            volts_tension = (cuentas_tension * ADC_TENSION_MAX) / pow(2,ADC_TENSION_BITS) / 10;
-            qDebug() << "Corriente [V]: " << volts_corriente;
-            qDebug() << "Tension [V]: " << volts_tension;
+                volts_corriente = (cuentas_corriente * ADC_CORRIENTE_MAX) / pow(2,ADC_CORRIENTE_BITS) / 10;
+                volts_tension = (cuentas_tension * ADC_TENSION_MAX) / pow(2,ADC_TENSION_BITS) / 10;
+                qDebug() << "Corriente [V]: " << volts_corriente;
+                qDebug() << "Tension [V]: " << volts_tension;
 
 
-            puntosX[p_refresco] = volts_tension; //ANTES: el rango en el grafico va desde 0 a 1
-            puntosY[p_refresco] = volts_corriente; //ANTES: el rango en el grafico va desde 0 a 3
+                puntosX[p_refresco] = volts_tension; //ANTES: el rango en el grafico va desde 0 a 1
+                puntosY[p_refresco] = volts_corriente; //ANTES: el rango en el grafico va desde 0 a 3
 
-            //TODO: si no hay mas datos esperar un tiempo para pedir
-            //if (recv_data[0] == OC_SENDDATA_ERR){
-            //APLICAR RETARDO
-            //}
+                //TODO: si no hay mas datos esperar un tiempo para pedir
+                //if (recv_data[0] == OC_SENDDATA_ERR){
+                //APLICAR RETARDO
+                //}
+            }
+            if (recv_data[0] == OC_SENDDATAEND){ //si termino la medicion
+                //Se termina la medición
+                qDebug() << "Termino la medicion";
+                medicion_habilitada = 0;
+                MainWindow::terminoMedicion();
+                if (demostracion == false){
+                    p_refresco = 0;
+                    medicion_habilitada = 0;
+                    for(int i=0; i<CANT_VALORES; i++){
+                        puntosX[i] = 0;
+                        puntosY[i] = 0;
+                    }
+                }
+                if (demostracion == true){
+                    p_refresco = 0;
+                    medicion_habilitada = 0;
+                }
+            }
 
         }
     }
@@ -312,8 +332,8 @@ void MainWindow::inicializarGraficos(int curva){
     ui->customPlot->xAxis->setLabel("Tension [V]");
     ui->customPlot->yAxis->setLabel("Corriente [uA]");
     // se puede especificar el rango fijo
-    ui->customPlot->xAxis->setRange(0.5, 1.0);
-    ui->customPlot->yAxis->setRange(0, 40);
+    ui->customPlot->xAxis->setRange(0, 3.0);
+    ui->customPlot->yAxis->setRange(0, 50);
 
     // hace que los ejes escalen automaticamente
     ui->customPlot->graph(curva)->rescaleAxes();

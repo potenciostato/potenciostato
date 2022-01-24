@@ -123,7 +123,7 @@ static ErrorCode_t HID_Ep_Hdlr(USBD_HANDLE_T hUsb, void *data, uint32_t event)
 {
 	USB_HID_CTRL_T *pHidCtrl = (USB_HID_CTRL_T *) data;
 
-	uint8_t i, mensaje[8]={0};
+	uint8_t i, mensaje[8]={0}, mensajein[8]={0};
 	uint8_t respuesta[8]={0};
 	struct USBmsj medicion;
 
@@ -152,24 +152,33 @@ static ErrorCode_t HID_Ep_Hdlr(USBD_HANDLE_T hUsb, void *data, uint32_t event)
 		switch (mensaje[0]){
 			// si el codigo de operacion recibido coincide con el de recibir datos
 			case OC_SENDDATA:
-				if(xQueueReceiveFromISR( qADCsend, &medicion, &xHigherPriorityTaskWoken) == pdFAIL) {
-					if (debugging == ENABLED)
-						DEBUGOUT("INT: NO HAY DATOS PARA MANDAR\n");
-					respuesta[0] = OC_SENDDATA_ERR;
-					for (i = 1; i < 8; i ++){
-						respuesta[i] = 0x0;
+				if(xQueueReceiveFromISR( qUSBin, &mensajein, &xHigherPriorityTaskWoken) != pdFAIL) {
+					if (mensajein[0] == OC_SENDDATAEND){
+						respuesta[0] = OC_SENDDATAEND;
+						for (i = 1; i < 8; i ++){
+							respuesta[i] = 0x0;
+						}
 					}
-				} else {
-					if (debugging == ENABLED)
-						DEBUGOUT("INT: SEND DATA\n");
-					respuesta[0] = OC_SENDDATA;
-					respuesta[1] = 0x0;
-					respuesta[2] = (medicion.corriente & 0xFF);
-					respuesta[3] = ((medicion.corriente >> 8) & 0xFF);
-					respuesta[4] = (medicion.tension & 0xFF);
-					respuesta[5] = ((medicion.tension >> 8) & 0xFF);
-					respuesta[6] = 0x0;
-					respuesta[7] = 0x0;
+				}else{
+					if(xQueueReceiveFromISR( qADCsend, &medicion, &xHigherPriorityTaskWoken) == pdFAIL) {
+						if (debugging == ENABLED)
+							DEBUGOUT("INT: NO HAY DATOS PARA MANDAR\n");
+						respuesta[0] = OC_SENDDATA_ERR;
+						for (i = 1; i < 8; i ++){
+							respuesta[i] = 0x0;
+						}
+					} else {
+						if (debugging == ENABLED)
+							DEBUGOUT("INT: SEND DATA\n");
+						respuesta[0] = OC_SENDDATA;
+						respuesta[1] = 0x0;
+						respuesta[2] = (medicion.corriente & 0xFF);
+						respuesta[3] = ((medicion.corriente >> 8) & 0xFF);
+						respuesta[4] = (medicion.tension & 0xFF);
+						respuesta[5] = ((medicion.tension >> 8) & 0xFF);
+						respuesta[6] = 0x0;
+						respuesta[7] = 0x0;
+					}
 				}
 				USBD_API->hw->WriteEP(hUsb, pHidCtrl->epin_adr, respuesta, 8);
 				break;

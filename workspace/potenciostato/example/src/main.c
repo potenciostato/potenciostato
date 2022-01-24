@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 //Para habilitar (o no) imprimir por consola
-bool debugging = ENABLED;
+bool debugging = DISABLED;
 
 extern ADC_CLOCK_SETUP_T ADCSetup;
 
@@ -308,10 +308,10 @@ static void vUSBTask(void *pvParameters) {
                 xQueueReset( qUSBin );
 
                 // Se limpian las configuraciones
-                conf_dac.mode = BARRIDO_CICLICO;
-                conf_dac.frec = 1000;
-				conf_dac.amp = 255;
-                conf_adc.frec = 10;
+                //conf_dac.mode = BARRIDO_CICLICO;
+                //conf_dac.frec = 1000;
+				//conf_dac.amp = 255;
+                //conf_adc.frec = 10;
 
                 // Se deshabilitan DAC y ADC
                 conf_dac.set = false;
@@ -356,6 +356,9 @@ static void vDACTask(void *pvParameters) {
     uint16_t AMPLITUD = 0, AMPLITUD_DIV = 255, MODO = 2;
     uint32_t FREC = 0;
     uint32_t CLOCK_DAC_HZ, timeoutDMA;
+
+    uint8_t respuesta[8]={0};
+
     struct DACmsj conf;
 
     // Config DAC DMA
@@ -403,10 +406,6 @@ static void vDACTask(void *pvParameters) {
             Chip_GPDMA_Stop(LPC_GPDMA, CanalDAC);
             AMPLITUD = 0; // fuerza a que cuando cambie el modo verifique la tabla de salida
             DACset = false;
-            if (conf.mode == BARRIDO_CICLICO){
-                Chip_GPDMA_PrepareDescriptor ( LPC_GPDMA , &DMA_LLI_buffer  , (uint32_t) tabla_salida ,
-                                                GPDMA_CONN_DAC , DMA_SIZE , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA , 0);
-            }
             if (conf.mode == BARRIDO_LINEAL){
                 Chip_GPDMA_PrepareDescriptor ( LPC_GPDMA , &DMA_NLI_buffer  , (uint32_t) tabla_salida ,
                                                 GPDMA_CONN_DAC , DMA_SIZE , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA , 0 );
@@ -430,12 +429,36 @@ static void vDACTask(void *pvParameters) {
             DACset = conf.set;
             if(DACset){
                 if (conf.mode == BARRIDO_CICLICO) {
-                	for(i=0;i<conf.ncic;i++) {
-                		Board_LED_Toggle(0);
+                	if (conf.ncic == 0){
+                        Chip_GPDMA_PrepareDescriptor ( LPC_GPDMA , &DMA_LLI_buffer  , (uint32_t) tabla_salida ,
+                                                         GPDMA_CONN_DAC , DMA_SIZE , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA , &DMA_LLI_buffer);
                 		SG_OK = Chip_GPDMA_SGTransfer (LPC_GPDMA , CanalDAC ,&DMA_LLI_buffer , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA);
-                		xSemaphoreTake(sDACncic, ( portTickType ) portMAX_DELAY);
-                	}
+                		Board_LED_Set(0,false);
+                	}else{
+                        Chip_GPDMA_PrepareDescriptor ( LPC_GPDMA , &DMA_LLI_buffer  , (uint32_t) tabla_salida ,
+                                                            GPDMA_CONN_DAC , DMA_SIZE , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA , 0);
+                    	for(i=0;i<conf.ncic;i++) {
+                    		Board_LED_Toggle(0);
+                    		SG_OK = Chip_GPDMA_SGTransfer (LPC_GPDMA , CanalDAC ,&DMA_LLI_buffer , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA);
+                    		xSemaphoreTake(sDACncic, ( portTickType ) portMAX_DELAY);
+                    	}
 
+                    	//Se envía el término de medición
+
+    					if (debugging == ENABLED)
+    						DEBUGOUT("INT: SEND DATA END\n");
+    					respuesta[0] = OC_SENDDATAEND;
+    					respuesta[1] = 0x0;
+    					respuesta[2] = 0x0;
+    					respuesta[3] = 0x0;
+    					respuesta[4] = 0x0;
+    					respuesta[5] = 0x0;
+    					respuesta[6] = 0x0;
+    					respuesta[7] = 0x0;
+                    	xQueueSendToBack(qUSBin,&respuesta,0);
+
+
+                	}
                 }
                 if (conf.mode == BARRIDO_LINEAL) {
                     SG_OK = Chip_GPDMA_SGTransfer (LPC_GPDMA , CanalDAC ,&DMA_NLI_buffer , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA);
