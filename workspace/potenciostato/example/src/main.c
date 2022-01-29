@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 //Para habilitar (o no) imprimir por consola
-bool debugging = DISABLED;
+bool debugging = ENABLED;
 
 extern ADC_CLOCK_SETUP_T ADCSetup;
 
@@ -72,6 +72,8 @@ struct USBmsj {
 };
 
 
+uint8_t midiendo=false;
+
 // OBJETOS FreeRTOS
 
 xSemaphoreHandle sDACncic;
@@ -107,23 +109,25 @@ void USB_IRQHandler(void){
     int countADCsend = uxQueueMessagesWaiting( qADCsend );
     int countUSBin = uxQueueMessagesWaiting( qUSBin );
     int countUSBout = uxQueueMessagesWaiting( qUSBout );
+
 }
 
 void ADC_IRQHandler(void){
     uint32_t dataADC;
     uint16_t valorADC;
+    int error;
     static signed portBASE_TYPE xHigherPriorityTaskWoken;
     xHigherPriorityTaskWoken = pdFALSE;
     NVIC_DisableIRQ(ADC_IRQn);
     if (Chip_ADC_ReadStatus(LPC_ADC,CANAL_CORRIENTE,ADC_DR_ADINT_STAT)){
         Chip_ADC_ReadValue(LPC_ADC, CANAL_CORRIENTE, &dataADC);
         valorADC = ADC_DR_RESULT(dataADC);
-        xQueueSendToBackFromISR( qADCcorriente, &valorADC, &xHigherPriorityTaskWoken );
+        error = xQueueSendToBackFromISR( qADCcorriente, &valorADC, &xHigherPriorityTaskWoken );
     }
     if (Chip_ADC_ReadStatus(LPC_ADC,CANAL_TENSION,ADC_DR_ADINT_STAT)){
         Chip_ADC_ReadValue(LPC_ADC, CANAL_TENSION, &dataADC);
         valorADC = ADC_DR_RESULT(dataADC);
-        xQueueSendToBackFromISR( qADCtension, &valorADC, &xHigherPriorityTaskWoken );
+        error = xQueueSendToBackFromISR( qADCtension, &valorADC, &xHigherPriorityTaskWoken );
     }
     portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 }
@@ -200,12 +204,13 @@ static void vInicializarUSB(void *pvParameters) {
 static void vUSBTask(void *pvParameters) {
 
     uint8_t lecturaQT[8]={0};
-    int i;
+    int i, error;
     struct DACmsj conf_dac = {true, BARRIDO_CICLICO, 1000, 255}; //estado del modulo, frecuencia[Hz], amplitud[V]
     struct ADCmsj conf_adc = {true,10}; //estado del modulo, frecuencia[Hz], amplitud[V]
-    uint8_t midiendo=false;
 
     int countADCsend, countUSBin, countUSBout;
+
+    midiendo=false;
 
     //Solo para pruebas
     //  xQueueSendToBack(qDAC,&conf_dac,0);
@@ -225,9 +230,11 @@ static void vUSBTask(void *pvParameters) {
         switch(lecturaQT[0])
         {
             case OC_INITMEASUREMENTLINEAL:
-                if (midiendo == true){
-                    break;
-                }
+                //if (midiendo == true){
+                //    break;
+                //}
+
+                //midiendo = true; //se setea en true, pero esto primero se hace desde hid_generic.c
                 /*
                  * 1)Habilito int del DAC
                  * 2)Habilito int del ADC
@@ -237,7 +244,6 @@ static void vUSBTask(void *pvParameters) {
                 if (debugging == ENABLED)
                     DEBUGOUT("USB: Habilito DAC & ADC\n");
 
-                //Todo tomar la config del init del QT
                 // Se habilitan DAC y ADC
 
                 /*struct DACmsj {
@@ -253,16 +259,18 @@ static void vUSBTask(void *pvParameters) {
                 conf_dac.amp = lecturaQT[2];
 
                 conf_adc.set = true;
-                xQueueSendToBack(qDAC,&conf_dac,0);
-                xQueueSendToBack(qADC,&conf_adc,0);
+                error = xQueueSendToBack(qDAC,&conf_dac,0);
+                error = xQueueSendToBack(qADC,&conf_adc,0);
 
-                midiendo = true;
                 break;
 
             case OC_INITMEASUREMENTCYCLICAL:
-                if (midiendo == true){
-                    break;
-                }
+                //if (midiendo == true){
+                //    break;
+                //}
+
+                //midiendo = true; //se setea en true, pero esto primero se hace desde hid_generic.c
+
                 /*
                  * 1)Habilito int del DAC
                  * 2)Habilito int del ADC
@@ -283,29 +291,20 @@ static void vUSBTask(void *pvParameters) {
 
                 conf_adc.set = true;
 
-                xQueueSendToBack(qDAC,&conf_dac,0);
-                xQueueSendToBack(qADC,&conf_adc,0);
+                error = xQueueSendToBack(qDAC,&conf_dac,0);
+                error = xQueueSendToBack(qADC,&conf_adc,0);
 
-                midiendo = true;
                 break;
 
             case OC_ABORTMEASUREMENT:
-                if (midiendo == false){
-                    break;
-                }
+                //if (midiendo == false){
+                //    break;
+                //}
 
                 // Deshabilito int del DAC & ADC
                 if (debugging == ENABLED)
                     DEBUGOUT("USB: Deshabilito DAC & ADC\n");
                 midiendo = false;
-
-                // Se limpian las colas de las mediciones
-                if (debugging == ENABLED)
-                    DEBUGOUT("USB: Se limpian las colas\n");
-                xQueueReset( qADCsend );
-                xQueueReset( qADCcorriente );
-                xQueueReset( qADCtension );
-                xQueueReset( qUSBin );
 
                 // Se limpian las configuraciones
                 //conf_dac.mode = BARRIDO_CICLICO;
@@ -316,9 +315,19 @@ static void vUSBTask(void *pvParameters) {
                 // Se deshabilitan DAC y ADC
                 conf_dac.set = false;
                 conf_adc.set = false;
-                xQueueSendToBack(qDAC,&conf_dac,0);
-                xQueueSendToBack(qADC,&conf_adc,0);
+                error = xQueueSendToBack(qDAC,&conf_dac,0);
+                error = xQueueSendToBack(qADC,&conf_adc,0);
 
+                break;
+
+            case OC_ENDMEASUREMENT:
+                // Se limpian las colas de las mediciones
+                if (debugging == ENABLED)
+                    DEBUGOUT("USB: Se limpian las colas\n");
+                xQueueReset( qADCsend );
+                xQueueReset( qADCcorriente );
+                xQueueReset( qADCtension );
+                xQueueReset( qUSBin );
                 break;
 
             case 30:
@@ -360,6 +369,8 @@ static void vDACTask(void *pvParameters) {
     uint8_t respuesta[8]={0};
 
     struct DACmsj conf;
+
+    int error;
 
     // Config DAC DMA
     CLOCK_DAC_HZ = Chip_Clock_GetSystemClockRate()/8;
@@ -446,8 +457,8 @@ static void vDACTask(void *pvParameters) {
                     	//Se envía el término de medición
 
     					if (debugging == ENABLED)
-    						DEBUGOUT("INT: SEND DATA END\n");
-    					respuesta[0] = OC_SENDDATAEND;
+    						DEBUGOUT("INT: CYCLE END\n");
+    					respuesta[0] = OC_CYCLEEND;
     					respuesta[1] = 0x0;
     					respuesta[2] = 0x0;
     					respuesta[3] = 0x0;
@@ -455,7 +466,7 @@ static void vDACTask(void *pvParameters) {
     					respuesta[5] = 0x0;
     					respuesta[6] = 0x0;
     					respuesta[7] = 0x0;
-                    	xQueueSendToBack(qUSBin,&respuesta,0);
+    					error = xQueueSendToBack(qUSBin,&respuesta,portMAX_DELAY);
 
                     	// Aquí el Qt debera enviar un Abort
 
@@ -484,6 +495,7 @@ static void vADCTask(void *pvParameters) {
     struct ADCmsj conf;
     //uint16_t ADCbuffer[ADC_N_COLA];
     struct USBmsj msjUSB;
+    int error;
 
     NVIC_EnableIRQ(ADC_IRQn);
 
@@ -515,7 +527,10 @@ static void vADCTask(void *pvParameters) {
 
                 msjUSB.corriente = corrienteADC;
                 msjUSB.tension = tensionADC;
-                xQueueSendToBack(qADCsend, &msjUSB, 10);
+                error = xQueueSendToBack(qADCsend, &msjUSB, 0); // pdTRUE (1) if the item was successfully posted, otherwise errQUEUE_FULL (0)
+
+                // Conteos para debugging
+                int countADCsend = uxQueueMessagesWaiting( qADCsend );
 
                 if (debugging == ENABLED)
                     DEBUGOUT("ADC: ADC Send\n");
@@ -556,13 +571,13 @@ int main(void)
     vSemaphoreCreateBinary(sDACncic);
     xSemaphoreTake(sDACncic, ( portTickType ) 10 );
 
-    qUSBin = xQueueCreate( TAMANIO_MAX_COLA, sizeof( uint8_t )* LARGO_MENSAJE);
-    qUSBout = xQueueCreate( TAMANIO_MAX_COLA, sizeof( uint8_t ) * LARGO_MENSAJE);
+    qUSBin = xQueueCreate( TAMANIO_MAX_COLA_USB, sizeof( uint8_t )* LARGO_MENSAJE);
+    qUSBout = xQueueCreate( TAMANIO_MAX_COLA_USB, sizeof( uint8_t ) * LARGO_MENSAJE);
     qDAC = xQueueCreate( 1, sizeof( struct DACmsj ));
     qADC = xQueueCreate( 1, sizeof( struct ADCmsj ));
     qADCcorriente = xQueueCreate(ADC_N_COLA, sizeof( uint16_t ));
     qADCtension = xQueueCreate(ADC_N_COLA, sizeof( uint16_t ));
-    qADCsend = xQueueCreate(1, sizeof( struct USBmsj ) * ADC_N_COLA);
+    qADCsend = xQueueCreate(TAMANIO_MAX_COLA_ADC, sizeof( struct USBmsj ) * ADC_N_COLA);
 
     prvSetupHardware();
 

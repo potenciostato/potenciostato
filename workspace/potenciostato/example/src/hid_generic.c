@@ -66,6 +66,7 @@ extern const uint8_t HID_ReportDescriptor[];
 extern const uint16_t HID_ReportDescSize;
 
 extern xQueueHandle qADCsend, qUSBin, qUSBout;
+extern midiendo;
 
 struct USBmsj {
 	uint16_t corriente;
@@ -153,21 +154,34 @@ static ErrorCode_t HID_Ep_Hdlr(USBD_HANDLE_T hUsb, void *data, uint32_t event)
 			// si el codigo de operacion recibido coincide con el de recibir datos
 			case OC_SENDDATA:
 				if(xQueueReceiveFromISR( qUSBin, &mensajein, &xHigherPriorityTaskWoken) != pdFAIL) {
-					if (mensajein[0] == OC_SENDDATAEND){
-						respuesta[0] = OC_SENDDATAEND;
+					if (mensajein[0] == OC_CYCLEEND){
+						if (debugging == ENABLED)
+							DEBUGOUT("INT: CYCLE END\n");
+						respuesta[0] = OC_CYCLEEND;
 						for (i = 1; i < 8; i ++){
 							respuesta[i] = 0x0;
 						}
 					}
 				}else{
 					if(xQueueReceiveFromISR( qADCsend, &medicion, &xHigherPriorityTaskWoken) == pdFAIL) {
-						if (debugging == ENABLED)
-							DEBUGOUT("INT: NO HAY DATOS PARA MANDAR\n");
-						respuesta[0] = OC_SENDDATA_ERR;
+						if (midiendo == true){
+							if (debugging == ENABLED)
+								DEBUGOUT("INT: NO HAY DATOS PARA MANDAR\n");
+							respuesta[0] = OC_SENDDATA_ERR;
+						}
+						if (midiendo == false){
+							if (debugging == ENABLED)
+								DEBUGOUT("INT: Termino la medicion y no hay mas datos \n");
+							respuesta[0] = OC_SENDDATAEND;
+						}
 						for (i = 1; i < 8; i ++){
 							respuesta[i] = 0x0;
 						}
 					} else {
+						// Si hay datos para mandar, mandarlos
+
+		                // Conteos para debugging
+		                int countADCsend = uxQueueMessagesWaitingFromISR( qADCsend );
 						if (debugging == ENABLED)
 							DEBUGOUT("INT: SEND DATA\n");
 						respuesta[0] = OC_SENDDATA;
@@ -184,7 +198,9 @@ static ErrorCode_t HID_Ep_Hdlr(USBD_HANDLE_T hUsb, void *data, uint32_t event)
 				break;
 			case OC_INITMEASUREMENTLINEAL:
 			case OC_INITMEASUREMENTCYCLICAL:
+				midiendo = true;
 			case OC_ABORTMEASUREMENT:
+			case OC_ENDMEASUREMENT:
 				xQueueSendToBackFromISR( qUSBout, &mensaje, &xHigherPriorityTaskWoken );
 				respuesta[0] = mensaje[0]; //el ACK sera el codigo de operacion recibido y nada mas
 				for (i = 0; i < 7; i ++){

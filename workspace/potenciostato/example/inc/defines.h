@@ -51,28 +51,31 @@
 #define FREC_TIMER          80
 
 #define BARRIDO_CICLICO 	0
-#define BARRIDO_LINEAL 		1
+#define BARRIDO_LINEAL 			1
 
 // Defines ADC
 
-#define CANAL_CORRIENTE		ADC_CH0
-#define CANAL_TENSION		ADC_CH1
+#define CANAL_CORRIENTE			ADC_CH0
+#define CANAL_TENSION			ADC_CH1
 
-#define ADC_SAMPL_FREC      50000
-#define ADC_N_COLA 			1 //se pone 1 medicion (punto) por cada mensaje de USB
-#define TAMANIO_MAX_COLA	100
-#define LARGO_MENSAJE		8 //igual a la cantidad de bytes de los reports de entrada y de salida de USB
+#define ADC_SAMPL_FREC      	50000
+#define ADC_N_COLA 				1 //se pone 1 medicion (punto) por cada mensaje de USB
+#define TAMANIO_MAX_COLA_ADC 	100 //cantidad maxima de mediciones (puntos) en la cola ADC
+#define TAMANIO_MAX_COLA_USB	100 //cantidad maxima de mensajes en la cola USB
+#define LARGO_MENSAJE			8 //igual a la cantidad de bytes de los reports de entrada y de salida de USB
 
 #define ADC_DR_RESULT(n)        (((n) & 0xFFF))
 
 // Definiciones de los códigos de operación
-#define OC_INITMEASUREMENTLINEAL 0xA1
-#define OC_INITMEASUREMENTCYCLICAL 0xA2
-#define OC_ABORTMEASUREMENT 0xB
-#define OC_SENDDATA 0xC
-#define OC_SENDDATAEND 0xD
-#define OC_ACK 0xE
-#define OC_SENDDATA_ERR 0xF
+#define OC_INITMEASUREMENTLINEAL 	0xA1
+#define OC_INITMEASUREMENTCYCLICAL 	0xA2
+#define OC_ABORTMEASUREMENT 		0xB1
+#define OC_ENDMEASUREMENT 			0xB2
+#define OC_SENDDATA 				0xC
+#define OC_CYCLEEND 				0xD1
+#define OC_SENDDATAEND 				0xD2
+#define OC_ACK 						0xE
+#define OC_SENDDATA_ERR 			0xF
 
 // Defines llaves
 #define SW_I_GAIN1 1
