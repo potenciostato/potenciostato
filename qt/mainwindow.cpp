@@ -213,21 +213,9 @@ void MainWindow::onTimeout(){
             }
             if (recv_data[0] == OC_SENDDATAEND){ //si termino la medicion
                 //Se termina la medición
-                qDebug() << "Termino la medicion";
-                medicion_habilitada = 0;
-                MainWindow::terminoMedicion();
-                if (demostracion == false){
-                    p_refresco = 0;
-                    medicion_habilitada = 0;
-                    for(int i=0; i<CANT_VALORES; i++){
-                        puntosX[i] = 0;
-                        puntosY[i] = 0;
-                    }
-                }
-                if (demostracion == true){
-                    p_refresco = 0;
-                    medicion_habilitada = 0;
-                }
+                qDebug() << "INFO: OC_SENDDATAEND recibido";
+                qDebug() << "INFO: Termino la medición => se procederá a abortar la medición";
+                MainWindow::forzarAbortar();
             }
 
         }
@@ -527,54 +515,7 @@ void MainWindow::on_Bt_IniciarCiclico_clicked()
 
 void MainWindow::on_Bt_Abortar_clicked()
 {
-    qDebug() << "Abortar Medición";
-    //Deshabilita Abortar
-    ui->Bt_Abortar->setEnabled(false);
-
-    //Se envia abortar la medición al LPC
-    //envio....
-    //se queda esperando al Recibido
-    // si llega recibido OK continuar
-
-    unsigned char buffer[8] = {0x0};
-    unsigned char recv_data[8] = {0x0};
-    int len;
-    int send_ret, recv_ret;
-
-    //Se envia inicio de medición al LPC
-    //envio....
-    //se queda esperando al Recibido
-    // si llega recibido OK continuar
-
-    //se enviara un INIT MEASUREMENT
-    buffer[0] = OC_ABORTMEASUREMENT;
-
-    send_ret = libusb_interrupt_transfer(dev_handle, 0x01, buffer, (sizeof(buffer)) * 8, &len, 1000);
-    recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * 8, &len, 1000);
-    //int recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * 64, &len, 1000);
-
-    qDebug() << "codigo envio" << send_ret;
-    qDebug() << "dato enviado" << buffer[0];
-    qDebug() << "codigo recepcion" << recv_ret;
-    qDebug() << "dato recibido[0]" << recv_data[0];
-
-    //Se termina la medición
-    qDebug() << "Termino la medicion";
-    medicion_habilitada = 0;
-    MainWindow::terminoMedicion();
-    if (demostracion == false){
-        p_refresco = 0;
-        medicion_habilitada = 0;
-        for(int i=0; i<CANT_VALORES; i++){
-            puntosX[i] = 0;
-            puntosY[i] = 0;
-        }
-    }
-    if (demostracion == true){
-        p_refresco = 0;
-        medicion_habilitada = 0;
-    }
-
+    MainWindow::forzarAbortar();
 }
 
 void MainWindow::on_Bt_Capturar_clicked()
@@ -789,7 +730,58 @@ void MainWindow::help()
 }
 
 
+void MainWindow::forzarAbortar()
+{
 
+    qDebug() << "Abortar Medición";
+    //Deshabilita Abortar
+    ui->Bt_Abortar->setEnabled(false);
+
+    //Se envia abortar la medición al LPC
+    //envio....
+    //se queda esperando al Recibido
+    // si llega recibido OK continuar
+
+    unsigned char buffer[8] = {0x0};
+    unsigned char recv_data[8] = {0x0};
+    int len;
+    int send_ret, recv_ret;
+
+    //Se envia inicio de medición al LPC
+    //envio....
+    //se queda esperando al Recibido
+    // si llega recibido OK continuar
+
+    //se enviara un INIT MEASUREMENT
+    buffer[0] = OC_ABORTMEASUREMENT;
+
+    send_ret = libusb_interrupt_transfer(dev_handle, 0x01, buffer, (sizeof(buffer)) * 8, &len, 1000);
+    recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * 8, &len, 1000);
+    //int recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * 64, &len, 1000);
+
+    qDebug() << "codigo envio" << send_ret;
+    qDebug() << "dato enviado" << buffer[0];
+    qDebug() << "codigo recepcion" << recv_ret;
+    qDebug() << "dato recibido[0]" << recv_data[0];
+
+    //Se termina la medición
+    qDebug() << "Termino la medicion";
+    medicion_habilitada = 0;
+    MainWindow::terminoMedicion();
+    if (demostracion == false){
+        p_refresco = 0;
+        medicion_habilitada = 0;
+        for(int i=0; i<CANT_VALORES; i++){
+            puntosX[i] = 0;
+            puntosY[i] = 0;
+        }
+    }
+    if (demostracion == true){
+        p_refresco = 0;
+        medicion_habilitada = 0;
+    }
+
+}
 
 
 /* -------------------- FUNCIONES DEPRECADAS -------------------- */

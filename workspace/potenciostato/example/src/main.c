@@ -457,6 +457,8 @@ static void vDACTask(void *pvParameters) {
     					respuesta[7] = 0x0;
                     	xQueueSendToBack(qUSBin,&respuesta,0);
 
+                    	// Aquí el Qt debera enviar un Abort
+
 
                 	}
                 }

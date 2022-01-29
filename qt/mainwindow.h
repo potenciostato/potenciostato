@@ -40,6 +40,8 @@ private slots:
     void terminoMedicion();
     void desconectarUSB();
 
+    void forzarAbortar();
+
     void on_Bt_IniciarCiclico_clicked();
     void on_Bt_FTCiclico_clicked();
 

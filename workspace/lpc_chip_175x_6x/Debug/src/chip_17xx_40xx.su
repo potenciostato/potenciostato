@@ -1,4 +1,4 @@
-D:\UTN\Proyecto Final\drive\desarrollo\software\repo\proyecto-final\workspace\lpc_chip_175x_6x\inc/clock_17xx_40xx.h:159:20:Chip_Clock_IsUSBPLLLocked	4	static
-D:\UTN\Proyecto Final\drive\desarrollo\software\repo\proyecto-final\workspace\lpc_chip_175x_6x\inc/clock_17xx_40xx.h:182:20:Chip_Clock_IsUSBPLLConnected	4	static
+C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/clock_17xx_40xx.h:159:20:Chip_Clock_IsUSBPLLLocked	4	static
+C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/clock_17xx_40xx.h:182:20:Chip_Clock_IsUSBPLLConnected	4	static
 ../src/chip_17xx_40xx.c:55:6:SystemCoreClockUpdate	8	static
 ../src/chip_17xx_40xx.c:64:6:Chip_USB_Init	8	static

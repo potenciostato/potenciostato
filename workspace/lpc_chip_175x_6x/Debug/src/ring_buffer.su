@@ -1,7 +1,7 @@
-D:\UTN\Proyecto Final\drive\desarrollo\software\repo\proyecto-final\workspace\lpc_chip_175x_6x\inc/ring_buffer.h:103:19:RingBuffer_GetCount	16	static
-D:\UTN\Proyecto Final\drive\desarrollo\software\repo\proyecto-final\workspace\lpc_chip_175x_6x\inc/ring_buffer.h:113:19:RingBuffer_GetFree	24	static
-D:\UTN\Proyecto Final\drive\desarrollo\software\repo\proyecto-final\workspace\lpc_chip_175x_6x\inc/ring_buffer.h:123:19:RingBuffer_IsFull	16	static
-D:\UTN\Proyecto Final\drive\desarrollo\software\repo\proyecto-final\workspace\lpc_chip_175x_6x\inc/ring_buffer.h:133:19:RingBuffer_IsEmpty	16	static
+C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/ring_buffer.h:103:19:RingBuffer_GetCount	16	static
+C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/ring_buffer.h:113:19:RingBuffer_GetFree	24	static
+C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/ring_buffer.h:123:19:RingBuffer_IsFull	16	static
+C:\Users\Gus\Desktop\proyecto-final\workspace\lpc_chip_175x_6x\inc/ring_buffer.h:133:19:RingBuffer_IsEmpty	16	static
 ../src/ring_buffer.c:55:5:RingBuffer_Init	24	static
 ../src/ring_buffer.c:66:5:RingBuffer_Insert	24	static
 ../src/ring_buffer.c:82:5:RingBuffer_InsertMult	40	static
