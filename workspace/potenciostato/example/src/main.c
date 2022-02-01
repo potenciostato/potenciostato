@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 //Para habilitar (o no) imprimir por consola
-bool debugging = ENABLED;
+bool debugging = DISABLED;
 
 extern ADC_CLOCK_SETUP_T ADCSetup;
 
@@ -106,9 +106,9 @@ void USB_IRQHandler(void){
     //Todo: poner un mensaje cuando se logra conectar correctamente
 
     // Conteos para debugging
-    int countADCsend = uxQueueMessagesWaiting( qADCsend );
-    int countUSBin = uxQueueMessagesWaiting( qUSBin );
-    int countUSBout = uxQueueMessagesWaiting( qUSBout );
+    //int countADCsend = uxQueueMessagesWaiting( qADCsend );
+    //int countUSBin = uxQueueMessagesWaiting( qUSBin );
+    //int countUSBout = uxQueueMessagesWaiting( qUSBout );
 
 }
 
@@ -205,12 +205,10 @@ static void vUSBTask(void *pvParameters) {
 
     uint8_t lecturaQT[8]={0};
     int i, error;
-    struct DACmsj conf_dac = {true, BARRIDO_CICLICO, 1000, 255}; //estado del modulo, frecuencia[Hz], amplitud[V]
-    struct ADCmsj conf_adc = {true,10}; //estado del modulo, frecuencia[Hz], amplitud[V]
+    struct DACmsj conf_dac = {false, BARRIDO_CICLICO, 1000, 255}; //estado del modulo, frecuencia[Hz], amplitud[V]
+    struct ADCmsj conf_adc = {false,10}; //estado del modulo, frecuencia[Hz], amplitud[V]
 
     int countADCsend, countUSBin, countUSBout;
-
-    midiendo=false;
 
     //Solo para pruebas
     //  xQueueSendToBack(qDAC,&conf_dac,0);
@@ -304,7 +302,7 @@ static void vUSBTask(void *pvParameters) {
                 // Deshabilito int del DAC & ADC
                 if (debugging == ENABLED)
                     DEBUGOUT("USB: Deshabilito DAC & ADC\n");
-                midiendo = false;
+                //midiendo = false; //esto se hace desde el handler de USB en hid_generic.c
 
                 // Se limpian las configuraciones
                 //conf_dac.mode = BARRIDO_CICLICO;
@@ -449,7 +447,7 @@ static void vDACTask(void *pvParameters) {
                         Chip_GPDMA_PrepareDescriptor ( LPC_GPDMA , &DMA_LLI_buffer  , (uint32_t) tabla_salida ,
                                                             GPDMA_CONN_DAC , DMA_SIZE , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA , 0);
                     	for(i=0;i<conf.ncic;i++) {
-                    		Board_LED_Toggle(0);
+                    		//Board_LED_Toggle(0);
                     		SG_OK = Chip_GPDMA_SGTransfer (LPC_GPDMA , CanalDAC ,&DMA_LLI_buffer , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA);
                     		xSemaphoreTake(sDACncic, ( portTickType ) portMAX_DELAY);
                     	}
@@ -514,11 +512,16 @@ static void vADCTask(void *pvParameters) {
             if (debugging == ENABLED)
                 DEBUGOUT("ADC: Habilita medicion ADC\n");
 
+            xQueueReset( qADCsend );
+            xQueueReset( qADCcorriente );
+            xQueueReset( qADCtension );
+
             NVIC_EnableIRQ(ADC_IRQn);
         	Chip_ADC_SetBurstCmd(LPC_ADC, ENABLE);
 
             i = 0;
             while (conf.set){
+            	Board_LED_Toggle(0);
 
                 xQueueReceive(qADCcorriente,&corrienteADC,portMAX_DELAY);
                 NVIC_EnableIRQ(ADC_IRQn);
@@ -530,7 +533,7 @@ static void vADCTask(void *pvParameters) {
                 error = xQueueSendToBack(qADCsend, &msjUSB, 0); // pdTRUE (1) if the item was successfully posted, otherwise errQUEUE_FULL (0)
 
                 // Conteos para debugging
-                int countADCsend = uxQueueMessagesWaiting( qADCsend );
+                //int countADCsend = uxQueueMessagesWaiting( qADCsend );
 
                 if (debugging == ENABLED)
                     DEBUGOUT("ADC: ADC Send\n");
