@@ -94,9 +94,6 @@ static void usb_pin_clk_init(void)
     Board_USBD_Init(1);
 }
 
-void hostDispositivo(uint32_t id, uint32_t valor){
-    int valoraux;
-}
 
 /*****************************************************************************
  * Interrupciones
@@ -644,6 +641,7 @@ int main(void)
     xTaskCreate(vADCTask, (signed char *) "vADCTask",
                 configMINIMAL_STACK_SIZE * 5, NULL, (tskIDLE_PRIORITY + 1UL),
                 (xTaskHandle *) NULL);
+    // verificar si es * 5 o si se puede dejar * 1
 
     /* Empieza el Scheduler */
     vTaskStartScheduler();

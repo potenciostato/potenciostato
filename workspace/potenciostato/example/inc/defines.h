@@ -24,45 +24,27 @@
 
 #define pi    3.14159265358979
 
-#define PUERTO(X)             X
-#define PIN(X)                 X
+#define PUERTO(X)             	X
+#define PIN(X)                 	X
 
-#define NUMERO_MUESTRAS     1000
-#define DMA_SIZE            1000
-#define FMAX                880
-#define VALOR_MEDIO_DAC     512
-
-#define PRIMER_CUADRANTE 	15
-#define SEGUNDO_CUADRANTE 	30
-#define TERCER_CUADRANTE 	45
-#define CUARTO_CUADRANTE 	60
+#define NUMERO_MUESTRAS     	1000 // cantidad de muestras de las señales precalculadas
+#define DMA_SIZE            	NUMERO_MUESTRAS
+#define VALOR_MEDIO_DAC     	512 //valor medio salida dac en cuentas (de 10 bits) de tension para 1.5V
 
 //#define CLOCK_DAC_HZ        30000000    // CCLK divido por 4. NOTA: Clock que trae por defecto con ésta configuración: 120MHz.
 
-#define CANT_DELAY 			100
-
-#define NUM_TAPS            29
-#define BLOCK_SIZE          30
-
-#define TECLAS				32
-#define cantTECLAS_MAX		6
-#define SILENCIO			50
-
-#define FREC_TIMER          80
-
-#define BARRIDO_CICLICO 	0
+#define BARRIDO_CICLICO 		0
 #define BARRIDO_LINEAL 			1
 
 // Defines ADC
-
 #define CANAL_CORRIENTE			ADC_CH0
 #define CANAL_TENSION			ADC_CH1
-
 #define ADC_SAMPL_FREC      	50000
 #define ADC_N_COLA 				1 //se pone 1 medicion (punto) por cada mensaje de USB
 #define TAMANIO_MAX_COLA_ADC 	2000 //cantidad maxima de mediciones (puntos) en la cola ADC
 #define TAMANIO_MAX_COLA_USB	100 //cantidad maxima de mensajes en la cola USB
 #define LARGO_MENSAJE			8 //igual a la cantidad de bytes de los reports de entrada y de salida de USB
+
 #define TICKS_MUESTREO          1 // delay entre lecturas de ADC, determina la frecuencia de muestreo (con el error propio de los ticks del sistema)
 
 #define ADC_DR_RESULT(n)        (((n) & 0xFFF))

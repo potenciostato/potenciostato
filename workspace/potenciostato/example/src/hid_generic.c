@@ -66,7 +66,7 @@ extern const uint8_t HID_ReportDescriptor[];
 extern const uint16_t HID_ReportDescSize;
 
 extern xQueueHandle qADCsend, qUSBin, qUSBout;
-extern midiendo;
+extern uint8_t midiendo;
 
 struct USBmsj {
 	uint16_t corriente;
