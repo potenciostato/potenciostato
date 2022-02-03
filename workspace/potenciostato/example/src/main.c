@@ -28,6 +28,7 @@
 
 //Para habilitar (o no) imprimir por consola
 bool debugging = DISABLED;
+//bool debugging = ENABLED;
 
 extern ADC_CLOCK_SETUP_T ADCSetup;
 
@@ -76,7 +77,7 @@ uint8_t midiendo=false;
 
 // OBJETOS FreeRTOS
 
-xSemaphoreHandle sDACncic;
+xSemaphoreHandle sDACncic, sDACready, sADCready, sDACstart, sADCstart;
 xQueueHandle qUSBin, qUSBout, qADC, qDAC, qADCcorriente, qADCtension, qADCsend;
 
 DMA_TransferDescriptor_t DMA_LLI_buffer;
@@ -119,6 +120,7 @@ void ADC_IRQHandler(void){
     static signed portBASE_TYPE xHigherPriorityTaskWoken;
     xHigherPriorityTaskWoken = pdFALSE;
     NVIC_DisableIRQ(ADC_IRQn);
+    Board_LED_Toggle(0);
     if (Chip_ADC_ReadStatus(LPC_ADC,CANAL_CORRIENTE,ADC_DR_ADINT_STAT)){
         Chip_ADC_ReadValue(LPC_ADC, CANAL_CORRIENTE, &dataADC);
         valorADC = ADC_DR_RESULT(dataADC);
@@ -257,8 +259,18 @@ static void vUSBTask(void *pvParameters) {
                 conf_dac.amp = lecturaQT[2];
 
                 conf_adc.set = true;
+
+                // Envia la configuracion a las tareas y estado de medicion
                 error = xQueueSendToBack(qDAC,&conf_dac,0);
                 error = xQueueSendToBack(qADC,&conf_adc,0);
+
+                // Espera a que ambas tareas esten listas para la medicion
+                xSemaphoreTake(sDACready, ( portTickType ) portMAX_DELAY);
+                xSemaphoreTake(sADCready, ( portTickType ) portMAX_DELAY);
+
+                // Inicio de la medicion
+                xSemaphoreGive(sDACstart);
+                xSemaphoreGive(sADCstart);
 
                 break;
 
@@ -289,8 +301,17 @@ static void vUSBTask(void *pvParameters) {
 
                 conf_adc.set = true;
 
+                // Envia la configuracion a las tareas y estado de medicion
                 error = xQueueSendToBack(qDAC,&conf_dac,0);
                 error = xQueueSendToBack(qADC,&conf_adc,0);
+
+                // Espera a que ambas tareas esten listas para la medicion
+                xSemaphoreTake(sDACready, ( portTickType ) portMAX_DELAY);
+                xSemaphoreTake(sADCready, ( portTickType ) portMAX_DELAY);
+
+                // Inicio de la medicion
+                xSemaphoreGive(sDACstart);
+                xSemaphoreGive(sADCstart);
 
                 break;
 
@@ -412,6 +433,7 @@ static void vDACTask(void *pvParameters) {
             timeoutDMA = 50;
         }
         if (conf.mode != MODO){
+        	MODO = conf.mode;
             Chip_GPDMA_Stop(LPC_GPDMA, CanalDAC);
             AMPLITUD = 0; // fuerza a que cuando cambie el modo verifique la tabla de salida
             DACset = false;
@@ -441,12 +463,17 @@ static void vDACTask(void *pvParameters) {
                 	if (conf.ncic == 0){
                         Chip_GPDMA_PrepareDescriptor ( LPC_GPDMA , &DMA_LLI_buffer  , (uint32_t) tabla_salida ,
                                                          GPDMA_CONN_DAC , DMA_SIZE , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA , &DMA_LLI_buffer);
-                		SG_OK = Chip_GPDMA_SGTransfer (LPC_GPDMA , CanalDAC ,&DMA_LLI_buffer , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA);
+
+                        xSemaphoreGive(sDACready);
+                        xSemaphoreTake(sDACstart, ( portTickType ) portMAX_DELAY);
+                        SG_OK = Chip_GPDMA_SGTransfer (LPC_GPDMA , CanalDAC ,&DMA_LLI_buffer , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA);
                 		Board_LED_Set(0,false);
                 	}else{
                         Chip_GPDMA_PrepareDescriptor ( LPC_GPDMA , &DMA_LLI_buffer  , (uint32_t) tabla_salida ,
                                                             GPDMA_CONN_DAC , DMA_SIZE , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA , 0);
-                    	for(i=0;i<conf.ncic;i++) {
+                        xSemaphoreGive(sDACready);
+                        xSemaphoreTake(sDACstart, ( portTickType ) portMAX_DELAY);
+                        for(i=0;i<conf.ncic;i++) {
                     		//Board_LED_Toggle(0);
                     		SG_OK = Chip_GPDMA_SGTransfer (LPC_GPDMA , CanalDAC ,&DMA_LLI_buffer , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA);
                     		xSemaphoreTake(sDACncic, ( portTickType ) portMAX_DELAY);
@@ -472,6 +499,8 @@ static void vDACTask(void *pvParameters) {
                 	}
                 }
                 if (conf.mode == BARRIDO_LINEAL) {
+                	xSemaphoreGive(sDACready);
+                	xSemaphoreTake(sDACstart, ( portTickType ) portMAX_DELAY);
                     SG_OK = Chip_GPDMA_SGTransfer (LPC_GPDMA , CanalDAC ,&DMA_NLI_buffer , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA);
                 }
 
@@ -516,12 +545,14 @@ static void vADCTask(void *pvParameters) {
             xQueueReset( qADCcorriente );
             xQueueReset( qADCtension );
 
+            xSemaphoreGive(sADCready);
+            xSemaphoreTake(sADCstart, ( portTickType ) portMAX_DELAY);
             NVIC_EnableIRQ(ADC_IRQn);
         	Chip_ADC_SetBurstCmd(LPC_ADC, ENABLE);
 
             i = 0;
             while (conf.set){
-            	Board_LED_Toggle(0);
+
 
                 xQueueReceive(qADCcorriente,&corrienteADC,portMAX_DELAY);
                 NVIC_EnableIRQ(ADC_IRQn);
@@ -530,8 +561,11 @@ static void vADCTask(void *pvParameters) {
 
                 msjUSB.corriente = corrienteADC;
                 msjUSB.tension = tensionADC;
-                error = xQueueSendToBack(qADCsend, &msjUSB, 0); // pdTRUE (1) if the item was successfully posted, otherwise errQUEUE_FULL (0)
+                error = xQueueSendToBack(qADCsend, &msjUSB, 10); // pdTRUE (1) if the item was successfully posted, otherwise errQUEUE_FULL (0)
 
+                if(error == 0){
+                	error = 0;
+                }
                 // Conteos para debugging
                 //int countADCsend = uxQueueMessagesWaiting( qADCsend );
 
@@ -540,7 +574,7 @@ static void vADCTask(void *pvParameters) {
 
                 // Se recibe la config para saber si se debera
                 // seguir midiendo o terminar
-                xQueueReceive(qADC,&conf,( portTickType ) 0);
+                xQueueReceive(qADC,&conf,( portTickType ) TICKS_MUESTREO);
             }
             if (debugging == ENABLED)
                 DEBUGOUT("ADC: Deshabilita medicion ADC\n");
@@ -573,6 +607,14 @@ int main(void)
 
     vSemaphoreCreateBinary(sDACncic);
     xSemaphoreTake(sDACncic, ( portTickType ) 10 );
+    vSemaphoreCreateBinary(sDACready);
+    xSemaphoreTake(sDACready, ( portTickType ) 10 );
+    vSemaphoreCreateBinary(sDACstart);
+    xSemaphoreTake(sDACstart, ( portTickType ) 10 );
+    vSemaphoreCreateBinary(sADCready);
+    xSemaphoreTake(sADCready, ( portTickType ) 10 );
+    vSemaphoreCreateBinary(sADCstart);
+    xSemaphoreTake(sADCstart, ( portTickType ) 10 );
 
     qUSBin = xQueueCreate( TAMANIO_MAX_COLA_USB, sizeof( uint8_t )* LARGO_MENSAJE);
     qUSBout = xQueueCreate( TAMANIO_MAX_COLA_USB, sizeof( uint8_t ) * LARGO_MENSAJE);
@@ -590,7 +632,7 @@ int main(void)
 
     /* USB  */
     xTaskCreate(vUSBTask, (signed char *) "vUSBTask",
-                configMINIMAL_STACK_SIZE, NULL, (tskIDLE_PRIORITY + 2UL),
+                configMINIMAL_STACK_SIZE, NULL, (tskIDLE_PRIORITY + 1UL),
                 (xTaskHandle *) NULL);
 
     /* DAC  */
@@ -600,7 +642,7 @@ int main(void)
 
     /* ADC  */
     xTaskCreate(vADCTask, (signed char *) "vADCTask",
-                configMINIMAL_STACK_SIZE, NULL, (tskIDLE_PRIORITY + 1UL),
+                configMINIMAL_STACK_SIZE * 5, NULL, (tskIDLE_PRIORITY + 1UL),
                 (xTaskHandle *) NULL);
 
     /* Empieza el Scheduler */

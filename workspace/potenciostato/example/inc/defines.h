@@ -60,9 +60,10 @@
 
 #define ADC_SAMPL_FREC      	50000
 #define ADC_N_COLA 				1 //se pone 1 medicion (punto) por cada mensaje de USB
-#define TAMANIO_MAX_COLA_ADC 	100 //cantidad maxima de mediciones (puntos) en la cola ADC
+#define TAMANIO_MAX_COLA_ADC 	2000 //cantidad maxima de mediciones (puntos) en la cola ADC
 #define TAMANIO_MAX_COLA_USB	100 //cantidad maxima de mensajes en la cola USB
 #define LARGO_MENSAJE			8 //igual a la cantidad de bytes de los reports de entrada y de salida de USB
+#define TICKS_MUESTREO          1 // delay entre lecturas de ADC, determina la frecuencia de muestreo (con el error propio de los ticks del sistema)
 
 #define ADC_DR_RESULT(n)        (((n) & 0xFFF))
 
@@ -77,18 +78,6 @@
 #define OC_ACK 						0xE
 #define OC_SENDDATA_ERR 			0xF
 
-// Defines llaves
-#define SW_I_GAIN1 1
-#define SW_I_GAIN2 2
-#define SW_GAIN1 1
-#define SW_GAIN2 2
-#define SW_V_GAIN1 1
-#define SW_V_GAIN2 2
-#define OFF_DAC_1 1
-#define OFF_DAC_2 2
-#define OFF_V_1 1
-#define OFF_V_2 2
-#define OFF_I_1 1
-#define OFF_I_2 2
+
 
 #endif /* DEFINES_H_ */
