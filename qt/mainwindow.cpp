@@ -171,138 +171,139 @@ void MainWindow::onTimeout(){
 
     unsigned int cuentas_corriente, cuentas_tension;
     float volts_tension, volts_corriente;
+    //qDebug() << clock() << "TimeOut";
+    for(i=0;i<PUNTOS_RECIBIDOS;i++){
+        if (demostracion == false){
+            //Se envia inicio de medición al LPC
+            //envio....
+            //se queda esperando al Recibido
+            // si llega recibido OK continuar
 
-    if (demostracion == false){
-        //Se envia inicio de medición al LPC
-        //envio....
-        //se queda esperando al Recibido
-        // si llega recibido OK continuar
-
-        if (connected == 1 && medicion_habilitada == 1){
-            //se enviara un SEND DATA
-            buffer[0] = OC_SENDDATA;
-
-            send_ret = libusb_interrupt_transfer(dev_handle, 0x01, buffer, (sizeof(buffer)) * 8, &len, 1000);
-            qDebug() << clock() << "Pedido Dato";
-            recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * 8, &len, 1000);
-            //int recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * 64, &len, 1000);
-            qDebug() << clock() << "Dato recibido";
-            if (debugging == ENABLED){
-                qDebug() << clock();
-                qDebug() << "codigo envio" << send_ret;
-                qDebug() << "dato enviado" << buffer[0];
-                qDebug() << "codigo recepcion" << recv_ret;
-                qDebug() << "OP Code recibido" << recv_data[0];
-                qDebug() << "Byte libre" << recv_data[1];
-                qDebug() << "Corriente: " << recv_data[3] << recv_data[2];
-                qDebug() << "Tension: " << recv_data[5] << recv_data[4];
-                qDebug() << "Bytes libres: " << recv_data[7] << recv_data[6];
-            }
-
-            if (recv_data[0] == OC_SENDDATA){ //si hay datos
-                cuentas_corriente = ((recv_data[3] << 8) | (recv_data[2]));
-                cuentas_tension = ((recv_data[5] << 8) | (recv_data[4]));
+            if (connected == 1 && medicion_habilitada == 1){
+                //se enviara un SEND DATA
+                buffer[0] = OC_SENDDATA;
+                qDebug() << clock() << "Se pide Dato";
+                send_ret = libusb_interrupt_transfer(dev_handle, 0x01, buffer, (sizeof(buffer)) * 8, &len, 1000);
+                qDebug() << clock() << "Pedido Dato enviado";
+                recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * 8, &len, 1000);
+                //int recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * 64, &len, 1000);
+                qDebug() << clock() << "Dato recibido";
                 if (debugging == ENABLED){
-                    qDebug() << "Cuentas corriente: " << cuentas_corriente;
-                    qDebug() << "Cuentas tension: " << cuentas_tension;
-                }
-                //volts_corriente = cuentas_corriente;
-                //volts_tension = cuentas_tension;
-                volts_corriente = (cuentas_corriente * ADC_CORRIENTE_MAX) / pow(2,ADC_CORRIENTE_BITS) / 10;
-                volts_tension = (cuentas_tension * ADC_TENSION_MAX) / pow(2,ADC_TENSION_BITS) / 10;
-                if (debugging == ENABLED){
-                    qDebug() << "Corriente [V]: " << volts_corriente;
-                    qDebug() << "Tension [V]: " << volts_tension;
+                    qDebug() << clock();
+                    qDebug() << "codigo envio" << send_ret;
+                    qDebug() << "dato enviado" << buffer[0];
+                    qDebug() << "codigo recepcion" << recv_ret;
+                    qDebug() << "OP Code recibido" << recv_data[0];
+                    qDebug() << "Byte libre" << recv_data[1];
+                    qDebug() << "Corriente: " << recv_data[3] << recv_data[2];
+                    qDebug() << "Tension: " << recv_data[5] << recv_data[4];
+                    qDebug() << "Bytes libres: " << recv_data[7] << recv_data[6];
                 }
 
-                puntosX[p_refresco] = volts_tension; //ANTES: el rango en el grafico va desde 0 a 1
-                puntosY[p_refresco] = volts_corriente; //ANTES: el rango en el grafico va desde 0 a 3
-
-                //TODO: si no hay mas datos esperar un tiempo para pedir
-                //if (recv_data[0] == OC_SENDDATA_ERR){
-                //APLICAR RETARDO
-                //}
-            }
-            if (recv_data[0] == OC_CYCLEEND){ //si termino la medicion
-                //Se termina la medición
-                qDebug() << "INFO: OC_CYCLEEND recibido";
-                qDebug() << "INFO: Termino la medición => se procederá a abortar la medición";
-                MainWindow::forzarAbortar();
-            }
-
-            if (recv_data[0] == OC_SENDDATAEND){ //si ya no hay mas datos
-                //Se termina la medición
-                qDebug() << "INFO: OC_SENDDATAEND recibido";
-                qDebug() << "INFO: Ya no hay mas datos";
-
-                qDebug() << "Envío de refresco al gráfico";
-                qDebug() << clock() << "inicio refrescar valores";
-                MainWindow::refrescarValores(puntosX, puntosY);
-                qDebug() << clock() << "termino refrescar valores";
-                //Se termina la medición
-                qDebug() << "Termino la medicion";
-                medicion_habilitada = 0;
-                MainWindow::terminoMedicion();
-                if (demostracion == false){
-                    p_refresco = 0;
-                    medicion_habilitada = 0;
-                    for(int i=0; i<CANT_VALORES; i++){
-                        puntosX[i] = 0;
-                        puntosY[i] = 0;
+                if (recv_data[0] == OC_SENDDATA){ //si hay datos
+                    cuentas_corriente = ((recv_data[3] << 8) | (recv_data[2]));
+                    cuentas_tension = ((recv_data[5] << 8) | (recv_data[4]));
+                    if (debugging == ENABLED){
+                        qDebug() << "Cuentas corriente: " << cuentas_corriente;
+                        qDebug() << "Cuentas tension: " << cuentas_tension;
                     }
-                }
-                if (demostracion == true){
-                    p_refresco = 0;
-                    medicion_habilitada = 0;
-                }
-            }
-        }
-    }
-    if (demostracion == true){
-        for (i=0; i < p_refresco; ++i)
-        {
-            puntosX[i] = primer_curva_paracetamolX[i];
-            puntosY[i] = primer_curva_paracetamolY[i];
-        }
-    }
+                    //volts_corriente = cuentas_corriente;
+                    //volts_tension = cuentas_tension;
+                    volts_corriente = (cuentas_corriente * ADC_CORRIENTE_MAX) / pow(2,ADC_CORRIENTE_BITS) / 10;
+                    volts_tension = (cuentas_tension * ADC_TENSION_MAX) / pow(2,ADC_TENSION_BITS) / 10;
+                    if (debugging == ENABLED){
+                        qDebug() << "Corriente [V]: " << volts_corriente;
+                        qDebug() << "Tension [V]: " << volts_tension;
+                    }
 
-    // ESTE IF TODAVIA NO ESTA PROBADO
-    /*if (demostracion == false){
-        if (strcmp(metodo,"BarridoLineal") == 0 && medicion_habilitada == 1){
-            //este if debera ser la condicion para el termino de la medicion
-            //es decir, se recibe el dato, si no es el fin de la medicion se appendea el dato
-            //si es el fin de la medicion se envia el Recibido y se termina la medicion
-            if (true){
-                qDebug() << "Termino la medicion";
-                medicion_habilitada = 0;
-                MainWindow::terminoMedicion();
-            }else{
-                p_refresco ++;
-                qDebug() << "Envio de refresco al grafico";
-                MainWindow::refrescarValores(tempX, tempY);
-            }
-        }
-    }*/
+                    puntosX[p_refresco] = volts_tension; //ANTES: el rango en el grafico va desde 0 a 1
+                    puntosY[p_refresco] = volts_corriente; //ANTES: el rango en el grafico va desde 0 a 3
 
-    if (demostracion == false){
-        if (strcmp(metodo,"BarridoCiclico") == 0  && medicion_habilitada == 1){ //antes era Reiterativo
-            if (p_refresco >= (CANT_VALORES-1)){
-                p_refresco = 0;
-                qDebug() << "Limpieza de graficos";
-                MainWindow::limpiarGraficos();
-                qDebug() << "Inicializacion del grafico 0";
-                MainWindow::inicializarGraficos();
-            }else{
-                p_refresco ++;
-                if (p_refresco % PUNTOS_REFRESCO == 0){
-                    qDebug() << clock() << "Envío de refresco al gráfico";
+                    //TODO: si no hay mas datos esperar un tiempo para pedir
+                    //if (recv_data[0] == OC_SENDDATA_ERR){
+                    //APLICAR RETARDO
+                    //}
+                }
+                if (recv_data[0] == OC_CYCLEEND){ //si termino la medicion
+                    //Se termina la medición
+                    qDebug() << "INFO: OC_CYCLEEND recibido";
+                    qDebug() << "INFO: Termino la medición => se procederá a abortar la medición";
+                    MainWindow::forzarAbortar();
+                }
+
+                if (recv_data[0] == OC_SENDDATAEND){ //si ya no hay mas datos
+                    //Se termina la medición
+                    qDebug() << "INFO: OC_SENDDATAEND recibido";
+                    qDebug() << "INFO: Ya no hay mas datos";
+
+                    qDebug() << "Envío de refresco al gráfico";
+                    qDebug() << clock() << "inicio refrescar valores";
                     MainWindow::refrescarValores(puntosX, puntosY);
                     qDebug() << clock() << "termino refrescar valores";
+                    //Se termina la medición
+                    qDebug() << "Termino la medicion";
+                    medicion_habilitada = 0;
+                    MainWindow::terminoMedicion();
+                    if (demostracion == false){
+                        p_refresco = 0;
+                        medicion_habilitada = 0;
+                        for(int i=0; i<CANT_VALORES; i++){
+                            puntosX[i] = 0;
+                            puntosY[i] = 0;
+                        }
+                    }
+                    if (demostracion == true){
+                        p_refresco = 0;
+                        medicion_habilitada = 0;
+                    }
                 }
             }
         }
-    }
-    if (demostracion == true){
+        if (demostracion == true){
+            for (i=0; i < p_refresco; ++i)
+            {
+                puntosX[i] = primer_curva_paracetamolX[i];
+                puntosY[i] = primer_curva_paracetamolY[i];
+            }
+        }
+
+        // ESTE IF TODAVIA NO ESTA PROBADO
+        /*if (demostracion == false){
+            if (strcmp(metodo,"BarridoLineal") == 0 && medicion_habilitada == 1){
+                //este if debera ser la condicion para el termino de la medicion
+                //es decir, se recibe el dato, si no es el fin de la medicion se appendea el dato
+                //si es el fin de la medicion se envia el Recibido y se termina la medicion
+                if (true){
+                    qDebug() << "Termino la medicion";
+                    medicion_habilitada = 0;
+                    MainWindow::terminoMedicion();
+                }else{
+                    p_refresco ++;
+                    qDebug() << "Envio de refresco al grafico";
+                    MainWindow::refrescarValores(tempX, tempY);
+                }
+            }
+        }*/
+
+        if (demostracion == false){
+            if (strcmp(metodo,"BarridoCiclico") == 0  && medicion_habilitada == 1){ //antes era Reiterativo
+                if (p_refresco >= (CANT_VALORES-1)){
+                    p_refresco = 0;
+                    qDebug() << "Limpieza de graficos";
+                    MainWindow::limpiarGraficos();
+                    qDebug() << "Inicializacion del grafico 0";
+                    MainWindow::inicializarGraficos();
+                }else{
+                    p_refresco ++;
+                    if (p_refresco % PUNTOS_REFRESCO == 0){
+                        qDebug() << clock() << "Envío de refresco al gráfico";
+                        MainWindow::refrescarValores(puntosX, puntosY);
+                        qDebug() << clock() << "termino refrescar valores";
+                    }
+                }
+            }
+        }
+        if (demostracion == true){
         if (strcmp(metodo,"BarridoLineal") == 0 && medicion_habilitada == 1){
             if (p_refresco >= CANT_VALORES && grafico_demostracion == 0){
                 p_refresco = 0;
@@ -351,7 +352,7 @@ void MainWindow::onTimeout(){
             }
         }
     }
-
+    }
 }
 
 // Funcion para inicializar las curvas de los graficos
