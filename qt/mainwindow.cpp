@@ -32,8 +32,7 @@ double primer_curva_paracetamolY[CANT_VALORES] = {
     3.000
 };
 int p_refresco = 0;
-double puntosX[CANT_VALORES] = {0};
-double puntosY[CANT_VALORES] = {0};
+int p_refrescado = 0;
 
 //char metodo[30] = "BarridoLineal";
 char metodo[30] = "BarridoCiclico"; //TODO: rehacer la verificacion del modo con defines
@@ -128,37 +127,29 @@ void MainWindow::graficarValores(int curva, double multiplicadorX, double  multi
 }
 
 // Funcion que se debera llamar desde un Timer para refrescar los valores en el grafico
-void MainWindow::refrescarValores(double x[CANT_VALORES], double y[CANT_VALORES], int curva, double multiplicadorX, double multiplicadorY){
-    // opcionalmente, para hallar el largo del vector x
-    //size_t n = (&x)[1] - x;
-    //int largo = (int) n;
+void MainWindow::refrescarValores(int curva){
     int i;
-    double tempX[CANT_VALORES] = {0};
-    double tempY[CANT_VALORES] = {0};
-
-    // Se aplica la escala correspondiente
-    // multiplicadorX = 1.00;
-    for (i=0; i < CANT_VALORES; ++i)
-    {
-        tempX[i] = x[i]*multiplicadorX;
+    if (p_refresco > p_refrescado){
+        for (i = p_refrescado; i < p_refresco; i++){
+            ui->customPlot->graph(curva)->addData(valoresX[i], valoresY[i]);
+        }
+    }else{
+        // en este caso se deberá tomar desde p_refrescado hasta CANTIDAD_VALORES y luego desde 0 hasta p_refresco
+        for (i = p_refrescado; i < CANT_VALORES; i++){
+            ui->customPlot->graph(curva)->addData(valoresX[i], valoresY[i]);
+        }
+        for (i = 0; i < p_refresco; i++){
+            ui->customPlot->graph(curva)->addData(valoresX[i], valoresY[i]);
+        }
     }
+    ui->customPlot->replot();
+    p_refrescado = p_refresco;
 
-    // multiplicadorY = 10.00;
-    for (i=0; i < CANT_VALORES; ++i)
-    {
-        tempY[i] = y[i]*multiplicadorY;
-    }
-
-    for (i=0; i < CANT_VALORES; ++i)
-    {
-        valoresX[i] = tempX[i];
-        valoresY[i] = tempY[i];
-    }
     // poner datos en el grafico
     //ui->customPlot->addGraph();
-    ui->customPlot->graph(curva)->setData(valoresX, valoresY);
-    ui->customPlot->replot();
 
+    //ui->customPlot->graph(curva)->setData(valoresX, valoresY);
+    //ui->customPlot->replot();
     // hace interactivo al grafico para que se pueda arrastrar, hacer zoom y seleccionar las curvas
     ui->customPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables);
 }
@@ -172,7 +163,7 @@ void MainWindow::onTimeout(){
     unsigned int cuentas_corriente, cuentas_tension;
     float volts_tension, volts_corriente;
     //qDebug() << clock() << "TimeOut";
-    for(i=0;i<PUNTOS_RECIBIDOS;i++){
+    for(i=0;i<PUNTOS_A_RECIBIR;i++){
         if (demostracion == false){
             //Se envia inicio de medición al LPC
             //envio....
@@ -183,9 +174,9 @@ void MainWindow::onTimeout(){
                 //se enviara un SEND DATA
                 buffer[0] = OC_SENDDATA;
                 qDebug() << clock() << "Se pide Dato";
-                send_ret = libusb_interrupt_transfer(dev_handle, 0x01, buffer, (sizeof(buffer)) * 8, &len, 1000);
+                send_ret = libusb_interrupt_transfer(dev_handle, 0x01, buffer, (sizeof(buffer)) * 8, &len, 10);
                 qDebug() << clock() << "Pedido Dato enviado";
-                recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * 8, &len, 1000);
+                recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * 8, &len, 20);
                 //int recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * 64, &len, 1000);
                 qDebug() << clock() << "Dato recibido";
                 if (debugging == ENABLED){
@@ -216,8 +207,11 @@ void MainWindow::onTimeout(){
                         qDebug() << "Tension [V]: " << volts_tension;
                     }
 
-                    puntosX[p_refresco] = volts_tension; //ANTES: el rango en el grafico va desde 0 a 1
-                    puntosY[p_refresco] = volts_corriente; //ANTES: el rango en el grafico va desde 0 a 3
+                    // probablemente aca haya que aplicar algun multiplicador (o no)
+                    // en graficarValores tengo double multiplicadorX = 1, double multiplicadorY = 10
+
+                    valoresX[p_refresco] = volts_tension; //ANTES: el rango en el grafico va desde 0 a 1
+                    valoresY[p_refresco] = volts_corriente; //ANTES: el rango en el grafico va desde 0 a 3
 
                     //TODO: si no hay mas datos esperar un tiempo para pedir
                     //if (recv_data[0] == OC_SENDDATA_ERR){
@@ -238,7 +232,7 @@ void MainWindow::onTimeout(){
 
                     qDebug() << "Envío de refresco al gráfico";
                     qDebug() << clock() << "inicio refrescar valores";
-                    MainWindow::refrescarValores(puntosX, puntosY);
+                    MainWindow::refrescarValores();
                     qDebug() << clock() << "termino refrescar valores";
                     //Se termina la medición
                     qDebug() << "Termino la medicion";
@@ -248,8 +242,8 @@ void MainWindow::onTimeout(){
                         p_refresco = 0;
                         medicion_habilitada = 0;
                         for(int i=0; i<CANT_VALORES; i++){
-                            puntosX[i] = 0;
-                            puntosY[i] = 0;
+                            valoresX[i] = 0;
+                            valoresY[i] = 0;
                         }
                     }
                     if (demostracion == true){
@@ -262,8 +256,8 @@ void MainWindow::onTimeout(){
         if (demostracion == true){
             for (i=0; i < p_refresco; ++i)
             {
-                puntosX[i] = primer_curva_paracetamolX[i];
-                puntosY[i] = primer_curva_paracetamolY[i];
+                valoresX[i] = primer_curva_paracetamolX[i];
+                valoresY[i] = primer_curva_paracetamolY[i];
             }
         }
 
@@ -289,15 +283,18 @@ void MainWindow::onTimeout(){
             if (strcmp(metodo,"BarridoCiclico") == 0  && medicion_habilitada == 1){ //antes era Reiterativo
                 if (p_refresco >= (CANT_VALORES-1)){
                     p_refresco = 0;
-                    qDebug() << "Limpieza de graficos";
-                    MainWindow::limpiarGraficos();
-                    qDebug() << "Inicializacion del grafico 0";
-                    MainWindow::inicializarGraficos();
+                    // Recopilar información de los valoresX y valoresY para almacenar
+                    // las mediciones realizadas y no perderlas
+
+                    //qDebug() << "Limpieza de graficos";
+                    //MainWindow::limpiarGraficos();
+                    //qDebug() << "Inicializacion del grafico 0";
+                    //MainWindow::inicializarGraficos();
                 }else{
                     p_refresco ++;
                     if (p_refresco % PUNTOS_REFRESCO == 0){
                         qDebug() << clock() << "Envío de refresco al gráfico";
-                        MainWindow::refrescarValores(puntosX, puntosY);
+                        MainWindow::refrescarValores();
                         qDebug() << clock() << "termino refrescar valores";
                     }
                 }
@@ -331,10 +328,7 @@ void MainWindow::onTimeout(){
             }else{
                 p_refresco ++;
                 qDebug() << "Envío de refresco al gráfico";
-                MainWindow::refrescarValores(puntosX, puntosY,
-                                             grafico_demostracion,
-                                             1,
-                                             10*(1-grafico_demostracion*0.15));
+                MainWindow::refrescarValores();
             }
         }
 
@@ -348,7 +342,7 @@ void MainWindow::onTimeout(){
             }else{
                 p_refresco ++;
                 qDebug() << "Envío de refresco al gráfico";
-                MainWindow::refrescarValores(puntosX, puntosY);
+                MainWindow::refrescarValores();
             }
         }
     }
