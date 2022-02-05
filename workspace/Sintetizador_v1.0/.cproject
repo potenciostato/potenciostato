@@ -20,7 +20,10 @@
 						<toolChain id="com.crt.advproject.toolchain.exe.debug.475703418" name="Code Red MCU Tools" superClass="com.crt.advproject.toolchain.exe.debug">
 							<targetPlatform binaryParser="org.eclipse.cdt.core.ELF;org.eclipse.cdt.core.GNU_ELF" id="com.crt.advproject.platform.exe.debug.1885082836" name="ARM-based MCU (Debug)" superClass="com.crt.advproject.platform.exe.debug"/>
 							<builder buildPath="${workspace_loc:/freertos_blinky}/Debug" id="com.crt.advproject.builder.exe.debug.131076519" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Gnu Make Builder" superClass="com.crt.advproject.builder.exe.debug"/>
-							<tool id="com.crt.advproject.cpp.exe.debug.24640360" name="MCU C++ Compiler" superClass="com.crt.advproject.cpp.exe.debug"/>
+							<tool id="com.crt.advproject.cpp.exe.debug.24640360" name="MCU C++ Compiler" superClass="com.crt.advproject.cpp.exe.debug">
+								<option id="com.crt.advproject.cpp.hdrlib.1614167887" superClass="com.crt.advproject.cpp.hdrlib" useByScannerDiscovery="false"/>
+								<option id="gnu.cpp.compiler.option.preprocessor.def.976449462" superClass="gnu.cpp.compiler.option.preprocessor.def" useByScannerDiscovery="false"/>
+							</tool>
 							<tool id="com.crt.advproject.gcc.exe.debug.1225049255" name="MCU C Compiler" superClass="com.crt.advproject.gcc.exe.debug">
 								<option id="com.crt.advproject.gcc.arch.1785617816" name="Architecture" superClass="com.crt.advproject.gcc.arch" useByScannerDiscovery="true" value="com.crt.advproject.gcc.target.cm3" valueType="enumerated"/>
 								<option id="com.crt.advproject.gcc.thumb.1504482304" name="Thumb mode" superClass="com.crt.advproject.gcc.thumb" useByScannerDiscovery="false" value="true" valueType="boolean"/>
@@ -132,7 +135,9 @@
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1354825252" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 								<inputType id="com.crt.advproject.assembler.input.1655531402" name="Additional Assembly Source Files" superClass="com.crt.advproject.assembler.input"/>
 							</tool>
-							<tool id="com.crt.advproject.link.cpp.exe.debug.272389732" name="MCU C++ Linker" superClass="com.crt.advproject.link.cpp.exe.debug"/>
+							<tool id="com.crt.advproject.link.cpp.exe.debug.272389732" name="MCU C++ Linker" superClass="com.crt.advproject.link.cpp.exe.debug">
+								<option id="com.crt.advproject.link.cpp.hdrlib.205940513" superClass="com.crt.advproject.link.cpp.hdrlib"/>
+							</tool>
 							<tool id="com.crt.advproject.link.exe.debug.1302659769" name="MCU Linker" superClass="com.crt.advproject.link.exe.debug">
 								<option id="com.crt.advproject.link.arch.579326334" name="Architecture" superClass="com.crt.advproject.link.arch" value="com.crt.advproject.link.target.cm3" valueType="enumerated"/>
 								<option id="com.crt.advproject.link.thumb.365232535" name="Thumb mode" superClass="com.crt.advproject.link.thumb" value="true" valueType="boolean"/>

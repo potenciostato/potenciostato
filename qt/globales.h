@@ -46,7 +46,14 @@ int8_t Dispositivo = -1;
 
 #define MV_TENSION_MAXIMA 3300
 
+#define CANT_VALORES 5000
+#define PUNTOS_REFRESCO 1
+
+// CONSTANTES INTERNAS
 #define FRECUENCIA 0
 #define PERIODO 1
+#define ENABLED true
+#define DISABLED false
+
 
 #endif // GLOBALES_H

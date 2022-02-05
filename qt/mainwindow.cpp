@@ -7,7 +7,7 @@
 #include "globales.h"
 #include "libusb.h"
 
-#define CANT_VALORES 500
+bool debugging = DISABLED;
 
 QVector<double> valoresX(CANT_VALORES), valoresY(CANT_VALORES); // declara vectores con 10 posiciones (0..9)
 
@@ -182,26 +182,32 @@ void MainWindow::onTimeout(){
             recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * 8, &len, 1000);
             //int recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * 64, &len, 1000);
 
-            qDebug() << "codigo envio" << send_ret;
-            qDebug() << "dato enviado" << buffer[0];
-            qDebug() << "codigo recepcion" << recv_ret;
-            qDebug() << "OP Code recibido" << recv_data[0];
-            qDebug() << "Byte libre" << recv_data[1];
-            qDebug() << "Corriente: " << recv_data[3] << recv_data[2];
-            qDebug() << "Tension: " << recv_data[5] << recv_data[4];
-            qDebug() << "Bytes libres: " << recv_data[7] << recv_data[6];
+            if (debugging == ENABLED){
+                qDebug() << "codigo envio" << send_ret;
+                qDebug() << "dato enviado" << buffer[0];
+                qDebug() << "codigo recepcion" << recv_ret;
+                qDebug() << "OP Code recibido" << recv_data[0];
+                qDebug() << "Byte libre" << recv_data[1];
+                qDebug() << "Corriente: " << recv_data[3] << recv_data[2];
+                qDebug() << "Tension: " << recv_data[5] << recv_data[4];
+                qDebug() << "Bytes libres: " << recv_data[7] << recv_data[6];
+            }
 
             if (recv_data[0] == OC_SENDDATA){ //si hay datos
                 cuentas_corriente = ((recv_data[3] << 8) | (recv_data[2]));
                 cuentas_tension = ((recv_data[5] << 8) | (recv_data[4]));
-                qDebug() << "Cuentas corriente: " << cuentas_corriente;
-                qDebug() << "Cuentas tension: " << cuentas_tension;
-
+                if (debugging == ENABLED){
+                    qDebug() << "Cuentas corriente: " << cuentas_corriente;
+                    qDebug() << "Cuentas tension: " << cuentas_tension;
+                }
+                //volts_corriente = cuentas_corriente;
+                //volts_tension = cuentas_tension;
                 volts_corriente = (cuentas_corriente * ADC_CORRIENTE_MAX) / pow(2,ADC_CORRIENTE_BITS) / 10;
                 volts_tension = (cuentas_tension * ADC_TENSION_MAX) / pow(2,ADC_TENSION_BITS) / 10;
-                qDebug() << "Corriente [V]: " << volts_corriente;
-                qDebug() << "Tension [V]: " << volts_tension;
-
+                if (debugging == ENABLED){
+                    qDebug() << "Corriente [V]: " << volts_corriente;
+                    qDebug() << "Tension [V]: " << volts_tension;
+                }
 
                 puntosX[p_refresco] = volts_tension; //ANTES: el rango en el grafico va desde 0 a 1
                 puntosY[p_refresco] = volts_corriente; //ANTES: el rango en el grafico va desde 0 a 3
@@ -222,6 +228,9 @@ void MainWindow::onTimeout(){
                 //Se termina la medición
                 qDebug() << "INFO: OC_SENDDATAEND recibido";
                 qDebug() << "INFO: Ya no hay mas datos";
+
+                qDebug() << "Envío de refresco al gráfico";
+                MainWindow::refrescarValores(puntosX, puntosY);
 
                 //Se termina la medición
                 qDebug() << "Termino la medicion";
@@ -278,8 +287,10 @@ void MainWindow::onTimeout(){
                 MainWindow::inicializarGraficos();
             }else{
                 p_refresco ++;
-                qDebug() << "Envío de refresco al gráfico";
-                MainWindow::refrescarValores(puntosX, puntosY);
+                if (p_refresco % PUNTOS_REFRESCO == 0){
+                    qDebug() << "Envío de refresco al gráfico";
+                    MainWindow::refrescarValores(puntosX, puntosY);
+                }
             }
         }
     }
@@ -352,17 +363,17 @@ void MainWindow::inicializarGraficos(int curva){
 
     // modificar apariencia del grafico
     if (curva == 0){
-        ui->customPlot->graph(curva)->setPen(QPen(Qt::red));
+        ui->customPlot->graph(curva)->setPen(QPen(Qt::blue));
         //ui->customPlot->graph(curva)->setBrush(QBrush(QColor(255, 0, 0, 20)));
         ui->customPlot->graph(curva)->setLineStyle(QCPGraph::lsNone);
-        ui->customPlot->graph(curva)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 4));
+        ui->customPlot->graph(curva)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 2));
     }
     if (curva == 1){
         ui->customPlot->graph(curva)->setPen(QPen(Qt::green));
         ui->customPlot->graph(curva)->setBrush(QBrush(QColor(0, 255, 0, 20)));
     }
     if (curva == 2){
-        ui->customPlot->graph(curva)->setPen(QPen(Qt::blue));
+        ui->customPlot->graph(curva)->setPen(QPen(Qt::red));
         ui->customPlot->graph(curva)->setBrush(QBrush(QColor(0, 0, 255, 20)));
     }
     if (curva == 3){
