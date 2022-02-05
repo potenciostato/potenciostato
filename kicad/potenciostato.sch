@@ -3,7 +3,7 @@ EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 1 3
+Sheet 1 4
 Title ""
 Date ""
 Rev ""
@@ -526,4 +526,10 @@ F 3 "" H 2050 3200 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	3800 3350 3350 3350
+$Sheet
+S 2150 6100 1150 1200
+U 61FF691F
+F0 "Fuente_partida" 50
+F1 "Fuente_partida.sch" 50
+$EndSheet
 $EndSCHEMATC
