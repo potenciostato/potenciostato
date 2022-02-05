@@ -20,33 +20,19 @@ endif
 
 -include ../makefile.defs
 
-OPTIONAL_TOOL_DEPS := \
-$(wildcard ../makefile.defs) \
-$(wildcard ../makefile.init) \
-$(wildcard ../makefile.targets) \
-
-
-BUILD_ARTIFACT_NAME := lpc_chip_175x_6x
-BUILD_ARTIFACT_EXTENSION := a
-BUILD_ARTIFACT_PREFIX := lib
-BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
-
 # Add inputs and outputs from these tool invocations to the build variables 
 
 # All Target
-all:
-	+@$(MAKE) --no-print-directory main-build && $(MAKE) --no-print-directory post-build
-
-# Main-build Target
-main-build: liblpc_chip_175x_6x.a
+all: liblpc_chip_175x_6x.a
 
 # Tool invocations
-liblpc_chip_175x_6x.a: $(OBJS) $(USER_OBJS) makefile objects.mk $(OPTIONAL_TOOL_DEPS)
+liblpc_chip_175x_6x.a: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: MCU Archiver'
 	arm-none-eabi-ar -r  "liblpc_chip_175x_6x.a" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
+	$(MAKE) --no-print-directory post-build
 
 # Other Targets
 clean:

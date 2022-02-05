@@ -7,9 +7,13 @@
 #include "globales.h"
 #include "libusb.h"
 
+#include "time.h"
+
 bool debugging = DISABLED;
 
 QVector<double> valoresX(CANT_VALORES), valoresY(CANT_VALORES); // declara vectores con 10 posiciones (0..9)
+
+
 
 double primer_curva_paracetamolX[CANT_VALORES] = {
     0.50, 0.51, 0.52, 0.53, 0.54, 0.55, 0.56, 0.57, 0.58, 0.59,
@@ -179,10 +183,12 @@ void MainWindow::onTimeout(){
             buffer[0] = OC_SENDDATA;
 
             send_ret = libusb_interrupt_transfer(dev_handle, 0x01, buffer, (sizeof(buffer)) * 8, &len, 1000);
+            qDebug() << clock() << "Pedido Dato";
             recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * 8, &len, 1000);
             //int recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * 64, &len, 1000);
-
+            qDebug() << clock() << "Dato recibido";
             if (debugging == ENABLED){
+                qDebug() << clock();
                 qDebug() << "codigo envio" << send_ret;
                 qDebug() << "dato enviado" << buffer[0];
                 qDebug() << "codigo recepcion" << recv_ret;
@@ -230,8 +236,9 @@ void MainWindow::onTimeout(){
                 qDebug() << "INFO: Ya no hay mas datos";
 
                 qDebug() << "Envío de refresco al gráfico";
+                qDebug() << clock() << "inicio refrescar valores";
                 MainWindow::refrescarValores(puntosX, puntosY);
-
+                qDebug() << clock() << "termino refrescar valores";
                 //Se termina la medición
                 qDebug() << "Termino la medicion";
                 medicion_habilitada = 0;
@@ -288,8 +295,9 @@ void MainWindow::onTimeout(){
             }else{
                 p_refresco ++;
                 if (p_refresco % PUNTOS_REFRESCO == 0){
-                    qDebug() << "Envío de refresco al gráfico";
+                    qDebug() << clock() << "Envío de refresco al gráfico";
                     MainWindow::refrescarValores(puntosX, puntosY);
+                    qDebug() << clock() << "termino refrescar valores";
                 }
             }
         }
