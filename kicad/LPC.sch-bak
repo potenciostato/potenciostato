@@ -108,9 +108,9 @@ P2.4
 Text HLabel 5950 3600 2    50   Input ~ 0
 P2.5
 Text HLabel 5950 3800 2    50   Input ~ 0
-P2.6
-Text HLabel 5950 3700 2    50   Input ~ 0
 P2.7
+Text HLabel 5950 3700 2    50   Input ~ 0
+P2.6
 Text HLabel 5950 3900 2    50   Input ~ 0
 P2.8
 Text HLabel 2200 3700 0    50   Input ~ 0
@@ -122,7 +122,7 @@ P0.21
 Text HLabel 2200 4000 0    50   Input ~ 0
 P0.22
 $Comp
-L power:GND #PWR0131
+L potenciostato-rescue:GND-power #PWR0131
 U 1 1 60A0C4F1
 P 5700 4300
 F 0 "#PWR0131" H 5700 4050 50  0001 C CNN
@@ -135,7 +135,7 @@ $EndComp
 Wire Wire Line
 	2550 1700 2650 1700
 $Comp
-L power:GND #PWR0132
+L potenciostato-rescue:GND-power #PWR0132
 U 1 1 60A0D2ED
 P 7400 2050
 F 0 "#PWR0132" H 7400 1800 50  0001 C CNN
@@ -146,7 +146,7 @@ F 3 "" H 7400 2050 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR0133
+L potenciostato-rescue:GND-power #PWR0133
 U 1 1 60A0D30E
 P 2800 1400
 F 0 "#PWR0133" H 2800 1150 50  0001 C CNN
@@ -168,4 +168,12 @@ Wire Wire Line
 Connection ~ 6950 2050
 Wire Wire Line
 	6950 2050 6850 2050
+Text Label 4200 3850 0    50   ~ 0
+Pin13_U8
+Text Label 4200 3650 0    50   ~ 0
+Pin5_U8
+Text Label 4200 3750 0    50   ~ 0
+Pin6_U8
+Text Label 4200 3950 0    50   ~ 0
+Pin12_U8
 $EndSCHEMATC

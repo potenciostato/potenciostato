@@ -14,7 +14,7 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L Amplifier_Operational:OP77 U4
+L potenciostato-rescue:OP77-Amplifier_Operational U4
 U 1 1 5CC24F96
 P 8300 4700
 F 0 "U4" H 8644 4654 50  0000 L CNN
@@ -25,7 +25,7 @@ F 3 "https://www.analog.com/media/en/technical-documentation/data-sheets/OP77.pd
 	-1   0    0    1   
 $EndComp
 $Comp
-L Device:R R2
+L potenciostato-rescue:R-Device R2
 U 1 1 5CC25964
 P 6600 2200
 F 0 "R2" V 6393 2200 50  0000 C CNN
@@ -36,7 +36,7 @@ F 3 "~" H 6600 2200 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L Device:R R3
+L potenciostato-rescue:R-Device R3
 U 1 1 5CC2629B
 P 6950 2750
 F 0 "R3" V 6743 2750 50  0000 C CNN
@@ -47,7 +47,7 @@ F 3 "~" H 6950 2750 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:R R5
+L potenciostato-rescue:R-Device R5
 U 1 1 5CC26B83
 P 8000 4050
 F 0 "R5" V 7793 4050 50  0000 C CNN
@@ -58,7 +58,7 @@ F 3 "~" H 8000 4050 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L power:GND #PWR08
+L potenciostato-rescue:GND-power #PWR08
 U 1 1 5CC2AC7B
 P 8700 4900
 F 0 "#PWR08" H 8700 4650 50  0001 C CNN
@@ -93,7 +93,7 @@ Wire Wire Line
 Wire Wire Line
 	7500 4700 8000 4700
 $Comp
-L power:GND #PWR01
+L potenciostato-rescue:GND-power #PWR01
 U 1 1 5CD2A3FD
 P 1000 1100
 F 0 "#PWR01" H 1000 850 50  0001 C CNN
@@ -104,7 +104,7 @@ F 3 "" H 1000 1100 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Connector:Conn_01x03_Female J1
+L potenciostato-rescue:Conn_01x03_Female-Connector J1
 U 1 1 5CDF8979
 P 1850 1100
 F 0 "J1" H 1550 900 50  0000 L CNN
@@ -127,7 +127,7 @@ Wire Wire Line
 Wire Wire Line
 	7400 2400 7300 2400
 $Comp
-L power:GND #PWR07
+L potenciostato-rescue:GND-power #PWR07
 U 1 1 5CC2A149
 P 7300 2500
 F 0 "#PWR07" H 7300 2250 50  0001 C CNN
@@ -138,7 +138,7 @@ F 3 "" H 7300 2500 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Connector:Conn_01x03_Male J3
+L potenciostato-rescue:Conn_01x03_Male-Connector J3
 U 1 1 5D250C0E
 P 9950 3350
 F 0 "J3" H 9922 3282 50  0000 R CNN
@@ -161,7 +161,7 @@ Wire Wire Line
 	7950 3250 6950 3250
 Connection ~ 7950 3250
 $Comp
-L power:+5V #PWR02
+L potenciostato-rescue:+5V-power #PWR02
 U 1 1 5F8AF7F8
 P 1150 1000
 F 0 "#PWR02" H 1150 850 50  0001 C CNN
@@ -172,7 +172,7 @@ F 3 "" H 1150 1000 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:-5V #PWR03
+L potenciostato-rescue:-5V-power #PWR03
 U 1 1 5F8AF868
 P 1150 1200
 F 0 "#PWR03" H 1150 1300 50  0001 C CNN
@@ -186,7 +186,7 @@ Wire Wire Line
 	8150 4050 8950 4050
 NoConn ~ 5700 7300
 $Comp
-L Amplifier_Operational:OP77 U1
+L potenciostato-rescue:OP77-Amplifier_Operational U1
 U 1 1 5F9FAD3E
 P 6200 4800
 F 0 "U1" H 6544 4754 50  0000 L CNN
@@ -197,7 +197,7 @@ F 3 "https://www.analog.com/media/en/technical-documentation/data-sheets/OP77.pd
 	-1   0    0    1   
 $EndComp
 $Comp
-L Device:R R1
+L potenciostato-rescue:R-Device R1
 U 1 1 5F9FAD44
 P 6050 4200
 F 0 "R1" V 5843 4200 50  0000 C CNN
@@ -208,7 +208,7 @@ F 3 "~" H 6050 4200 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L power:GND #PWR06
+L potenciostato-rescue:GND-power #PWR06
 U 1 1 5F9FAD4A
 P 6600 5000
 F 0 "#PWR06" H 6600 4750 50  0001 C CNN
@@ -223,7 +223,7 @@ Wire Wire Line
 Wire Wire Line
 	6600 4900 6600 5000
 $Comp
-L Device:R R4
+L potenciostato-rescue:R-Device R4
 U 1 1 5F9FD20A
 P 7100 4700
 F 0 "R4" V 6893 4700 50  0000 C CNN
@@ -344,7 +344,7 @@ Wire Wire Line
 	5500 3800 5500 4200
 Connection ~ 5500 4200
 $Comp
-L Amplifier_Operational:TL082 U2
+L potenciostato-rescue:TL082-Amplifier_Operational U2
 U 1 1 601CBD2D
 P 8400 3250
 F 0 "U2" H 8400 3620 50  0000 C CNN
@@ -355,7 +355,7 @@ F 3 "http://www.ti.com/lit/ds/symlink/tl081.pdf" H 8400 3250 50  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L Amplifier_Operational:TL082 U2
+L potenciostato-rescue:TL082-Amplifier_Operational U2
 U 2 1 601CBED5
 P 6350 3350
 F 0 "U2" H 6550 3700 50  0000 C CNN
@@ -366,7 +366,7 @@ F 3 "http://www.ti.com/lit/ds/symlink/tl081.pdf" H 6350 3350 50  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L Amplifier_Operational:TL082 U2
+L potenciostato-rescue:TL082-Amplifier_Operational U2
 U 3 1 601CBFB9
 P 6550 3350
 F 0 "U2" H 6511 3397 50  0000 L CNN
@@ -377,7 +377,7 @@ F 3 "http://www.ti.com/lit/ds/symlink/tl081.pdf" H 6550 3350 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:-5V #PWR0101
+L potenciostato-rescue:-5V-power #PWR0101
 U 1 1 601CC089
 P 6450 3650
 F 0 "#PWR0101" H 6450 3750 50  0001 C CNN
@@ -388,7 +388,7 @@ F 3 "" H 6450 3650 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L power:+5V #PWR0102
+L potenciostato-rescue:+5V-power #PWR0102
 U 1 1 601CC0FC
 P 6450 3050
 F 0 "#PWR0102" H 6450 2900 50  0001 C CNN
@@ -399,7 +399,7 @@ F 3 "" H 6450 3050 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Amplifier_Operational:OP77 U3
+L potenciostato-rescue:OP77-Amplifier_Operational U3
 U 1 1 5CC225D1
 P 7700 2300
 F 0 "U3" H 8044 2254 50  0000 L CNN
@@ -410,7 +410,7 @@ F 3 "https://www.analog.com/media/en/technical-documentation/data-sheets/OP77.pd
 	1    0    0    1   
 $EndComp
 $Comp
-L power:-5V #PWR0103
+L potenciostato-rescue:-5V-power #PWR0103
 U 1 1 601CC2C2
 P 6300 4500
 F 0 "#PWR0103" H 6300 4600 50  0001 C CNN
@@ -421,7 +421,7 @@ F 3 "" H 6300 4500 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:-5V #PWR0104
+L potenciostato-rescue:-5V-power #PWR0104
 U 1 1 601CC383
 P 8400 4400
 F 0 "#PWR0104" H 8400 4500 50  0001 C CNN
@@ -432,7 +432,7 @@ F 3 "" H 8400 4400 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:-5V #PWR0105
+L potenciostato-rescue:-5V-power #PWR0105
 U 1 1 601CC42A
 P 7600 2000
 F 0 "#PWR0105" H 7600 2100 50  0001 C CNN
@@ -443,7 +443,7 @@ F 3 "" H 7600 2000 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:+5V #PWR0106
+L potenciostato-rescue:+5V-power #PWR0106
 U 1 1 601CC539
 P 7600 2600
 F 0 "#PWR0106" H 7600 2450 50  0001 C CNN
@@ -454,7 +454,7 @@ F 3 "" H 7600 2600 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L power:+5V #PWR0107
+L potenciostato-rescue:+5V-power #PWR0107
 U 1 1 601CC592
 P 8400 5000
 F 0 "#PWR0107" H 8400 4850 50  0001 C CNN
@@ -465,7 +465,7 @@ F 3 "" H 8400 5000 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L power:+5V #PWR0108
+L potenciostato-rescue:+5V-power #PWR0108
 U 1 1 601CC639
 P 6300 5100
 F 0 "#PWR0108" H 6300 4950 50  0001 C CNN
@@ -514,7 +514,7 @@ Wire Wire Line
 Wire Wire Line
 	2050 3100 2050 3200
 $Comp
-L power:GND #PWR0130
+L potenciostato-rescue:GND-power #PWR0130
 U 1 1 609B9D8E
 P 2050 3200
 F 0 "#PWR0130" H 2050 2950 50  0001 C CNN
