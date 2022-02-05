@@ -148,17 +148,7 @@ static ErrorCode_t HID_Ep_Hdlr(USBD_HANDLE_T hUsb, void *data, uint32_t event)
 		// tiene sin tener que pasar por USBTask (para agilizar)
 		// qUSBout tendra los datos a pasar
 
-		switch (mensaje[0]){
-			case OC_INITMEASUREMENTLINEAL:
-			case OC_INITMEASUREMENTCYCLICAL:
-				midiendo = true;
-				break;
-			case OC_ABORTMEASUREMENT:
-				midiendo = false;
-				break;
-			default:
-				break;
-		}
+
 
 		// Si el QT envia cualquier otra cosa se pasan todos los datos
 		// a la tarea de USB por medio de la cola qUSBout

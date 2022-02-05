@@ -230,6 +230,7 @@ static void vUSBTask(void *pvParameters) {
                 //if (midiendo == true){
                 //    break;
                 //}
+            	midiendo = true;
 
                 //midiendo = true; //se setea en true, pero esto primero se hace desde hid_generic.c
                 /*
@@ -276,7 +277,7 @@ static void vUSBTask(void *pvParameters) {
                 //    break;
                 //}
 
-                //midiendo = true; //se setea en true, pero esto primero se hace desde hid_generic.c
+                midiendo = true;
 
                 /*
                  * 1)Habilito int del DAC
@@ -316,6 +317,8 @@ static void vUSBTask(void *pvParameters) {
                 //if (midiendo == false){
                 //    break;
                 //}
+
+            	midiendo = false;
 
                 // Deshabilito int del DAC & ADC
                 if (debugging == ENABLED)
@@ -489,6 +492,16 @@ static void vDACTask(void *pvParameters) {
     					respuesta[6] = 0x0;
     					respuesta[7] = 0x0;
     					error = xQueueSendToBack(qUSBin,&respuesta,portMAX_DELAY);
+
+    					respuesta[0] = OC_ABORTMEASUREMENT;
+    					respuesta[1] = 0x0;
+    					respuesta[2] = 0x0;
+    					respuesta[3] = 0x0;
+    					respuesta[4] = 0x0;
+    					respuesta[5] = 0x0;
+    					respuesta[6] = 0x0;
+    					respuesta[7] = 0x0;
+    					error = xQueueSendToBack(qUSBout,&respuesta,portMAX_DELAY);
 
                     	// Aquí el Qt debera enviar un Abort
 

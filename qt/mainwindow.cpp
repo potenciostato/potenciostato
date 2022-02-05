@@ -221,8 +221,8 @@ void MainWindow::onTimeout(){
                 if (recv_data[0] == OC_CYCLEEND){ //si termino la medicion
                     //Se termina la medición
                     qDebug() << "INFO: OC_CYCLEEND recibido";
-                    qDebug() << "INFO: Termino la medición => se procederá a abortar la medición";
-                    MainWindow::forzarAbortar();
+                    // Se deshabilita el boton de abortar
+                    ui->Bt_Abortar->setEnabled(false);
                 }
 
                 if (recv_data[0] == OC_SENDDATAEND){ //si ya no hay mas datos
