@@ -33,9 +33,6 @@
 
 //#define CLOCK_DAC_HZ        30000000    // CCLK divido por 4. NOTA: Clock que trae por defecto con ésta configuración: 120MHz.
 
-#define BARRIDO_CICLICO 		0
-#define BARRIDO_LINEAL 			1
-
 // Defines ADC
 #define CANAL_CORRIENTE			ADC_CH0
 #define CANAL_TENSION			ADC_CH1
@@ -60,6 +57,9 @@
 #define OC_ACK 						0xE
 #define OC_SENDDATA_ERR 			0xF
 
+
+#define BARRIDO_CICLICO 		OC_INITMEASUREMENTCYCLICAL
+#define BARRIDO_LINEAL 			OC_INITMEASUREMENTLINEAL
 
 
 #endif /* DEFINES_H_ */

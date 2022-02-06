@@ -27,8 +27,8 @@
  ****************************************************************************/
 
 //Para habilitar (o no) imprimir por consola
-bool debugging = DISABLED;
-//bool debugging = ENABLED;
+//bool debugging = DISABLED;
+bool debugging = ENABLED;
 
 extern ADC_CLOCK_SETUP_T ADCSetup;
 
@@ -205,7 +205,7 @@ static void vUSBTask(void *pvParameters) {
     uint8_t lecturaQT[8]={0};
     int i, error;
     struct DACmsj conf_dac = {false, BARRIDO_CICLICO, 1000, 255}; //estado del modulo, frecuencia[Hz], amplitud[V]
-    struct ADCmsj conf_adc = {false,10}; //estado del modulo, frecuencia[Hz], amplitud[V]
+    struct ADCmsj conf_adc = {false,ADC_SAMPL_FREC}; //estado del modulo, frecuencia[Hz]
 
     int countADCsend, countUSBin, countUSBout;
 
@@ -216,83 +216,24 @@ static void vUSBTask(void *pvParameters) {
 
     while (1) {
         if (debugging == ENABLED)
-            DEBUGOUT("USB: Se va a leer xOPCodequeue\n");
+            DEBUGOUT("USB: Se va a leer qUSBout\n");
 
         // Se lee la cola, si no se recibe nada la tarea se quedará esperando
         xQueueReceive( qUSBout, &lecturaQT, portMAX_DELAY);
 
         if (debugging == ENABLED)
-            DEBUGOUT("USB: Se obtuvo xOPCodequeue\n");
+            DEBUGOUT("USB: Se obtuvo OPcode: %x\n",lecturaQT[0]);
 
         switch(lecturaQT[0])
         {
             case OC_INITMEASUREMENTLINEAL:
-                //if (midiendo == true){
-                //    break;
-                //}
-            	midiendo = true;
-
-                //midiendo = true; //se setea en true, pero esto primero se hace desde hid_generic.c
-                /*
-                 * 1)Habilito int del DAC
-                 * 2)Habilito int del ADC
-                 * NVIC_EnableIRQ(ADC_IRQn);
-                 * ADC_StartCmd(LPC_ADC,ADC_START_NOW);
-                 */
-                if (debugging == ENABLED)
-                    DEBUGOUT("USB: Habilito DAC & ADC\n");
-
-                // Se habilitan DAC y ADC
-
-                /*struct DACmsj {
-                  bool set;
-                  uint16_t mode;
-                  uint32_t frec;
-                  uint16_t amp;*/
-
-
-                conf_dac.set = true;
-                conf_dac.mode = BARRIDO_LINEAL;
-                conf_dac.frec = (lecturaQT[3]<<16) | (lecturaQT[4]<<8) | lecturaQT[5]; //me parece debería ir un OR | (había un +)
-                conf_dac.amp = lecturaQT[2];
-
-                conf_adc.set = true;
-
-                // Envia la configuracion a las tareas y estado de medicion
-                error = xQueueSendToBack(qDAC,&conf_dac,0);
-                error = xQueueSendToBack(qADC,&conf_adc,0);
-
-                // Espera a que ambas tareas esten listas para la medicion
-                xSemaphoreTake(sDACready, ( portTickType ) portMAX_DELAY);
-                xSemaphoreTake(sADCready, ( portTickType ) portMAX_DELAY);
-
-                // Inicio de la medicion
-                xSemaphoreGive(sDACstart);
-                xSemaphoreGive(sADCstart);
-
-                break;
-
             case OC_INITMEASUREMENTCYCLICAL:
-                //if (midiendo == true){
-                //    break;
-                //}
 
-                midiendo = true;
-
-                /*
-                 * 1)Habilito int del DAC
-                 * 2)Habilito int del ADC
-                 * NVIC_EnableIRQ(ADC_IRQn);
-                 * ADC_StartCmd(LPC_ADC,ADC_START_NOW);
-                 */
                 if (debugging == ENABLED)
-                    DEBUGOUT("USB: Habilito DAC & ADC\n");
-
-                //Todo tomar la config del init del QT
-                // Se habilitan DAC y ADC
+                    DEBUGOUT("USB: Configuro DAC & ADC\n");
 
                 conf_dac.set = true;
-                conf_dac.mode = BARRIDO_CICLICO;
+                conf_dac.mode = lecturaQT[0];
                 conf_dac.frec =(lecturaQT[3]<<16) | (lecturaQT[4]<<8) | lecturaQT[5]; //me parece debería ir un OR | (había un +)
                 conf_dac.amp = lecturaQT[2];
                 conf_dac.ncic = lecturaQT[6];
@@ -307,6 +248,9 @@ static void vUSBTask(void *pvParameters) {
                 xSemaphoreTake(sDACready, ( portTickType ) portMAX_DELAY);
                 xSemaphoreTake(sADCready, ( portTickType ) portMAX_DELAY);
 
+                if (debugging == ENABLED)
+                     DEBUGOUT("USB: Habilito DAC & ADC\n");
+
                 // Inicio de la medicion
                 xSemaphoreGive(sDACstart);
                 xSemaphoreGive(sADCstart);
@@ -314,22 +258,10 @@ static void vUSBTask(void *pvParameters) {
                 break;
 
             case OC_ABORTMEASUREMENT:
-                //if (midiendo == false){
-                //    break;
-                //}
-
-            	midiendo = false;
 
                 // Deshabilito int del DAC & ADC
                 if (debugging == ENABLED)
                     DEBUGOUT("USB: Deshabilito DAC & ADC\n");
-                //midiendo = false; //esto se hace desde el handler de USB en hid_generic.c
-
-                // Se limpian las configuraciones
-                //conf_dac.mode = BARRIDO_CICLICO;
-                //conf_dac.frec = 1000;
-				//conf_dac.amp = 255;
-                //conf_adc.frec = 10;
 
                 // Se deshabilitan DAC y ADC
                 conf_dac.set = false;
@@ -347,26 +279,6 @@ static void vUSBTask(void *pvParameters) {
                 xQueueReset( qADCcorriente );
                 xQueueReset( qADCtension );
                 xQueueReset( qUSBin );
-                break;
-
-            case 30:
-                // Envio datos a PC de manera continua
-                //if (debugging == ENABLED)
-                //  DEBUGOUT("USB: Envio datos a QT\r\n");
-                //Leo el valor recibido por el adc
-                //xQueueReceive( xACDqueue, &BufferOutSTR, 0);
-
-                break;
-
-            case 31:
-                // Finalizo el envio de datos a la PC
-                if (debugging == ENABLED)
-                    DEBUGOUT("USB: Finalizo el envio datos a PC\r\n");
-                break;
-
-            case 32:
-                if (debugging == ENABLED)
-                    DEBUGOUT("DATOS ADC");
                 break;
 
             default:
@@ -409,7 +321,7 @@ static void vDACTask(void *pvParameters) {
         xQueueReceive(qDAC,&conf,portMAX_DELAY);
 
         if (debugging == ENABLED)
-            DEBUGOUT("DAC: Entre DAC\n");
+            DEBUGOUT("DAC: Conf recibida Set:%d,Frec:%d,Ncic:%d,Amp:%d\n",conf.set,conf.frec,conf.ncic,conf.amp);
 
         if(conf.frec != FREC){
             FREC = conf.frec; //este valor esta multiplicado por 1000 desde el Qt
@@ -466,6 +378,9 @@ static void vDACTask(void *pvParameters) {
 
                         xSemaphoreGive(sDACready);
                         xSemaphoreTake(sDACstart, ( portTickType ) portMAX_DELAY);
+                        midiendo = true;
+                        if (debugging == ENABLED)
+                            DEBUGOUT("DAC: Iniciando señal triangular infinita\n");
                         SG_OK = Chip_GPDMA_SGTransfer (LPC_GPDMA , CanalDAC ,&DMA_LLI_buffer , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA);
                 		Board_LED_Set(0,false);
                 	}else{
@@ -473,6 +388,9 @@ static void vDACTask(void *pvParameters) {
                                                             GPDMA_CONN_DAC , DMA_SIZE , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA , 0);
                         xSemaphoreGive(sDACready);
                         xSemaphoreTake(sDACstart, ( portTickType ) portMAX_DELAY);
+                        midiendo = true;
+                        if (debugging == ENABLED)
+                            DEBUGOUT("DAC: Iniciando señal triangular de %d ciclos\n", conf.ncic);
                         for(i=0;i<conf.ncic;i++) {
                     		//Board_LED_Toggle(0);
                     		SG_OK = Chip_GPDMA_SGTransfer (LPC_GPDMA , CanalDAC ,&DMA_LLI_buffer , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA);
@@ -482,7 +400,8 @@ static void vDACTask(void *pvParameters) {
                     	//Se envía el término de medición
 
     					if (debugging == ENABLED)
-    						DEBUGOUT("INT: CYCLE END\n");
+    						DEBUGOUT("DAC: CYCLE END\n");
+
     					respuesta[0] = OC_CYCLEEND;
     					respuesta[1] = 0x0;
     					respuesta[2] = 0x0;
@@ -492,6 +411,11 @@ static void vDACTask(void *pvParameters) {
     					respuesta[6] = 0x0;
     					respuesta[7] = 0x0;
     					error = xQueueSendToBack(qUSBin,&respuesta,portMAX_DELAY);
+
+    					midiendo = false;
+
+    					if (debugging == ENABLED)
+    						DEBUGOUT("DAC: ABORT\n");
 
     					respuesta[0] = OC_ABORTMEASUREMENT;
     					respuesta[1] = 0x0;
@@ -511,15 +435,16 @@ static void vDACTask(void *pvParameters) {
                 if (conf.mode == BARRIDO_LINEAL) {
                 	xSemaphoreGive(sDACready);
                 	xSemaphoreTake(sDACstart, ( portTickType ) portMAX_DELAY);
+                	midiendo = true;
+                    if (debugging == ENABLED)
+                        DEBUGOUT("DAC: Iniciando señal lineal\n");
                     SG_OK = Chip_GPDMA_SGTransfer (LPC_GPDMA , CanalDAC ,&DMA_NLI_buffer , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA);
                 }
-
-                if (debugging == ENABLED)
-                    DEBUGOUT("DAC: Habilite DAC\n");
             } else {
                 Chip_GPDMA_Stop(LPC_GPDMA, CanalDAC);
                 if (debugging == ENABLED)
-                    DEBUGOUT("DAC: Deshabilite DAC\n");
+                    DEBUGOUT("DAC: Deshabilitado\n");
+                midiendo = false;
             }
         }
     }
@@ -541,15 +466,14 @@ static void vADCTask(void *pvParameters) {
         // Se lee la cola, si no se recibe nada la tarea se quedará esperando
         xQueueReceive(qADC,&conf,portMAX_DELAY);
         if (debugging == ENABLED)
-            DEBUGOUT("ADC: Entre ADC\n");
+        	DEBUGOUT("ADC: Conf recibida Set:%d,Frec:%d\n",conf.set,conf.frec);
 
         if(conf.frec != FREC){
             FREC = conf.frec;
             Chip_ADC_SetSampleRate(LPC_ADC,&ADCSetup,FREC);
         }
         if (conf.set == true){
-            if (debugging == ENABLED)
-                DEBUGOUT("ADC: Habilita medicion ADC\n");
+
 
             xQueueReset( qADCsend );
             xQueueReset( qADCcorriente );
@@ -559,6 +483,8 @@ static void vADCTask(void *pvParameters) {
             xSemaphoreTake(sADCstart, ( portTickType ) portMAX_DELAY);
             NVIC_EnableIRQ(ADC_IRQn);
         	Chip_ADC_SetBurstCmd(LPC_ADC, ENABLE);
+            if (debugging == ENABLED)
+                DEBUGOUT("ADC: Iniciando medición\n");
 
             i = 0;
             while (conf.set){
@@ -589,10 +515,6 @@ static void vADCTask(void *pvParameters) {
             if (debugging == ENABLED)
                 DEBUGOUT("ADC: Deshabilita medicion ADC\n");
             Chip_ADC_SetBurstCmd(LPC_ADC, DISABLE);
-        }
-        else {
-            if (debugging == ENABLED)
-                DEBUGOUT("ADC: Esta deshabilitado ADC\n");
         }
     }
 }

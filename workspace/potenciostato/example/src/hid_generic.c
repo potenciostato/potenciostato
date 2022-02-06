@@ -127,6 +127,7 @@ static ErrorCode_t HID_Ep_Hdlr(USBD_HANDLE_T hUsb, void *data, uint32_t event)
 	uint8_t i, mensaje[8]={0}, mensajein[8]={0};
 	uint8_t respuesta[8]={0};
 	struct USBmsj medicion;
+	bool medicion_iniciada;
 
 
 	static portBASE_TYPE xHigherPriorityTaskWoken;
@@ -148,6 +149,10 @@ static ErrorCode_t HID_Ep_Hdlr(USBD_HANDLE_T hUsb, void *data, uint32_t event)
 		// tiene sin tener que pasar por USBTask (para agilizar)
 		// qUSBout tendra los datos a pasar
 
+		if(mensaje[0] == OC_INITMEASUREMENTCYCLICAL || mensaje[0] == OC_INITMEASUREMENTLINEAL)
+			medicion_iniciada = true;
+		if(mensaje[0] == OC_ABORTMEASUREMENT)
+			medicion_iniciada = false;
 
 
 		// Si el QT envia cualquier otra cosa se pasan todos los datos
@@ -157,6 +162,7 @@ static ErrorCode_t HID_Ep_Hdlr(USBD_HANDLE_T hUsb, void *data, uint32_t event)
 			case OC_SENDDATA:
 				if(xQueueReceiveFromISR( qUSBin, &mensajein, &xHigherPriorityTaskWoken) != pdFAIL) {
 					if (mensajein[0] == OC_CYCLEEND){
+						medicion_iniciada = false;
 						if (debugging == ENABLED)
 							DEBUGOUT("INT: CYCLE END\n");
 						respuesta[0] = OC_CYCLEEND;
@@ -166,12 +172,12 @@ static ErrorCode_t HID_Ep_Hdlr(USBD_HANDLE_T hUsb, void *data, uint32_t event)
 					}
 				}else{
 					if(xQueueReceiveFromISR( qADCsend, &medicion, &xHigherPriorityTaskWoken) == pdFAIL) {
-						if (midiendo == true){
+						if (medicion_iniciada == true){
 							if (debugging == ENABLED)
 								DEBUGOUT("INT: NO HAY DATOS PARA MANDAR\n");
 							respuesta[0] = OC_SENDDATA_ERR;
 						}
-						if (midiendo == false){
+						if (medicion_iniciada == false){
 							if (debugging == ENABLED)
 								DEBUGOUT("INT: Termino la medicion y no hay mas datos \n");
 							respuesta[0] = OC_SENDDATAEND;
