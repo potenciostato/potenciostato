@@ -67,6 +67,7 @@ extern const uint16_t HID_ReportDescSize;
 
 extern xQueueHandle qADCsend, qUSBin, qUSBout;
 extern uint8_t midiendo;
+bool medicion_iniciada=false;
 
 struct USBmsj {
 	uint16_t corriente;
@@ -127,7 +128,6 @@ static ErrorCode_t HID_Ep_Hdlr(USBD_HANDLE_T hUsb, void *data, uint32_t event)
 	uint8_t i, mensaje[8]={0}, mensajein[8]={0};
 	uint8_t respuesta[8]={0};
 	struct USBmsj medicion;
-	bool medicion_iniciada;
 
 
 	static portBASE_TYPE xHigherPriorityTaskWoken;

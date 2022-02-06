@@ -570,7 +570,33 @@ void MainWindow::on_Bt_IniciarCiclico_clicked()
 
 void MainWindow::on_Bt_Abortar_clicked()
 {
+    uint8_t ciclos = 0;
+    ciclos = ui->Num_CicCiclico->value();
+
     MainWindow::forzarAbortar();
+    if (ciclos == 0){
+        // TODO: hacer esto funcion, porque el codigo se repite en Timeout()
+        qDebug() << "Envío de refresco al gráfico";
+        qDebug() << clock() << "inicio refrescar valores";
+        MainWindow::refrescarValores();
+        qDebug() << clock() << "termino refrescar valores";
+        //Se termina la medición
+        qDebug() << "Termino la medicion";
+        medicion_habilitada = 0;
+        MainWindow::terminoMedicion();
+        if (demostracion == false){
+            p_refresco = 0;
+            medicion_habilitada = 0;
+            for(int i=0; i<CANT_VALORES; i++){
+                valoresX[i] = 0;
+                valoresY[i] = 0;
+            }
+        }
+        if (demostracion == true){
+            p_refresco = 0;
+            medicion_habilitada = 0;
+        }
+    }
 }
 
 void MainWindow::on_Bt_Capturar_clicked()
@@ -802,12 +828,8 @@ void MainWindow::forzarAbortar()
     int len;
     int send_ret, recv_ret;
 
-    //Se envia inicio de medición al LPC
-    //envio....
-    //se queda esperando al Recibido
-    // si llega recibido OK continuar
 
-    //se enviara un INIT MEASUREMENT
+    //se enviara un ABORT MEASUREMENT
     buffer[0] = OC_ABORTMEASUREMENT;
 
     send_ret = libusb_interrupt_transfer(dev_handle, 0x01, buffer, (sizeof(buffer)) * 8, &len, 1000);

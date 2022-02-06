@@ -27,8 +27,8 @@
  ****************************************************************************/
 
 //Para habilitar (o no) imprimir por consola
-//bool debugging = DISABLED;
-bool debugging = ENABLED;
+bool debugging = DISABLED;
+//bool debugging = ENABLED;
 
 extern ADC_CLOCK_SETUP_T ADCSetup;
 
