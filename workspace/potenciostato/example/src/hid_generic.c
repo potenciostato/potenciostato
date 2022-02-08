@@ -128,7 +128,8 @@ static ErrorCode_t HID_Ep_Hdlr(USBD_HANDLE_T hUsb, void *data, uint32_t event)
 	uint8_t i, mensaje[8]={0}, mensajein[8]={0};
 	uint8_t respuesta[8]={0};
 	struct USBmsj medicion;
-
+	uint8_t n_punto = 0;
+	int cod_receive;
 
 	static portBASE_TYPE xHigherPriorityTaskWoken;
 	xHigherPriorityTaskWoken = pdFALSE;
@@ -171,7 +172,14 @@ static ErrorCode_t HID_Ep_Hdlr(USBD_HANDLE_T hUsb, void *data, uint32_t event)
 						}
 					}
 				}else{
-					if(xQueueReceiveFromISR( qADCsend, &medicion, &xHigherPriorityTaskWoken) == pdFAIL) {
+					// Hay que enviar datos de la medicion
+
+					// Se inicia en 0 puntos
+					n_punto = 0;
+
+					// Se intenta recibir la primer medicion
+					cod_receive = xQueueReceiveFromISR( qADCsend, &medicion, &xHigherPriorityTaskWoken);
+					if(cod_receive == pdFAIL){
 						if (medicion_iniciada == true){
 							if (debugging == ENABLED)
 								DEBUGOUT("INT: NO HAY DATOS PARA MANDAR\n");
@@ -186,21 +194,35 @@ static ErrorCode_t HID_Ep_Hdlr(USBD_HANDLE_T hUsb, void *data, uint32_t event)
 							respuesta[i] = 0x0;
 						}
 					} else {
-						// Si hay datos para mandar, mandarlos
+						for (i = 0; i < 8; i ++){
+							respuesta[i] = 0x0;
+						}
+						do{
+							// Hay datos para enviar
+							if (debugging == ENABLED)
+								DEBUGOUT("INT: SEND DATA\n");
 
-		                // Conteos para debugging
-		                //int countADCsend = uxQueueMessagesWaitingFromISR( qADCsend );
+							// Si hay datos para mandar, encolar los puntos de la medicion
+							respuesta[0] = OC_SENDDATA;
+							respuesta[1] = n_punto+1; // representa la cantidad de puntos a enviar
+							respuesta[2+3*n_punto] = (medicion.corriente & 0xFF);
+							respuesta[3+3*n_punto] =  ((medicion.corriente >> 8) & 0x0F) | ((medicion.tension & 0x0F) << 4);
+							respuesta[4+3*n_punto] = (((medicion.tension) >> 4) & 0xFF);
 
-						if (debugging == ENABLED)
-							DEBUGOUT("INT: SEND DATA\n");
-						respuesta[0] = OC_SENDDATA;
-						respuesta[1] = 0x0;
-						respuesta[2] = (medicion.corriente & 0xFF);
-						respuesta[3] = ((medicion.corriente >> 8) & 0xFF);
-						respuesta[4] = (medicion.tension & 0xFF);
-						respuesta[5] = ((medicion.tension >> 8) & 0xFF);
-						respuesta[6] = 0x0;
-						respuesta[7] = 0x0;
+							n_punto++;
+							// Protocolo viejo
+							//respuesta[0] = OC_SENDDATA;
+							//respuesta[1] = 0x0;
+							//respuesta[2] = (medicion.corriente & 0xFF);
+							//respuesta[3] = ((medicion.corriente >> 8) & 0xFF);
+							//respuesta[4] = (medicion.tension & 0xFF);
+							//respuesta[5] = ((medicion.tension >> 8) & 0xFF);
+							//respuesta[6] = 0x0;
+							//respuesta[7] = 0x0;
+							if (n_punto < MAX_PUNTOS){
+								cod_receive = xQueueReceiveFromISR( qADCsend, &medicion, &xHigherPriorityTaskWoken);
+							}
+						}while((cod_receive != pdFAIL) && (n_punto < MAX_PUNTOS));
 					}
 				}
 				USBD_API->hw->WriteEP(hUsb, pHidCtrl->epin_adr, respuesta, 8);

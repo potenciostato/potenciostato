@@ -9,7 +9,7 @@
 
 #include "time.h"
 
-bool debugging = DISABLED;
+bool debugging = ENABLED;
 
 QVector<double> valoresX(CANT_VALORES), valoresY(CANT_VALORES); // declara vectores con 10 posiciones (0..9)
 
@@ -157,7 +157,7 @@ void MainWindow::refrescarValores(int curva){
 void MainWindow::onTimeout(){
     unsigned char buffer[8] = {0x0};
     unsigned char recv_data[8] = {0x0};
-    int len, i=0;
+    int len, i=0, j=0;
     int send_ret, recv_ret;
 
     unsigned int cuentas_corriente, cuentas_tension;
@@ -178,45 +178,79 @@ void MainWindow::onTimeout(){
                 qDebug() << clock() << "Pedido Dato enviado";
                 recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * 8, &len, 20);
                 //int recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * 64, &len, 1000);
-                qDebug() << clock() << "Dato recibido";
+
                 if (debugging == ENABLED){
-                    qDebug() << clock();
                     qDebug() << "codigo envio" << send_ret;
                     qDebug() << "dato enviado" << buffer[0];
                     qDebug() << "codigo recepcion" << recv_ret;
                     qDebug() << "OP Code recibido" << recv_data[0];
-                    qDebug() << "Byte libre" << recv_data[1];
-                    qDebug() << "Corriente: " << recv_data[3] << recv_data[2];
-                    qDebug() << "Tension: " << recv_data[5] << recv_data[4];
-                    qDebug() << "Bytes libres: " << recv_data[7] << recv_data[6];
                 }
 
-                if (recv_data[0] == OC_SENDDATA){ //si hay datos
-                    cuentas_corriente = ((recv_data[3] << 8) | (recv_data[2]));
-                    cuentas_tension = ((recv_data[5] << 8) | (recv_data[4]));
-                    if (debugging == ENABLED){
-                        qDebug() << "Cuentas corriente: " << cuentas_corriente;
-                        qDebug() << "Cuentas tension: " << cuentas_tension;
+                if (recv_ret < 0)
+                    continue;
+
+                qDebug() << clock() << "Dato recibido";
+                if (debugging == ENABLED){
+                    qDebug() << clock();
+                    qDebug() << "OP Code recibido" << recv_data[0];
+                    qDebug() << "Cantidad puntos:" << recv_data[1];
+                    qDebug() << "respuesta[2]: " << recv_data[2];   //(medicion.corriente & 0xFF);
+                    qDebug() << "respuesta[3]:" << recv_data[3];    //((medicion.corriente >> 8) & 0x0F) | ((medicion.tension & 0x0F) << 4);
+                    qDebug() << "respuesta[4]:" << recv_data[4];    //(((medicion.tension) >> 4) & 0xFF);
+                    qDebug() << "respuesta[5]: " << recv_data[5];
+                    qDebug() << "respuesta[6]:" << recv_data[6];
+                    qDebug() << "respuesta[7]: " << recv_data[7];
+                }
+
+                if (recv_data[0] == OC_SENDDATA){ // Si hay datos, ver cuantos
+                    for (j = 0; j < recv_data[1]; j++){
+                        cuentas_corriente = (((recv_data[3+3*j] & 0x0F) << 8) | (recv_data[2+3*j]));
+                        cuentas_tension = ((recv_data[4+3*j] << 4) | ((recv_data[3+3*j] & 0xF0) >> 4));
+                        if (debugging == ENABLED){
+                            qDebug() << "Cuentas corriente: " << cuentas_corriente;
+                            qDebug() << "Cuentas tension: " << cuentas_tension;
+                        }
+                        //volts_corriente = cuentas_corriente;
+                        //volts_tension = cuentas_tension;
+                        volts_corriente = (cuentas_corriente * ADC_CORRIENTE_MAX) / pow(2,ADC_CORRIENTE_BITS) / 10;
+                        volts_tension = (cuentas_tension * ADC_TENSION_MAX) / pow(2,ADC_TENSION_BITS) / 10;
+                        if (debugging == ENABLED){
+                            qDebug() << "Corriente [V]: " << volts_corriente;
+                            qDebug() << "Tension [V]: " << volts_tension;
+                        }
+
+                        // probablemente aca haya que aplicar algun multiplicador (o no)
+                        // en graficarValores tengo double multiplicadorX = 1, double multiplicadorY = 10
+
+                        valoresX[p_refresco] = volts_tension; //ANTES: el rango en el grafico va desde 0 a 1
+                        valoresY[p_refresco] = volts_corriente; //ANTES: el rango en el grafico va desde 0 a 3
+
+                        //TODO: si no hay mas datos esperar un tiempo para pedir
+                        //if (recv_data[0] == OC_SENDDATA_ERR){
+                        //APLICAR RETARDO
+                        //}
+
+
+                        // TODO: este codigo se repite abajo, ver como hacerlo bien..
+                        if (p_refresco >= (CANT_VALORES-1)){
+                            p_refresco = 0;
+                            // Recopilar información de los valoresX y valoresY para almacenar
+                            // las mediciones realizadas y no perderlas
+
+                            //qDebug() << "Limpieza de graficos";
+                            //MainWindow::limpiarGraficos();
+                            //qDebug() << "Inicializacion del grafico 0";
+                            //MainWindow::inicializarGraficos();
+                        }else{
+                            p_refresco ++;
+                            if (p_refresco % PUNTOS_REFRESCO == 0){
+                                qDebug() << clock() << "Envío de refresco al gráfico";
+                                MainWindow::refrescarValores();
+                                qDebug() << clock() << "termino refrescar valores";
+                            }
+                        }
+
                     }
-                    //volts_corriente = cuentas_corriente;
-                    //volts_tension = cuentas_tension;
-                    volts_corriente = (cuentas_corriente * ADC_CORRIENTE_MAX) / pow(2,ADC_CORRIENTE_BITS) / 10;
-                    volts_tension = (cuentas_tension * ADC_TENSION_MAX) / pow(2,ADC_TENSION_BITS) / 10;
-                    if (debugging == ENABLED){
-                        qDebug() << "Corriente [V]: " << volts_corriente;
-                        qDebug() << "Tension [V]: " << volts_tension;
-                    }
-
-                    // probablemente aca haya que aplicar algun multiplicador (o no)
-                    // en graficarValores tengo double multiplicadorX = 1, double multiplicadorY = 10
-
-                    valoresX[p_refresco] = volts_tension; //ANTES: el rango en el grafico va desde 0 a 1
-                    valoresY[p_refresco] = volts_corriente; //ANTES: el rango en el grafico va desde 0 a 3
-
-                    //TODO: si no hay mas datos esperar un tiempo para pedir
-                    //if (recv_data[0] == OC_SENDDATA_ERR){
-                    //APLICAR RETARDO
-                    //}
                 }
                 if (recv_data[0] == OC_CYCLEEND){ //si termino la medicion
                     //Se termina la medición

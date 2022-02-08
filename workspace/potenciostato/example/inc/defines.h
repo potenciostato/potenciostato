@@ -42,9 +42,12 @@
 #define TAMANIO_MAX_COLA_USB	100 //cantidad maxima de mensajes en la cola USB
 #define LARGO_MENSAJE			8 //igual a la cantidad de bytes de los reports de entrada y de salida de USB
 
+#define MAX_PUNTOS 2
+
 #define TICKS_MUESTREO          1 // delay entre lecturas de ADC, determina la frecuencia de muestreo (con el error propio de los ticks del sistema)
 
 #define ADC_DR_RESULT(n)        (((n) & 0xFFF))
+
 
 // Definiciones de los códigos de operación
 #define OC_INITMEASUREMENTLINEAL 	0xA1
@@ -56,7 +59,6 @@
 #define OC_SENDDATAEND 				0xD2
 #define OC_ACK 						0xE
 #define OC_SENDDATA_ERR 			0xF
-
 
 #define BARRIDO_CICLICO 		OC_INITMEASUREMENTCYCLICAL
 #define BARRIDO_LINEAL 			OC_INITMEASUREMENTLINEAL
