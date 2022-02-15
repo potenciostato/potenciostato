@@ -574,7 +574,7 @@ int main(void)
 
     /* ADC  */
     xTaskCreate(vADCTask, (signed char *) "vADCTask",
-                configMINIMAL_STACK_SIZE * 5, NULL, (tskIDLE_PRIORITY + 1UL),
+                configMINIMAL_STACK_SIZE * 1, NULL, (tskIDLE_PRIORITY + 1UL),
                 (xTaskHandle *) NULL);
     // verificar si es * 5 o si se puede dejar * 1
 
