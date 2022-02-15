@@ -52,6 +52,9 @@ MainWindow::MainWindow(QWidget *parent)
     //asocio la accion triggered del ui->actionAyuda a la funcion help() (dentro de slots el mainwindow.h)
     connect(ui->actionAyuda, SIGNAL(triggered()), this, SLOT(help()));
     MainWindow::inicializarGraficos();
+    // se puede especificar el rango fijo
+    ui->customPlot->xAxis->setRange(0, 3.0);
+    ui->customPlot->yAxis->setRange(0, 50);
     if (demostracion == true){
         grafico_demostracion = 0;
     }
@@ -389,9 +392,6 @@ void MainWindow::inicializarGraficos(int curva){
     ui->customPlot->addGraph();
     ui->customPlot->xAxis->setLabel("Tension [V]");
     ui->customPlot->yAxis->setLabel("Corriente [uA]");
-    // se puede especificar el rango fijo
-    ui->customPlot->xAxis->setRange(0, 3.0);
-    ui->customPlot->yAxis->setRange(0, 50);
 
     // hace que los ejes escalen automaticamente
     ui->customPlot->graph(curva)->rescaleAxes();
