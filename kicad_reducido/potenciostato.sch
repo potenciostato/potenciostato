@@ -595,4 +595,10 @@ Wire Wire Line
 Connection ~ 1800 3100
 Text Notes 9000 4850 0    50   ~ 0
 Calculamos para una entrada de 1mA \npara que no sature en las primeras mediciones
+$Sheet
+S 1800 5950 1800 1000
+U 62106E60
+F0 "Fuente_partida" 50
+F1 "Fuente_partida.sch" 50
+$EndSheet
 $EndSCHEMATC
