@@ -77,7 +77,7 @@ uint8_t midiendo=false;
 
 // OBJETOS FreeRTOS
 
-xSemaphoreHandle sDACncic, sDACready, sADCready, sDACstart, sADCstart;
+xSemaphoreHandle sDACncic, sDACready, sADCready, sDACstart, sADCstart, sADCdelay;
 xQueueHandle qUSBin, qUSBout, qADC, qDAC, qADCcorriente, qADCtension, qADCsend;
 
 DMA_TransferDescriptor_t DMA_LLI_buffer;
@@ -141,6 +141,16 @@ void DMA_IRQHandler(void)
     else {
         /* Process error here */
     }
+    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+}
+
+void TIMER0_IRQHandler(void)
+{
+	static signed portBASE_TYPE xHigherPriorityTaskWoken;
+	if (Chip_TIMER_MatchPending(LPC_TIMER0, 1)) {
+		Chip_TIMER_ClearMatch(LPC_TIMER0, 1);
+		xSemaphoreGiveFromISR(sADCdelay, &xHigherPriorityTaskWoken);
+	}
     portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 }
 
@@ -239,6 +249,7 @@ static void vUSBTask(void *pvParameters) {
                 conf_dac.ncic = lecturaQT[6];
 
                 conf_adc.set = true;
+                conf_adc.frec = conf_dac.frec;
 
                 // Envia la configuracion a las tareas y estado de medicion
                 error = xQueueSendToBack(qDAC,&conf_dac,0);
@@ -454,12 +465,18 @@ static void vDACTask(void *pvParameters) {
 static void vADCTask(void *pvParameters) {
 
     uint16_t FREC = ADC_SAMPL_FREC, i, corrienteADC, tensionADC;
+    uint32_t timerFreq, cuentas;
     struct ADCmsj conf;
-    //uint16_t ADCbuffer[ADC_N_COLA];
     struct USBmsj msjUSB;
     int error;
 
     NVIC_EnableIRQ(ADC_IRQn);
+
+	/* Enable timer 1 clock */
+	Chip_TIMER_Init(LPC_TIMER0);
+
+	/* Timer rate is system clock rate */
+	timerFreq = Chip_Clock_GetSystemClockRate();
 
     while(1) {
 
@@ -469,8 +486,13 @@ static void vADCTask(void *pvParameters) {
         	DEBUGOUT("ADC: Conf recibida Set:%d,Frec:%d\n",conf.set,conf.frec);
 
         if(conf.frec != FREC){
-            FREC = conf.frec;
-            Chip_ADC_SetSampleRate(LPC_ADC,&ADCSetup,FREC);
+            FREC = conf.frec/1000;
+            cuentas = timerFreq / (FREC*PUNTOS_GRAFICA);
+            if(cuentas <= 0) cuentas = 1;
+        	Chip_TIMER_Reset(LPC_TIMER0);
+        	Chip_TIMER_MatchEnableInt(LPC_TIMER0, 1);
+        	Chip_TIMER_SetMatch(LPC_TIMER0, 1, timerFreq/10000);
+        	Chip_TIMER_ResetOnMatchEnable(LPC_TIMER0, 1);
         }
         if (conf.set == true){
 
@@ -489,7 +511,6 @@ static void vADCTask(void *pvParameters) {
             i = 0;
             while (conf.set){
 
-
                 xQueueReceive(qADCcorriente,&corrienteADC,portMAX_DELAY);
                 NVIC_EnableIRQ(ADC_IRQn);
                 xQueueReceive(qADCtension,&tensionADC,portMAX_DELAY);
@@ -497,20 +518,21 @@ static void vADCTask(void *pvParameters) {
 
                 msjUSB.corriente = corrienteADC;
                 msjUSB.tension = tensionADC;
-                error = xQueueSendToBack(qADCsend, &msjUSB, 10); // pdTRUE (1) if the item was successfully posted, otherwise errQUEUE_FULL (0)
-
-                if(error == 0){
-                	error = 0;
-                }
-                // Conteos para debugging
-                //int countADCsend = uxQueueMessagesWaiting( qADCsend );
+                error = xQueueSendToBack(qADCsend, &msjUSB, 0); // pdTRUE (1) if the item was successfully posted, otherwise errQUEUE_FULL (0)
 
                 if (debugging == ENABLED)
                     DEBUGOUT("ADC: ADC Send\n");
 
                 // Se recibe la config para saber si se debera
                 // seguir midiendo o terminar
-                xQueueReceive(qADC,&conf,( portTickType ) TICKS_MUESTREO);
+                xQueueReceive(qADC,&conf,0);
+
+                // Delay hecho por timer
+            	Chip_TIMER_Enable(LPC_TIMER0);
+            	NVIC_ClearPendingIRQ(TIMER0_IRQn);
+            	NVIC_EnableIRQ(TIMER0_IRQn);
+            	xSemaphoreTake(sADCdelay, ( portTickType ) portMAX_DELAY);
+
             }
             if (debugging == ENABLED)
                 DEBUGOUT("ADC: Deshabilita medicion ADC\n");
@@ -547,6 +569,8 @@ int main(void)
     xSemaphoreTake(sADCready, ( portTickType ) 10 );
     vSemaphoreCreateBinary(sADCstart);
     xSemaphoreTake(sADCstart, ( portTickType ) 10 );
+    vSemaphoreCreateBinary(sADCdelay);
+    xSemaphoreTake(sADCdelay, ( portTickType ) 10 );
 
     qUSBin = xQueueCreate( TAMANIO_MAX_COLA_USB, sizeof( uint8_t )* LARGO_MENSAJE);
     qUSBout = xQueueCreate( TAMANIO_MAX_COLA_USB, sizeof( uint8_t ) * LARGO_MENSAJE);
