@@ -45,17 +45,20 @@ int8_t Dispositivo = -1;
 
 #define MILISEGUNDOS_POLLING 200
 
-#define CANT_VALORES 500
-#define PUNTOS_REFRESCO 10
-#define PUNTOS_A_RECIBIR 5
+#define LARGO_MENSAJE_ENTRADA	32 //cantidad de bytes de los reports de entrada (visto desde el punto de vista de la PC)
+#define LARGO_MENSAJE_SALIDA	8 //cantidad de bytes de los reports de salida (visto desde el punto de vista de la PC)
 
-#define MAX_PUNTOS 2
+#define CANT_VALORES 500
+#define PUNTOS_REFRESCO 4
+#define REPORTES_A_RECIBIR 4
+
+
 
 // CONSTANTES INTERNAS
 #define FRECUENCIA 0
 #define PERIODO 1
 #define ENABLED true
 #define DISABLED false
-
+#define BITS_EN_UN_BYTE 8
 
 #endif // GLOBALES_H

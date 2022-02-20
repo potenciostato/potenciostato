@@ -37,6 +37,7 @@
  */
 
 #include "app_usbd_cfg.h"
+#include <defines.h>
 
 /*****************************************************************************
  * Private types/enumerations/variables
@@ -46,9 +47,13 @@
  * Public types/enumerations/variables
  ****************************************************************************/
 
-#define HID_INPUT_REPORT_BYTES       8				/* size of report in Bytes */
-#define HID_OUTPUT_REPORT_BYTES      8				/* size of report in Bytes */
+#define HID_INPUT_REPORT_BYTES       LARGO_MENSAJE_ENTRADA				/* size of report in Bytes */
+#define HID_INPUT_MAXPACKETSIZE		 LARGO_PACKETSIZE_ENTRADA
+#define HID_OUTPUT_REPORT_BYTES      LARGO_MENSAJE_SALIDA				/* size of report in Bytes */
+#define HID_OUTPUT_MAXPACKETSIZE     LARGO_PACKETSIZE_SALIDA
 #define HID_FEATURE_REPORT_BYTES     1				/* size of report in Bytes */
+
+
 
 /**
  * HID Report Descriptor
@@ -139,15 +144,15 @@ ALIGNED(4) uint8_t USB_FsConfigDescriptor[] = {
 	USB_ENDPOINT_DESCRIPTOR_TYPE,	/* bDescriptorType */
 	HID_EP_IN,						/* bEndpointAddress */
 	USB_ENDPOINT_TYPE_INTERRUPT,	/* bmAttributes */
-	WBVAL(0x0008),					/* wMaxPacketSize */
-	0x20,		/* 16ms */          /* bInterval */
+	WBVAL(HID_INPUT_MAXPACKETSIZE),	/* wMaxPacketSize */
+	0x40,		/* 16ms */          /* bInterval */
 	/* Endpoint, HID Interrupt Out */
 	USB_ENDPOINT_DESC_SIZE,			/* bLength */
 	USB_ENDPOINT_DESCRIPTOR_TYPE,	/* bDescriptorType */
 	HID_EP_OUT,						/* bEndpointAddress */
 	USB_ENDPOINT_TYPE_INTERRUPT,	/* bmAttributes */
-	WBVAL(0x0008),					/* wMaxPacketSize */
-	0x20,							/* bInterval: 16ms */
+	WBVAL(HID_OUTPUT_MAXPACKETSIZE),/* wMaxPacketSize */
+	0x40,							/* bInterval: 16ms */
 	/* Terminator */
 	0								/* bLength */
 };

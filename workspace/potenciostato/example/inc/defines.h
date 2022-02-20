@@ -34,16 +34,19 @@
 //#define CLOCK_DAC_HZ        30000000    // CCLK divido por 4. NOTA: Clock que trae por defecto con ésta configuración: 120MHz.
 
 // Defines ADC
-#define CANAL_CORRIENTE			ADC_CH0
-#define CANAL_TENSION			ADC_CH1
-#define ADC_SAMPL_FREC      	50000
-#define ADC_N_COLA 				1 //se pone 1 medicion (punto) por cada mensaje de USB
-#define TAMANIO_MAX_COLA_ADC 	2000 //cantidad maxima de mediciones (puntos) en la cola ADC
-#define TAMANIO_MAX_COLA_USB	100 //cantidad maxima de mensajes en la cola USB
-#define LARGO_MENSAJE			8 //igual a la cantidad de bytes de los reports de entrada y de salida de USB
+#define CANAL_CORRIENTE				ADC_CH0
+#define CANAL_TENSION				ADC_CH1
+#define ADC_SAMPL_FREC      		50000
+#define ADC_N_COLA 					1 //se pone 1 medicion (punto) por cada mensaje de USB
+#define TAMANIO_MAX_COLA_ADC 		2000 //cantidad maxima de mediciones (puntos) en la cola ADC
+#define TAMANIO_MAX_COLA_USB		100 //cantidad maxima de mensajes en la cola USB
+#define LARGO_MENSAJE_ENTRADA		21 //cantidad de bytes de los reports de entrada (visto desde el punto de vista de la PC)
+#define LARGO_PACKETSIZE_ENTRADA	21 //cantidad de bytes máxima de los reports de entrada
+#define LARGO_MENSAJE_SALIDA		8 //cantidad de bytes de los reports de salida (visto desde el punto de vista de la PC)
+#define LARGO_PACKETSIZE_SALIDA		8 //cantidad de bytes máxima de los reports de salida
 
-#define PUNTOS_GRAFICA			200
-#define MAX_PUNTOS 2
+#define PUNTOS_GRAFICA			500
+#define MAX_PUNTOS 6
 
 
 #define TICKS_MUESTREO          10 // delay entre lecturas de ADC, determina la frecuencia de muestreo (con el error propio de los ticks del sistema)

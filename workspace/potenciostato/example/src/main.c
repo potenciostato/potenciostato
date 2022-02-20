@@ -212,7 +212,7 @@ static void vInicializarUSB(void *pvParameters) {
  * */
 static void vUSBTask(void *pvParameters) {
 
-    uint8_t lecturaQT[8]={0};
+    uint8_t lecturaQT[LARGO_MENSAJE_ENTRADA]={0};
     int i, error;
     struct DACmsj conf_dac = {false, BARRIDO_CICLICO, 1000, 255}; //estado del modulo, frecuencia[Hz], amplitud[V]
     struct ADCmsj conf_adc = {false,ADC_SAMPL_FREC}; //estado del modulo, frecuencia[Hz]
@@ -308,7 +308,8 @@ static void vDACTask(void *pvParameters) {
     uint32_t FREC = 0;
     uint32_t CLOCK_DAC_HZ, timeoutDMA;
 
-    uint8_t respuesta[8]={0};
+    uint8_t respuesta_in[LARGO_MENSAJE_ENTRADA]={0};
+    uint8_t respuesta_out[LARGO_MENSAJE_SALIDA]={0};
 
     struct DACmsj conf;
 
@@ -413,33 +414,24 @@ static void vDACTask(void *pvParameters) {
     					if (debugging == ENABLED)
     						DEBUGOUT("DAC: CYCLE END\n");
 
-    					respuesta[0] = OC_CYCLEEND;
-    					respuesta[1] = 0x0;
-    					respuesta[2] = 0x0;
-    					respuesta[3] = 0x0;
-    					respuesta[4] = 0x0;
-    					respuesta[5] = 0x0;
-    					respuesta[6] = 0x0;
-    					respuesta[7] = 0x0;
-    					error = xQueueSendToBack(qUSBin,&respuesta,portMAX_DELAY);
+    					respuesta_in[0] = OC_CYCLEEND;
+						for (i = 1; i < LARGO_MENSAJE_ENTRADA; i ++){
+							respuesta_in[i] = 0x0;
+						}
+    					error = xQueueSendToBack(qUSBin,&respuesta_in,portMAX_DELAY);
 
     					midiendo = false;
 
     					if (debugging == ENABLED)
     						DEBUGOUT("DAC: ABORT\n");
 
-    					respuesta[0] = OC_ABORTMEASUREMENT;
-    					respuesta[1] = 0x0;
-    					respuesta[2] = 0x0;
-    					respuesta[3] = 0x0;
-    					respuesta[4] = 0x0;
-    					respuesta[5] = 0x0;
-    					respuesta[6] = 0x0;
-    					respuesta[7] = 0x0;
-    					error = xQueueSendToBack(qUSBout,&respuesta,portMAX_DELAY);
+    					respuesta_out[0] = OC_ABORTMEASUREMENT;
+						for (i = 1; i < LARGO_MENSAJE_SALIDA; i ++){
+							respuesta_out[i] = 0x0;
+						}
+    					error = xQueueSendToBack(qUSBout,&respuesta_out,portMAX_DELAY);
 
                     	// Aquí el Qt debera enviar un Abort
-
 
                 	}
                 }
@@ -476,14 +468,14 @@ static void vADCTask(void *pvParameters) {
 	Chip_TIMER_Init(LPC_TIMER0);
 
 	/* Timer rate is system clock rate */
-	timerFreq = Chip_Clock_GetSystemClockRate();
+	timerFreq = Chip_Clock_GetSystemClockRate()/4;
 
     while(1) {
 
         // Se lee la cola, si no se recibe nada la tarea se quedará esperando
         xQueueReceive(qADC,&conf,portMAX_DELAY);
         if (debugging == ENABLED)
-        	DEBUGOUT("ADC: Conf recibida Set:%d,Frec:%d\n",conf.set,conf.frec);
+        	DEBUGOUT("ADC: Conf recibida Set:%d,Frec:%d\n", conf.set, conf.frec);
 
         if(conf.frec != FREC){
             FREC = conf.frec/1000;
@@ -491,7 +483,7 @@ static void vADCTask(void *pvParameters) {
             if(cuentas <= 0) cuentas = 1;
         	Chip_TIMER_Reset(LPC_TIMER0);
         	Chip_TIMER_MatchEnableInt(LPC_TIMER0, 1);
-        	Chip_TIMER_SetMatch(LPC_TIMER0, 1, timerFreq/10000);
+        	Chip_TIMER_SetMatch(LPC_TIMER0, 1, cuentas);
         	Chip_TIMER_ResetOnMatchEnable(LPC_TIMER0, 1);
         }
         if (conf.set == true){
@@ -572,8 +564,8 @@ int main(void)
     vSemaphoreCreateBinary(sADCdelay);
     xSemaphoreTake(sADCdelay, ( portTickType ) 10 );
 
-    qUSBin = xQueueCreate( TAMANIO_MAX_COLA_USB, sizeof( uint8_t )* LARGO_MENSAJE);
-    qUSBout = xQueueCreate( TAMANIO_MAX_COLA_USB, sizeof( uint8_t ) * LARGO_MENSAJE);
+    qUSBin = xQueueCreate( TAMANIO_MAX_COLA_USB, sizeof( uint8_t )* LARGO_MENSAJE_ENTRADA);
+    qUSBout = xQueueCreate( TAMANIO_MAX_COLA_USB, sizeof( uint8_t ) * LARGO_MENSAJE_SALIDA);
     qDAC = xQueueCreate( 1, sizeof( struct DACmsj ));
     qADC = xQueueCreate( 1, sizeof( struct ADCmsj ));
     qADCcorriente = xQueueCreate(ADC_N_COLA, sizeof( uint16_t ));

@@ -124,9 +124,10 @@ static ErrorCode_t HID_SetReport(USBD_HANDLE_T hHid, USB_SETUP_PACKET *pSetup, u
 static ErrorCode_t HID_Ep_Hdlr(USBD_HANDLE_T hUsb, void *data, uint32_t event)
 {
 	USB_HID_CTRL_T *pHidCtrl = (USB_HID_CTRL_T *) data;
+	uint8_t cantidad = 0;
 
-	uint8_t i, mensaje[8]={0}, mensajein[8]={0};
-	uint8_t respuesta[8]={0};
+	uint8_t i, mensaje[LARGO_MENSAJE_SALIDA]={0}, mensajein[LARGO_MENSAJE_SALIDA]={0};
+	uint8_t respuesta[LARGO_MENSAJE_ENTRADA]={0};
 	struct USBmsj medicion;
 	uint8_t n_punto = 0;
 	int cod_receive;
@@ -140,8 +141,8 @@ static ErrorCode_t HID_Ep_Hdlr(USBD_HANDLE_T hUsb, void *data, uint32_t event)
 
 	case USB_EVT_OUT:
 		/* Leo el mensaje del QT */
-		USBD_API->hw->ReadEP(hUsb, pHidCtrl->epout_adr, loopback_report);
-		for (i = 0; i < 8; i++){
+		cantidad = USBD_API->hw->ReadEP(hUsb, pHidCtrl->epout_adr, loopback_report);
+		for (i = 0; i < cantidad; i++){
 			mensaje[i] = *(loopback_report+i);
 		}
 		/* El mensaje sera procesado */
@@ -167,7 +168,7 @@ static ErrorCode_t HID_Ep_Hdlr(USBD_HANDLE_T hUsb, void *data, uint32_t event)
 						if (debugging == ENABLED)
 							DEBUGOUT("INT: CYCLE END\n");
 						respuesta[0] = OC_CYCLEEND;
-						for (i = 1; i < 8; i ++){
+						for (i = 1; i < LARGO_MENSAJE_ENTRADA; i ++){
 							respuesta[i] = 0x0;
 						}
 					}
@@ -190,11 +191,11 @@ static ErrorCode_t HID_Ep_Hdlr(USBD_HANDLE_T hUsb, void *data, uint32_t event)
 								DEBUGOUT("INT: Termino la medicion y no hay mas datos \n");
 							respuesta[0] = OC_SENDDATAEND;
 						}
-						for (i = 1; i < 8; i ++){
+						for (i = 1; i < LARGO_MENSAJE_ENTRADA; i ++){
 							respuesta[i] = 0x0;
 						}
 					} else {
-						for (i = 0; i < 8; i ++){
+						for (i = 0; i < LARGO_MENSAJE_ENTRADA; i ++){
 							respuesta[i] = 0x0;
 						}
 						do{
@@ -225,7 +226,7 @@ static ErrorCode_t HID_Ep_Hdlr(USBD_HANDLE_T hUsb, void *data, uint32_t event)
 						}while((cod_receive != pdFAIL) && (n_punto < MAX_PUNTOS));
 					}
 				}
-				USBD_API->hw->WriteEP(hUsb, pHidCtrl->epin_adr, respuesta, 8);
+				USBD_API->hw->WriteEP(hUsb, pHidCtrl->epin_adr, respuesta, LARGO_MENSAJE_ENTRADA);
 				break;
 			case OC_INITMEASUREMENTLINEAL:
 			case OC_INITMEASUREMENTCYCLICAL:
@@ -233,23 +234,22 @@ static ErrorCode_t HID_Ep_Hdlr(USBD_HANDLE_T hUsb, void *data, uint32_t event)
 			case OC_ENDMEASUREMENT:
 				xQueueSendToBackFromISR( qUSBout, &mensaje, &xHigherPriorityTaskWoken );
 				respuesta[0] = mensaje[0]; //el ACK sera el codigo de operacion recibido y nada mas
-				for (i = 0; i < 7; i ++){
-					respuesta[i+1] = 0;
+				for (i = 1; i < LARGO_MENSAJE_ENTRADA; i++){
+					respuesta[i] = 0;
 				}
 				if (debugging == ENABLED)
 					DEBUGOUT("INT: INIT OR ABORT\n");
-				USBD_API->hw->WriteEP(hUsb, pHidCtrl->epin_adr, respuesta, 8);
+				USBD_API->hw->WriteEP(hUsb, pHidCtrl->epin_adr, respuesta, LARGO_MENSAJE_ENTRADA);
 				break;
 			default:
-				mensaje[0] = 0xFF;
-				mensaje[1] = 0xAA;
-				mensaje[2] = 0xFF;
-				mensaje[3] = 0xAA;
-				mensaje[4] = 0xFF;
-				mensaje[5] = 0xAA;
-				mensaje[6] = 0xFF;
-				mensaje[7] = 0xAA;
-				USBD_API->hw->WriteEP(hUsb, pHidCtrl->epin_adr, mensaje, 8);
+				for (i = 1; i < LARGO_MENSAJE_ENTRADA; i++){
+					if (i % 2 == 0)
+						respuesta[i] = 0xAA;
+					else
+						respuesta[i] = 0xFF;
+				}
+
+				USBD_API->hw->WriteEP(hUsb, pHidCtrl->epin_adr, respuesta, LARGO_MENSAJE_ENTRADA);
 				break;
 		}
 

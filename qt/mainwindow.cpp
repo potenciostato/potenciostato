@@ -1,3 +1,15 @@
+// CODIGO DE EJEMPLO PARA LUEGO.......
+//QString Buff;
+//Buff = ui->TBox->toPlainText();
+//Datos = Buff.toInt();
+//    QMessageBox::warning(this,"Error","El valor ingresado es inválido",QMessageBox::Retry);
+//Datos = 0;
+//Buff=QString::number(Datos);
+//ui->TBox_2->setText(Buff);
+
+
+
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -158,15 +170,15 @@ void MainWindow::refrescarValores(int curva){
 }
 
 void MainWindow::onTimeout(){
-    unsigned char buffer[8] = {0x0};
-    unsigned char recv_data[8] = {0x0};
+    unsigned char buffer[LARGO_MENSAJE_SALIDA] = {0x0};
+    unsigned char recv_data[LARGO_MENSAJE_ENTRADA] = {0x0};
     int len, i=0, j=0;
     int send_ret, recv_ret;
 
     unsigned int cuentas_corriente, cuentas_tension;
     float volts_tension, volts_corriente;
     //qDebug() << clock() << "TimeOut";
-    for(i=0;i<PUNTOS_A_RECIBIR;i++){
+    for(i=0;i<REPORTES_A_RECIBIR;i++){
         if (demostracion == false){
             //Se envia inicio de medición al LPC
             //envio....
@@ -177,9 +189,9 @@ void MainWindow::onTimeout(){
                 //se enviara un SEND DATA
                 buffer[0] = OC_SENDDATA;
                 qDebug() << clock() << "Se pide Dato";
-                send_ret = libusb_interrupt_transfer(dev_handle, 0x01, buffer, (sizeof(buffer)) * 8, &len, 10);
+                send_ret = libusb_interrupt_transfer(dev_handle, 0x01, buffer, (sizeof(buffer)) * BITS_EN_UN_BYTE, &len, 1000);
                 qDebug() << clock() << "Pedido Dato enviado";
-                recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * 8, &len, 20);
+                recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * BITS_EN_UN_BYTE, &len, 1000);
                 //int recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * 64, &len, 1000);
 
                 if (debugging == ENABLED){
@@ -197,12 +209,12 @@ void MainWindow::onTimeout(){
                     qDebug() << clock();
                     qDebug() << "OP Code recibido" << recv_data[0];
                     qDebug() << "Cantidad puntos:" << recv_data[1];
-                    qDebug() << "respuesta[2]: " << recv_data[2];   //(medicion.corriente & 0xFF);
-                    qDebug() << "respuesta[3]:" << recv_data[3];    //((medicion.corriente >> 8) & 0x0F) | ((medicion.tension & 0x0F) << 4);
-                    qDebug() << "respuesta[4]:" << recv_data[4];    //(((medicion.tension) >> 4) & 0xFF);
-                    qDebug() << "respuesta[5]: " << recv_data[5];
-                    qDebug() << "respuesta[6]:" << recv_data[6];
-                    qDebug() << "respuesta[7]: " << recv_data[7];
+                    //qDebug() << "respuesta[2]: " << recv_data[2];   //(medicion.corriente & 0xFF);
+                    //qDebug() << "respuesta[3]:" << recv_data[3];    //((medicion.corriente >> 8) & 0x0F) | ((medicion.tension & 0x0F) << 4);
+                    //qDebug() << "respuesta[4]:" << recv_data[4];    //(((medicion.tension) >> 4) & 0xFF);
+                    //qDebug() << "respuesta[5]: " << recv_data[5];
+                    //qDebug() << "respuesta[6]:" << recv_data[6];
+                    //qDebug() << "respuesta[7]: " << recv_data[7];
                 }
 
                 if (recv_data[0] == OC_SENDDATA){ // Si hay datos, ver cuantos
@@ -426,8 +438,8 @@ void MainWindow::limpiarGraficos(){
 
 // Es llamada cuando el LPC y el QT estan al tanto del termino de la medición
 void MainWindow::terminoMedicion(){
-    unsigned char buffer[8] = {0x0};
-    unsigned char recv_data[8] = {0x0};
+    unsigned char buffer[LARGO_MENSAJE_SALIDA] = {0x0};
+    unsigned char recv_data[LARGO_MENSAJE_ENTRADA] = {0x0};
     int len;
     int send_ret, recv_ret;
 
@@ -436,8 +448,8 @@ void MainWindow::terminoMedicion(){
     //se enviara un END MEASUREMENT
     buffer[0] = OC_ENDMEASUREMENT;
 
-    send_ret = libusb_interrupt_transfer(dev_handle, 0x01, buffer, (sizeof(buffer)) * 8, &len, 1000);
-    recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * 8, &len, 1000);
+    send_ret = libusb_interrupt_transfer(dev_handle, 0x01, buffer, (sizeof(buffer)) * BITS_EN_UN_BYTE, &len, 1000);
+    recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * BITS_EN_UN_BYTE, &len, 1000);
     //int recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * 64, &len, 1000);
 
     qDebug() << "codigo envio" << send_ret;
@@ -469,8 +481,8 @@ void MainWindow::on_Bt_IniciarLineal_clicked()
     ui->Bt_IniciarLineal->setEnabled(false);
     ui->Bt_Exportar->setEnabled(false);
 
-    unsigned char buffer[8] = {0x0};
-    unsigned char recv_data[8] = {0x0};
+    unsigned char buffer[LARGO_MENSAJE_SALIDA] = {0x0};
+    unsigned char recv_data[LARGO_MENSAJE_ENTRADA] = {0x0};
     int len;
     int send_ret, recv_ret;
     uint8_t tension_pico = 0;
@@ -494,8 +506,8 @@ void MainWindow::on_Bt_IniciarLineal_clicked()
     buffer[6] = 0x00;
     buffer[7] = 0x00;
 
-    send_ret = libusb_interrupt_transfer(dev_handle, 0x01, buffer, (sizeof(buffer)) * 8, &len, 1000);
-    recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * 8, &len, 1000);
+    send_ret = libusb_interrupt_transfer(dev_handle, 0x01, buffer, (sizeof(buffer)) * BITS_EN_UN_BYTE, &len, 1000);
+    recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * BITS_EN_UN_BYTE, &len, 1000);
     //int recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * 64, &len, 1000);
 
     qDebug() << "codigo envio" << send_ret;
@@ -537,8 +549,8 @@ void MainWindow::on_Bt_IniciarCiclico_clicked()
     ui->Bt_IniciarCiclico->setEnabled(false);
     ui->Bt_Exportar->setEnabled(false);
 
-    unsigned char buffer[8] = {0x0};
-    unsigned char recv_data[8] = {0x0};
+    unsigned char buffer[LARGO_MENSAJE_SALIDA] = {0x0};
+    unsigned char recv_data[LARGO_MENSAJE_ENTRADA] = {0x0};
     int len;
     int send_ret, recv_ret;
     uint8_t tension_pico = 0;
@@ -570,8 +582,8 @@ void MainWindow::on_Bt_IniciarCiclico_clicked()
     buffer[7] = 0x00;
 
 
-    send_ret = libusb_interrupt_transfer(dev_handle, 0x01, buffer, (sizeof(buffer)) * 8, &len, 1000);
-    recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * 8, &len, 1000);
+    send_ret = libusb_interrupt_transfer(dev_handle, 0x01, buffer, (sizeof(buffer)) * BITS_EN_UN_BYTE, &len, 1000);
+    recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * BITS_EN_UN_BYTE, &len, 1000);
     //int recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * 64, &len, 1000);
 
     qDebug() << "codigo envio" << send_ret;
@@ -753,88 +765,9 @@ void MainWindow::on_Conectar_Bt_clicked()
     ui->Conectar_Bt->setEnabled(false);
     ui->Desconectar_Bt->setEnabled(true);
 
-    //QString Buff;
-
-    unsigned int Datos;
-    unsigned int Potencia;
-
-    //unsigned char TxData [4];
-    unsigned char TxData[4];
-    //unsigned char RxData [4];
-    unsigned char RxData[4];
-
-    int Enviados=0;
-
-    int actual_length;
-
-    //Buff = ui->TBox->toPlainText();
-
-    //Datos = Buff.toInt();
-
-
-    /*for (i=0 ; i < 4; i++)
-    {
-        TxData[3-i] = Datos % 10;
-        Datos = Datos / 10;
-    }
-
-    qDebug() << "-----Inicio Bytes Enviados-----";
-    qDebug() << TxData[0];
-    qDebug() << TxData[1];
-    qDebug() << TxData[2];
-    qDebug() << TxData[3];
-    qDebug() << "-----Fin Bytes Enviados-----";
-    */
-
-    //if(data1 > 80)
-    //{
-    //    QMessageBox::warning(this,"Error","El valor ingresado es inválido",QMessageBox::Retry);
-
-    //    return;
-    //}
-
     libusb_claim_interface(dev_handle, 0);
 
-/*    unsigned char buffer[8] = {0x0};
-    unsigned char recv_data[8] = {0x0};
-    int len;
-    int send_ret, recv_ret;
-
-    //se enviara un INIT MEASUREMENT
-    buffer[0] = OC_INITMEASUREMENT;
-
-    send_ret = libusb_interrupt_transfer(dev_handle, 0x01, buffer, (sizeof(buffer)) * 8, &len, 1000);
-    recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * 8, &len, 1000);
-    //int recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * 64, &len, 1000);
-
-    qDebug() << "codigo envio" << send_ret;
-    qDebug() << "dato enviado" << buffer[0];
-    qDebug() << "codigo recepcion" << recv_ret;
-    qDebug() << "dato recibido[0]" << recv_data[0];*/
-
-    /*Enviados = libusb_interrupt_transfer(dev_handle , 0x01 , TxData , (sizeof (TxData)) * 4, &actual_length , 1000);
-    libusb_interrupt_transfer(dev_handle , 0x81 , RxData , (sizeof (RxData)) * 4, &actual_length , 1000);
-
-    //Datos = 0;
-
-    for (i=0 ; i < 4; i++)
-    {
-        Potencia = (unsigned int) pow((double) 10 , (double) i);
-        //Datos += RxData[3-i] * Potencia;
-    }
-
-    //Buff=QString::number(Datos);
-
-    //ui->TBox_2->setText(Buff);
-
-    qDebug() << "-----Inicio Bytes Recibidos-----";
-    qDebug() << RxData[0];
-    qDebug() << RxData[1];
-    qDebug() << RxData[2];
-    qDebug() << RxData[3];
-    qDebug() << "-----Fin Bytes Recibidos-----";*/
     qDebug() << Dispositivo;
-    qDebug() << Enviados;
 }
 
 void MainWindow::help()
@@ -857,8 +790,8 @@ void MainWindow::forzarAbortar()
     //se queda esperando al Recibido
     // si llega recibido OK continuar
 
-    unsigned char buffer[8] = {0x0};
-    unsigned char recv_data[8] = {0x0};
+    unsigned char buffer[LARGO_MENSAJE_SALIDA] = {0x0};
+    unsigned char recv_data[LARGO_MENSAJE_ENTRADA] = {0x0};
     int len;
     int send_ret, recv_ret;
 
@@ -866,8 +799,8 @@ void MainWindow::forzarAbortar()
     //se enviara un ABORT MEASUREMENT
     buffer[0] = OC_ABORTMEASUREMENT;
 
-    send_ret = libusb_interrupt_transfer(dev_handle, 0x01, buffer, (sizeof(buffer)) * 8, &len, 1000);
-    recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * 8, &len, 1000);
+    send_ret = libusb_interrupt_transfer(dev_handle, 0x01, buffer, (sizeof(buffer)) * BITS_EN_UN_BYTE, &len, 1000);
+    recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * BITS_EN_UN_BYTE, &len, 1000);
     //int recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * 64, &len, 1000);
 
     qDebug() << "codigo envio" << send_ret;
