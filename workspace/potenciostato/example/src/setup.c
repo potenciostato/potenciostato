@@ -17,14 +17,10 @@ ADC_CLOCK_SETUP_T ADCSetup;
  ****************************************************************************/
 void prvSetupHardware(void)
 {
-	uint32_t timerfreq;
-
 	SystemCoreClockUpdate();
 	Board_Init();
 	Chip_GPIO_Init (LPC_GPIO);
 	Chip_IOCON_Init(LPC_IOCON);
-
-	timerfreq= Chip_Clock_GetSystemClockRate();
 
 	// Setup ADC
 	Chip_ADC_Init(LPC_ADC, &ADCSetup);
@@ -36,13 +32,13 @@ void prvSetupHardware(void)
 	Chip_IOCON_PinMux(LPC_IOCON, PUERTO(0), PIN(23), MD_PLN, IOCON_FUNC1); //ADC0
 	Chip_IOCON_PinMux(LPC_IOCON, PUERTO(0), PIN(24), MD_PLN, IOCON_FUNC1); //ADC1
 
-	//Chip_ADC_SetBurstCmd(LPC_ADC,DISABLE);
-
-
     // Setup DAC
 	Chip_IOCON_PinMux (LPC_IOCON , PUERTO(0) , PIN(26) , MD_PLN, IOCON_FUNC2 );
 	Chip_DAC_Init(LPC_DAC);
 	Chip_Clock_SetPCLKDiv(SYSCTL_PCLK_DAC, SYSCTL_CLKDIV_8);
 	Chip_DAC_ConfigDAConverterControl(LPC_DAC, DAC_DBLBUF_ENA | DAC_CNT_ENA | DAC_DMA_ENA); // Se habilita el DMA y soporte de cuenta.
 
+	// Setup Timer0
+	Chip_TIMER_Init(LPC_TIMER0);
+	Chip_TIMER_Enable(LPC_TIMER0);
 }

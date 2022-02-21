@@ -45,9 +45,9 @@
 #define LARGO_MENSAJE_SALIDA		8 //cantidad de bytes de los reports de salida (visto desde el punto de vista de la PC)
 #define LARGO_PACKETSIZE_SALIDA		8 //cantidad de bytes máxima de los reports de salida
 
-#define PUNTOS_GRAFICA			500
+#define PUNTOS_GRAFICA			200
 #define MAX_PUNTOS 6
-
+#define FRECUENCIA_ALTA 		100
 
 #define TICKS_MUESTREO          10 // delay entre lecturas de ADC, determina la frecuencia de muestreo (con el error propio de los ticks del sistema)
 
