@@ -303,7 +303,6 @@ static void vDACTask(void *pvParameters) {
     uint32_t FREC = 0;
     uint32_t CLOCK_DAC_HZ, timeoutDMA;
 
-    uint8_t respuesta_in[LARGO_MENSAJE_ENTRADA]={0};
     uint8_t respuesta_out[LARGO_MENSAJE_SALIDA]={0};
 
     struct DACmsj conf;
@@ -315,9 +314,6 @@ static void vDACTask(void *pvParameters) {
     CanalDAC = Chip_GPDMA_GetFreeChannel ( LPC_GPDMA , 0 );
     Chip_GPDMA_Init ( LPC_GPDMA );
     NVIC_EnableIRQ(DMA_IRQn);
-
-
-
 
     while(1) {
 
@@ -404,18 +400,7 @@ static void vDACTask(void *pvParameters) {
                     		xSemaphoreTake(sDACncic, ( portTickType ) portMAX_DELAY);
                     	}
 
-                    	//Se envía el término de medición
-
-    					if (debugging == ENABLED)
-    						DEBUGOUT("DAC: CYCLE END\n");
-
-    					respuesta_in[0] = OC_CYCLEEND;
-						for (i = 1; i < LARGO_MENSAJE_ENTRADA; i ++){
-							respuesta_in[i] = 0x0;
-						}
-    					error = xQueueSendToBack(qUSBin,&respuesta_in,portMAX_DELAY);
-
-    					//midiendo = false;
+                    	//Se envía el término de medición a Tarea USB
 
     					if (debugging == ENABLED)
     						DEBUGOUT("DAC: ABORT\n");
@@ -425,9 +410,6 @@ static void vDACTask(void *pvParameters) {
 							respuesta_out[i] = 0x0;
 						}
     					error = xQueueSendToBack(qUSBout,&respuesta_out,portMAX_DELAY);
-
-                    	// Aquí el Qt debera enviar un Abort
-
                 	}
                 }
                 if (conf.mode == BARRIDO_LINEAL) {
@@ -442,7 +424,7 @@ static void vDACTask(void *pvParameters) {
                 Chip_GPDMA_Stop(LPC_GPDMA, CanalDAC);
                 if (debugging == ENABLED)
                     DEBUGOUT("DAC: Deshabilitado\n");
-                midiendo = false;
+                //midiendo = false;
             }
         }
     }
@@ -451,10 +433,12 @@ static void vDACTask(void *pvParameters) {
 
 static void vADCTask(void *pvParameters) {
 
+    uint8_t respuesta_in[LARGO_MENSAJE_ENTRADA]={0};
     uint16_t FREC = ADC_SAMPL_FREC;
-    uint32_t timerFreq, cuentas, error, datos_ok;
+    uint32_t timerFreq, cuentas, error, datos_ok, i;
     struct ADCmsj conf;
     struct USBmsj msjUSB;
+    unsigned portBASE_TYPE n_mensajes;
 
 	timerFreq = Chip_Clock_GetSystemClockRate()/4;
 
@@ -485,9 +469,10 @@ static void vADCTask(void *pvParameters) {
         	Chip_ADC_SetBurstCmd(LPC_ADC, ENABLE);
             if (debugging == ENABLED)
                 DEBUGOUT("ADC: Iniciando medición\n");
-
+            i = 0;
             while (conf.set){
-            	if(FREC<FRECUENCIA_ALTA){
+
+            	if(FREC<FRECUENCIA_BAJA){
             		NVIC_EnableIRQ(ADC_IRQn);
             		error = xQueueReceive(qADCmedicion,&msjUSB,10);
                     if(error == pdFAIL)
@@ -501,17 +486,20 @@ static void vADCTask(void *pvParameters) {
                     // Se recibe la config para saber si se debera seguir midiendo o terminar
                     xQueueReceive(qADC,&conf,0);
 
-                    // Delay hecho por timer
+                    // Delay por timer
                 	NVIC_ClearPendingIRQ(TIMER0_IRQn);
                 	NVIC_EnableIRQ(TIMER0_IRQn);
                 	xSemaphoreTake(sADCdelay, ( portTickType ) portMAX_DELAY);
             	} else {
-            		NVIC_EnableIRQ(ADC_IRQn);
-                    // Se recibe la config para saber si se debera
-                    // seguir midiendo o terminar
-                    xQueueReceive(qADC,&conf,0);
 
-                    // Delay hecho por timer
+            		NVIC_EnableIRQ(ADC_IRQn);
+            		// Se encuesta la cola cada 50 mediciones
+            		if(i>=50){
+                    	xQueueReceive(qADC,&conf,0);
+                    	i=0;
+                    }
+            		i++;
+                    // Delay por timer
                 	NVIC_ClearPendingIRQ(TIMER0_IRQn);
                 	NVIC_EnableIRQ(TIMER0_IRQn);
                 	xSemaphoreTake(sADCdelay, ( portTickType ) portMAX_DELAY);
@@ -520,14 +508,23 @@ static void vADCTask(void *pvParameters) {
             if (debugging == ENABLED)
                 DEBUGOUT("ADC: Deshabilita medicion ADC\n");
             Chip_ADC_SetBurstCmd(LPC_ADC, DISABLE);
-            if(FREC>=FRECUENCIA_ALTA){
+            if(FREC>=FRECUENCIA_BAJA){
             	datos_ok = 1;
+            	n_mensajes = uxQueueMessagesWaiting(qADCmedicion);
             	while(datos_ok){
             		datos_ok = xQueueReceive(qADCmedicion,&msjUSB, 1);
                     error = xQueueSendToBack(qADCsend, &msjUSB, 0);
             	}
             }
-			midiendo = false;
+            // Se da aviso de fin de lectura de datos
+			if (debugging == ENABLED)
+				DEBUGOUT("ADC: CYCLE END\n");
+
+			respuesta_in[0] = OC_CYCLEEND;
+			for (i = 1; i < LARGO_MENSAJE_ENTRADA; i ++){
+				respuesta_in[i] = 0x0;
+			}
+			error = xQueueSendToBack(qUSBin,&respuesta_in,portMAX_DELAY);
         }
     }
 }
@@ -567,7 +564,7 @@ int main(void)
     qUSBout = xQueueCreate( TAMANIO_MAX_COLA_USB, sizeof( uint8_t ) * LARGO_MENSAJE_SALIDA);
     qDAC = xQueueCreate( 1, sizeof( struct DACmsj ));
     qADC = xQueueCreate( 1, sizeof( struct ADCmsj ));
-    qADCmedicion = xQueueCreate(PUNTOS_GRAFICA, sizeof( struct USBmsj ));
+    qADCmedicion = xQueueCreate(PUNTOS_GRAFICA*2, sizeof( struct USBmsj ));
     qADCsend = xQueueCreate(TAMANIO_MAX_COLA_ADC, sizeof( struct USBmsj ) * ADC_N_COLA);
 
     prvSetupHardware();
