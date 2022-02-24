@@ -1,5 +1,5 @@
-EESchema Schematic File Version 5
-EELAYER 36 0
+EESchema Schematic File Version 4
+EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
@@ -12,11 +12,6 @@ Comment1 ""
 Comment2 ""
 Comment3 ""
 Comment4 ""
-Comment5 ""
-Comment6 ""
-Comment7 ""
-Comment8 ""
-Comment9 ""
 $EndDescr
 Connection ~ 1800 3100
 Connection ~ 2050 3100
@@ -599,5 +594,11 @@ F4 "I_IN" I R 4800 3800 50
 F5 "I_ADC" I L 3800 3900 50 
 F6 "V_IN" I R 4800 3350 50 
 F7 "V_ADC" I L 3800 3350 50 
+$EndSheet
+$Sheet
+S 2250 6150 1950 900 
+U 6214974F
+F0 "Fuente_partida" 50
+F1 "Fuente_partida.sch" 50
 $EndSheet
 $EndSCHEMATC
