@@ -60,5 +60,7 @@ int8_t Dispositivo = -1;
 #define ENABLED true
 #define DISABLED false
 #define BITS_EN_UN_BYTE 8
+#define CUR_X 0
+#define CUR_Y 1
 
 #endif // GLOBALES_H

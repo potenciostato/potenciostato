@@ -63,10 +63,21 @@ MainWindow::MainWindow(QWidget *parent)
 
     //asocio la accion triggered del ui->actionAyuda a la funcion help() (dentro de slots el mainwindow.h)
     connect(ui->actionAyuda, SIGNAL(triggered()), this, SLOT(help()));
+
+    // hace interactivo al grafico para que se pueda arrastrar, hacer zoom y seleccionar las curvas
+    //ui->customPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables);
+    ui->customPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectAxes |
+                                    QCP::iSelectLegend | QCP::iSelectPlottables);
+    // connect slot that ties some axis selections together (especially opposite axes):
+    connect(ui->customPlot, SIGNAL(selectionChangedByUser()), this, SLOT(selectionChanged()));
+    // connect slots that takes care that when an axis is selected, only that direction can be dragged and zoomed:
+    connect(ui->customPlot, SIGNAL(mousePress(QMouseEvent*)), this, SLOT(mousePress()));
+    connect(ui->customPlot, SIGNAL(mouseWheel(QWheelEvent*)), this, SLOT(mouseWheel()));
+    // setup policy and connect slot for context menu popup:
+    ui->customPlot->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->customPlot, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(menuContextual(QPoint)));
+
     MainWindow::inicializarGraficos();
-    // se puede especificar el rango fijo
-    ui->customPlot->xAxis->setRange(0, 3.0);
-    ui->customPlot->yAxis->setRange(0, 50);
     if (demostracion == true){
         grafico_demostracion = 0;
     }
@@ -137,8 +148,6 @@ void MainWindow::graficarValores(int curva, double multiplicadorX, double  multi
     ui->customPlot->graph(curva)->setData(valoresX, valoresY);
     ui->customPlot->replot();
 
-    // hace interactivo al grafico para que se pueda arrastrar, hacer zoom y seleccionar las curvas
-    ui->customPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables);
 }
 
 // Funcion que se debera llamar desde un Timer para refrescar los valores en el grafico
@@ -165,8 +174,6 @@ void MainWindow::refrescarValores(int curva){
 
     //ui->customPlot->graph(curva)->setData(valoresX, valoresY);
     //ui->customPlot->replot();
-    // hace interactivo al grafico para que se pueda arrastrar, hacer zoom y seleccionar las curvas
-    ui->customPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables);
 }
 
 void MainWindow::onTimeout(){
@@ -283,6 +290,7 @@ void MainWindow::onTimeout(){
                     qDebug() << clock() << "inicio refrescar valores";
                     MainWindow::refrescarValores();
                     qDebug() << clock() << "termino refrescar valores";
+                    MainWindow::autoCentrar();
                     //Se termina la medición
                     qDebug() << "Termino la medicion";
                     medicion_habilitada = 0;
@@ -405,8 +413,14 @@ void MainWindow::inicializarGraficos(int curva){
     ui->customPlot->xAxis->setLabel("Tension [V]");
     ui->customPlot->yAxis->setLabel("Corriente [uA]");
 
-    // hace que los ejes escalen automaticamente
+    // hace que los ejes escalen automaticamente con los valores actuales
     ui->customPlot->graph(curva)->rescaleAxes();
+
+    // se puede especificar el rango fijo
+    ui->customPlot->xAxis->setRange(0, 3.0);
+    ui->customPlot->yAxis->setRange(0, 50);
+    ui->customPlot->axisRect()->setupFullAxesBox();
+    // make bottom and left axes transfer their ranges to top and right axes:
     connect(ui->customPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), ui->customPlot->xAxis2, SLOT(setRange(QCPRange)));
     connect(ui->customPlot->yAxis, SIGNAL(rangeChanged(QCPRange)), ui->customPlot->yAxis2, SLOT(setRange(QCPRange)));
 
@@ -434,6 +448,12 @@ void MainWindow::inicializarGraficos(int curva){
 
 void MainWindow::limpiarGraficos(){
     ui->customPlot->clearGraphs();
+}
+
+void MainWindow::autoCentrar(){
+    // let the ranges scale themselves so graph 0 fits perfectly in the visible area:
+    ui->customPlot->graph(0)->rescaleAxes(false);
+    ui->customPlot->replot();
 }
 
 // Es llamada cuando el LPC y el QT estan al tanto del termino de la medición
@@ -774,9 +794,118 @@ void MainWindow::help()
 {
     qDebug() << "Ayuda";
     //link a documentacion https://doc.qt.io/qt-5/qmessagebox.html#about
-    QMessageBox::about(this,"Sobre Potenciostato","Potenciostato versión 1.0");
+    QMessageBox::about(this,
+                       "Potenciostato - UTN FRA",
+                       "Proyecto Final: Potenciostato\nIntegrantes de grupo:\n    Arluna Gustavo\n    Gómez Caamaño Axel Lucas\n    Trinidad Hernán Matías\n\nFacultad Regional Avellaneda - Universidad Tecnológica Nacional");
 }
 
+void MainWindow::selectionChanged()
+{
+  /*
+   normally, axis base line, axis tick labels and axis labels are selectable separately, but we want
+   the user only to be able to select the axis as a whole, so we tie the selected states of the tick labels
+   and the axis base line together. However, the axis label shall be selectable individually.
+
+   The selection state of the left and right axes shall be synchronized as well as the state of the
+   bottom and top axes.
+
+   Further, we want to synchronize the selection of the graphs with the selection state of the respective
+   legend item belonging to that graph. So the user can select a graph by either clicking on the graph itself
+   or on its legend item.
+  */
+
+  // make top and bottom axes be selected synchronously, and handle axis and tick labels as one selectable object:
+  if (ui->customPlot->xAxis->selectedParts().testFlag(QCPAxis::spAxis) || ui->customPlot->xAxis->selectedParts().testFlag(QCPAxis::spTickLabels) ||
+      ui->customPlot->xAxis2->selectedParts().testFlag(QCPAxis::spAxis) || ui->customPlot->xAxis2->selectedParts().testFlag(QCPAxis::spTickLabels))
+  {
+    ui->customPlot->xAxis2->setSelectedParts(QCPAxis::spAxis|QCPAxis::spTickLabels);
+    ui->customPlot->xAxis->setSelectedParts(QCPAxis::spAxis|QCPAxis::spTickLabels);
+  }
+  // make left and right axes be selected synchronously, and handle axis and tick labels as one selectable object:
+  if (ui->customPlot->yAxis->selectedParts().testFlag(QCPAxis::spAxis) || ui->customPlot->yAxis->selectedParts().testFlag(QCPAxis::spTickLabels) ||
+      ui->customPlot->yAxis2->selectedParts().testFlag(QCPAxis::spAxis) || ui->customPlot->yAxis2->selectedParts().testFlag(QCPAxis::spTickLabels))
+  {
+    ui->customPlot->yAxis2->setSelectedParts(QCPAxis::spAxis|QCPAxis::spTickLabels);
+    ui->customPlot->yAxis->setSelectedParts(QCPAxis::spAxis|QCPAxis::spTickLabels);
+  }
+
+  // synchronize selection of graphs with selection of corresponding legend items:
+  for (int i=0; i<ui->customPlot->graphCount(); ++i)
+  {
+    QCPGraph *graph = ui->customPlot->graph(i);
+    QCPPlottableLegendItem *item = ui->customPlot->legend->itemWithPlottable(graph);
+    if (item->selected() || graph->selected())
+    {
+      item->setSelected(true);
+      graph->setSelection(QCPDataSelection(graph->data()->dataRange()));
+    }
+  }
+}
+
+
+void MainWindow::mousePress()
+{
+  // if an axis is selected, only allow the direction of that axis to be dragged
+  // if no axis is selected, both directions may be dragged
+
+  if (ui->customPlot->xAxis->selectedParts().testFlag(QCPAxis::spAxis))
+    ui->customPlot->axisRect()->setRangeDrag(ui->customPlot->xAxis->orientation());
+  else if (ui->customPlot->yAxis->selectedParts().testFlag(QCPAxis::spAxis))
+    ui->customPlot->axisRect()->setRangeDrag(ui->customPlot->yAxis->orientation());
+  else
+    ui->customPlot->axisRect()->setRangeDrag(Qt::Horizontal|Qt::Vertical);
+}
+
+void MainWindow::mouseWheel()
+{
+  // if an axis is selected, only allow the direction of that axis to be zoomed
+  // if no axis is selected, both directions may be zoomed
+
+  if (ui->customPlot->xAxis->selectedParts().testFlag(QCPAxis::spAxis))
+    ui->customPlot->axisRect()->setRangeZoom(ui->customPlot->xAxis->orientation());
+  else if (ui->customPlot->yAxis->selectedParts().testFlag(QCPAxis::spAxis))
+    ui->customPlot->axisRect()->setRangeZoom(ui->customPlot->yAxis->orientation());
+  else
+    ui->customPlot->axisRect()->setRangeZoom(Qt::Horizontal|Qt::Vertical);
+}
+
+void MainWindow::menuContextual(QPoint pos)
+{
+  QMenu *menu = new QMenu(this);
+  menu->setAttribute(Qt::WA_DeleteOnClose);
+
+  if (ui->customPlot->legend->selectTest(pos, false) >= 0) // context menu on legend requested
+  {
+    menu->addAction("Cursor X", this, SLOT(habilitarCursor()))->setData((int)(CUR_X));
+    menu->addAction("Cursor Y", this, SLOT(habilitarCursor()))->setData((int)(CUR_Y));
+  } else  // general context menu on graphs requested
+  {
+    menu->addAction("Cursor X", this, SLOT(habilitarCursor()))->setData((int)(CUR_X));
+    menu->addAction("Cursor Y", this, SLOT(habilitarCursor()))->setData((int)(CUR_Y));
+  }
+
+  menu->popup(ui->customPlot->mapToGlobal(pos));
+}
+
+void MainWindow::habilitarCursor(){
+    if (QAction* contextAction = qobject_cast<QAction*>(sender())) // make sure this slot is really called by a context menu action, so it carries the data we need
+    {
+      bool ok;
+      int dataInt = contextAction->data().toInt(&ok);
+      qDebug() << "Cursor a cambiar" << dataInt;
+      if (ok)
+      {
+          if (dataInt == CUR_X){
+              //qDebug() << dataInt;
+          }
+          if (dataInt == CUR_Y){
+              //qDebug() << dataInt;
+          }
+        //ui->customPlot->axisRect()->insetLayout()->setInsetAlignment(0, (Qt::Alignment)dataInt);
+        //ui->customPlot->replot();
+      }
+    }
+}
 
 void MainWindow::forzarAbortar()
 {
@@ -906,5 +1035,11 @@ void MainWindow::on_Bt_FTCiclico_clicked()
         ui->Num_SegCiclico->setEnabled(false);
         ui->Num_HzCiclico->setEnabled(true);
     }
+}
+
+
+void MainWindow::on_Bt_AutoCentrar_clicked()
+{
+    MainWindow::autoCentrar();
 }
 

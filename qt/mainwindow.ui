@@ -395,6 +395,19 @@
        </widget>
       </widget>
      </widget>
+     <widget class="QPushButton" name="Bt_AutoCentrar">
+      <property name="geometry">
+       <rect>
+        <x>510</x>
+        <y>30</y>
+        <width>61</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Centrar</string>
+      </property>
+     </widget>
     </widget>
    </widget>
    <widget class="QPushButton" name="Desconectar_Bt">
@@ -484,7 +497,7 @@
   <customwidget>
    <class>QCustomPlot</class>
    <extends>QWidget</extends>
-   <header>qcustomplot.h</header>
+   <header>../../qcustomplot.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

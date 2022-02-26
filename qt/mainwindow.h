@@ -6,6 +6,8 @@
 #include <QTimer>
 #include <QIcon>
 #include <QDoubleSpinBox>
+#include "qcustomplot.h"
+#include "axistag.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -29,6 +31,9 @@ private slots:
     void on_Bt_Exportar_clicked();
 
     void help();
+    void selectionChanged();
+    void mousePress();
+    void mouseWheel();
 
     void makePlot();
     void onTimeout();
@@ -37,6 +42,9 @@ private slots:
     void refrescarValores(int curva = 0);
     void limpiarGraficos();
     void inicializarGraficos(int curva = 0);
+    void autoCentrar();
+    void menuContextual(QPoint pos);
+    void habilitarCursor();
     void terminoMedicion();
     void desconectarUSB();
 
@@ -45,7 +53,14 @@ private slots:
     void on_Bt_IniciarCiclico_clicked();
     void on_Bt_FTCiclico_clicked();
 
+    void on_Bt_AutoCentrar_clicked();
+
 private:
     Ui::MainWindow *ui;
+    QCustomPlot *mPlot;
+    QPointer<QCPGraph> mGraph1;
+    QPointer<QCPGraph> mGraph2;
+    AxisTag *mTag1;
+    AxisTag *mTag2;
 };
 #endif // MAINWINDOW_H

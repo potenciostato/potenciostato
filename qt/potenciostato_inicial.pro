@@ -9,16 +9,20 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    axistag.cpp \
     main.cpp \
     mainwindow.cpp \
+    qcpdocumentobject.cpp \
     qcustomplot.cpp
 
 HEADERS += \
     LIBUSB_Binary/examples/source/stdint.h \
     LIBUSB_Binary/include/libusb-1.0/libusb.h \
+    axistag.h \
     globales.h \
     libusb.h \
     mainwindow.h \
+    qcpdocumentobject.h \
     qcustomplot.h
 
 FORMS += \
