@@ -32,7 +32,7 @@ private slots:
 
     void help();
     void selectionChanged();
-    void mousePress();
+    void mousePress(QMouseEvent* event);
     void mouseWheel();
 
     void makePlot();
@@ -44,6 +44,9 @@ private slots:
     void inicializarGraficos(int curva = 0);
     void autoCentrar();
     void menuContextual(QPoint pos);
+    void calcularCursor(int x, int y, char cursor);
+    void graficarCursor(char cursor);
+    void refrescarDeltas();
     void habilitarCursor();
     void terminoMedicion();
     void desconectarUSB();
@@ -54,6 +57,8 @@ private slots:
     void on_Bt_FTCiclico_clicked();
 
     void on_Bt_AutoCentrar_clicked();
+
+    void on_Bt_Cursores_clicked();
 
 private:
     Ui::MainWindow *ui;

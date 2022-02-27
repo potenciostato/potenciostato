@@ -23,9 +23,8 @@
 
 bool debugging = ENABLED;
 
+
 QVector<double> valoresX(CANT_VALORES), valoresY(CANT_VALORES); // declara vectores con 10 posiciones (0..9)
-
-
 
 double primer_curva_paracetamolX[CANT_VALORES] = {
     0.50, 0.51, 0.52, 0.53, 0.54, 0.55, 0.56, 0.57, 0.58, 0.59,
@@ -52,7 +51,9 @@ int medicion_habilitada = 0;
 char frec_periodo = FRECUENCIA;
 bool demostracion = false;
 bool grafico_inicial = false;
+int estado_cursor = SIN_SELECCIONAR;
 int grafico_demostracion;
+float a_med_x=0, a_med_y=0, b_med_x=0, b_med_y=0, med_z=0;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -71,7 +72,7 @@ MainWindow::MainWindow(QWidget *parent)
     // connect slot that ties some axis selections together (especially opposite axes):
     connect(ui->customPlot, SIGNAL(selectionChangedByUser()), this, SLOT(selectionChanged()));
     // connect slots that takes care that when an axis is selected, only that direction can be dragged and zoomed:
-    connect(ui->customPlot, SIGNAL(mousePress(QMouseEvent*)), this, SLOT(mousePress()));
+    connect(ui->customPlot, SIGNAL(mousePress(QMouseEvent*)), this, SLOT(mousePress(QMouseEvent*)));
     connect(ui->customPlot, SIGNAL(mouseWheel(QWheelEvent*)), this, SLOT(mouseWheel()));
     // setup policy and connect slot for context menu popup:
     ui->customPlot->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -409,7 +410,8 @@ void MainWindow::onTimeout(){
 // Funcion para inicializar las curvas de los graficos
 void MainWindow::inicializarGraficos(int curva){
     // se crea el graph
-    ui->customPlot->addGraph();
+    ui->customPlot->addGraph(); //para la medicion
+    ui->customPlot->addGraph(); //para los cursores
     ui->customPlot->xAxis->setLabel("Tension [V]");
     ui->customPlot->yAxis->setLabel("Corriente [uA]");
 
@@ -430,6 +432,12 @@ void MainWindow::inicializarGraficos(int curva){
         //ui->customPlot->graph(curva)->setBrush(QBrush(QColor(255, 0, 0, 20)));
         ui->customPlot->graph(curva)->setLineStyle(QCPGraph::lsNone);
         ui->customPlot->graph(curva)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 2));
+
+        ui->customPlot->graph(1)->setPen(QPen(Qt::green));
+        //ui->customPlot->graph(1)->setBrush(QBrush(QColor(0, 255, 0, 20)));
+        ui->customPlot->graph(1)->setLineStyle(QCPGraph::lsLine);
+        //ui->customPlot->graph(curva+1)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssTriangle, QColor(0, 255, 0, 20), 2));
+
     }
     if (curva == 1){
         ui->customPlot->graph(curva)->setPen(QPen(Qt::green));
@@ -843,17 +851,120 @@ void MainWindow::selectionChanged()
 }
 
 
-void MainWindow::mousePress()
+void MainWindow::mousePress(QMouseEvent* event)
 {
   // if an axis is selected, only allow the direction of that axis to be dragged
   // if no axis is selected, both directions may be dragged
 
-  if (ui->customPlot->xAxis->selectedParts().testFlag(QCPAxis::spAxis))
-    ui->customPlot->axisRect()->setRangeDrag(ui->customPlot->xAxis->orientation());
-  else if (ui->customPlot->yAxis->selectedParts().testFlag(QCPAxis::spAxis))
-    ui->customPlot->axisRect()->setRangeDrag(ui->customPlot->yAxis->orientation());
-  else
-    ui->customPlot->axisRect()->setRangeDrag(Qt::Horizontal|Qt::Vertical);
+    /*if (debugging == ENABLED){
+        qDebug() << "x" << event->pos().x() << ", y: " << event->pos().y();
+        qDebug() << "global" << ui->customPlot->mapToGlobal(event->pos());
+        qDebug() << ui->customPlot->xAxis->range(); //49 a 546
+        qDebug() << ui->customPlot->yAxis->range(); //14 a 341
+    }*/
+
+    //TODO: verificar que el click haya sido el boton izquierdo (y no el derecho)
+    switch (estado_cursor){
+    case SIN_SELECCIONAR:
+        break;
+    case SELECCIONAR_A:
+        calcularCursor(event->pos().x(), event->pos().y(), CUR_A);
+        graficarCursor(CUR_A);
+        estado_cursor = SELECCIONAR_B;
+        break;
+    case SELECCIONAR_B:
+        calcularCursor(event->pos().x(), event->pos().y(), CUR_B);
+        graficarCursor(CUR_B);
+        refrescarDeltas();
+        estado_cursor = SIN_SELECCIONAR;
+        break;
+    default:
+        break;
+    }
+
+
+
+    if (ui->customPlot->xAxis->selectedParts().testFlag(QCPAxis::spAxis))
+        ui->customPlot->axisRect()->setRangeDrag(ui->customPlot->xAxis->orientation());
+    else if (ui->customPlot->yAxis->selectedParts().testFlag(QCPAxis::spAxis))
+        ui->customPlot->axisRect()->setRangeDrag(ui->customPlot->yAxis->orientation());
+    else
+        ui->customPlot->axisRect()->setRangeDrag(Qt::Horizontal|Qt::Vertical);
+}
+
+void MainWindow::calcularCursor(int x, int y, char cursor)
+{
+    float medX, medY, medZ;
+    float minRangeX, maxRangeX, minRangeY, maxRangeY;
+    if (debugging == ENABLED){
+        qDebug() << "x" << x << ", y: " << y; //49 a 546 en x; 14 a 341 en y;
+        //qDebug() << "global" << ui->customPlot->mapToGlobal(pos());
+        qDebug() << ui->customPlot->xAxis->range();
+        qDebug() << ui->customPlot->yAxis->range();
+    }
+    minRangeX = ui->customPlot->xAxis->range().lower;
+    maxRangeX = ui->customPlot->xAxis->range().upper;
+    minRangeY = ui->customPlot->yAxis->range().lower;
+    maxRangeY = ui->customPlot->yAxis->range().upper;
+    if (debugging == ENABLED){
+        //qDebug() << "minRangeX: " << minRangeX << ", maxRangeX" << maxRangeX;
+        //qDebug() << "minRangeY: " << minRangeY << ", maxRangeY" << maxRangeY;
+    }
+    medX = x;
+    medX = ((medX - POS_X_MINIMA)/(POS_X_MAXIMA - POS_X_MINIMA)*(maxRangeX-minRangeX))+minRangeX;
+    medY = y;
+    medY = -((-POS_Y_MAXIMA + medY)/(POS_Y_MAXIMA - POS_Y_MINIMA)*(maxRangeY-minRangeY))+minRangeY;
+
+    if (cursor == CUR_A){
+        a_med_x = medX;
+        a_med_y = medY;
+    }
+    if (cursor == CUR_B){
+        b_med_x = medX;
+        b_med_y = medY;
+        medZ = (b_med_x-a_med_x)/(b_med_y-a_med_y);
+        if (medZ < 0){
+            medZ = -medZ;
+        }
+        if (medZ >= 0){
+            //medZ = medZ;
+        }
+        med_z = medZ;
+    }
+
+    if (debugging == ENABLED){
+        qDebug() << "med_x" << medX;
+        qDebug() << "med_y" << medY;
+        qDebug() << "med_z" << medZ;
+    }
+
+}
+
+void MainWindow::graficarCursor(char cursor){
+    //float x, y;
+    QVector<double> x(2), y(2);
+    switch(cursor){
+    case CUR_A:
+        x[0] = a_med_x;
+        y[0] = a_med_y;
+        x[1] = a_med_x;
+        y[1] = a_med_y;
+        break;
+    case CUR_B:
+        x[0] = a_med_x;
+        y[0] = a_med_y;
+        x[1] = b_med_x;
+        y[1] = b_med_y;
+        break;
+    }
+    ui->customPlot->graph(1)->setData(x, y, false);
+    ui->customPlot->replot();
+}
+
+void MainWindow::refrescarDeltas(){
+    ui->Num_deltaX->setText(QString::number(b_med_x-a_med_x, 'f', 4));
+    ui->Num_deltaY->setText(QString::number(b_med_y-a_med_y, 'f', 4));
+    ui->Num_deltaZ->setText(QString::number(med_z, 'f', 4));
 }
 
 void MainWindow::mouseWheel()
@@ -871,20 +982,22 @@ void MainWindow::mouseWheel()
 
 void MainWindow::menuContextual(QPoint pos)
 {
-  QMenu *menu = new QMenu(this);
-  menu->setAttribute(Qt::WA_DeleteOnClose);
+    QMenu *menu = new QMenu(this);
+    menu->setAttribute(Qt::WA_DeleteOnClose);
 
-  if (ui->customPlot->legend->selectTest(pos, false) >= 0) // context menu on legend requested
-  {
-    menu->addAction("Cursor X", this, SLOT(habilitarCursor()))->setData((int)(CUR_X));
-    menu->addAction("Cursor Y", this, SLOT(habilitarCursor()))->setData((int)(CUR_Y));
-  } else  // general context menu on graphs requested
-  {
-    menu->addAction("Cursor X", this, SLOT(habilitarCursor()))->setData((int)(CUR_X));
-    menu->addAction("Cursor Y", this, SLOT(habilitarCursor()))->setData((int)(CUR_Y));
-  }
+    //qDebug() << "x: " << pos << ", y: " << pos;
 
-  menu->popup(ui->customPlot->mapToGlobal(pos));
+    if (ui->customPlot->legend->selectTest(pos, false) >= 0) // context menu on legend requested
+    {
+        menu->addAction("Cursor X", this, SLOT(habilitarCursor()))->setData((int)(CUR_A));
+        menu->addAction("Cursor Y", this, SLOT(habilitarCursor()))->setData((int)(CUR_B));
+    } else  // general context menu on graphs requested
+    {
+        menu->addAction("Cursor X", this, SLOT(habilitarCursor()))->setData((int)(CUR_A));
+        menu->addAction("Cursor Y", this, SLOT(habilitarCursor()))->setData((int)(CUR_B));
+    }
+
+    menu->popup(ui->customPlot->mapToGlobal(pos));
 }
 
 void MainWindow::habilitarCursor(){
@@ -892,19 +1005,37 @@ void MainWindow::habilitarCursor(){
     {
       bool ok;
       int dataInt = contextAction->data().toInt(&ok);
-      qDebug() << "Cursor a cambiar" << dataInt;
+      if (debugging == ENABLED)
+        qDebug() << "Cursor a cambiar" << dataInt;
       if (ok)
       {
-          if (dataInt == CUR_X){
+          if (dataInt == CUR_A){
+              //ui->customPlot->setInteractions(0x0);
+              //ui->customPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectAxes |
+              //                                QCP::iSelectLegend | QCP::iSelectPlottables);
               //qDebug() << dataInt;
           }
-          if (dataInt == CUR_Y){
+          if (dataInt == CUR_B){
               //qDebug() << dataInt;
           }
         //ui->customPlot->axisRect()->insetLayout()->setInsetAlignment(0, (Qt::Alignment)dataInt);
         //ui->customPlot->replot();
       }
     }
+}
+
+void MainWindow::on_Bt_AutoCentrar_clicked()
+{
+    MainWindow::autoCentrar();
+}
+
+
+void MainWindow::on_Bt_Cursores_clicked()
+{
+    if (estado_cursor == SIN_SELECCIONAR)
+        estado_cursor = SELECCIONAR_A;
+
+
 }
 
 void MainWindow::forzarAbortar()
@@ -938,6 +1069,40 @@ void MainWindow::forzarAbortar()
     qDebug() << "dato recibido[0]" << recv_data[0];
 
 }
+
+
+void MainWindow::on_Desconectar_Bt_clicked()
+{
+    MainWindow::desconectarUSB();
+
+    medicion_habilitada = 0;
+
+    //Habilita la conexión
+    ui->Conectar_Bt->setEnabled(true);
+    ui->Bt_IniciarLineal->setEnabled(false);
+    ui->Bt_IniciarCiclico->setEnabled(false);
+    ui->Bt_Abortar->setEnabled(false);
+    ui->Bt_Capturar->setEnabled(false);
+    ui->Bt_Exportar->setEnabled(false);
+    ui->Desconectar_Bt->setEnabled(false);
+
+}
+
+void MainWindow::on_Bt_FTCiclico_clicked()
+{
+    if (frec_periodo == FRECUENCIA){
+        frec_periodo = PERIODO;
+        ui->Num_SegCiclico->setEnabled(true);
+        ui->Num_HzCiclico->setEnabled(false);
+    }
+    else
+    {
+        frec_periodo = FRECUENCIA;
+        ui->Num_SegCiclico->setEnabled(false);
+        ui->Num_HzCiclico->setEnabled(true);
+    }
+}
+
 
 
 /* -------------------- FUNCIONES DEPRECADAS -------------------- */
@@ -1000,46 +1165,3 @@ void MainWindow::realtimeData(){
         frameCount = 0;
     }
 }
-
-
-
-
-
-void MainWindow::on_Desconectar_Bt_clicked()
-{
-    MainWindow::desconectarUSB();
-
-    medicion_habilitada = 0;
-
-    //Habilita la conexión
-    ui->Conectar_Bt->setEnabled(true);
-    ui->Bt_IniciarLineal->setEnabled(false);
-    ui->Bt_IniciarCiclico->setEnabled(false);
-    ui->Bt_Abortar->setEnabled(false);
-    ui->Bt_Capturar->setEnabled(false);
-    ui->Bt_Exportar->setEnabled(false);
-    ui->Desconectar_Bt->setEnabled(false);
-
-}
-
-void MainWindow::on_Bt_FTCiclico_clicked()
-{
-    if (frec_periodo == FRECUENCIA){
-        frec_periodo = PERIODO;
-        ui->Num_SegCiclico->setEnabled(true);
-        ui->Num_HzCiclico->setEnabled(false);
-    }
-    else
-    {
-        frec_periodo = FRECUENCIA;
-        ui->Num_SegCiclico->setEnabled(false);
-        ui->Num_HzCiclico->setEnabled(true);
-    }
-}
-
-
-void MainWindow::on_Bt_AutoCentrar_clicked()
-{
-    MainWindow::autoCentrar();
-}
-

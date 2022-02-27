@@ -45,6 +45,11 @@ int8_t Dispositivo = -1;
 
 #define MILISEGUNDOS_POLLING 200
 
+#define POS_X_MINIMA 46
+#define POS_X_MAXIMA 736
+#define POS_Y_MINIMA 14
+#define POS_Y_MAXIMA 461
+
 #define LARGO_MENSAJE_ENTRADA	32 //cantidad de bytes de los reports de entrada (visto desde el punto de vista de la PC)
 #define LARGO_MENSAJE_SALIDA	8 //cantidad de bytes de los reports de salida (visto desde el punto de vista de la PC)
 
@@ -60,7 +65,11 @@ int8_t Dispositivo = -1;
 #define ENABLED true
 #define DISABLED false
 #define BITS_EN_UN_BYTE 8
-#define CUR_X 0
-#define CUR_Y 1
+#define SIN_SELECCIONAR 0
+#define SELECCIONAR_A 1
+#define SELECCIONAR_B 2
+#define CUR_A 1
+#define CUR_B 2
+
 
 #endif // GLOBALES_H
