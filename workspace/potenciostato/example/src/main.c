@@ -214,7 +214,7 @@ static void vUSBTask(void *pvParameters) {
     struct DACmsj conf_dac = {false, BARRIDO_CICLICO, 1000, 255}; //estado del modulo, frecuencia[Hz], amplitud[V]
     struct ADCmsj conf_adc = {false,ADC_SAMPL_FREC}; //estado del modulo, frecuencia[Hz]
 
-    int countADCsend, countUSBin, countUSBout;
+    int countADCsend, countUSBin, countUSBout, DAC_ready, ADC_ready;
 
     //Solo para pruebas
     //  xQueueSendToBack(qDAC,&conf_dac,0);
@@ -253,15 +253,15 @@ static void vUSBTask(void *pvParameters) {
                 error = xQueueSendToBack(qADC,&conf_adc,0);
 
                 // Espera a que ambas tareas esten listas para la medicion
-                xSemaphoreTake(sDACready, ( portTickType ) portMAX_DELAY);
-                xSemaphoreTake(sADCready, ( portTickType ) portMAX_DELAY);
+                xSemaphoreTake(sDACready, ( portTickType ) TAKE_TIMEOUT);
+                xSemaphoreTake(sADCready, ( portTickType ) TAKE_TIMEOUT);
 
                 if (debugging == ENABLED)
                      DEBUGOUT("USB: Habilito DAC & ADC\n");
 
                 // Inicio de la medicion
-                xSemaphoreGive(sDACstart);
                 xSemaphoreGive(sADCstart);
+                xSemaphoreGive(sDACstart);
 
                 break;
 
@@ -312,7 +312,6 @@ static void vDACTask(void *pvParameters) {
 
     // Config DAC DMA
     CLOCK_DAC_HZ = Chip_Clock_GetSystemClockRate()/8;
-    CanalDAC = Chip_GPDMA_GetFreeChannel ( LPC_GPDMA , 0 );
     Chip_GPDMA_Init ( LPC_GPDMA );
     NVIC_EnableIRQ(DMA_IRQn);
 
@@ -378,14 +377,14 @@ static void vDACTask(void *pvParameters) {
         if(conf.set != DACset){
             DACset = conf.set;
             if(DACset){
+            	CanalDAC = Chip_GPDMA_GetFreeChannel ( LPC_GPDMA , 0 );
                 if (conf.mode == BARRIDO_CICLICO) {
                 	if (conf.ncic == 0){
                         Chip_GPDMA_PrepareDescriptor ( LPC_GPDMA , &DMA_LLI_buffer  , (uint32_t) tabla_salida ,
                                                          GPDMA_CONN_DAC , DMA_SIZE , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA , &DMA_LLI_buffer);
 
                         xSemaphoreGive(sDACready);
-                        xSemaphoreTake(sDACstart, ( portTickType ) portMAX_DELAY);
-                        midiendo = true;
+                        xSemaphoreTake(sDACstart, ( portTickType ) TAKE_TIMEOUT);
                         if (debugging == ENABLED)
                             DEBUGOUT("DAC: Iniciando señal triangular infinita\n");
                         SG_OK = Chip_GPDMA_SGTransfer (LPC_GPDMA , CanalDAC ,&DMA_LLI_buffer , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA);
@@ -394,13 +393,19 @@ static void vDACTask(void *pvParameters) {
                         Chip_GPDMA_PrepareDescriptor ( LPC_GPDMA , &DMA_LLI_buffer  , (uint32_t) tabla_salida ,
                                                             GPDMA_CONN_DAC , DMA_SIZE , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA , 0);
                         xSemaphoreGive(sDACready);
-                        xSemaphoreTake(sDACstart, ( portTickType ) portMAX_DELAY);
-                        midiendo = true;
+                        xSemaphoreTake(sDACstart, ( portTickType ) TAKE_TIMEOUT);
                         if (debugging == ENABLED)
                             DEBUGOUT("DAC: Iniciando señal triangular de %d ciclos\n", conf.ncic);
                         for(i=0;i<conf.ncic;i++) {
                     		SG_OK = Chip_GPDMA_SGTransfer (LPC_GPDMA , CanalDAC ,&DMA_LLI_buffer , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA);
-                    		xSemaphoreTake(sDACncic, ( portTickType ) portMAX_DELAY);
+                    		error = xSemaphoreTake(sDACncic, ( portTickType ) 5000);
+                    		if(error == pdFALSE){
+                    			// reseteo las variables debido a error
+                    			MODO = 2;
+                    			AMPLITUD = 0;
+                    			FREC = 0;
+                    			break;
+                    		}
                     	}
 
                     	//Se envía el término de medición a Tarea USB
@@ -414,13 +419,12 @@ static void vDACTask(void *pvParameters) {
 						for (i = 1; i < LARGO_MENSAJE_SALIDA; i ++){
 							respuesta_out[i] = 0x0;
 						}
-    					error = xQueueSendToBack(qUSBout,&respuesta_out,portMAX_DELAY);
+    					error = xQueueSendToBack(qUSBout,&respuesta_out,TAKE_TIMEOUT);
                 	}
                 }
                 if (conf.mode == BARRIDO_LINEAL) {
                 	xSemaphoreGive(sDACready);
-                	xSemaphoreTake(sDACstart, ( portTickType ) portMAX_DELAY);
-                	midiendo = true;
+                	xSemaphoreTake(sDACstart, ( portTickType ) TAKE_TIMEOUT);
                     if (debugging == ENABLED)
                         DEBUGOUT("DAC: Iniciando señal lineal\n");
                     SG_OK = Chip_GPDMA_SGTransfer (LPC_GPDMA , CanalDAC ,&DMA_NLI_buffer , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA);
@@ -440,8 +444,7 @@ static void vDACTask(void *pvParameters) {
 static void vADCTask(void *pvParameters) {
 
     uint8_t respuesta_in[LARGO_MENSAJE_ENTRADA]={0};
-    uint16_t FREC = ADC_SAMPL_FREC;
-    uint32_t timerFreq, cuentas, error, datos_ok, i;
+    uint32_t FREC, timerFreq, cuentas, error, datos_ok, i;
     struct ADCmsj conf;
     struct USBmsj msjUSB;
     unsigned portBASE_TYPE n_mensajes;
@@ -456,8 +459,12 @@ static void vADCTask(void *pvParameters) {
         	DEBUGOUT("ADC: Conf recibida Set:%d,Frec:%d\n",conf.set,conf.frec);
 
         if(conf.frec != FREC){
-            FREC = conf.frec/1000;
-            cuentas = timerFreq / (FREC*PUNTOS_GRAFICA);
+        	FREC = conf.frec;
+        	if(FREC < 1000){
+        		cuentas = ((timerFreq*10) / (FREC*PUNTOS_GRAFICA))*100;
+        	} else {
+        		cuentas = timerFreq / ((FREC/1000)*PUNTOS_GRAFICA);
+        	}
             if(cuentas <= 0) cuentas = 1;
         	Chip_TIMER_Reset(LPC_TIMER0);
         	Chip_TIMER_MatchEnableInt(LPC_TIMER0, 1);
@@ -474,8 +481,8 @@ static void vADCTask(void *pvParameters) {
             i = 0;
 
             xSemaphoreGive(sADCready);
-            xSemaphoreTake(sADCstart, ( portTickType ) portMAX_DELAY);
-
+            xSemaphoreTake(sADCstart, ( portTickType ) TAKE_TIMEOUT);
+            midiendo = true;
             while (conf.set && midiendo){
 
             	if(FREC<FRECUENCIA_BAJA){
@@ -495,20 +502,22 @@ static void vADCTask(void *pvParameters) {
                     // Delay por timer
                 	NVIC_ClearPendingIRQ(TIMER0_IRQn);
                 	NVIC_EnableIRQ(TIMER0_IRQn);
-                	xSemaphoreTake(sADCdelay, ( portTickType ) portMAX_DELAY);
+                	xSemaphoreTake(sADCdelay, ( portTickType ) TAKE_TIMEOUT);
             	} else {
 
             		NVIC_EnableIRQ(ADC_IRQn);
             		// Se encuesta la cola cada 50 mediciones
-            		if(i>=50){
-                    	xQueueReceive(qADC,&conf,0);
-                    	i=0;
-                    }
-            		i++;
+
                     // Delay por timer
                 	NVIC_ClearPendingIRQ(TIMER0_IRQn);
                 	NVIC_EnableIRQ(TIMER0_IRQn);
-                	xSemaphoreTake(sADCdelay, ( portTickType ) portMAX_DELAY);
+                	xSemaphoreTake(sADCdelay, ( portTickType ) TAKE_TIMEOUT);
+                	i++;
+            		if(i>=PUNTOS_GRAFICA){
+                    	xQueueReceive(qADC,&conf,10);
+                    	i=0;
+                    	break;
+                    }
             	}
             }
             if (debugging == ENABLED)
@@ -530,7 +539,7 @@ static void vADCTask(void *pvParameters) {
 			for (i = 1; i < LARGO_MENSAJE_ENTRADA; i ++){
 				respuesta_in[i] = 0x0;
 			}
-			error = xQueueSendToBack(qUSBin,&respuesta_in,portMAX_DELAY);
+			error = xQueueSendToBack(qUSBin,&respuesta_in,TAKE_TIMEOUT);
         }
     }
 }

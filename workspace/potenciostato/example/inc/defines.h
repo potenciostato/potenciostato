@@ -47,11 +47,13 @@
 
 #define PUNTOS_GRAFICA			200
 #define MAX_PUNTOS 6
-#define FRECUENCIA_BAJA			50
+#define FRECUENCIA_BAJA			50000 // FREC*1000
 
 #define TICKS_MUESTREO          10 // delay entre lecturas de ADC, determina la frecuencia de muestreo (con el error propio de los ticks del sistema)
 
 #define ADC_DR_RESULT(n)        (((n) & 0xFFF))
+
+#define TAKE_TIMEOUT			1000
 
 
 // Definiciones de los códigos de operación
