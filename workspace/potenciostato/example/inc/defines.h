@@ -36,7 +36,7 @@
 // Defines ADC
 #define CANAL_CORRIENTE				ADC_CH0
 #define CANAL_TENSION				ADC_CH1
-#define ADC_SAMPL_FREC      		50000
+#define ADC_SAMPL_FREC      		200000
 #define ADC_N_COLA 					1 //se pone 1 medicion (punto) por cada mensaje de USB
 #define TAMANIO_MAX_COLA_ADC 		2000 //cantidad maxima de mediciones (puntos) en la cola ADC
 #define TAMANIO_MAX_COLA_USB		100 //cantidad maxima de mensajes en la cola USB
@@ -47,11 +47,13 @@
 
 #define PUNTOS_GRAFICA			200
 #define MAX_PUNTOS 6
-#define FRECUENCIA_BAJA			50
+#define FRECUENCIA_BAJA			50000 // FREC*1000
 
 #define TICKS_MUESTREO          10 // delay entre lecturas de ADC, determina la frecuencia de muestreo (con el error propio de los ticks del sistema)
 
 #define ADC_DR_RESULT(n)        (((n) & 0xFFF))
+
+#define TAKE_TIMEOUT			1000
 
 
 // Definiciones de los códigos de operación
