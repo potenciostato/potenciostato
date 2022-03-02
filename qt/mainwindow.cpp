@@ -1,25 +1,15 @@
-// CODIGO DE EJEMPLO PARA LUEGO.......
-//QString Buff;
-//Buff = ui->TBox->toPlainText();
-//Datos = Buff.toInt();
-//    QMessageBox::warning(this,"Error","El valor ingresado es inválido",QMessageBox::Retry);
-//Datos = 0;
-//Buff=QString::number(Datos);
-//ui->TBox_2->setText(Buff);
-
-
-
-
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
 #include <QtGui>
+#include <QFile>
+#include <QTextStream>
 #include "qmessagebox.h"
 
 #include "globales.h"
 #include "libusb.h"
-
 #include "time.h"
+
 
 bool debugging = ENABLED;
 
@@ -50,6 +40,7 @@ char metodo[30] = "BarridoCiclico"; //TODO: rehacer la verificacion del modo con
 int medicion_habilitada = 0;
 char frec_periodo = FRECUENCIA;
 bool demostracion = false;
+bool flag_inicial = true;
 bool grafico_inicial = false;
 int estado_cursor = SIN_SELECCIONAR;
 int grafico_demostracion;
@@ -155,15 +146,15 @@ void MainWindow::graficarValores(int curva, double multiplicadorX, double  multi
 void MainWindow::refrescarValores(int curva){
     int i;
     if (p_refresco > p_refrescado){
-        for (i = p_refrescado; i < p_refresco; i++){
+        for (i = p_refrescado; (i < p_refresco) && (valoresX[i] != -1) && (valoresY[i] != -1); i++){
             ui->customPlot->graph(curva)->addData(valoresX[i], valoresY[i]);
         }
     }else{
         // en este caso se deberá tomar desde p_refrescado hasta CANTIDAD_VALORES y luego desde 0 hasta p_refresco
-        for (i = p_refrescado; i < CANT_VALORES; i++){
+        for (i = p_refrescado; (i < CANT_VALORES) && (valoresX[i] != -1) && (valoresY[i] != -1); i++){
             ui->customPlot->graph(curva)->addData(valoresX[i], valoresY[i]);
         }
-        for (i = 0; i < p_refresco; i++){
+        for (i = 0; (i < p_refresco) && (valoresX[i] != -1) && (valoresY[i] != -1); i++){
             ui->customPlot->graph(curva)->addData(valoresX[i], valoresY[i]);
         }
     }
@@ -299,10 +290,6 @@ void MainWindow::onTimeout(){
                     if (demostracion == false){
                         p_refresco = 0;
                         medicion_habilitada = 0;
-                        for(int i=0; i<CANT_VALORES; i++){
-                            valoresX[i] = 0;
-                            valoresY[i] = 0;
-                        }
                     }
                     if (demostracion == true){
                         p_refresco = 0;
@@ -337,7 +324,7 @@ void MainWindow::onTimeout(){
             }
         }*/
 
-        if (demostracion == false){
+        /*if (demostracion == false){
             if (strcmp(metodo,"BarridoCiclico") == 0  && medicion_habilitada == 1){ //antes era Reiterativo
                 if (p_refresco >= (CANT_VALORES-1)){
                     p_refresco = 0;
@@ -357,8 +344,8 @@ void MainWindow::onTimeout(){
                     }
                 }
             }
-        }
-        if (demostracion == true){
+        }*/
+        /*if (demostracion == true){
         if (strcmp(metodo,"BarridoLineal") == 0 && medicion_habilitada == 1){
             if (p_refresco >= CANT_VALORES && grafico_demostracion == 0){
                 p_refresco = 0;
@@ -403,7 +390,7 @@ void MainWindow::onTimeout(){
                 MainWindow::refrescarValores();
             }
         }
-    }
+        }*/
     }
 }
 
@@ -419,8 +406,11 @@ void MainWindow::inicializarGraficos(int curva){
     ui->customPlot->graph(curva)->rescaleAxes();
 
     // se puede especificar el rango fijo
-    ui->customPlot->xAxis->setRange(0, 3.0);
-    ui->customPlot->yAxis->setRange(0, 50);
+    if (flag_inicial == true){
+        ui->customPlot->xAxis->setRange(0, 3.0);
+        ui->customPlot->yAxis->setRange(0, 50);
+        flag_inicial = false;
+    }
     ui->customPlot->axisRect()->setupFullAxesBox();
     // make bottom and left axes transfer their ranges to top and right axes:
     connect(ui->customPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), ui->customPlot->xAxis2, SLOT(setRange(QCPRange)));
@@ -495,6 +485,7 @@ void MainWindow::terminoMedicion(){
 void MainWindow::on_pushButton_clicked()
 {
     qDebug() << "hola";
+    MainWindow::on_Bt_Exportar_clicked();
 }
 
 void MainWindow::on_Bt_IniciarLineal_clicked()
@@ -630,6 +621,12 @@ void MainWindow::on_Bt_IniciarCiclico_clicked()
     //TODO: verificar que el LPC responda con el OP_CODE correspondiente
     //      y asi, iniciar la medicion
 
+    //Se limpia el vector de valores con valores invalidos
+    for(int i=0; i<CANT_VALORES; i++){
+        valoresX[i] = -1;
+        valoresY[i] = -1;
+    }
+
     //Se activa la medicion en el Timer
     medicion_habilitada = 1;
 
@@ -661,10 +658,6 @@ void MainWindow::on_Bt_Abortar_clicked()
         if (demostracion == false){
             p_refresco = 0;
             medicion_habilitada = 0;
-            for(int i=0; i<CANT_VALORES; i++){
-                valoresX[i] = 0;
-                valoresY[i] = 0;
-            }
         }
         if (demostracion == true){
             p_refresco = 0;
@@ -686,10 +679,19 @@ void MainWindow::on_Bt_Exportar_clicked()
 {
     qDebug() << "Exportar Medición";
 
-    //Almacena en la carpeta mediciones una foto de la medición final
-    // con un timestamp y los datos en csv correspondientes.
-    //Recibe la elección del nombre de los 2 archivos a guardar (imagen y datos en csv)
+    // Almacena en la carpeta mediciones los datos que se ven en pantalla en CSV
+    MainWindow::exportarCSV();
 
+    // Almacena una foto de la medición final
+
+    // (opcional) Recibe la elección del nombre de los 2 archivos a guardar (imagen y datos en csv)
+
+    // Notifica el correcto (o no) almacenado del archivo
+    //QMessageBox::about(this,
+    //                   "Potenciostato - UTN FRA",
+    //                   "Proyecto Final: Potenciostato\nIntegrantes de grupo:\n    Arluna Gustavo\n    Gómez Caamaño Axel Lucas\n    Trinidad Hernán Matías\n\nFacultad Regional Avellaneda - Universidad Tecnológica Nacional");
+    //QMessageBox::Information(this, "hola");
+    QMessageBox::information(this,"Potenciostato","Archivo guardado satisfactoriamente");
 }
 
 
@@ -1103,10 +1105,32 @@ void MainWindow::on_Bt_FTCiclico_clicked()
     }
 }
 
+void MainWindow::exportarCSV()
+{
+    QString nom_archivo;
+    nom_archivo = QString("med_%1.csv").arg(QDateTime::currentDateTime().toString("yyyy.MM.dd-hh_mm_ss"));
+    QFile arch(nom_archivo);
+    if ( arch.open(QIODevice::WriteOnly) )
+    {
+        QTextStream stream( &arch );
+        stream << "Tension,Corriente" << endl;
+        for (int c=0; (c < CANT_VALORES) && ((valoresX[c] != -1 && valoresY[c] != -1)); c++ )
+            stream << valoresX[c] << "," << valoresY[c] << endl;
+    }
+    arch.close();
+
+}
 
 
 /* -------------------- FUNCIONES DEPRECADAS -------------------- */
-
+// CODIGO DE EJEMPLO PARA LUEGO.......
+//QString Buff;
+//Buff = ui->TBox->toPlainText();
+//Datos = Buff.toInt();
+//    QMessageBox::warning(this,"Error","El valor ingresado es inválido",QMessageBox::Retry);
+//Datos = 0;
+//Buff=QString::number(Datos);
+//ui->TBox_2->setText(Buff);
 
 void MainWindow::makePlot()
 {

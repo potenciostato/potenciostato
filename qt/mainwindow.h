@@ -52,12 +52,11 @@ private slots:
     void desconectarUSB();
 
     void forzarAbortar();
+    void exportarCSV();
 
     void on_Bt_IniciarCiclico_clicked();
     void on_Bt_FTCiclico_clicked();
-
     void on_Bt_AutoCentrar_clicked();
-
     void on_Bt_Cursores_clicked();
 
 private:
