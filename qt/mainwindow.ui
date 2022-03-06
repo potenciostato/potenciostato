@@ -656,24 +656,6 @@
        <string>Iniciar Conexión USB</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton">
-      <property name="geometry">
-       <rect>
-        <x>850</x>
-        <y>460</y>
-        <width>71</width>
-        <height>41</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>9</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>Prueba</string>
-      </property>
-     </widget>
      <widget class="QPushButton" name="Desconectar_Bt">
       <property name="enabled">
        <bool>false</bool>
@@ -738,16 +720,6 @@
   <action name="actionOpciones">
    <property name="text">
     <string>Opciones</string>
-   </property>
-  </action>
-  <action name="actionMedir">
-   <property name="text">
-    <string>Medir</string>
-   </property>
-  </action>
-  <action name="actionConfiguracion">
-   <property name="text">
-    <string>Configuración</string>
    </property>
   </action>
   <action name="actionAyuda">

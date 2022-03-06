@@ -56,6 +56,9 @@ MainWindow::MainWindow(QWidget *parent)
     //asocio la accion triggered del ui->actionAyuda a la funcion help() (dentro de slots el mainwindow.h)
     connect(ui->actionAyuda, SIGNAL(triggered()), this, SLOT(help()));
 
+    //asocio la accion triggered del ui->actionAyuda a la funcion () (dentro de slots el mainwindow.h)
+    connect(ui->actionAbrir_Medicion, SIGNAL(triggered()), this, SLOT(abrirMedicion()));
+
     // hace interactivo al grafico para que se pueda arrastrar, hacer zoom y seleccionar las curvas
     //ui->customPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables);
     ui->customPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectAxes |
@@ -179,11 +182,8 @@ void MainWindow::onTimeout(){
     //qDebug() << clock() << "TimeOut";
     for(i=0;i<REPORTES_A_RECIBIR;i++){
         if (demostracion == false){
-            //Se envia inicio de medición al LPC
-            //envio....
-            //se queda esperando al Recibido
-            // si llega recibido OK continuar
 
+            //Se envia inicio de medición al LPC
             if (connected == 1 && medicion_habilitada == 1){
                 //se enviara un SEND DATA
                 buffer[0] = OC_SENDDATA;
@@ -244,17 +244,8 @@ void MainWindow::onTimeout(){
                         //APLICAR RETARDO
                         //}
 
-
-                        // TODO: este codigo se repite abajo, ver como hacerlo bien..
                         if (p_refresco >= (CANT_VALORES-1)){
                             p_refresco = 0;
-                            // Recopilar información de los valoresX y valoresY para almacenar
-                            // las mediciones realizadas y no perderlas
-
-                            //qDebug() << "Limpieza de graficos";
-                            //MainWindow::limpiarGraficos();
-                            //qDebug() << "Inicializacion del grafico 0";
-                            //MainWindow::inicializarGraficos();
                         }else{
                             p_refresco ++;
                             if (p_refresco % PUNTOS_REFRESCO == 0){
@@ -298,7 +289,7 @@ void MainWindow::onTimeout(){
                 }
             }
         }
-        if (demostracion == true){
+        /*if (demostracion == true){
             for (i=0; i < p_refresco; ++i)
             {
                 valoresX[i] = primer_curva_paracetamolX[i];
@@ -306,46 +297,7 @@ void MainWindow::onTimeout(){
             }
         }
 
-        // ESTE IF TODAVIA NO ESTA PROBADO
-        /*if (demostracion == false){
-            if (strcmp(metodo,"BarridoLineal") == 0 && medicion_habilitada == 1){
-                //este if debera ser la condicion para el termino de la medicion
-                //es decir, se recibe el dato, si no es el fin de la medicion se appendea el dato
-                //si es el fin de la medicion se envia el Recibido y se termina la medicion
-                if (true){
-                    qDebug() << "Termino la medicion";
-                    medicion_habilitada = 0;
-                    MainWindow::terminoMedicion();
-                }else{
-                    p_refresco ++;
-                    qDebug() << "Envio de refresco al grafico";
-                    MainWindow::refrescarValores(tempX, tempY);
-                }
-            }
-        }*/
-
-        /*if (demostracion == false){
-            if (strcmp(metodo,"BarridoCiclico") == 0  && medicion_habilitada == 1){ //antes era Reiterativo
-                if (p_refresco >= (CANT_VALORES-1)){
-                    p_refresco = 0;
-                    // Recopilar información de los valoresX y valoresY para almacenar
-                    // las mediciones realizadas y no perderlas
-
-                    //qDebug() << "Limpieza de graficos";
-                    //MainWindow::limpiarGraficos();
-                    //qDebug() << "Inicializacion del grafico 0";
-                    //MainWindow::inicializarGraficos();
-                }else{
-                    p_refresco ++;
-                    if (p_refresco % PUNTOS_REFRESCO == 0){
-                        qDebug() << clock() << "Envío de refresco al gráfico";
-                        MainWindow::refrescarValores();
-                        qDebug() << clock() << "termino refrescar valores";
-                    }
-                }
-            }
-        }*/
-        /*if (demostracion == true){
+        if (demostracion == true){
         if (strcmp(metodo,"BarridoLineal") == 0 && medicion_habilitada == 1){
             if (p_refresco >= CANT_VALORES && grafico_demostracion == 0){
                 p_refresco = 0;
@@ -480,12 +432,6 @@ void MainWindow::terminoMedicion(){
     ui->Bt_Abortar->setEnabled(false);
     ui->Bt_Capturar->setEnabled(false);
     ui->Bt_Exportar->setEnabled(true);
-}
-
-void MainWindow::on_pushButton_clicked()
-{
-    qDebug() << "hola";
-    MainWindow::on_Bt_Exportar_clicked();
 }
 
 void MainWindow::on_Bt_IniciarLineal_clicked()
@@ -807,6 +753,63 @@ void MainWindow::help()
     QMessageBox::about(this,
                        "Potenciostato - UTN FRA",
                        "Proyecto Final: Potenciostato\nIntegrantes de grupo:\n    Arluna Gustavo\n    Gómez Caamaño Axel Lucas\n    Trinidad Hernán Matías\n\nFacultad Regional Avellaneda - Universidad Tecnológica Nacional");
+}
+
+void MainWindow::abrirMedicion(){
+    QString nom_archivo;
+    bool archivo_valido = false;
+
+    QFileDialog fd(this);
+    fd.setFileMode(QFileDialog::AnyFile);
+    fd.setNameFilter(tr("Mediciones (*.csv)"));
+    if (fd.exec()) {
+        nom_archivo = fd.selectedFiles().constFirst();
+
+        qDebug() << "archivo seleccionado: " << nom_archivo;
+        QFile arch(nom_archivo);
+        if ( arch.open(QIODevice::ReadOnly | QIODevice::Text) )
+        {
+
+            MainWindow::limpiarGraficos();
+            MainWindow::resetearValores();
+
+            MainWindow::inicializarGraficos();
+
+            QTextStream in(&arch);
+            while (!in.atEnd()) {
+                QString linea = in.readLine();
+                //qDebug() << linea;
+                QStringList palabras = linea.split( "," );
+                if (archivo_valido == true){
+                    valoresX[p_refresco] = palabras[0].toFloat();
+                    valoresY[p_refresco] = palabras[1].toFloat();
+                    if (p_refresco >= (CANT_VALORES-1)){
+                        p_refresco = 0;
+                    }
+                    else{
+                        p_refresco++;
+                    }
+                }
+                if (palabras[0].compare("Tension") == 0 && palabras[1].compare("Corriente") == 0){
+                    archivo_valido = true;
+                }
+            }
+            MainWindow::refrescarValores();
+            qDebug() << clock() << "termino refrescar valores";
+            MainWindow::autoCentrar();
+        }
+        arch.close();
+    }
+}
+
+void MainWindow::resetearValores(){
+    p_refresco = 0;
+    p_refrescado = 0;
+    for (int i = 0; i < CANT_VALORES; i++)
+    {
+        valoresX[i] = -1;
+        valoresY[i] = -1;
+    }
 }
 
 void MainWindow::selectionChanged()

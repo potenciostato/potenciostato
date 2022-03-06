@@ -22,7 +22,6 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_pushButton_clicked();
     void on_Conectar_Bt_clicked();
     void on_Desconectar_Bt_clicked();
     void on_Bt_IniciarLineal_clicked();
@@ -31,6 +30,9 @@ private slots:
     void on_Bt_Exportar_clicked();
 
     void help();
+    void abrirMedicion();
+
+    void resetearValores();
     void selectionChanged();
     void mousePress(QMouseEvent* event);
     void mouseWheel();
