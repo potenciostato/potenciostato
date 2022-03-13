@@ -27,7 +27,10 @@
 #define PUERTO(X)             	X
 #define PIN(X)                 	X
 
-#define NUMERO_MUESTRAS     	1000 // cantidad de muestras de las señales precalculadas
+#define NUMERO_MUESTRAS     	500 // cantidad de muestras de las señales precalculadas
+//#define NUMERO_MUESTRAS     	1000 // cantidad de muestras de las señales precalculadas
+//#define NUMERO_MUESTRAS     	2000 // cantidad de muestras de las señales precalculadas
+//#define NUMERO_MUESTRAS     	4000 // cantidad de muestras de las señales precalculadas
 #define DMA_SIZE            	NUMERO_MUESTRAS
 #define VALOR_MEDIO_DAC     	512 //valor medio salida dac en cuentas (de 10 bits) de tension para 1.5V
 

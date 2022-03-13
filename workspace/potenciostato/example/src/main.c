@@ -299,7 +299,8 @@ static void vUSBTask(void *pvParameters) {
 /* DAC parpadeo cada 0.1s */
 static void vDACTask(void *pvParameters) {
     bool DACset = false;
-    uint16_t tabla_salida[ NUMERO_MUESTRAS ], i, SG_OK = 0;
+    uint16_t i, SG_OK = 0;
+    uint16_t tabla_salida[ NUMERO_MUESTRAS ];
     uint16_t AMPLITUD = 0, AMPLITUD_DIV = 255, MODO = 2;
     uint32_t FREC = 0;
     uint32_t CLOCK_DAC_HZ, timeoutDMA;
@@ -331,10 +332,31 @@ static void vDACTask(void *pvParameters) {
             if (FREC == 0){
             	DEBUGOUT("DAC: Frecuencia incorrecta, no puede valer 0\n");
             }
-            if(FREC < NUMERO_MUESTRAS)
+            if (FREC <= 10*1000){
+            	Chip_Clock_SetPCLKDiv(SYSCTL_PCLK_DAC, SYSCTL_CLKDIV_8);
+                CLOCK_DAC_HZ = Chip_Clock_GetSystemClockRate()/8;
+                timeoutDMA = ((((CLOCK_DAC_HZ * 100) / FREC) * 10) / NUMERO_MUESTRAS );
+            }
+            if (FREC > 10*1000 && FREC <= 200*1000){
+            	Chip_Clock_SetPCLKDiv(SYSCTL_PCLK_DAC, SYSCTL_CLKDIV_4);
+                CLOCK_DAC_HZ = Chip_Clock_GetSystemClockRate()/4;
+                timeoutDMA = ((((CLOCK_DAC_HZ * 100) / FREC) * 10) / NUMERO_MUESTRAS );
+            }
+            if (FREC > 200*1000 && FREC <= 1000*1000){
+            	Chip_Clock_SetPCLKDiv(SYSCTL_PCLK_DAC, SYSCTL_CLKDIV_2);
+                CLOCK_DAC_HZ = Chip_Clock_GetSystemClockRate()/2;
+                timeoutDMA = (((((CLOCK_DAC_HZ * 10) / FREC) * 10) / NUMERO_MUESTRAS ) * 10);
+            }
+            if (FREC > 1000*1000){
+            	Chip_Clock_SetPCLKDiv(SYSCTL_PCLK_DAC, SYSCTL_CLKDIV_1);
+                CLOCK_DAC_HZ = Chip_Clock_GetSystemClockRate()/1;
+                timeoutDMA = (((((CLOCK_DAC_HZ * 10) / FREC) * 10) / NUMERO_MUESTRAS ) * 10);
+            }
+
+            /*if(FREC < NUMERO_MUESTRAS*1000)
             	timeoutDMA = (((((CLOCK_DAC_HZ * 10) / FREC) * 10) / NUMERO_MUESTRAS ) * 10);
             else
-            	timeoutDMA = (((CLOCK_DAC_HZ * 10) / NUMERO_MUESTRAS) * 100) / FREC ;
+            	timeoutDMA = (((CLOCK_DAC_HZ * 10) / NUMERO_MUESTRAS) * 100) / FREC ;*/
             // Nota:
             // el multiplicar 3 veces por 10 se debe a que la frecuencia desde QT se envia multiplicada
             // por 1000 para pasar 0,001 a 1 y tener todo en unsigned int en 24 (32) bits
@@ -364,7 +386,7 @@ static void vDACTask(void *pvParameters) {
         	AMPLITUD = conf.amp;
 			if (conf.mode == BARRIDO_CICLICO){
 				for ( i = 0 ; i < NUMERO_MUESTRAS ; i++ ) {
-					tabla_salida[i]= (uint16_t) ((AMPLITUD * (tabla_tria[i] - VALOR_MEDIO_DAC))/AMPLITUD_DIV + VALOR_MEDIO_DAC) << 6;
+					tabla_salida[i]= (uint16_t) ((AMPLITUD * (tabla_tria500[i] - VALOR_MEDIO_DAC))/AMPLITUD_DIV + VALOR_MEDIO_DAC) << 6;
 				}
 			}
 			if (conf.mode == BARRIDO_LINEAL){
@@ -398,7 +420,7 @@ static void vDACTask(void *pvParameters) {
                             DEBUGOUT("DAC: Iniciando señal triangular de %d ciclos\n", conf.ncic);
                         for(i=0;i<conf.ncic;i++) {
                     		SG_OK = Chip_GPDMA_SGTransfer (LPC_GPDMA , CanalDAC ,&DMA_LLI_buffer , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA);
-                    		error = xSemaphoreTake(sDACncic, ( portTickType ) 5000);
+                    		error = xSemaphoreTake(sDACncic, ( portTickType ) (500000/FREC + 1000));
                     		if(error == pdFALSE){
                     			// reseteo las variables debido a error
                     			MODO = 2;
@@ -488,8 +510,9 @@ static void vADCTask(void *pvParameters) {
             	if(FREC<FRECUENCIA_BAJA){
             		NVIC_EnableIRQ(ADC_IRQn);
             		error = xQueueReceive(qADCmedicion,&msjUSB,10);
-                    if(error == pdFAIL)
+                    if (error == pdFAIL){
                     	continue;
+                    }
 
             		error = xQueueSendToBack(qADCsend, &msjUSB, 0);
 
@@ -516,7 +539,6 @@ static void vADCTask(void *pvParameters) {
             		if(i>=PUNTOS_GRAFICA){
                     	xQueueReceive(qADC,&conf,10);
                     	i=0;
-                    	break;
                     }
             	}
             }
@@ -600,7 +622,6 @@ int main(void)
     xTaskCreate(vADCTask, (signed char *) "vADCTask",
                 configMINIMAL_STACK_SIZE * 1, NULL, (tskIDLE_PRIORITY + 1UL),
                 (xTaskHandle *) NULL);
-    // verificar si es * 5 o si se puede dejar * 1
 
     /* Empieza el Scheduler */
     vTaskStartScheduler();
