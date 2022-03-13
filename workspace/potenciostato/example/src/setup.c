@@ -41,4 +41,8 @@ void prvSetupHardware(void)
 	// Setup Timer0
 	Chip_TIMER_Init(LPC_TIMER0);
 	Chip_TIMER_Enable(LPC_TIMER0);
+
+	// Setup Timer1
+	Chip_TIMER_Init(LPC_TIMER1);
+	Chip_TIMER_Enable(LPC_TIMER1);
 }
