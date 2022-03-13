@@ -417,7 +417,7 @@ static void vDACTask(void *pvParameters) {
             if(DACset){
             	CanalDAC = Chip_GPDMA_GetFreeChannel ( LPC_GPDMA , 0 );
                 if (conf.mode == BARRIDO_CICLICO) {
-                	if(conf.set < FRECUENCIA_MUY_BAJA){
+                	if(conf.frec < FRECUENCIA_MUY_BAJA){
                         for(i=0;i<conf.ncic;i++) {
                         	for(j=0;j<NUMERO_MUESTRAS;j++){
                         		Chip_DAC_UpdateValue(LPC_DAC, tabla_salida[j] >> 6);
