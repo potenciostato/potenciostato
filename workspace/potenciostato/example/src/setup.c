@@ -35,8 +35,8 @@ void prvSetupHardware(void)
     // Setup DAC
 	Chip_IOCON_PinMux (LPC_IOCON , PUERTO(0) , PIN(26) , MD_PLN, IOCON_FUNC2 );
 	Chip_DAC_Init(LPC_DAC);
-	Chip_Clock_SetPCLKDiv(SYSCTL_PCLK_DAC, SYSCTL_CLKDIV_8);
-	Chip_DAC_ConfigDAConverterControl(LPC_DAC, DAC_DBLBUF_ENA | DAC_CNT_ENA | DAC_DMA_ENA); // Se habilita el DMA y soporte de cuenta.
+	// Punto medio DAC
+	Chip_DAC_UpdateValue(LPC_DAC, 512);
 
 	// Setup Timer0
 	Chip_TIMER_Init(LPC_TIMER0);
