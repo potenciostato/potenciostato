@@ -33,7 +33,7 @@
 //#define NUMERO_MUESTRAS     	4000 // cantidad de muestras de las señales precalculadas
 #define DMA_SIZE            	NUMERO_MUESTRAS
 #define VALOR_MEDIO_DAC     	512 //valor medio salida dac en cuentas (de 10 bits) de tension para 1.5V
-
+#define REINTENTOS_MAX			3
 //#define CLOCK_DAC_HZ        30000000    // CCLK divido por 4. NOTA: Clock que trae por defecto con ésta configuración: 120MHz.
 
 // Defines ADC
@@ -63,6 +63,7 @@
 // Definiciones de los códigos de operación
 #define OC_INITMEASUREMENTLINEAL 	0xA1
 #define OC_INITMEASUREMENTCYCLICAL 	0xA2
+#define OC_RETRYMEASUREMENT		 	0xA3
 #define OC_ABORTMEASUREMENT 		0xB1
 #define OC_ENDMEASUREMENT 			0xB2
 #define OC_SENDDATA 				0xC
