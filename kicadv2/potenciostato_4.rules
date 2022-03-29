@@ -1,0 +1,204 @@
+
+(rules PCB potenciostato_4
+  (snap_angle 
+    fortyfive_degree
+  )
+  (autoroute_settings
+    (fanout off)
+    (eu.mihosoft.freerouting.autoroute on)
+    (postroute on)
+    (vias on)
+    (via_costs 50)
+    (plane_via_costs 5)
+    (start_ripup_costs 100)
+    (start_pass_no 1)
+    (layer_rule F.Cu
+      (active off)
+      (preferred_direction horizontal)
+      (preferred_direction_trace_costs 1.0)
+      (against_preferred_direction_trace_costs 2.5)
+    )
+    (layer_rule B.Cu
+      (active on)
+      (preferred_direction vertical)
+      (preferred_direction_trace_costs 1.0)
+      (against_preferred_direction_trace_costs 1.7)
+    )
+  )
+  (rule
+    (width 750.0)
+    (clear 500.0)
+    (clear 375.0 (type smd_to_turn_gap))
+    (clear 126.0 (type smd_smd))
+    (clear 200.0 (type Alimentación_Alimentación))
+    (clear 200.0 (type USB_USB))
+  )
+  (padstack "Via[0-1]_1300:1000_um"
+    (shape
+      (circle F.Cu 1300.0 0.0 0.0)
+    )
+    (shape
+      (circle B.Cu 1300.0 0.0 0.0)
+    )
+    (attach off)
+  )
+  (padstack "Via[0-1]_800:400_um"
+    (shape
+      (circle F.Cu 800.0 0.0 0.0)
+    )
+    (shape
+      (circle B.Cu 800.0 0.0 0.0)
+    )
+    (attach off)
+  )
+  (padstack "Via[0-1]_1500:1000_um"
+    (shape
+      (circle F.Cu 1500.0 0.0 0.0)
+    )
+    (shape
+      (circle B.Cu 1500.0 0.0 0.0)
+    )
+    (attach off)
+  )
+  (padstack "Via[0-1]_200:100_um"
+    (shape
+      (circle F.Cu 200.0 0.0 0.0)
+    )
+    (shape
+      (circle B.Cu 200.0 0.0 0.0)
+    )
+    (attach off)
+  )
+  (via 
+    "Via[0-1]_1300:1000_um" "Via[0-1]_1300:1000_um" default
+  )
+  (via 
+    "Via[0-1]_800:400_um" "Via[0-1]_800:400_um" default
+  )
+  (via 
+    "Via[0-1]_1500:1000_um" "Via[0-1]_1500:1000_um" default
+  )
+  (via 
+    "Via[0-1]_200:100_um" "Via[0-1]_200:100_um" default
+  )
+  (via 
+    "Via[0-1]_1300:1000_um-kicad_default" "Via[0-1]_1300:1000_um" "kicad_default"
+  )
+  (via 
+    "Via[0-1]_800:400_um-kicad_default" "Via[0-1]_800:400_um" "kicad_default"
+  )
+  (via 
+    "Via[0-1]_1500:1000_um-kicad_default" "Via[0-1]_1500:1000_um" "kicad_default"
+  )
+  (via 
+    "Via[0-1]_200:100_um-kicad_default" "Via[0-1]_200:100_um" "kicad_default"
+  )
+  (via 
+    "Via[0-1]_1300:1000_um-Alimentación" "Via[0-1]_1300:1000_um" Alimentación
+  )
+  (via 
+    "Via[0-1]_800:400_um-Alimentación" "Via[0-1]_800:400_um" Alimentación
+  )
+  (via 
+    "Via[0-1]_1500:1000_um-Alimentación" "Via[0-1]_1500:1000_um" Alimentación
+  )
+  (via 
+    "Via[0-1]_200:100_um-Alimentación" "Via[0-1]_200:100_um" Alimentación
+  )
+  (via 
+    "Via[0-1]_1300:1000_um-Señal" "Via[0-1]_1300:1000_um" Señal
+  )
+  (via 
+    "Via[0-1]_800:400_um-Señal" "Via[0-1]_800:400_um" Señal
+  )
+  (via 
+    "Via[0-1]_1500:1000_um-Señal" "Via[0-1]_1500:1000_um" Señal
+  )
+  (via 
+    "Via[0-1]_200:100_um-Señal" "Via[0-1]_200:100_um" Señal
+  )
+  (via 
+    "Via[0-1]_1300:1000_um-USB" "Via[0-1]_1300:1000_um" USB
+  )
+  (via 
+    "Via[0-1]_800:400_um-USB" "Via[0-1]_800:400_um" USB
+  )
+  (via 
+    "Via[0-1]_1500:1000_um-USB" "Via[0-1]_1500:1000_um" USB
+  )
+  (via 
+    "Via[0-1]_200:100_um-USB" "Via[0-1]_200:100_um" USB
+  )
+  (via_rule
+    default "Via[0-1]_200:100_um"
+  )
+  (via_rule
+    "kicad_default" "Via[0-1]_1300:1000_um-kicad_default"
+  )
+  (via_rule
+    Alimentación "Via[0-1]_800:400_um-Alimentación"
+  )
+  (via_rule
+    Señal "Via[0-1]_1300:1000_um-Señal"
+  )
+  (via_rule
+    USB "Via[0-1]_1300:1000_um-USB"
+  )
+  (class default
+    (clearance_class default)
+    (via_rule default)
+    (rule
+      (width 750.0)
+    )
+    (circuit 
+      (use_layer F.Cu B.Cu)
+    )
+  )
+  (class "kicad_default"
+    GND "/salida_dac/VIN" "/salida_dac/I_IN" "/salida_dac/V_IN" "Net-(R7-Pad2)" "Net-(R26-Pad1)" "Net-(R27-Pad2)" /LPC/DAC
+    /LPC/ADC0 /LPC/ADC1 "Net-(R10-Pad2)" "Net-(R5-Pad1)"
+    (clearance_class "kicad_default")
+    (via_rule kicad_default)
+    (rule
+      (width 750.0)
+    )
+    (circuit 
+      (use_layer F.Cu B.Cu)
+    )
+  )
+  (class Alimentación
+    +5V "-5V"
+    (clearance_class Alimentación)
+    (via_rule Alimentación)
+    (rule
+      (width 800.0)
+    )
+    (circuit 
+      (use_layer F.Cu B.Cu)
+    )
+  )
+  (class Señal
+    "Net-(J3-Pad3)" "Net-(J3-Pad2)" "Net-(J3-Pad1)" "Net-(R1-Pad1)" "Net-(R2-Pad1)" "Net-(R3-Pad2)" "Net-(R4-Pad1)" "Net-(R7-Pad1)"
+    "Net-(R8-Pad1)" "Net-(R8-Pad2)" "Net-(R9-Pad1)" "Net-(R10-Pad1)" "Net-(R13-Pad2)" "Net-(R13-Pad1)" "Net-(R14-Pad1)" "Net-(R15-Pad1)"
+    "Net-(R16-Pad2)" "Net-(R18-Pad1)" "Net-(R21-Pad1)" "Net-(R22-Pad1)" "Net-(R23-Pad2)"
+    (clearance_class Señal)
+    (via_rule Señal)
+    (rule
+      (width 750.0)
+    )
+    (circuit 
+      (use_layer F.Cu B.Cu)
+    )
+  )
+  (class USB
+    "Net-(J2-Pad2)" "Net-(J2-Pad3)"
+    (clearance_class USB)
+    (via_rule USB)
+    (rule
+      (width 500.0)
+    )
+    (circuit 
+      (use_layer F.Cu B.Cu)
+    )
+  )
+)
