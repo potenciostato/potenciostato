@@ -15,6 +15,7 @@ workspace/lpc_board_nxp_lpcxpresso_1769/Debug/src/board_sysinit.o
 workspace/lpc_board_nxp_lpcxpresso_1769/Debug/src/lpc_phy_smsc87x0.d
 workspace/lpc_board_nxp_lpcxpresso_1769/Debug/src/lpc_phy_smsc87x0.o
 workspace/lpc_board_nxp_lpcxpresso_1769/Debug/src/subdir.mk
+workspace/lpc_board_nxp_lpcxpresso_1769/Debug/makefile
 workspace/lpc_chip_175x_6x/Debug/liblpc_chip_175x_6x.a
 workspace/lpc_chip_175x_6x/Debug/src/adc_17xx_40xx.d
 workspace/lpc_chip_175x_6x/Debug/src/adc_17xx_40xx.o
@@ -81,6 +82,7 @@ workspace/lpc_chip_175x_6x/Debug/src/uart_17xx_40xx.d
 workspace/lpc_chip_175x_6x/Debug/src/uart_17xx_40xx.o
 workspace/lpc_chip_175x_6x/Debug/src/wwdt_17xx_40xx.d
 workspace/lpc_chip_175x_6x/Debug/src/wwdt_17xx_40xx.o
+workspace/lpc_chip_175x_6x/Debug/makefile
 workspace/potenciostato/Debug/example/src/cr_startup_lpc175x_6x.o
 workspace/potenciostato/Debug/example/src/hid_desc.d
 workspace/potenciostato/Debug/example/src/hid_desc.o
@@ -128,6 +130,7 @@ workspace/FreeRTOS_TAD_logs/
 workspace/lpc_board_nxp_lpcxpresso_1769/.settings/
 workspace/lpc_chip_175x_6x/.settings/
 workspace/periph_adc/.settings/
+workspace/periph_timer/.settings/language.settings.xml
 workspace/potenciostato/Debug/example/src/cr_startup_lpc175x_6x.su
 workspace/potenciostato/Debug/example/src/hid_desc.su
 workspace/potenciostato/Debug/example/src/hid_generic.su
