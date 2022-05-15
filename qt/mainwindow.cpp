@@ -430,7 +430,6 @@ void MainWindow::terminoMedicion(){
     ui->Bt_IniciarLineal->setEnabled(true);
     ui->Bt_IniciarCiclico->setEnabled(true);
     ui->Bt_Abortar->setEnabled(false);
-    ui->Bt_Capturar->setEnabled(false);
     ui->Bt_Exportar->setEnabled(true);
 }
 
@@ -496,9 +495,8 @@ void MainWindow::on_Bt_IniciarLineal_clicked()
         p_refresco = 0;
     }
 
-    //Habilita abortar y capturar
+    //Habilita abortar
     ui->Bt_Abortar->setEnabled(true);
-    ui->Bt_Capturar->setEnabled(true);
 
 }
 
@@ -514,47 +512,82 @@ void MainWindow::on_Bt_IniciarCiclico_clicked()
     ui->Bt_IniciarCiclico->setEnabled(false);
     ui->Bt_Exportar->setEnabled(false);
 
-    unsigned char buffer[LARGO_MENSAJE_SALIDA] = {0x0};
-    unsigned char recv_data[LARGO_MENSAJE_ENTRADA] = {0x0};
+    unsigned char buffer[LARGO_MENSAJE_ENTRADA] = {0x0};
+    unsigned char recv_data[LARGO_MENSAJE_SALIDA] = {0x0};
     int len;
     int send_ret, recv_ret;
-    uint8_t tension_pico = 0;
-    //int tension_pico = 0;
-    uint32_t frecuencia = 0;
-    uint8_t ciclos = 0;
+    uint16_t tension_punto1 = 0;    //max: 1000 mV
+    uint16_t tension_punto2 = 0;    //max: 1000 mV
+    uint16_t tension_punto3 = 0;    //max: 1000 mV
+    uint8_t velocidad = 0;         //max: 255 mV/s
+    uint8_t tiempo_retencion = 0;   //max: 255 seg
+    uint16_t tension_retencion = 0; //max: 1000 mV
+    uint8_t ciclos = 0;             //max: 255 ciclos
 
     //Se procesa la configuración elegida
-    tension_pico = (255 * (1000 * ui->Num_VCiclico->value())) / MV_TENSION_MAXIMA;
-    if (frec_periodo == FRECUENCIA){
-        frecuencia = ui->Num_HzCiclico->value() * 1000;
-    }else{
-        frecuencia = (1/ui->Num_SegCiclico->value()) * 1000;
-    }
+    //la cual consiste en el protocolo detallado en: https://docs.google.com/document/d/1LWbUOdiwlQI_1ugtcBbvklIMVfBlg8_1/edit#heading=h.v8ol8v6hjwx
+    tension_punto1 = ui->Num_mVTen1Ciclico->value();
+    tension_punto2 = ui->Num_mVTen2Ciclico->value();
+    tension_punto3 = ui->Num_mVTen3Ciclico->value();
+    tension_retencion = ui->Num_mVTenRetCiclico->value();
+    velocidad = ui->Num_mVSegVelCiclico->value();
+    tiempo_retencion = ui->Num_SegRetCiclico->value();
     ciclos = ui->Num_CicCiclico->value();
 
-    qDebug() << "tension_pico: " << tension_pico;
-    qDebug() << "frecuencia: " << frecuencia;
-    qDebug() << "ciclos: " << ciclos;
+    qDebug() << "tension_punto1:" << tension_punto1;
+    qDebug() << "tension_punto2:" << tension_punto2;
+    qDebug() << "tension_punto3:" << tension_punto3;
+    qDebug() << "tension_retencion:" << tension_retencion;
+    qDebug() << "velocidad:" << velocidad;
+    qDebug() << "tiempo_retencion:" << tiempo_retencion;
+    qDebug() << "ciclos:" << ciclos;
 
+    /*
+     * el mensaje a enviar, segun protocolo v3, sera:
+     * 0xA2;
+     * 0x00;
+     * 8 bits mas significativos de tension_punto1
+     *  => ((tension_punto1 & 0x3FC) >> 2);
+     * 2 bits menos significativos de tension_punto1 y los 6 bits mas significativos de tension_punto2
+     *  => ((tension_punto1 & 0x003) << 6) | ((tension_punto2 & 0x3F0) >> 4);
+     * 4 bits menos significativos de tension_punto2 y los 4 bits mas significativos de tension_punto3
+     *  => ((tension_punto2 & 0x00F) << 4) | ((tension_punto3 & 0x3C0) >> 6);
+     * 6 bits menos significativos de tension_punto3 y los 2 bits mas significativos de tension_retencion
+     *  => ((tension_punto3 & 0x03F) << 2) | ((tension_retencion & 0xC0) >> 6);
+     * 8 bits menos significativos de tension_retencion
+     *  => ((tension_retencion & 0x0FF));
+     * 8 bits de velocidad
+     *  => velocidad;
+     * 8 bits tiempo de retencion
+     *  => tiempo_retencion;
+     * 8 bits de ciclos
+     *  => ciclos;
+     *
+    */
     //se enviara un INIT MEASUREMENT CYCLICAL
     buffer[0] = OC_INITMEASUREMENTCYCLICAL;
     buffer[1] = 0x00;
-    buffer[2] = (uint8_t) tension_pico;
-    buffer[3] = (uint8_t) ((frecuencia & 0xFF0000) >> 16);
-    buffer[4] = (uint8_t) ((frecuencia & 0x00FF00) >> 8);
-    buffer[5] = (uint8_t) (frecuencia & 0x0000FF);
-    buffer[6] = (uint8_t) ciclos;
-    buffer[7] = 0x00;
+    buffer[2] = (uint8_t) ((tension_punto1 & 0x3FC) >> 2);
+    buffer[3] = (uint8_t) (((tension_punto1 & 0x003) << 6) | ((tension_punto2 & 0x3F0) >> 4));
+    buffer[4] = (uint8_t) (((tension_punto2 & 0x00F) << 4) | ((tension_punto3 & 0x3C0) >> 6));
+    buffer[5] = (uint8_t) (((tension_punto3 & 0x03F) << 2) | ((tension_retencion & 0xC0) >> 6));
+    buffer[6] = (uint8_t) (tension_retencion & 0x0FF);
+    buffer[7] = (uint8_t) (velocidad & 0x0FF);
+    buffer[8] = (uint8_t) (tiempo_retencion & 0x0FF);
+    buffer[9] = (uint8_t) (ciclos & 0x0FF);
 
-
+    /*
     send_ret = libusb_interrupt_transfer(dev_handle, 0x01, buffer, (sizeof(buffer)) * BITS_EN_UN_BYTE, &len, 1000);
     recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * BITS_EN_UN_BYTE, &len, 1000);
+    */
+
     //int recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * 64, &len, 1000);
 
     qDebug() << "codigo envio" << send_ret;
     qDebug() << "dato enviado completo"
-             << buffer[0] << buffer[1] << buffer[2] << buffer[3]
-             << buffer[4] << buffer[5] << buffer[6] << buffer[7];
+             << buffer[0] << buffer[1] << buffer[2] << buffer[3] << buffer[4]
+             << buffer[5] << buffer[6] << buffer[7] << buffer[8] << buffer[9];
+
     qDebug() << "dato enviado [0]" << buffer[0];
 
     qDebug() << "codigo recepcion" << recv_ret;
@@ -563,9 +596,6 @@ void MainWindow::on_Bt_IniciarCiclico_clicked()
     //Limpia el gráfico y lo inicializa
     MainWindow::limpiarGraficos();
     MainWindow::inicializarGraficos();
-
-    //TODO: verificar que el LPC responda con el OP_CODE correspondiente
-    //      y asi, iniciar la medicion
 
     //Se limpia el vector de valores con valores invalidos
     for(int i=0; i<CANT_VALORES; i++){
@@ -580,9 +610,8 @@ void MainWindow::on_Bt_IniciarCiclico_clicked()
         p_refresco = 0;
     }
 
-    //Habilita abortar y capturar
+    //Habilita abortar
     ui->Bt_Abortar->setEnabled(true);
-    ui->Bt_Capturar->setEnabled(true);
 }
 
 void MainWindow::on_Bt_Abortar_clicked()
@@ -610,15 +639,6 @@ void MainWindow::on_Bt_Abortar_clicked()
             medicion_habilitada = 0;
         }
     }
-}
-
-void MainWindow::on_Bt_Capturar_clicked()
-{
-    qDebug() << "Capturar Medición";
-
-    //Almacena en la carpeta mediciones una foto de la medición actual
-    // con un timestamp y los datos en csv correspondientes.
-
 }
 
 void MainWindow::on_Bt_Exportar_clicked()
@@ -736,7 +756,6 @@ void MainWindow::on_Conectar_Bt_clicked()
     ui->Bt_IniciarLineal->setEnabled(true);
     ui->Bt_IniciarCiclico->setEnabled(true);
     ui->Bt_Abortar->setEnabled(false);
-    ui->Bt_Capturar->setEnabled(false);
     ui->Bt_Exportar->setEnabled(false);
     ui->Conectar_Bt->setEnabled(false);
     ui->Desconectar_Bt->setEnabled(true);
@@ -1075,7 +1094,6 @@ void MainWindow::forzarAbortar()
 
 }
 
-
 void MainWindow::on_Desconectar_Bt_clicked()
 {
     MainWindow::desconectarUSB();
@@ -1087,25 +1105,9 @@ void MainWindow::on_Desconectar_Bt_clicked()
     ui->Bt_IniciarLineal->setEnabled(false);
     ui->Bt_IniciarCiclico->setEnabled(false);
     ui->Bt_Abortar->setEnabled(false);
-    ui->Bt_Capturar->setEnabled(false);
     ui->Bt_Exportar->setEnabled(false);
     ui->Desconectar_Bt->setEnabled(false);
 
-}
-
-void MainWindow::on_Bt_FTCiclico_clicked()
-{
-    if (frec_periodo == FRECUENCIA){
-        frec_periodo = PERIODO;
-        ui->Num_SegCiclico->setEnabled(true);
-        ui->Num_HzCiclico->setEnabled(false);
-    }
-    else
-    {
-        frec_periodo = FRECUENCIA;
-        ui->Num_SegCiclico->setEnabled(false);
-        ui->Num_HzCiclico->setEnabled(true);
-    }
 }
 
 void MainWindow::exportarCSV()

@@ -50,9 +50,9 @@
       <property name="geometry">
        <rect>
         <x>780</x>
-        <y>360</y>
+        <y>470</y>
         <width>211</width>
-        <height>41</height>
+        <height>31</height>
        </rect>
       </property>
       <property name="font">
@@ -67,36 +67,15 @@
        <string>Abortar</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="Bt_Capturar">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="geometry">
-       <rect>
-        <x>780</x>
-        <y>410</y>
-        <width>101</width>
-        <height>41</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>9</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>Capturar</string>
-      </property>
-     </widget>
      <widget class="QPushButton" name="Bt_Exportar">
       <property name="enabled">
        <bool>false</bool>
       </property>
       <property name="geometry">
        <rect>
-        <x>890</x>
-        <y>410</y>
-        <width>101</width>
+        <x>780</x>
+        <y>510</y>
+        <width>211</width>
         <height>41</height>
        </rect>
       </property>
@@ -116,9 +95,9 @@
       <property name="geometry">
        <rect>
         <x>770</x>
-        <y>110</y>
+        <y>90</y>
         <width>231</width>
-        <height>241</height>
+        <height>371</height>
        </rect>
       </property>
       <property name="font">
@@ -126,21 +105,384 @@
         <pointsize>9</pointsize>
        </font>
       </property>
-      <property name="currentIndex">
-       <number>1</number>
+      <property name="tabPosition">
+       <enum>QTabWidget::North</enum>
       </property>
-      <widget class="QWidget" name="tab">
+      <property name="tabShape">
+       <enum>QTabWidget::Rounded</enum>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <property name="elideMode">
+       <enum>Qt::ElideRight</enum>
+      </property>
+      <property name="usesScrollButtons">
+       <bool>false</bool>
+      </property>
+      <property name="documentMode">
+       <bool>false</bool>
+      </property>
+      <property name="tabsClosable">
+       <bool>false</bool>
+      </property>
+      <property name="movable">
+       <bool>false</bool>
+      </property>
+      <widget class="QWidget" name="tabCiclico">
        <attribute name="title">
-        <string>Barrido Lineal</string>
+        <string>Barrido Cíclico</string>
        </attribute>
-       <widget class="QPushButton" name="Bt_IniciarLineal">
+       <widget class="QGroupBox" name="grupoPeriodoRetencion_2">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>10</y>
+          <width>221</width>
+          <height>81</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>9</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="title">
+         <string>Período retención</string>
+        </property>
+        <widget class="QDoubleSpinBox" name="Num_SegRetCiclico">
+         <property name="geometry">
+          <rect>
+           <x>140</x>
+           <y>20</y>
+           <width>71</width>
+           <height>22</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="decimals">
+          <number>0</number>
+         </property>
+         <property name="maximum">
+          <double>255.000000000000000</double>
+         </property>
+         <property name="singleStep">
+          <double>1.000000000000000</double>
+         </property>
+        </widget>
+        <widget class="QLabel" name="Lb_TenRetCiclico">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>50</y>
+           <width>91</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Tensión [mV]</string>
+         </property>
+        </widget>
+        <widget class="QDoubleSpinBox" name="Num_mVTenRetCiclico">
+         <property name="geometry">
+          <rect>
+           <x>140</x>
+           <y>50</y>
+           <width>71</width>
+           <height>22</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="decimals">
+          <number>0</number>
+         </property>
+         <property name="maximum">
+          <double>1000.000000000000000</double>
+         </property>
+         <property name="singleStep">
+          <double>1.000000000000000</double>
+         </property>
+        </widget>
+        <widget class="QLabel" name="Lb_TiemRetCiclico">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>20</y>
+           <width>91</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Tiempo [seg]</string>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QGroupBox" name="grupoPeriodoRetencion_3">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>100</y>
+          <width>221</width>
+          <height>181</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>9</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="title">
+         <string>Período rampa</string>
+        </property>
+        <widget class="QDoubleSpinBox" name="Num_mVTen1Ciclico">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>50</y>
+           <width>61</width>
+           <height>22</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="decimals">
+          <number>0</number>
+         </property>
+         <property name="maximum">
+          <double>1000.000000000000000</double>
+         </property>
+         <property name="singleStep">
+          <double>1.000000000000000</double>
+         </property>
+        </widget>
+        <widget class="QLabel" name="Lb_VelCiclico">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>100</y>
+           <width>111</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Velocidad [mV/seg]</string>
+         </property>
+        </widget>
+        <widget class="QDoubleSpinBox" name="Num_mVTen2Ciclico">
+         <property name="geometry">
+          <rect>
+           <x>80</x>
+           <y>50</y>
+           <width>61</width>
+           <height>22</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="decimals">
+          <number>0</number>
+         </property>
+         <property name="maximum">
+          <double>1000.000000000000000</double>
+         </property>
+         <property name="singleStep">
+          <double>1.000000000000000</double>
+         </property>
+        </widget>
+        <widget class="QLabel" name="Lb_CicCiclico">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>140</y>
+           <width>111</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Ciclos</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+        <widget class="QDoubleSpinBox" name="Num_mVTen3Ciclico">
+         <property name="geometry">
+          <rect>
+           <x>150</x>
+           <y>50</y>
+           <width>61</width>
+           <height>22</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="decimals">
+          <number>0</number>
+         </property>
+         <property name="maximum">
+          <double>1000.000000000000000</double>
+         </property>
+         <property name="singleStep">
+          <double>1.000000000000000</double>
+         </property>
+        </widget>
+        <widget class="QLabel" name="Lb_TenCiclico">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>20</y>
+           <width>201</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Tensión [mV]</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+        <widget class="QDoubleSpinBox" name="Num_mVSegVelCiclico">
+         <property name="geometry">
+          <rect>
+           <x>140</x>
+           <y>100</y>
+           <width>71</width>
+           <height>22</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="decimals">
+          <number>0</number>
+         </property>
+         <property name="minimum">
+          <double>0.000000000000000</double>
+         </property>
+         <property name="maximum">
+          <double>255.000000000000000</double>
+         </property>
+         <property name="singleStep">
+          <double>1.000000000000000</double>
+         </property>
+         <property name="value">
+          <double>0.000000000000000</double>
+         </property>
+        </widget>
+        <widget class="QDoubleSpinBox" name="Num_CicCiclico">
+         <property name="geometry">
+          <rect>
+           <x>140</x>
+           <y>140</y>
+           <width>71</width>
+           <height>22</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="decimals">
+          <number>0</number>
+         </property>
+         <property name="maximum">
+          <double>255.000000000000000</double>
+         </property>
+         <property name="singleStep">
+          <double>1.000000000000000</double>
+         </property>
+        </widget>
+        <zorder>Lb_VelCiclico</zorder>
+        <zorder>Num_mVTen1Ciclico</zorder>
+        <zorder>Num_mVTen2Ciclico</zorder>
+        <zorder>Lb_CicCiclico</zorder>
+        <zorder>Lb_TenCiclico</zorder>
+        <zorder>Num_mVSegVelCiclico</zorder>
+        <zorder>Num_CicCiclico</zorder>
+        <zorder>Num_mVTen3Ciclico</zorder>
+       </widget>
+       <widget class="QPushButton" name="Bt_IniciarCiclico">
         <property name="enabled">
          <bool>false</bool>
         </property>
         <property name="geometry">
          <rect>
           <x>50</x>
-          <y>170</y>
+          <y>300</y>
           <width>121</width>
           <height>41</height>
          </rect>
@@ -154,11 +496,58 @@
          <string>Iniciar Medición</string>
         </property>
        </widget>
+      </widget>
+      <widget class="QWidget" name="tabLineal">
+       <attribute name="title">
+        <string>Barrido Lineal</string>
+       </attribute>
+       <widget class="QDoubleSpinBox" name="Num_HzLineal">
+        <property name="geometry">
+         <rect>
+          <x>140</x>
+          <y>10</y>
+          <width>71</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="decimals">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <double>10000.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>1.000000000000000</double>
+        </property>
+       </widget>
+       <widget class="QLabel" name="Lb_HzLineal">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>10</y>
+          <width>91</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Frecuencia [Hz]</string>
+        </property>
+       </widget>
        <widget class="QDoubleSpinBox" name="Num_VLineal">
         <property name="geometry">
          <rect>
-          <x>141</x>
-          <y>10</y>
+          <x>140</x>
+          <y>40</y>
           <width>71</width>
           <height>22</height>
          </rect>
@@ -179,7 +568,7 @@
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>10</y>
+          <y>40</y>
           <width>91</width>
           <height>21</height>
          </rect>
@@ -193,130 +582,14 @@
          <string>Tensión máxima [V]</string>
         </property>
        </widget>
-       <widget class="QLabel" name="Lb_HzLineal">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>40</y>
-          <width>91</width>
-          <height>21</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Frecuencia [Hz]</string>
-        </property>
-       </widget>
-       <widget class="QDoubleSpinBox" name="Num_HzLineal">
-        <property name="geometry">
-         <rect>
-          <x>141</x>
-          <y>40</y>
-          <width>71</width>
-          <height>22</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="decimals">
-         <number>0</number>
-        </property>
-        <property name="maximum">
-         <double>10000.000000000000000</double>
-        </property>
-        <property name="singleStep">
-         <double>1.000000000000000</double>
-        </property>
-       </widget>
-      </widget>
-      <widget class="QWidget" name="tab_2">
-       <attribute name="title">
-        <string>Barrido Cíclico</string>
-       </attribute>
-       <widget class="QLabel" name="Lb_VCiclico">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>10</y>
-          <width>91</width>
-          <height>21</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Tensión máxima [V]</string>
-        </property>
-       </widget>
-       <widget class="QDoubleSpinBox" name="Num_VCiclico">
-        <property name="geometry">
-         <rect>
-          <x>141</x>
-          <y>10</y>
-          <width>71</width>
-          <height>22</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="maximum">
-         <double>3.300000000000000</double>
-        </property>
-        <property name="singleStep">
-         <double>0.100000000000000</double>
-        </property>
-       </widget>
-       <widget class="QDoubleSpinBox" name="Num_HzCiclico">
-        <property name="geometry">
-         <rect>
-          <x>141</x>
-          <y>40</y>
-          <width>71</width>
-          <height>22</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="decimals">
-         <number>3</number>
-        </property>
-        <property name="minimum">
-         <double>0.025000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>8000.000000000000000</double>
-        </property>
-        <property name="singleStep">
-         <double>0.001000000000000</double>
-        </property>
-        <property name="value">
-         <double>1.000000000000000</double>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="Bt_IniciarCiclico">
+       <widget class="QPushButton" name="Bt_IniciarLineal">
         <property name="enabled">
          <bool>false</bool>
         </property>
         <property name="geometry">
          <rect>
           <x>50</x>
-          <y>170</y>
+          <y>300</y>
           <width>121</width>
           <height>41</height>
          </rect>
@@ -328,138 +601,6 @@
         </property>
         <property name="text">
          <string>Iniciar Medición</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="Lb_HzCiclico">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>40</y>
-          <width>91</width>
-          <height>21</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Frecuencia [Hz]</string>
-        </property>
-       </widget>
-       <widget class="QDoubleSpinBox" name="Num_CicCiclico">
-        <property name="geometry">
-         <rect>
-          <x>141</x>
-          <y>100</y>
-          <width>71</width>
-          <height>22</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="decimals">
-         <number>0</number>
-        </property>
-        <property name="maximum">
-         <double>10000.000000000000000</double>
-        </property>
-        <property name="singleStep">
-         <double>1.000000000000000</double>
-        </property>
-       </widget>
-       <widget class="QLabel" name="Lb_CicCiclico">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>100</y>
-          <width>91</width>
-          <height>21</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Cant. de Ciclos</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="Lb_SegCiclico">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>70</y>
-          <width>91</width>
-          <height>21</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Período [Seg]</string>
-        </property>
-       </widget>
-       <widget class="QDoubleSpinBox" name="Num_SegCiclico">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="geometry">
-         <rect>
-          <x>141</x>
-          <y>70</y>
-          <width>71</width>
-          <height>22</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="decimals">
-         <number>5</number>
-        </property>
-        <property name="minimum">
-         <double>0.000130000000000</double>
-        </property>
-        <property name="maximum">
-         <double>40.000000000000000</double>
-        </property>
-        <property name="singleStep">
-         <double>0.000010000000000</double>
-        </property>
-        <property name="value">
-         <double>1.000000000000000</double>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="Bt_FTCiclico">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="geometry">
-         <rect>
-          <x>50</x>
-          <y>140</y>
-          <width>121</width>
-          <height>21</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Frec. &lt;=&gt; Período</string>
         </property>
        </widget>
       </widget>
@@ -644,7 +785,7 @@
         <x>780</x>
         <y>10</y>
         <width>211</width>
-        <height>51</height>
+        <height>41</height>
        </rect>
       </property>
       <property name="font">
@@ -663,9 +804,9 @@
       <property name="geometry">
        <rect>
         <x>780</x>
-        <y>60</y>
+        <y>50</y>
         <width>211</width>
-        <height>41</height>
+        <height>31</height>
        </rect>
       </property>
       <property name="font">
