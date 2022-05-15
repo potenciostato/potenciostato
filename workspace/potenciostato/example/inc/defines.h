@@ -45,8 +45,8 @@
 #define TAMANIO_MAX_COLA_USB		100 //cantidad maxima de mensajes en la cola USB
 #define LARGO_MENSAJE_ENTRADA		21 //cantidad de bytes de los reports de entrada (visto desde el punto de vista de la PC)
 #define LARGO_PACKETSIZE_ENTRADA	21 //cantidad de bytes máxima de los reports de entrada
-#define LARGO_MENSAJE_SALIDA		8 //cantidad de bytes de los reports de salida (visto desde el punto de vista de la PC)
-#define LARGO_PACKETSIZE_SALIDA		8 //cantidad de bytes máxima de los reports de salida
+#define LARGO_MENSAJE_SALIDA		10 //cantidad de bytes de los reports de salida (visto desde el punto de vista de la PC)
+#define LARGO_PACKETSIZE_SALIDA		10 //cantidad de bytes máxima de los reports de salida
 
 #define PUNTOS_GRAFICA			200
 #define MAX_PUNTOS 6

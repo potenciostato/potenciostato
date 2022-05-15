@@ -24,10 +24,12 @@ public:
 private slots:
     void on_Conectar_Bt_clicked();
     void on_Desconectar_Bt_clicked();
-    void on_Bt_IniciarLineal_clicked();
+    void on_Bt_IniciarCiclico_clicked();
+    void on_Bt_IniciarLineal_clicked(); //hoy no esta 100% testeado esto
     void on_Bt_Abortar_clicked();
-    void on_Bt_Capturar_clicked();
     void on_Bt_Exportar_clicked();
+    void on_Bt_AutoCentrar_clicked();
+    void on_Bt_Cursores_clicked();
 
     void help();
     void abrirMedicion();
@@ -55,11 +57,6 @@ private slots:
 
     void forzarAbortar();
     void exportarCSV();
-
-    void on_Bt_IniciarCiclico_clicked();
-    void on_Bt_FTCiclico_clicked();
-    void on_Bt_AutoCentrar_clicked();
-    void on_Bt_Cursores_clicked();
 
 private:
     Ui::MainWindow *ui;

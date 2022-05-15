@@ -56,9 +56,13 @@ const  USBD_API_T *g_pUsbApi = &g_usbApi;
 
 struct DACmsj {
   bool set;
-  uint16_t mode;
-  uint32_t frec;
-  uint16_t amp;
+  uint8_t mode;
+  uint16_t v_pto1;
+  uint16_t v_pto2;
+  uint16_t v_pto3;
+  uint16_t v_retencion;
+  uint8_t velocidad;
+  uint8_t s_retencion;
   uint8_t ncic;
 };
 
@@ -263,13 +267,18 @@ static void vUSBTask(void *pvParameters) {
 						DEBUGOUT("USB: Configuro DAC & ADC\n");
 
 					conf_dac.set = true;
-					conf_dac.mode = lecturaQT[0];
-					conf_dac.frec =(lecturaQT[3]<<16) | (lecturaQT[4]<<8) | lecturaQT[5]; //me parece debería ir un OR | (había un +)
-					conf_dac.amp = lecturaQT[2];
-					conf_dac.ncic = lecturaQT[6];
+					conf_dac.mode = (uint8_t) (lecturaQT[0] & 0xFF);
+					conf_dac.v_pto1 = (uint16_t) ((lecturaQT[2] << 2) | ((lecturaQT[3] & 0xC0) >> 6));
+					conf_dac.v_pto2 = (uint16_t) (((lecturaQT[3] & 0x3F) << 4) | ((lecturaQT[4] & 0xF0) >> 4));
+					conf_dac.v_pto3 = (uint16_t) (((lecturaQT[4] & 0x0F) << 6) | ((lecturaQT[5] & 0xFC) >> 2));
+					conf_dac.v_retencion = (uint16_t) (((lecturaQT[5] & 0x03) << 8) | (lecturaQT[6] & 0xFF));
+					conf_dac.velocidad = (uint8_t) (lecturaQT[7] & 0xFF);
+					conf_dac.s_retencion = (uint8_t) (lecturaQT[8] & 0xFF);
+					conf_dac.ncic = (uint8_t) (lecturaQT[9] & 0xFF);
 
 					conf_adc.set = true;
-					conf_adc.frec = conf_dac.frec;
+					//conf_adc.frec = conf_dac.frec;
+					conf_adc.frec = 1000;
                 } else {
                 	retry_cnt++;
                 }
@@ -351,10 +360,11 @@ static void vDACTask(struct DACmsj *pvParameters) {
     conf = *pvParameters;
 
 	if (debugging == ENABLED)
-		DEBUGOUT("DAC: Conf recibida Set:%d,Frec:%d,Ncic:%d,Amp:%d\n",conf.set,conf.frec,conf.ncic,conf.amp);
+		DEBUGOUT("DAC: Conf recibida \nSet:%d, v_pto1:%d, v_pto2:%d, v_pto3:%d, v_retencion:%d, velocidad:%d, s_retencion:%d, Ncic:%d\n",conf.set,conf.v_pto1,conf.v_pto2,conf.v_pto3,conf.v_retencion,conf.velocidad,conf.s_retencion,conf.ncic);
 
 	// Config Frecuencia
-	FREC = conf.frec; //este valor esta multiplicado por 1000 desde el Qt
+	//FREC = conf.frec; //este valor esta multiplicado por 1000 desde el Qt
+	FREC = 1000; //parche para que compile, luego que se integre protocolo v3 sacar
 	if (FREC == 0){
 		DEBUGOUT("DAC: Frecuencia incorrecta, no puede valer 0\n");
 	}
@@ -398,7 +408,8 @@ static void vDACTask(struct DACmsj *pvParameters) {
 	}
 
 	// Config Amplitud
-	AMPLITUD = conf.amp;
+	//AMPLITUD = conf.amp; //parche pre protocolo v3
+	AMPLITUD = 255;
 	if (conf.mode == BARRIDO_CICLICO){
 		for ( i = 0 ; i < NUMERO_MUESTRAS ; i++ ) {
 			tabla_salida[i]= (uint16_t) ((AMPLITUD * (tabla_tria500[i] - VALOR_MEDIO_DAC))/AMPLITUD_DIV + VALOR_MEDIO_DAC) << 6;
@@ -414,7 +425,7 @@ static void vDACTask(struct DACmsj *pvParameters) {
 	CanalDAC = Chip_GPDMA_GetFreeChannel ( LPC_GPDMA , 0 );
 
 	if (conf.mode == BARRIDO_CICLICO) {
-		if(conf.frec < FRECUENCIA_MUY_BAJA){
+		if(FREC < FRECUENCIA_MUY_BAJA){
 			if (conf.ncic == 0) conf.ncic = 255;
 			xSemaphoreGive(sDACready);
 			xSemaphoreTake(sDACstart, ( portTickType ) TAKE_TIMEOUT);

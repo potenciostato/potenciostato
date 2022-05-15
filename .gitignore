@@ -15,6 +15,7 @@ workspace/lpc_board_nxp_lpcxpresso_1769/Debug/src/board_sysinit.o
 workspace/lpc_board_nxp_lpcxpresso_1769/Debug/src/lpc_phy_smsc87x0.d
 workspace/lpc_board_nxp_lpcxpresso_1769/Debug/src/lpc_phy_smsc87x0.o
 workspace/lpc_board_nxp_lpcxpresso_1769/Debug/src/subdir.mk
+workspace/lpc_board_nxp_lpcxpresso_1769/Debug/makefile
 workspace/lpc_chip_175x_6x/Debug/liblpc_chip_175x_6x.a
 workspace/lpc_chip_175x_6x/Debug/src/adc_17xx_40xx.d
 workspace/lpc_chip_175x_6x/Debug/src/adc_17xx_40xx.o
@@ -81,6 +82,7 @@ workspace/lpc_chip_175x_6x/Debug/src/uart_17xx_40xx.d
 workspace/lpc_chip_175x_6x/Debug/src/uart_17xx_40xx.o
 workspace/lpc_chip_175x_6x/Debug/src/wwdt_17xx_40xx.d
 workspace/lpc_chip_175x_6x/Debug/src/wwdt_17xx_40xx.o
+workspace/lpc_chip_175x_6x/Debug/makefile
 workspace/potenciostato/Debug/example/src/cr_startup_lpc175x_6x.o
 workspace/potenciostato/Debug/example/src/hid_desc.d
 workspace/potenciostato/Debug/example/src/hid_desc.o
@@ -119,6 +121,26 @@ workspace/potenciostato/Debug/potenciostato_Debug_memory.ld
 qt/potenciostato_inicial.pro.user
 workspace/Sintetizador_v1.0/.settings/language.settings.xml
 workspace/freertos_blinky/.settings/language.settings.xml
+workspace/freertos_blinky/Debug/example/src/cr_startup_lpc175x_6x.o
+workspace/freertos_blinky/Debug/example/src/freertos_blinky.o
+workspace/freertos_blinky/Debug/example/src/hid_desc.o
+workspace/freertos_blinky/Debug/example/src/hid_generic.o
+workspace/freertos_blinky/Debug/example/src/main.o
+workspace/freertos_blinky/Debug/example/src/setup.o
+workspace/freertos_blinky/Debug/example/src/subdir.mk
+workspace/freertos_blinky/Debug/example/src/sysinit.o
+workspace/freertos_blinky/Debug/freertos/src/FreeRTOSCommonHooks.o
+workspace/freertos_blinky/Debug/freertos/src/heap_3.o
+workspace/freertos_blinky/Debug/freertos/src/list.o
+workspace/freertos_blinky/Debug/freertos/src/port.o
+workspace/freertos_blinky/Debug/freertos/src/queue.o
+workspace/freertos_blinky/Debug/freertos/src/subdir.mk
+workspace/freertos_blinky/Debug/freertos/src/tasks.o
+workspace/freertos_blinky/Debug/freertos_blinky_Debug.ld
+workspace/freertos_blinky/Debug/freertos_blinky_Debug_library.ld
+workspace/freertos_blinky/Debug/freertos_blinky_Debug_memory.ld
+workspace/freertos_blinky/Debug/makefile
+workspace/freertos_blinky/Debug/sources.mk
 workspace/potenciostato/potenciostato Release (1).launch
 workspace/usbd_lib_hid_generic/.settings/language.settings.xml
 workspace/usbd_lib_hid_keyboard/.settings/language.settings.xml
@@ -128,6 +150,7 @@ workspace/FreeRTOS_TAD_logs/
 workspace/lpc_board_nxp_lpcxpresso_1769/.settings/
 workspace/lpc_chip_175x_6x/.settings/
 workspace/periph_adc/.settings/
+workspace/periph_timer/.settings/language.settings.xml
 workspace/potenciostato/Debug/example/src/cr_startup_lpc175x_6x.su
 workspace/potenciostato/Debug/example/src/hid_desc.su
 workspace/potenciostato/Debug/example/src/hid_generic.su
