@@ -570,16 +570,14 @@ void MainWindow::on_Bt_IniciarCiclico_clicked()
     buffer[2] = (uint8_t) ((tension_punto1 & 0x3FC) >> 2);
     buffer[3] = (uint8_t) (((tension_punto1 & 0x003) << 6) | ((tension_punto2 & 0x3F0) >> 4));
     buffer[4] = (uint8_t) (((tension_punto2 & 0x00F) << 4) | ((tension_punto3 & 0x3C0) >> 6));
-    buffer[5] = (uint8_t) (((tension_punto3 & 0x03F) << 2) | ((tension_retencion & 0xC0) >> 6));
+    buffer[5] = (uint8_t) (((tension_punto3 & 0x03F) << 2) | ((tension_retencion & 0x300) >> 8));
     buffer[6] = (uint8_t) (tension_retencion & 0x0FF);
     buffer[7] = (uint8_t) (velocidad & 0x0FF);
     buffer[8] = (uint8_t) (tiempo_retencion & 0x0FF);
     buffer[9] = (uint8_t) (ciclos & 0x0FF);
 
-    /*
     send_ret = libusb_interrupt_transfer(dev_handle, 0x01, buffer, (sizeof(buffer)) * BITS_EN_UN_BYTE, &len, 1000);
     recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * BITS_EN_UN_BYTE, &len, 1000);
-    */
 
     //int recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * 64, &len, 1000);
 
