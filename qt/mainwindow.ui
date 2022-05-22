@@ -217,11 +217,14 @@
          <property name="decimals">
           <number>0</number>
          </property>
+         <property name="minimum">
+          <double>-3000.000000000000000</double>
+         </property>
          <property name="maximum">
-          <double>1000.000000000000000</double>
+          <double>3000.000000000000000</double>
          </property>
          <property name="singleStep">
-          <double>1.000000000000000</double>
+          <double>10.000000000000000</double>
          </property>
         </widget>
         <widget class="QLabel" name="Lb_TiemRetCiclico">
@@ -283,11 +286,14 @@
          <property name="decimals">
           <number>0</number>
          </property>
+         <property name="minimum">
+          <double>-3000.000000000000000</double>
+         </property>
          <property name="maximum">
-          <double>1000.000000000000000</double>
+          <double>3000.000000000000000</double>
          </property>
          <property name="singleStep">
-          <double>1.000000000000000</double>
+          <double>10.000000000000000</double>
          </property>
         </widget>
         <widget class="QLabel" name="Lb_VelCiclico">
@@ -329,11 +335,14 @@
          <property name="decimals">
           <number>0</number>
          </property>
+         <property name="minimum">
+          <double>-3000.000000000000000</double>
+         </property>
          <property name="maximum">
-          <double>1000.000000000000000</double>
+          <double>3000.000000000000000</double>
          </property>
          <property name="singleStep">
-          <double>1.000000000000000</double>
+          <double>10.000000000000000</double>
          </property>
         </widget>
         <widget class="QLabel" name="Lb_CicCiclico">
@@ -378,11 +387,14 @@
          <property name="decimals">
           <number>0</number>
          </property>
+         <property name="minimum">
+          <double>-3000.000000000000000</double>
+         </property>
          <property name="maximum">
-          <double>1000.000000000000000</double>
+          <double>3000.000000000000000</double>
          </property>
          <property name="singleStep">
-          <double>1.000000000000000</double>
+          <double>10.000000000000000</double>
          </property>
         </widget>
         <widget class="QLabel" name="Lb_TenCiclico">

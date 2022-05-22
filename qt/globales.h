@@ -57,6 +57,7 @@ int8_t Dispositivo = -1;
 #define PUNTOS_REFRESCO 4
 #define REPORTES_A_RECIBIR 4
 
+#define GEN_PTO_MEDIO 1000 //mV
 
 
 // CONSTANTES INTERNAS

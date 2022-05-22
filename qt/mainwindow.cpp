@@ -516,13 +516,13 @@ void MainWindow::on_Bt_IniciarCiclico_clicked()
     unsigned char recv_data[LARGO_MENSAJE_SALIDA] = {0x0};
     int len;
     int send_ret, recv_ret;
-    uint16_t tension_punto1 = 0;    //max: 1000 mV
-    uint16_t tension_punto2 = 0;    //max: 1000 mV
-    uint16_t tension_punto3 = 0;    //max: 1000 mV
+    int tension_punto1 = 0;    //min: -1000 mV, max: 1000 mV
+    int tension_punto2 = 0;    //min: -1000 mV, max: 1000 mV
+    int tension_punto3 = 0;    //min: -1000 mV, max: 1000 mV
     uint8_t velocidad = 0;         //max: 255 mV/s
-    uint8_t tiempo_retencion = 0;   //max: 255 seg
-    uint16_t tension_retencion = 0; //max: 1000 mV
-    uint8_t ciclos = 0;             //max: 255 ciclos
+    uint8_t tiempo_retencion = 0;  //max: 255 seg
+    int16_t tension_retencion = 0; //min: -1000 mV, max: 1000 mV
+    uint8_t ciclos = 0;            //max: 255 ciclos
 
     //Se procesa la configuración elegida
     //la cual consiste en el protocolo detallado en: https://docs.google.com/document/d/1LWbUOdiwlQI_1ugtcBbvklIMVfBlg8_1/edit#heading=h.v8ol8v6hjwx
@@ -542,20 +542,40 @@ void MainWindow::on_Bt_IniciarCiclico_clicked()
     qDebug() << "tiempo_retencion:" << tiempo_retencion;
     qDebug() << "ciclos:" << ciclos;
 
+    // para simplificar el envio se le adiciona GEN_PTO_MEDIO a cada valor de tension a enviar
+    uint16_t tension_punto1_aenviar;
+    uint16_t tension_punto2_aenviar;
+    uint16_t tension_punto3_aenviar;
+    uint16_t tension_retencion_aenviar;
+
+    tension_punto1_aenviar = (uint16_t) (tension_punto1 + GEN_PTO_MEDIO);
+    tension_punto2_aenviar = (uint16_t) (tension_punto2 + GEN_PTO_MEDIO);
+    tension_punto3_aenviar = (uint16_t) (tension_punto3 + GEN_PTO_MEDIO);
+    tension_retencion_aenviar = (uint16_t) (tension_retencion + GEN_PTO_MEDIO);
+
+    qDebug() << "tension_punto1_aenviar:" << tension_punto1_aenviar;
+    qDebug() << "tension_punto2_aenviar:" << tension_punto2_aenviar;
+    qDebug() << "tension_punto3_aenviar:" << tension_punto3_aenviar;
+    qDebug() << "tension_retencion_aenviar:" << tension_retencion_aenviar;
+
     /*
-     * el mensaje a enviar, segun protocolo v3, sera:
+     * el mensaje a enviar, segun protocolo v4, sera:
      * 0xA2;
      * 0x00;
      * 8 bits mas significativos de tension_punto1
-     *  => ((tension_punto1 & 0x3FC) >> 2);
-     * 2 bits menos significativos de tension_punto1 y los 6 bits mas significativos de tension_punto2
-     *  => ((tension_punto1 & 0x003) << 6) | ((tension_punto2 & 0x3F0) >> 4);
-     * 4 bits menos significativos de tension_punto2 y los 4 bits mas significativos de tension_punto3
-     *  => ((tension_punto2 & 0x00F) << 4) | ((tension_punto3 & 0x3C0) >> 6);
-     * 6 bits menos significativos de tension_punto3 y los 2 bits mas significativos de tension_retencion
-     *  => ((tension_punto3 & 0x03F) << 2) | ((tension_retencion & 0xC0) >> 6);
-     * 8 bits menos significativos de tension_retencion
-     *  => ((tension_retencion & 0x0FF));
+     *  => ((tension_punto1 & 0x3FC0) >> 6);
+     * 6 bits menos significativos de tension_punto1 y los 2 bits mas significativos de tension_punto2
+     *  => ((tension_punto1 & 0x003F) << 2) | ((tension_punto2 & 0x3000) >> 12);
+     * 8 bits menos significativos (parte alta) de tension_punto2
+     *  => ((tension_punto2 & 0x0FF0) >> 4);
+     * 4 bits menos significativos (parte baja) de tension_punto2 y los 4 bits mas significativos de tension_punto3
+     *  => ((tension_punto2 & 0x000F) << 4) | ((tension_punto3 & 0x3C00) >> 10);
+     * 8 bits menos significativos (parte alta) de tension_punto3
+     *  => ((tension_punto3 & 0x03FC) >> 2);
+     * 2 bits menos significativos (parte baja) de tension_punto3 y los 6 bits mas significativos de tension_retencion
+     *  => ((tension_punto3 & 0x0003) << 6) | ((tension_retencion & 0xCF00) >> 8);
+     * 8 bits menos significativos (parte alta) de tension_retencion
+     *  => (tension_retencion & 0x00FF);
      * 8 bits de velocidad
      *  => velocidad;
      * 8 bits tiempo de retencion
@@ -567,14 +587,20 @@ void MainWindow::on_Bt_IniciarCiclico_clicked()
     //se enviara un INIT MEASUREMENT CYCLICAL
     buffer[0] = OC_INITMEASUREMENTCYCLICAL;
     buffer[1] = 0x00;
-    buffer[2] = (uint8_t) ((tension_punto1 & 0x3FC) >> 2);
-    buffer[3] = (uint8_t) (((tension_punto1 & 0x003) << 6) | ((tension_punto2 & 0x3F0) >> 4));
-    buffer[4] = (uint8_t) (((tension_punto2 & 0x00F) << 4) | ((tension_punto3 & 0x3C0) >> 6));
-    buffer[5] = (uint8_t) (((tension_punto3 & 0x03F) << 2) | ((tension_retencion & 0x300) >> 8));
-    buffer[6] = (uint8_t) (tension_retencion & 0x0FF);
-    buffer[7] = (uint8_t) (velocidad & 0x0FF);
-    buffer[8] = (uint8_t) (tiempo_retencion & 0x0FF);
-    buffer[9] = (uint8_t) (ciclos & 0x0FF);
+    buffer[2] = (uint8_t) ((tension_punto1_aenviar & 0x3FC0) >> 6);
+    buffer[3] = (uint8_t) (((tension_punto1_aenviar & 0x003F) << 2) | ((tension_punto2_aenviar & 0x3000) >> 12));
+    buffer[4] = (uint8_t) ((tension_punto2_aenviar & 0x0FF0) >> 4);
+    buffer[5] = (uint8_t) (((tension_punto2_aenviar & 0x000F) << 4) | ((tension_punto3_aenviar & 0x3C00) >> 10));
+    buffer[6] = (uint8_t) ((tension_punto3_aenviar & 0x03FC) >> 2);
+    buffer[7] = (uint8_t) (((tension_punto3_aenviar & 0x0003) << 6) | ((tension_retencion_aenviar & 0xCF00) >> 8));
+    buffer[8] = (uint8_t) (tension_retencion_aenviar & 0x00FF);
+    buffer[9] = (uint8_t) (velocidad & 0x0FF);
+    buffer[10] = (uint8_t) (tiempo_retencion & 0x0FF);
+    buffer[12] = (uint8_t) (ciclos & 0x0FF);
+
+    qDebug() << "dato a enviar completo"
+             << buffer[0] << buffer[1] << buffer[2] << buffer[3] << buffer[4] << buffer[5]
+             << buffer[6] << buffer[7] << buffer[8] << buffer[9] << buffer[10] << buffer[11] << buffer[12];
 
     send_ret = libusb_interrupt_transfer(dev_handle, 0x01, buffer, (sizeof(buffer)) * BITS_EN_UN_BYTE, &len, 1000);
     recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * BITS_EN_UN_BYTE, &len, 1000);
@@ -583,8 +609,8 @@ void MainWindow::on_Bt_IniciarCiclico_clicked()
 
     qDebug() << "codigo envio" << send_ret;
     qDebug() << "dato enviado completo"
-             << buffer[0] << buffer[1] << buffer[2] << buffer[3] << buffer[4]
-             << buffer[5] << buffer[6] << buffer[7] << buffer[8] << buffer[9];
+             << buffer[0] << buffer[1] << buffer[2] << buffer[3] << buffer[4] << buffer[5]
+             << buffer[6] << buffer[7] << buffer[8] << buffer[9] << buffer[10] << buffer[11] << buffer[12];
 
     qDebug() << "dato enviado [0]" << buffer[0];
 

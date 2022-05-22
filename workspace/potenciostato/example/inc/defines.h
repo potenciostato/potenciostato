@@ -75,5 +75,10 @@
 #define BARRIDO_CICLICO 		OC_INITMEASUREMENTCYCLICAL
 #define BARRIDO_LINEAL 			OC_INITMEASUREMENTLINEAL
 
+// Definiciones del codigo generador de señales
+#define GEN_GAN_AT 165 //100*3300mV/2000 se multiplica por 100 para no utilizar punto flotante
+#define GEN_CANT_MUESTRAS_MAX 1000
+#define GEN_CANT_BITS_DAC 10
+#define GEN_PTO_MEDIO 1000 //mV
 
 #endif /* DEFINES_H_ */

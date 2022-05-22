@@ -268,13 +268,14 @@ static void vUSBTask(void *pvParameters) {
 
 					conf_dac.set = true;
 					conf_dac.mode = (uint8_t) (lecturaQT[0] & 0xFF);
-					conf_dac.v_pto1 = (uint16_t) ((lecturaQT[2] << 2) | ((lecturaQT[3] & 0xC0) >> 6));
-					conf_dac.v_pto2 = (uint16_t) (((lecturaQT[3] & 0x3F) << 4) | ((lecturaQT[4] & 0xF0) >> 4));
-					conf_dac.v_pto3 = (uint16_t) (((lecturaQT[4] & 0x0F) << 6) | ((lecturaQT[5] & 0xFC) >> 2));
-					conf_dac.v_retencion = (uint16_t) (((lecturaQT[5] & 0x03) << 8) | (lecturaQT[6] & 0xFF));
-					conf_dac.velocidad = (uint8_t) (lecturaQT[7] & 0xFF);
-					conf_dac.s_retencion = (uint8_t) (lecturaQT[8] & 0xFF);
-					conf_dac.ncic = (uint8_t) (lecturaQT[9] & 0xFF);
+
+					conf_dac.v_pto1 = (uint16_t) (((lecturaQT[2] & 0xFF) << 6) | ((lecturaQT[3] & 0xFC) >> 2));
+					conf_dac.v_pto2 = (uint16_t) (((lecturaQT[3] & 0x03) << 12) | ((lecturaQT[4] & 0xFF) << 4) | ((lecturaQT[5] & 0xF0) >> 4));
+					conf_dac.v_pto3 = (uint16_t) (((lecturaQT[5] & 0x0F) << 10) | ((lecturaQT[6] & 0xFF) << 2) | ((lecturaQT[7] & 0xC0) >> 6));
+					conf_dac.v_retencion = (uint16_t) (((lecturaQT[7] & 0x3F) << 8) | (lecturaQT[8] & 0xFF));
+					conf_dac.velocidad = (uint8_t) (lecturaQT[9] & 0xFF);
+					conf_dac.s_retencion = (uint8_t) (lecturaQT[10] & 0xFF);
+					conf_dac.ncic = (uint8_t) (lecturaQT[11] & 0xFF);
 
 					conf_adc.set = true;
 					//conf_adc.frec = conf_dac.frec;
@@ -284,7 +285,7 @@ static void vUSBTask(void *pvParameters) {
                 }
 
                  xTaskCreate(vDACTask, (signed char *) "vDACTask",
-                            configMINIMAL_STACK_SIZE * 5, &conf_dac, (tskIDLE_PRIORITY + 1UL), &xDACTask);
+                            configMINIMAL_STACK_SIZE * 10, &conf_dac, (tskIDLE_PRIORITY + 1UL), &xDACTask);
 
                  xTaskCreate(vADCTask, (signed char *) "vADCTask",
                             configMINIMAL_STACK_SIZE * 1, &conf_adc, (tskIDLE_PRIORITY + 1UL), &xADCTask);
@@ -336,7 +337,11 @@ static void vUSBTask(void *pvParameters) {
 /* DAC parpadeo cada 0.1s */
 static void vDACTask(struct DACmsj *pvParameters) {
     bool DACset = false, DACfail = false;
-    uint16_t i, j, SG_OK = 0;
+    uint16_t i, j, gen_aux, SG_OK = 0;
+    uint16_t gen_cant_valores_dac = 1, gen_ms_entrepuntos_subida, gen_ms_entrepuntos_bajada;
+    int16_t gen_pto_inicial, gen_pto_picomax, gen_pto_final, gen_pto_retencion;
+    int16_t gen_velocidad;
+    uint16_t gen_vector_valores_subida[GEN_CANT_MUESTRAS_MAX] = {0}, gen_vector_valores_bajada[GEN_CANT_MUESTRAS_MAX] = {0};
     uint16_t tabla_salida[ NUMERO_MUESTRAS ];
     uint16_t AMPLITUD = 0, AMPLITUD_DIV = 255, MODO = 2;
     uint32_t FREC = 0;
@@ -368,6 +373,44 @@ static void vDACTask(struct DACmsj *pvParameters) {
 	if (FREC == 0){
 		DEBUGOUT("DAC: Frecuencia incorrecta, no puede valer 0\n");
 	}
+
+	// Se genera la señal a transferir por el DAC
+	gen_pto_inicial = (int16_t) (conf.v_pto1 - GEN_PTO_MEDIO); //mV
+	gen_pto_picomax = (int16_t) (conf.v_pto2 - GEN_PTO_MEDIO); //mV
+	gen_pto_final = (int16_t) (conf.v_pto3 - GEN_PTO_MEDIO); //mV
+	gen_pto_retencion = (int16_t) (conf.v_retencion - GEN_PTO_MEDIO); //mV
+
+	gen_velocidad = (int16_t) (conf.velocidad);
+
+
+	gen_velocidad = gen_velocidad * GEN_GAN_AT; //50*165 = 8250
+	gen_pto_inicial = gen_pto_inicial * GEN_GAN_AT; //-1000 * 165 = -165000
+	gen_pto_picomax = gen_pto_picomax * GEN_GAN_AT; //1000 * 165 = 165000
+	gen_pto_final = gen_pto_final * GEN_GAN_AT; //-1000 * 165 = -165000
+
+	// se calcula la potencia
+	for (i = 0; i < GEN_CANT_BITS_DAC; i++){
+		gen_cant_valores_dac *= 2;
+	}
+	gen_cant_valores_dac -= 1;
+
+	// se obtiene el vector de valores ya escalado para mV (con la ganancia tenida en cuenta)
+	for (i = 0; i < GEN_CANT_MUESTRAS_MAX; i++){
+		gen_vector_valores_subida[i] = ((gen_pto_picomax-gen_pto_inicial)/(GEN_CANT_MUESTRAS_MAX)*i);
+	}
+
+	// se calculan los milisegundos que deberan trascurrir entre puntos
+	gen_ms_entrepuntos_subida = 2000*(gen_pto_picomax-gen_pto_inicial)/(gen_velocidad*GEN_CANT_MUESTRAS_MAX);
+
+	// se obtiene el vector de valores ya escalado para mV (con la ganancia tenida en cuenta)
+	for (i = 0; i < GEN_CANT_MUESTRAS_MAX; i++){
+		gen_vector_valores_bajada[i] = gen_vector_valores_subida[GEN_CANT_MUESTRAS_MAX-1]+
+				((gen_pto_final-gen_pto_picomax)/(GEN_CANT_MUESTRAS_MAX)*i);
+	}
+
+	// se calculan los milisegundos que deberan trascurrir entre puntos
+	gen_ms_entrepuntos_bajada = 2000*(gen_pto_picomax-gen_pto_final)/(gen_velocidad*GEN_CANT_MUESTRAS_MAX);
+
 
 	if (FREC <= FRECUENCIA_MUY_BAJA){
 		cuentas = ((timerFreq*100) / (FREC*NUMERO_MUESTRAS))*10;
