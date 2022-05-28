@@ -285,7 +285,7 @@ static void vUSBTask(void *pvParameters) {
                 }
 
                  xTaskCreate(vDACTask, (signed char *) "vDACTask",
-                            configMINIMAL_STACK_SIZE * 10, &conf_dac, (tskIDLE_PRIORITY + 1UL), &xDACTask);
+                            configMINIMAL_STACK_SIZE * 12, &conf_dac, (tskIDLE_PRIORITY + 1UL), &xDACTask);
 
                  xTaskCreate(vADCTask, (signed char *) "vADCTask",
                             configMINIMAL_STACK_SIZE * 1, &conf_adc, (tskIDLE_PRIORITY + 1UL), &xADCTask);
@@ -339,7 +339,7 @@ static void vDACTask(struct DACmsj *pvParameters) {
     bool DACset = false, DACfail = false;
     uint16_t i, j, gen_aux, SG_OK = 0;
     uint16_t gen_cant_valores_dac = 1, gen_ms_entrepuntos_subida, gen_ms_entrepuntos_bajada;
-    int16_t gen_pto_inicial, gen_pto_picomax, gen_pto_final, gen_pto_retencion;
+    int32_t gen_pto_inicial, gen_pto_picomax, gen_pto_final, gen_pto_retencion;
     int16_t gen_velocidad;
     uint16_t gen_vector_valores_subida[GEN_CANT_MUESTRAS_MAX] = {0}, gen_vector_valores_bajada[GEN_CANT_MUESTRAS_MAX] = {0};
     uint16_t tabla_salida[ NUMERO_MUESTRAS ];
@@ -375,18 +375,18 @@ static void vDACTask(struct DACmsj *pvParameters) {
 	}
 
 	// Se genera la señal a transferir por el DAC
-	gen_pto_inicial = (int16_t) (conf.v_pto1 - GEN_PTO_MEDIO); //mV
-	gen_pto_picomax = (int16_t) (conf.v_pto2 - GEN_PTO_MEDIO); //mV
-	gen_pto_final = (int16_t) (conf.v_pto3 - GEN_PTO_MEDIO); //mV
-	gen_pto_retencion = (int16_t) (conf.v_retencion - GEN_PTO_MEDIO); //mV
+	gen_pto_inicial = (int32_t) (conf.v_pto1 - GEN_PTO_MEDIO); //mV
+	gen_pto_picomax = (int32_t) (conf.v_pto2 - GEN_PTO_MEDIO); //mV
+	gen_pto_final = (int32_t) (conf.v_pto3 - GEN_PTO_MEDIO); //mV
+	gen_pto_retencion = (int32_t) (conf.v_retencion - GEN_PTO_MEDIO); //mV
 
 	gen_velocidad = (int16_t) (conf.velocidad);
 
 
-	gen_velocidad = gen_velocidad * GEN_GAN_AT; //50*165 = 8250
-	gen_pto_inicial = gen_pto_inicial * GEN_GAN_AT; //-1000 * 165 = -165000
-	gen_pto_picomax = gen_pto_picomax * GEN_GAN_AT; //1000 * 165 = 165000
-	gen_pto_final = gen_pto_final * GEN_GAN_AT; //-1000 * 165 = -165000
+	//gen_velocidad = gen_velocidad * GEN_GAN_AT; //50*165 = 8250
+	//gen_pto_inicial = gen_pto_inicial * GEN_GAN_AT; //-1000 * 165 = -165000
+	//gen_pto_picomax = gen_pto_picomax * GEN_GAN_AT; //1000 * 165 = 165000
+	//gen_pto_final = gen_pto_final * GEN_GAN_AT; //0 * 165 = 0
 
 	// se calcula la potencia
 	for (i = 0; i < GEN_CANT_BITS_DAC; i++){
@@ -396,20 +396,21 @@ static void vDACTask(struct DACmsj *pvParameters) {
 
 	// se obtiene el vector de valores ya escalado para mV (con la ganancia tenida en cuenta)
 	for (i = 0; i < GEN_CANT_MUESTRAS_MAX; i++){
-		gen_vector_valores_subida[i] = ((gen_pto_picomax-gen_pto_inicial)/(GEN_CANT_MUESTRAS_MAX)*i);
+		gen_vector_valores_subida[i] = (uint16_t)
+				((((gen_pto_picomax-gen_pto_inicial)*i+GEN_PTO_MEDIO)*gen_cant_valores_dac)/(2*GEN_PTO_MEDIO)/GEN_CANT_MUESTRAS_MAX);
 	}
 
 	// se calculan los milisegundos que deberan trascurrir entre puntos
-	gen_ms_entrepuntos_subida = 2000*(gen_pto_picomax-gen_pto_inicial)/(gen_velocidad*GEN_CANT_MUESTRAS_MAX);
+	gen_ms_entrepuntos_subida = (uint16_t) (gen_velocidad*GEN_CANT_MUESTRAS_MAX)/(gen_pto_picomax-gen_pto_inicial);
 
 	// se obtiene el vector de valores ya escalado para mV (con la ganancia tenida en cuenta)
 	for (i = 0; i < GEN_CANT_MUESTRAS_MAX; i++){
-		gen_vector_valores_bajada[i] = gen_vector_valores_subida[GEN_CANT_MUESTRAS_MAX-1]+
-				((gen_pto_final-gen_pto_picomax)/(GEN_CANT_MUESTRAS_MAX)*i);
+		gen_vector_valores_bajada[i] = (uint16_t) (gen_vector_valores_subida[GEN_CANT_MUESTRAS_MAX-1]+
+				((((gen_pto_final-gen_pto_picomax)*i+GEN_PTO_MEDIO)*gen_cant_valores_dac)/(2*GEN_PTO_MEDIO)/GEN_CANT_MUESTRAS_MAX));
 	}
 
 	// se calculan los milisegundos que deberan trascurrir entre puntos
-	gen_ms_entrepuntos_bajada = 2000*(gen_pto_picomax-gen_pto_final)/(gen_velocidad*GEN_CANT_MUESTRAS_MAX);
+	gen_ms_entrepuntos_bajada = (uint16_t) (gen_velocidad*GEN_CANT_MUESTRAS_MAX)/(gen_pto_picomax-gen_pto_final);
 
 
 	if (FREC <= FRECUENCIA_MUY_BAJA){
