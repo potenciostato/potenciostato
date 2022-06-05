@@ -106,8 +106,6 @@ static void usb_pin_clk_init(void)
 void USB_IRQHandler(void){
     USBD_API->hw->ISR(g_hUsb);
 
-    //Todo: poner un mensaje cuando se logra conectar correctamente
-
     // Conteos para debugging
     //int countADCsend = uxQueueMessagesWaiting( qADCsend );
     //int countUSBin = uxQueueMessagesWaiting( qUSBin );
@@ -401,7 +399,14 @@ static void vDACTask(struct DACmsj *pvParameters) {
 	}
 
 	// se calculan los milisegundos que deberan trascurrir entre puntos
-	gen_ms_entrepuntos_subida = (uint16_t) (gen_velocidad*GEN_CANT_MUESTRAS_MAX)/(gen_pto_picomax-gen_pto_inicial);
+	/*
+	 * Amplitud subida/bajada en tensión [mV] * 1000 [mSeg]
+	 * --------------------------------------------------------------- = [mSeg/muestra]
+	 * Cant Max muestras [muestra] * velocidad [mV/Seg] * 1000 [mSeg]
+	 */
+
+	gen_ms_entrepuntos_subida = (uint16_t) (((gen_pto_picomax-gen_pto_inicial)*1000)
+			/ (GEN_CANT_MUESTRAS_MAX * gen_velocidad));
 
 	// se obtiene el vector de valores ya escalado para mV (con la ganancia tenida en cuenta)
 	for (i = 0; i < GEN_CANT_MUESTRAS_MAX; i++){
@@ -410,7 +415,8 @@ static void vDACTask(struct DACmsj *pvParameters) {
 	}
 
 	// se calculan los milisegundos que deberan trascurrir entre puntos
-	gen_ms_entrepuntos_bajada = (uint16_t) (gen_velocidad*GEN_CANT_MUESTRAS_MAX)/(gen_pto_picomax-gen_pto_final);
+	gen_ms_entrepuntos_bajada = (uint16_t) (((gen_pto_picomax-gen_pto_final)*1000)
+			/ (GEN_CANT_MUESTRAS_MAX * gen_velocidad));
 
 
 	if (FREC <= FRECUENCIA_MUY_BAJA){
