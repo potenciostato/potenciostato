@@ -416,16 +416,17 @@ static void vDACTask(struct DACmsj *pvParameters) {
 
 	// se obtiene el vector de valores del primer flanco ya escalado para mV (con la ganancia tenida en cuenta)
 	for (i = 0; i < GEN_CANT_MUESTRAS_MAX; i++){
-		if (flag_subida){
+		gen_mul_subida = i;
+		/*if (flag_subida){
 			gen_mul_subida = i;
 		}
 		else{
 			gen_mul_subida = GEN_CANT_MUESTRAS_MAX - i;
-		}
+		}*/
 		gen_inicial_subida = 512 + ((gen_pto_inicial*1023) / (2*GEN_PTO_MEDIO));
 
 		gen_vector_valores_subida[i] = (uint16_t) (gen_inicial_subida+
-				((((gen_dif_subida)*gen_mul_subida+GEN_PTO_MEDIO)*gen_cant_valores_dac)/(2*GEN_PTO_MEDIO)/GEN_CANT_MUESTRAS_MAX));
+				((((gen_pto_picomax - gen_pto_inicial)*gen_mul_subida+GEN_PTO_MEDIO)*gen_cant_valores_dac)/(2*GEN_PTO_MEDIO)/GEN_CANT_MUESTRAS_MAX));
 	}
 
 	// se obtiene el vector de valores del segundo flanco ya escalado para mV (con la ganancia tenida en cuenta)
