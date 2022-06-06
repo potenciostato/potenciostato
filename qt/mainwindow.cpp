@@ -11,7 +11,7 @@
 #include "time.h"
 
 
-bool debugging = ENABLED;
+bool debugging = DISABLED;
 
 
 QVector<double> valoresX(CANT_VALORES), valoresY(CANT_VALORES); // declara vectores con 10 posiciones (0..9)
@@ -512,8 +512,8 @@ void MainWindow::on_Bt_IniciarCiclico_clicked()
     ui->Bt_IniciarCiclico->setEnabled(false);
     ui->Bt_Exportar->setEnabled(false);
 
-    unsigned char buffer[LARGO_MENSAJE_ENTRADA] = {0x0};
-    unsigned char recv_data[LARGO_MENSAJE_SALIDA] = {0x0};
+    unsigned char buffer[LARGO_MENSAJE_SALIDA] = {0x0};
+    unsigned char recv_data[LARGO_MENSAJE_ENTRADA] = {0x0};
     int len;
     int send_ret, recv_ret;
     int tension_punto1 = 0;    //min: -1000 mV, max: 1000 mV
@@ -596,11 +596,11 @@ void MainWindow::on_Bt_IniciarCiclico_clicked()
     buffer[8] = (uint8_t) (tension_retencion_aenviar & 0x00FF);
     buffer[9] = (uint8_t) (velocidad & 0x0FF);
     buffer[10] = (uint8_t) (tiempo_retencion & 0x0FF);
-    buffer[12] = (uint8_t) (ciclos & 0x0FF);
+    buffer[11] = (uint8_t) (ciclos & 0x0FF);
 
     qDebug() << "dato a enviar completo"
              << buffer[0] << buffer[1] << buffer[2] << buffer[3] << buffer[4] << buffer[5]
-             << buffer[6] << buffer[7] << buffer[8] << buffer[9] << buffer[10] << buffer[11] << buffer[12];
+             << buffer[6] << buffer[7] << buffer[8] << buffer[9] << buffer[10] << buffer[11];
 
     send_ret = libusb_interrupt_transfer(dev_handle, 0x01, buffer, (sizeof(buffer)) * BITS_EN_UN_BYTE, &len, 1000);
     recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * BITS_EN_UN_BYTE, &len, 1000);
@@ -610,7 +610,7 @@ void MainWindow::on_Bt_IniciarCiclico_clicked()
     qDebug() << "codigo envio" << send_ret;
     qDebug() << "dato enviado completo"
              << buffer[0] << buffer[1] << buffer[2] << buffer[3] << buffer[4] << buffer[5]
-             << buffer[6] << buffer[7] << buffer[8] << buffer[9] << buffer[10] << buffer[11] << buffer[12];
+             << buffer[6] << buffer[7] << buffer[8] << buffer[9] << buffer[10] << buffer[11];
 
     qDebug() << "dato enviado [0]" << buffer[0];
 

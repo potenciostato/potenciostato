@@ -224,7 +224,7 @@ static void vInicializarUSB(void *pvParameters) {
  * */
 static void vUSBTask(void *pvParameters) {
 
-    uint8_t lecturaQT[LARGO_MENSAJE_ENTRADA]={0};
+    uint8_t lecturaQT[LARGO_MENSAJE_SALIDA]={0};
     int i, error, retry_cnt = 0;
     struct DACmsj conf_dac = {false, BARRIDO_CICLICO, 1000, 255}; //estado del modulo, frecuencia[Hz], amplitud[V]
     struct ADCmsj conf_adc = {false,ADC_SAMPL_FREC}; //estado del modulo, frecuencia[Hz]
@@ -339,8 +339,11 @@ static void vDACTask(struct DACmsj *pvParameters) {
     uint16_t gen_cant_valores_dac = 1, gen_ms_entrepuntos_subida, gen_ms_entrepuntos_bajada;
     int32_t gen_pto_inicial, gen_pto_picomax, gen_pto_final, gen_pto_retencion;
     int16_t gen_velocidad;
+    int32_t gen_dif_subida, gen_dif_bajada;
+    uint16_t gen_mul_subida, gen_mul_bajada, gen_inicial_subida, gen_inicial_bajada;
     uint16_t gen_vector_valores_subida[GEN_CANT_MUESTRAS_MAX] = {0}, gen_vector_valores_bajada[GEN_CANT_MUESTRAS_MAX] = {0};
-    uint16_t tabla_salida[ NUMERO_MUESTRAS ];
+    uint8_t flanco, flag_subida, flag_bajada;
+    //uint16_t tabla_salida[ NUMERO_MUESTRAS ];
     uint16_t AMPLITUD = 0, AMPLITUD_DIV = 255, MODO = 2;
     uint32_t FREC = 0;
     uint32_t CLOCK_DAC_HZ, timerFreq, timeoutDMA, cuentas;
@@ -380,7 +383,6 @@ static void vDACTask(struct DACmsj *pvParameters) {
 
 	gen_velocidad = (int16_t) (conf.velocidad);
 
-
 	//gen_velocidad = gen_velocidad * GEN_GAN_AT; //50*165 = 8250
 	//gen_pto_inicial = gen_pto_inicial * GEN_GAN_AT; //-1000 * 165 = -165000
 	//gen_pto_picomax = gen_pto_picomax * GEN_GAN_AT; //1000 * 165 = 165000
@@ -392,10 +394,46 @@ static void vDACTask(struct DACmsj *pvParameters) {
 	}
 	gen_cant_valores_dac -= 1;
 
-	// se obtiene el vector de valores ya escalado para mV (con la ganancia tenida en cuenta)
+	// se generaliza tanto para un flanco de "subida" ascendente como descendente
+	if (gen_pto_picomax > gen_pto_inicial){
+		gen_dif_subida = (uint16_t) (gen_pto_picomax - gen_pto_inicial);
+		flag_subida = TRUE;
+	}
+	else{
+		gen_dif_subida = (uint16_t) (- gen_pto_picomax + gen_pto_inicial);
+		flag_subida = FALSE;
+	}
+
+	// se generaliza tanto para un flanco de "bajada" ascendente como descendente
+	if (gen_pto_picomax > gen_pto_final){
+		gen_dif_bajada = (uint16_t) (gen_pto_picomax - gen_pto_final);
+		flag_bajada = TRUE;
+	}
+	else{
+		gen_dif_bajada = (uint16_t) (- gen_pto_picomax + gen_pto_final);
+		flag_bajada = FALSE;
+	}
+
+	// se obtiene el vector de valores del primer flanco ya escalado para mV (con la ganancia tenida en cuenta)
 	for (i = 0; i < GEN_CANT_MUESTRAS_MAX; i++){
-		gen_vector_valores_subida[i] = (uint16_t)
-				((((gen_pto_picomax-gen_pto_inicial)*i+GEN_PTO_MEDIO)*gen_cant_valores_dac)/(2*GEN_PTO_MEDIO)/GEN_CANT_MUESTRAS_MAX);
+		if (flag_subida){
+			gen_mul_subida = i;
+		}
+		else{
+			gen_mul_subida = GEN_CANT_MUESTRAS_MAX - i;
+		}
+		gen_inicial_subida = 512 + ((gen_pto_inicial*1023) / (2*GEN_PTO_MEDIO));
+
+		gen_vector_valores_subida[i] = (uint16_t) (gen_inicial_subida+
+				((((gen_dif_subida)*gen_mul_subida+GEN_PTO_MEDIO)*gen_cant_valores_dac)/(2*GEN_PTO_MEDIO)/GEN_CANT_MUESTRAS_MAX));
+	}
+
+	// se obtiene el vector de valores del segundo flanco ya escalado para mV (con la ganancia tenida en cuenta)
+	for (i = 0; i < GEN_CANT_MUESTRAS_MAX; i++){
+		gen_mul_bajada = i;
+		gen_inicial_bajada = gen_vector_valores_subida[GEN_CANT_MUESTRAS_MAX-1];
+		gen_vector_valores_bajada[i] = (uint16_t) (gen_inicial_bajada+
+				((((gen_pto_final - gen_pto_picomax)*gen_mul_bajada+GEN_PTO_MEDIO)*gen_cant_valores_dac)/(2*GEN_PTO_MEDIO)/GEN_CANT_MUESTRAS_MAX));
 	}
 
 	// se calculan los milisegundos que deberan trascurrir entre puntos
@@ -405,21 +443,24 @@ static void vDACTask(struct DACmsj *pvParameters) {
 	 * Cant Max muestras [muestra] * velocidad [mV/Seg] * 1000 [mSeg]
 	 */
 
-	gen_ms_entrepuntos_subida = (uint16_t) (((gen_pto_picomax-gen_pto_inicial)*1000)
+	gen_ms_entrepuntos_subida = (uint16_t) ((gen_dif_subida*1000)
 			/ (GEN_CANT_MUESTRAS_MAX * gen_velocidad));
-
-	// se obtiene el vector de valores ya escalado para mV (con la ganancia tenida en cuenta)
-	for (i = 0; i < GEN_CANT_MUESTRAS_MAX; i++){
-		gen_vector_valores_bajada[i] = (uint16_t) (gen_vector_valores_subida[GEN_CANT_MUESTRAS_MAX-1]+
-				((((gen_pto_final-gen_pto_picomax)*i+GEN_PTO_MEDIO)*gen_cant_valores_dac)/(2*GEN_PTO_MEDIO)/GEN_CANT_MUESTRAS_MAX));
-	}
 
 	// se calculan los milisegundos que deberan trascurrir entre puntos
-	gen_ms_entrepuntos_bajada = (uint16_t) (((gen_pto_picomax-gen_pto_final)*1000)
+	gen_ms_entrepuntos_bajada = (uint16_t) ((gen_dif_bajada*1000)
 			/ (GEN_CANT_MUESTRAS_MAX * gen_velocidad));
 
-
-	if (FREC <= FRECUENCIA_MUY_BAJA){
+	//TODO: probar
+	if (FREC == 1000){
+		cuentas = (timerFreq/1000)*gen_ms_entrepuntos_subida;
+		if(cuentas <= 0) cuentas = 1;
+		Chip_TIMER_Reset(LPC_TIMER1);
+		Chip_TIMER_MatchEnableInt(LPC_TIMER1, 1);
+		Chip_TIMER_SetMatch(LPC_TIMER1, 1, cuentas);
+		Chip_TIMER_ResetOnMatchEnable(LPC_TIMER1, 1);
+	}
+	/*
+	if (FREC > 1000 && FREC <= FRECUENCIA_MUY_BAJA){
 		cuentas = ((timerFreq*100) / (FREC*NUMERO_MUESTRAS))*10;
 		if(cuentas <= 0) cuentas = 1;
 		Chip_TIMER_Reset(LPC_TIMER1);
@@ -456,9 +497,11 @@ static void vDACTask(struct DACmsj *pvParameters) {
 	}else{
 		Chip_DAC_SetDMATimeOut(LPC_DAC, timeoutDMA);
 	}
+	*/
 
 	// Config Amplitud
 	//AMPLITUD = conf.amp; //parche pre protocolo v3
+	/*
 	AMPLITUD = 255;
 	if (conf.mode == BARRIDO_CICLICO){
 		for ( i = 0 ; i < NUMERO_MUESTRAS ; i++ ) {
@@ -470,6 +513,7 @@ static void vDACTask(struct DACmsj *pvParameters) {
 			tabla_salida[i]= (uint16_t) (AMPLITUD * tabla_sier[i] / AMPLITUD_DIV ) << 6;
 		}
 	}
+	*/
 
 	DACset = conf.set;
 	CanalDAC = Chip_GPDMA_GetFreeChannel ( LPC_GPDMA , 0 );
@@ -480,19 +524,41 @@ static void vDACTask(struct DACmsj *pvParameters) {
 			xSemaphoreGive(sDACready);
 			xSemaphoreTake(sDACstart, ( portTickType ) TAKE_TIMEOUT);
 			for(i=0;i<conf.ncic;i++) {
-				for(j=0;j<NUMERO_MUESTRAS;j++){
-					Chip_DAC_UpdateValue(LPC_DAC, tabla_salida[j] >> 6);
+				for(flanco = PRIMER_FLANCO; flanco <= SEGUNDO_FLANCO; flanco++){
+					if (flanco == SEGUNDO_FLANCO){
+						cuentas = (timerFreq/1000)*gen_ms_entrepuntos_bajada;
+						if(cuentas <= 0) cuentas = 1;
+						Chip_TIMER_Reset(LPC_TIMER1);
+						Chip_TIMER_MatchEnableInt(LPC_TIMER1, 1);
+						Chip_TIMER_SetMatch(LPC_TIMER1, 1, cuentas);
+						Chip_TIMER_ResetOnMatchEnable(LPC_TIMER1, 1);
+					}
+					for(j=0;j<GEN_CANT_MUESTRAS_MAX;j++){
+					if (flanco == PRIMER_FLANCO)
+						Chip_DAC_UpdateValue(LPC_DAC, gen_vector_valores_subida[j]);
+					if (flanco == SEGUNDO_FLANCO)
+						Chip_DAC_UpdateValue(LPC_DAC, gen_vector_valores_bajada[j]);
 
 					// Delay por timer
 					NVIC_ClearPendingIRQ(TIMER1_IRQn);
 					NVIC_EnableIRQ(TIMER1_IRQn);
-					xQueueReceive(qADC, &conf, 0);
-					if(conf.set == false)
-						break;
+					xQueueReceive(qDAC, &conf, 0);
+					if(conf.set == false){
+						// finaliza la tarea
+						Chip_DAC_UpdateValue(LPC_DAC, 512);
+
+						if (debugging == ENABLED)
+							DEBUGOUT("DAC: Deshabilitado\n");
+						midiendo = false;
+
+						vTaskDelete(NULL);
+					}
 					xSemaphoreTake(sDACdelay, ( portTickType ) TAKE_TIMEOUT);
+					}
 				}
 			}
 		} else {
+			/*
 			if (conf.ncic == 0){
 				Chip_GPDMA_PrepareDescriptor ( LPC_GPDMA , &DMA_tabla_salida  , (uint32_t) tabla_salida ,
 												 GPDMA_CONN_DAC , DMA_SIZE , GPDMA_TRANSFERTYPE_M2P_CONTROLLER_DMA , &DMA_tabla_salida);
@@ -527,6 +593,7 @@ static void vDACTask(struct DACmsj *pvParameters) {
 					}
 				}
 			}
+			*/
 		}
 		//Se envía el término de medición a Tarea USB
 		if (debugging == ENABLED)

@@ -43,19 +43,20 @@ int8_t Dispositivo = -1;
 #define ADC_CORRIENTE_BITS 12
 #define MV_TENSION_MAXIMA 3300
 
-#define MILISEGUNDOS_POLLING 200
+#define MILISEGUNDOS_POLLING 50 //cantidad de milisegundos entre rafagas de REPORTES_A_RECIBIR
 
 #define POS_X_MINIMA 46
 #define POS_X_MAXIMA 736
 #define POS_Y_MINIMA 14
 #define POS_Y_MAXIMA 461
 
-#define LARGO_MENSAJE_ENTRADA	32 //cantidad de bytes de los reports de entrada (visto desde el punto de vista de la PC)
-#define LARGO_MENSAJE_SALIDA	8 //cantidad de bytes de los reports de salida (visto desde el punto de vista de la PC)
+#define LARGO_MENSAJE_ENTRADA	21 //cantidad de bytes de los reports de entrada (visto desde el punto de vista de la PC)
+                                   //da 21 porque no se pudo enviar mas datos desde el LPC, deberia ser 32 o hasta 64
+#define LARGO_MENSAJE_SALIDA	12 //cantidad de bytes de los reports de salida (visto desde el punto de vista de la PC)
 
-#define CANT_VALORES 500
-#define PUNTOS_REFRESCO 4
-#define REPORTES_A_RECIBIR 4
+#define CANT_VALORES 1000 //cantidad maxima de puntos a representar en el grafico
+#define PUNTOS_REFRESCO 10
+#define REPORTES_A_RECIBIR 4 //reportes a recibir en una misma rafaga de pedido de datos
 
 #define GEN_PTO_MEDIO 1000 //mV
 
