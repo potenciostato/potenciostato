@@ -25,7 +25,6 @@ private slots:
     void on_Conectar_Bt_clicked();
     void on_Desconectar_Bt_clicked();
     void on_Bt_IniciarCiclico_clicked();
-    void on_Bt_IniciarLineal_clicked(); //hoy no esta 100% testeado esto
     void on_Bt_Abortar_clicked();
     void on_Bt_Exportar_clicked();
     void on_Bt_AutoCentrar_clicked();

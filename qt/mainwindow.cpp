@@ -10,40 +10,17 @@
 #include "libusb.h"
 #include "time.h"
 
-
 bool debugging = DISABLED;
-
 
 QVector<double> valoresX(CANT_VALORES), valoresY(CANT_VALORES); // declara vectores con 10 posiciones (0..9)
 
-double primer_curva_paracetamolX[CANT_VALORES] = {
-    0.50, 0.51, 0.52, 0.53, 0.54, 0.55, 0.56, 0.57, 0.58, 0.59,
-    0.60, 0.61, 0.62, 0.63, 0.64, 0.65, 0.66, 0.67, 0.68, 0.69,
-    0.70, 0.71, 0.72, 0.73, 0.74, 0.75, 0.76, 0.77, 0.78, 0.79,
-    0.80, 0.81, 0.82, 0.83, 0.84, 0.85, 0.86, 0.87, 0.88, 0.89,
-    0.90, 0.91, 0.92, 0.93, 0.94, 0.95, 0.96, 0.97, 0.98, 0.99,
-    1.00
-};
-double primer_curva_paracetamolY[CANT_VALORES] = {
-    0.010, 0.010, 0.010, 0.010, 0.010, 0.010, 0.010, 0.010, 0.010, 0.010,
-    0.011, 0.020, 0.011, 0.015, 0.011, 0.018, 0.023, 0.011, 0.036, 0.050,
-    0.111, 0.332, 0.552, 0.773, 0.994, 1.210, 1.430, 1.660, 1.880, 2.100,
-    2.320, 2.540, 2.760, 2.980, 3.200, 3.420, 3.500, 3.550, 3.580, 3.570,
-    3.520, 3.460, 3.410, 3.370, 3.320, 3.250, 3.190, 3.140, 3.090, 3.040,
-    3.000
-};
 int p_refresco = 0;
 int p_refrescado = 0;
 
-//char metodo[30] = "BarridoLineal";
 char metodo[30] = "BarridoCiclico"; //TODO: rehacer la verificacion del modo con defines
 int medicion_habilitada = 0;
-char frec_periodo = FRECUENCIA;
-bool demostracion = false;
-bool flag_inicial = true;
-bool grafico_inicial = false;
 int estado_cursor = SIN_SELECCIONAR;
-int grafico_demostracion;
+bool flag_inicial = true;
 float a_med_x=0, a_med_y=0, b_med_x=0, b_med_y=0, med_z=0;
 
 MainWindow::MainWindow(QWidget *parent)
@@ -73,12 +50,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->customPlot, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(menuContextual(QPoint)));
 
     MainWindow::inicializarGraficos();
-    if (demostracion == true){
-        grafico_demostracion = 0;
-    }
-    if (grafico_inicial == true){
-        MainWindow::graficarValores();
-    }
 
     // Configuracion timer
     auto timer = new QTimer(this);
@@ -111,40 +82,6 @@ void MainWindow::desconectarUSB(){
     }
 }
 
-// Funcion para inicializar y graficar una sola vez una curva, no apta para ser llamada dentro de un Timer
-void MainWindow::graficarValores(int curva, double multiplicadorX, double  multiplicadorY){
-    int i;
-    double tempX[CANT_VALORES] = {0};
-    double tempY[CANT_VALORES] = {0};
-
-    // aplicamos escalamiento por multiplicadores de unidades
-
-    // multiplicadorX = 1.00;
-    for (i=0; i<CANT_VALORES; ++i)
-    {
-        tempX[i] = primer_curva_paracetamolX[i]*multiplicadorX;
-    }
-
-    // multiplicadorY = 10.00;
-    for (i=0; i<CANT_VALORES; ++i)
-    {
-        tempY[i] = primer_curva_paracetamolY[i]*multiplicadorY;
-    }
-
-    // se almacena en valoresX y valoresY que son los QVectors que se grafican
-    for (i=0; i<CANT_VALORES; ++i)
-    {
-        valoresX[i] = tempX[i];
-        valoresY[i] = tempY[i];
-    }
-
-    // inicializar graficos
-    MainWindow::inicializarGraficos(curva);
-    ui->customPlot->graph(curva)->setData(valoresX, valoresY);
-    ui->customPlot->replot();
-
-}
-
 // Funcion que se debera llamar desde un Timer para refrescar los valores en el grafico
 void MainWindow::refrescarValores(int curva){
     int i;
@@ -163,12 +100,6 @@ void MainWindow::refrescarValores(int curva){
     }
     ui->customPlot->replot();
     p_refrescado = p_refresco;
-
-    // poner datos en el grafico
-    //ui->customPlot->addGraph();
-
-    //ui->customPlot->graph(curva)->setData(valoresX, valoresY);
-    //ui->customPlot->replot();
 }
 
 void MainWindow::onTimeout(){
@@ -181,168 +112,97 @@ void MainWindow::onTimeout(){
     float volts_tension, volts_corriente;
     //qDebug() << clock() << "TimeOut";
     for(i=0;i<REPORTES_A_RECIBIR;i++){
-        if (demostracion == false){
+        //Se envia inicio de medición al LPC
+        if (connected == 1 && medicion_habilitada == 1){
+            //se enviara un SEND DATA
+            buffer[0] = OC_SENDDATA;
+            qDebug() << clock() << "Se pide Dato";
+            send_ret = libusb_interrupt_transfer(dev_handle, 0x01, buffer, (sizeof(buffer)) * BITS_EN_UN_BYTE, &len, 1000);
+            qDebug() << clock() << "Pedido Dato enviado";
+            recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * BITS_EN_UN_BYTE, &len, 1000);
 
-            //Se envia inicio de medición al LPC
-            if (connected == 1 && medicion_habilitada == 1){
-                //se enviara un SEND DATA
-                buffer[0] = OC_SENDDATA;
-                qDebug() << clock() << "Se pide Dato";
-                send_ret = libusb_interrupt_transfer(dev_handle, 0x01, buffer, (sizeof(buffer)) * BITS_EN_UN_BYTE, &len, 1000);
-                qDebug() << clock() << "Pedido Dato enviado";
-                recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * BITS_EN_UN_BYTE, &len, 1000);
-                //int recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * 64, &len, 1000);
+            if (debugging == ENABLED){
+                qDebug() << "codigo envio" << send_ret;
+                qDebug() << "dato enviado" << buffer[0];
+                qDebug() << "codigo recepcion" << recv_ret;
+                qDebug() << "OP Code recibido" << recv_data[0];
+            }
 
-                if (debugging == ENABLED){
-                    qDebug() << "codigo envio" << send_ret;
-                    qDebug() << "dato enviado" << buffer[0];
-                    qDebug() << "codigo recepcion" << recv_ret;
-                    qDebug() << "OP Code recibido" << recv_data[0];
-                }
+            if (recv_ret < 0)
+                continue;
 
-                if (recv_ret < 0)
-                    continue;
+            qDebug() << clock() << "Dato recibido";
+            if (debugging == ENABLED){
+                qDebug() << clock();
+                qDebug() << "OP Code recibido" << recv_data[0];
+                qDebug() << "Cantidad puntos:" << recv_data[1];
+                //qDebug() << "respuesta[2]: " << recv_data[2];   //(medicion.corriente & 0xFF);
+                //qDebug() << "respuesta[3]:" << recv_data[3];    //((medicion.corriente >> 8) & 0x0F) | ((medicion.tension & 0x0F) << 4);
+                //qDebug() << "respuesta[4]:" << recv_data[4];    //(((medicion.tension) >> 4) & 0xFF);
+                //qDebug() << "respuesta[5]: " << recv_data[5];
+                //qDebug() << "respuesta[6]:" << recv_data[6];
+                //qDebug() << "respuesta[7]: " << recv_data[7];
+            }
 
-                qDebug() << clock() << "Dato recibido";
-                if (debugging == ENABLED){
-                    qDebug() << clock();
-                    qDebug() << "OP Code recibido" << recv_data[0];
-                    qDebug() << "Cantidad puntos:" << recv_data[1];
-                    //qDebug() << "respuesta[2]: " << recv_data[2];   //(medicion.corriente & 0xFF);
-                    //qDebug() << "respuesta[3]:" << recv_data[3];    //((medicion.corriente >> 8) & 0x0F) | ((medicion.tension & 0x0F) << 4);
-                    //qDebug() << "respuesta[4]:" << recv_data[4];    //(((medicion.tension) >> 4) & 0xFF);
-                    //qDebug() << "respuesta[5]: " << recv_data[5];
-                    //qDebug() << "respuesta[6]:" << recv_data[6];
-                    //qDebug() << "respuesta[7]: " << recv_data[7];
-                }
-
-                if (recv_data[0] == OC_SENDDATA){ // Si hay datos, ver cuantos
-                    for (j = 0; j < recv_data[1]; j++){
-                        cuentas_corriente = (((recv_data[3+3*j] & 0x0F) << 8) | (recv_data[2+3*j]));
-                        cuentas_tension = ((recv_data[4+3*j] << 4) | ((recv_data[3+3*j] & 0xF0) >> 4));
-                        if (debugging == ENABLED){
-                            qDebug() << "Cuentas corriente: " << cuentas_corriente;
-                            qDebug() << "Cuentas tension: " << cuentas_tension;
-                        }
-                        //volts_corriente = cuentas_corriente;
-                        //volts_tension = cuentas_tension;
-                        volts_corriente = (cuentas_corriente * ADC_CORRIENTE_MAX) / pow(2,ADC_CORRIENTE_BITS) / 10;
-                        volts_tension = (cuentas_tension * ADC_TENSION_MAX) / pow(2,ADC_TENSION_BITS) / 10;
-                        if (debugging == ENABLED){
-                            qDebug() << "Corriente [V]: " << volts_corriente;
-                            qDebug() << "Tension [V]: " << volts_tension;
-                        }
-
-                        // probablemente aca haya que aplicar algun multiplicador (o no)
-                        // en graficarValores tengo double multiplicadorX = 1, double multiplicadorY = 10
-
-                        valoresX[p_refresco] = volts_tension; //ANTES: el rango en el grafico va desde 0 a 1
-                        valoresY[p_refresco] = volts_corriente; //ANTES: el rango en el grafico va desde 0 a 3
-
-                        //TODO: si no hay mas datos esperar un tiempo para pedir
-                        //if (recv_data[0] == OC_SENDDATA_ERR){
-                        //APLICAR RETARDO
-                        //}
-
-                        if (p_refresco >= (CANT_VALORES-1)){
-                            p_refresco = 0;
-                        }else{
-                            p_refresco ++;
-                            if (p_refresco % PUNTOS_REFRESCO == 0){
-                                qDebug() << clock() << "Envío de refresco al gráfico";
-                                MainWindow::refrescarValores();
-                                qDebug() << clock() << "termino refrescar valores";
-                            }
-                        }
-
+            if (recv_data[0] == OC_SENDDATA){ // Si hay datos, ver cuantos
+                for (j = 0; j < recv_data[1]; j++){
+                    cuentas_corriente = (((recv_data[3+3*j] & 0x0F) << 8) | (recv_data[2+3*j]));
+                    cuentas_tension = ((recv_data[4+3*j] << 4) | ((recv_data[3+3*j] & 0xF0) >> 4));
+                    if (debugging == ENABLED){
+                        qDebug() << "Cuentas corriente: " << cuentas_corriente;
+                        qDebug() << "Cuentas tension: " << cuentas_tension;
                     }
-                }
-                if (recv_data[0] == OC_CYCLEEND){ //si termino la medicion
-                    //Se termina la medición
-                    qDebug() << "INFO: OC_CYCLEEND recibido";
-                    // Se deshabilita el boton de abortar
-                    ui->Bt_Abortar->setEnabled(false);
-                }
+                    // Se hace la cuenta para pasar de cuentas a Volts para la tension y la corriente
+                    volts_corriente = (cuentas_corriente * ADC_CORRIENTE_MAX) / pow(2,ADC_CORRIENTE_BITS) / 10;
+                    volts_tension = (cuentas_tension * ADC_TENSION_MAX) / pow(2,ADC_TENSION_BITS) / 10;
+                    if (debugging == ENABLED){
+                        qDebug() << "Corriente [V]: " << volts_corriente;
+                        qDebug() << "Tension [V]: " << volts_tension;
+                    }
 
-                if (recv_data[0] == OC_SENDDATAEND){ //si ya no hay mas datos
-                    //Se termina la medición
-                    qDebug() << "INFO: OC_SENDDATAEND recibido";
-                    qDebug() << "INFO: Ya no hay mas datos";
+                    // probablemente aca haya que aplicar algun multiplicador (o no)
+                    // en graficarValores tengo double multiplicadorX = 1, double multiplicadorY = 10
 
-                    qDebug() << "Envío de refresco al gráfico";
-                    qDebug() << clock() << "inicio refrescar valores";
-                    MainWindow::refrescarValores();
-                    qDebug() << clock() << "termino refrescar valores";
-                    MainWindow::autoCentrar();
-                    //Se termina la medición
-                    qDebug() << "Termino la medicion";
-                    medicion_habilitada = 0;
-                    MainWindow::terminoMedicion();
-                    if (demostracion == false){
+                    valoresX[p_refresco] = volts_tension; //ANTES: el rango en el grafico va desde 0 a 1
+                    valoresY[p_refresco] = volts_corriente; //ANTES: el rango en el grafico va desde 0 a 3
+
+                    if (p_refresco >= (CANT_VALORES-1)){
                         p_refresco = 0;
-                        medicion_habilitada = 0;
+                    }else{
+                        p_refresco ++;
+                        if (p_refresco % PUNTOS_REFRESCO == 0){
+                            qDebug() << clock() << "Envío de refresco al gráfico";
+                            MainWindow::refrescarValores();
+                            qDebug() << clock() << "termino refrescar valores";
+                        }
                     }
-                    if (demostracion == true){
-                        p_refresco = 0;
-                        medicion_habilitada = 0;
-                    }
+
                 }
             }
-        }
-        /*if (demostracion == true){
-            for (i=0; i < p_refresco; ++i)
-            {
-                valoresX[i] = primer_curva_paracetamolX[i];
-                valoresY[i] = primer_curva_paracetamolY[i];
+            if (recv_data[0] == OC_CYCLEEND){ //si termino la medicion
+                //Se termina la medición
+                qDebug() << "INFO: OC_CYCLEEND recibido";
+                // Se deshabilita el boton de abortar
+                ui->Bt_Abortar->setEnabled(false);
             }
-        }
 
-        if (demostracion == true){
-        if (strcmp(metodo,"BarridoLineal") == 0 && medicion_habilitada == 1){
-            if (p_refresco >= CANT_VALORES && grafico_demostracion == 0){
-                p_refresco = 0;
-                qDebug() << "Termino el primer grafico de demostracion";
-                grafico_demostracion = 1;
-                MainWindow::inicializarGraficos(grafico_demostracion);
-            }
-            else if (p_refresco >= CANT_VALORES && grafico_demostracion == 1){
-                p_refresco = 0;
-                qDebug() << "Termino el segundo grafico de demostracion";
-                grafico_demostracion = 2;
-                MainWindow::inicializarGraficos(grafico_demostracion);
-            }
-            else if (p_refresco >= CANT_VALORES && grafico_demostracion == 2){
-                p_refresco = 0;
-                qDebug() << "Termino el tercer grafico de demostracion";
-                grafico_demostracion = 3;
-                MainWindow::inicializarGraficos(grafico_demostracion);
-            }
-            else if (p_refresco >= CANT_VALORES && grafico_demostracion == 3){
-                p_refresco = 0;
+            if (recv_data[0] == OC_SENDDATAEND){ //si ya no hay mas datos
+                //Se termina la medición
+                qDebug() << "INFO: OC_SENDDATAEND recibido";
+                qDebug() << "INFO: Ya no hay mas datos";
+
+                qDebug() << "Envío de refresco al gráfico";
+                qDebug() << clock() << "inicio refrescar valores";
+                MainWindow::refrescarValores();
+                qDebug() << clock() << "termino refrescar valores";
+                MainWindow::autoCentrar();
+                //Se termina la medición
                 qDebug() << "Termino la medicion";
                 medicion_habilitada = 0;
                 MainWindow::terminoMedicion();
-            }else{
-                p_refresco ++;
-                qDebug() << "Envío de refresco al gráfico";
-                MainWindow::refrescarValores();
-            }
-        }
-
-        if (strcmp(metodo,"BarridoCiclico") == 0  && medicion_habilitada == 1){ //antes era Reiterativo
-            if (p_refresco >= CANT_VALORES){
                 p_refresco = 0;
-                qDebug() << "Limpieza de graficos";
-                MainWindow::limpiarGraficos();
-                qDebug() << "Inicializacion del grafico 0";
-                MainWindow::inicializarGraficos();
-            }else{
-                p_refresco ++;
-                qDebug() << "Envío de refresco al gráfico";
-                MainWindow::refrescarValores();
             }
         }
-        }*/
     }
 }
 
@@ -359,6 +219,7 @@ void MainWindow::inicializarGraficos(int curva){
 
     // se puede especificar el rango fijo
     if (flag_inicial == true){
+        // TODO: se debera hacer una calibración para saber donde centrar el gráfico
         ui->customPlot->xAxis->setRange(0, 3.0);
         ui->customPlot->yAxis->setRange(0, 50);
         flag_inicial = false;
@@ -401,12 +262,11 @@ void MainWindow::limpiarGraficos(){
 }
 
 void MainWindow::autoCentrar(){
-    // let the ranges scale themselves so graph 0 fits perfectly in the visible area:
     ui->customPlot->graph(0)->rescaleAxes(false);
     ui->customPlot->replot();
 }
 
-// Es llamada cuando el LPC y el QT estan al tanto del termino de la medición
+// Es llamada cuando el LPC y el QT estan al tanto del término de la medición
 void MainWindow::terminoMedicion(){
     unsigned char buffer[LARGO_MENSAJE_SALIDA] = {0x0};
     unsigned char recv_data[LARGO_MENSAJE_ENTRADA] = {0x0};
@@ -427,77 +287,9 @@ void MainWindow::terminoMedicion(){
     qDebug() << "codigo recepcion" << recv_ret;
     qDebug() << "dato recibido[0]" << recv_data[0];
 
-    ui->Bt_IniciarLineal->setEnabled(true);
     ui->Bt_IniciarCiclico->setEnabled(true);
     ui->Bt_Abortar->setEnabled(false);
     ui->Bt_Exportar->setEnabled(true);
-}
-
-void MainWindow::on_Bt_IniciarLineal_clicked()
-{
-    if (connected != 1){
-        qDebug() << "Dispositivo no conectado";
-        return;
-    }
-
-    qDebug() << "Iniciar Medición";
-    //Deshabilita Iniciar
-    ui->Bt_IniciarLineal->setEnabled(false);
-    ui->Bt_Exportar->setEnabled(false);
-
-    unsigned char buffer[LARGO_MENSAJE_SALIDA] = {0x0};
-    unsigned char recv_data[LARGO_MENSAJE_ENTRADA] = {0x0};
-    int len;
-    int send_ret, recv_ret;
-    uint8_t tension_pico = 0;
-    //int tension_pico = 0;
-    uint32_t frecuencia = 0;
-
-    //Se procesa la configuración elegida
-    tension_pico = (255 * (1000 * ui->Num_VLineal->value())) / MV_TENSION_MAXIMA;
-    frecuencia = ui->Num_HzLineal->value() * 1000;
-
-    qDebug() << "tension_pico: " << tension_pico;
-    qDebug() << "frecuencia: " << frecuencia;
-
-    //se enviara un INIT MEASUREMENT LINEAL
-    buffer[0] = OC_INITMEASUREMENTLINEAL;
-    buffer[1] = 0x00;
-    buffer[2] = tension_pico;
-    buffer[3] = (uint8_t) ((frecuencia & 0xFF0000) >> 16);
-    buffer[4] = (uint8_t) ((frecuencia & 0x00FF00) >> 8);
-    buffer[5] = (uint8_t) (frecuencia & 0x0000FF);
-    buffer[6] = 0x00;
-    buffer[7] = 0x00;
-
-    send_ret = libusb_interrupt_transfer(dev_handle, 0x01, buffer, (sizeof(buffer)) * BITS_EN_UN_BYTE, &len, 1000);
-    recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * BITS_EN_UN_BYTE, &len, 1000);
-    //int recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * 64, &len, 1000);
-
-    qDebug() << "codigo envio" << send_ret;
-    qDebug() << "dato enviado completo"
-             << buffer[0] << buffer[1] << buffer[2] << buffer[3]
-             << buffer[4] << buffer[5] << buffer[6] << buffer[7];
-    qDebug() << "codigo recepcion" << recv_ret;
-    qDebug() << "dato recibido[0]" << recv_data[0];
-
-    //Limpia el gráfico y lo inicializa
-    MainWindow::limpiarGraficos();
-    MainWindow::inicializarGraficos();
-
-    //TODO: verificar que el LPC responda con el OP_CODE correspondiente
-    //      y asi, iniciar la medicion
-
-    //Se activa la medicion en el Timer
-    medicion_habilitada = 1;
-
-    if (demostracion == true){
-        p_refresco = 0;
-    }
-
-    //Habilita abortar
-    ui->Bt_Abortar->setEnabled(true);
-
 }
 
 void MainWindow::on_Bt_IniciarCiclico_clicked()
@@ -630,10 +422,6 @@ void MainWindow::on_Bt_IniciarCiclico_clicked()
     //Se activa la medicion en el Timer
     medicion_habilitada = 1;
 
-    if (demostracion == true){
-        p_refresco = 0;
-    }
-
     //Habilita abortar
     ui->Bt_Abortar->setEnabled(true);
 }
@@ -654,14 +442,7 @@ void MainWindow::on_Bt_Abortar_clicked()
         qDebug() << "Termino la medicion";
         medicion_habilitada = 0;
         MainWindow::terminoMedicion();
-        if (demostracion == false){
-            p_refresco = 0;
-            medicion_habilitada = 0;
-        }
-        if (demostracion == true){
-            p_refresco = 0;
-            medicion_habilitada = 0;
-        }
+        p_refresco = 0;
     }
 }
 
@@ -777,7 +558,6 @@ void MainWindow::on_Conectar_Bt_clicked()
     connected = 1;
 
     // Se habilita el inicio de medición
-    ui->Bt_IniciarLineal->setEnabled(true);
     ui->Bt_IniciarCiclico->setEnabled(true);
     ui->Bt_Abortar->setEnabled(false);
     ui->Bt_Exportar->setEnabled(false);
@@ -1083,7 +863,6 @@ void MainWindow::on_Bt_Cursores_clicked()
     if (estado_cursor == SIN_SELECCIONAR)
         estado_cursor = SELECCIONAR_A;
 
-
 }
 
 void MainWindow::forzarAbortar()
@@ -1126,7 +905,6 @@ void MainWindow::on_Desconectar_Bt_clicked()
 
     //Habilita la conexión
     ui->Conectar_Bt->setEnabled(true);
-    ui->Bt_IniciarLineal->setEnabled(false);
     ui->Bt_IniciarCiclico->setEnabled(false);
     ui->Bt_Abortar->setEnabled(false);
     ui->Bt_Exportar->setEnabled(false);

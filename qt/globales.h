@@ -62,8 +62,6 @@ int8_t Dispositivo = -1;
 
 
 // CONSTANTES INTERNAS
-#define FRECUENCIA 0
-#define PERIODO 1
 #define ENABLED true
 #define DISABLED false
 #define BITS_EN_UN_BYTE 8
