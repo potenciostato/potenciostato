@@ -1,6 +1,7 @@
 /*
  * Potenciostato
- *
+ * Proyecto Final
+ * UTN Facultad Regional Avellaneda
  */
 // 1.0
 //TODO: - Todo lo que dice en Minutas al día de la fecha
@@ -11,7 +12,6 @@
 #include <chip.h>
 #include <semphr.h>
 #include <queue.h>
-
 
 #include <stdio.h>
 #include <string.h>
@@ -73,7 +73,6 @@ struct USBmsj {
 uint8_t midiendo=false;
 
 // OBJETOS FreeRTOS
-
 xSemaphoreHandle sDACready, sADCready, sDACstart, sADCstart, sADCdelay, sDACdelay;
 xQueueHandle qUSBin, qUSBout, qADC, qDAC, qADCmedicion, qADCsend;
 
@@ -81,7 +80,7 @@ static void vDACTask(struct DACmsj *pvParameters);
 static void vADCTask(struct ADCmsj *pvParameters);
 
 /*****************************************************************************
- * Declaracion de funciones
+ * Declaración de funciones
  ****************************************************************************/
 static void usb_pin_clk_init(void)
 {
@@ -197,7 +196,7 @@ static void vInicializarUSB(void *pvParameters) {
 static void vUSBTask(void *pvParameters) {
 
     uint8_t lecturaQT[LARGO_MENSAJE_SALIDA]={0};
-    int i, error, retry_cnt = 0;
+    int error, retry_cnt = 0;
     struct DACmsj conf_dac = {false, BARRIDO_CICLICO}; //estado del modulo, modo Cíclico
     struct ADCmsj conf_adc = {false, 100}; //estado del modulo, velocidad[mV/s]
 
@@ -305,16 +304,16 @@ static void vUSBTask(void *pvParameters) {
 /* DAC parpadeo cada 0.1s */
 static void vDACTask(struct DACmsj *pvParameters) {
     bool DACset = false, DACfail = false;
-    uint16_t i, j, gen_aux, SG_OK = 0;
+    uint16_t i, j, SG_OK = 0;
     uint16_t gen_cant_valores_dac = 1, gen_ms_entrepuntos_subida, gen_ms_entrepuntos_bajada;
     int32_t gen_pto_inicial, gen_pto_picomax, gen_pto_final, gen_pto_retencion;
     int16_t gen_velocidad;
     int32_t gen_dif_subida, gen_dif_bajada;
     uint16_t gen_mul_subida, gen_mul_bajada, gen_inicial_subida, gen_inicial_bajada;
     uint16_t gen_vector_valores_subida[GEN_CANT_MUESTRAS_MAX] = {0}, gen_vector_valores_bajada[GEN_CANT_MUESTRAS_MAX] = {0};
-    uint8_t flanco, flag_subida, flag_bajada;
-    uint16_t MODO = 2;
-    uint32_t CLOCK_DAC_HZ, timerFreq, cuentas;
+    uint16_t gen_valor_retencion;
+    uint8_t flanco;
+    uint32_t timerFreq, cuentas;
 
     uint8_t respuesta_out[LARGO_MENSAJE_SALIDA]={0};
 
@@ -350,24 +349,20 @@ static void vDACTask(struct DACmsj *pvParameters) {
 	}
 	gen_cant_valores_dac -= 1;
 
-	// se generaliza tanto para un flanco de "subida" ascendente como descendente
+	// se le quita el signo a la diferencia para calcular ms entre puntos en flanco de "subida"
 	if (gen_pto_picomax > gen_pto_inicial){
 		gen_dif_subida = (uint16_t) (gen_pto_picomax - gen_pto_inicial);
-		flag_subida = TRUE;
 	}
 	else{
 		gen_dif_subida = (uint16_t) (- gen_pto_picomax + gen_pto_inicial);
-		flag_subida = FALSE;
 	}
 
-	// se generaliza tanto para un flanco de "bajada" ascendente como descendente
+	// se le quita el signo a la diferencia para calcular ms entre puntos en flanco de "bajada"
 	if (gen_pto_picomax > gen_pto_final){
 		gen_dif_bajada = (uint16_t) (gen_pto_picomax - gen_pto_final);
-		flag_bajada = TRUE;
 	}
 	else{
 		gen_dif_bajada = (uint16_t) (- gen_pto_picomax + gen_pto_final);
-		flag_bajada = FALSE;
 	}
 
 	// se obtiene el vector de valores del primer flanco ya escalado para mV (con la ganancia tenida en cuenta)
@@ -387,20 +382,54 @@ static void vDACTask(struct DACmsj *pvParameters) {
 				((((gen_pto_final - gen_pto_picomax)*gen_mul_bajada+GEN_PTO_MEDIO)*gen_cant_valores_dac)/(2*GEN_PTO_MEDIO)/GEN_CANT_MUESTRAS_MAX));
 	}
 
-	// se calculan los milisegundos que deberan trascurrir entre puntos
+	// se obtiene el valor digital (10 bits) de la tensión de retención
+	gen_valor_retencion = (((gen_pto_retencion+GEN_PTO_MEDIO)*gen_cant_valores_dac)/(2*GEN_PTO_MEDIO));
+
+	// se calculan los milisegundos que deberan trascurrir entre puntos para cada flanco
 	/*
 	 * Amplitud subida/bajada en tensión [mV] * 1000 [mSeg]
 	 * --------------------------------------------------------------- = [mSeg/muestra]
 	 * Cant Max muestras [muestra] * velocidad [mV/Seg] * 1000 [mSeg]
 	 */
-
 	gen_ms_entrepuntos_subida = (uint16_t) ((gen_dif_subida*1000)
 			/ (GEN_CANT_MUESTRAS_MAX * gen_velocidad));
-
-	// se calculan los milisegundos que deberan trascurrir entre puntos
 	gen_ms_entrepuntos_bajada = (uint16_t) ((gen_dif_bajada*1000)
 			/ (GEN_CANT_MUESTRAS_MAX * gen_velocidad));
 
+	// Se da comienzo al período de retención
+	cuentas = (timerFreq)*conf.s_retencion;
+	if(cuentas <= 0) cuentas = 1;
+	Chip_TIMER_Reset(LPC_TIMER1);
+	Chip_TIMER_MatchEnableInt(LPC_TIMER1, 1);
+	Chip_TIMER_SetMatch(LPC_TIMER1, 1, cuentas);
+	Chip_TIMER_ResetOnMatchEnable(LPC_TIMER1, 1);
+	if (conf.mode == BARRIDO_CICLICO) {
+		if(conf.s_retencion > 0){
+			if (conf.ncic == 0) conf.ncic = 255;
+			xSemaphoreGive(sDACready);
+			xSemaphoreTake(sDACstart, ( portTickType ) TAKE_TIMEOUT);
+
+			Chip_DAC_UpdateValue(LPC_DAC, gen_valor_retencion);
+
+			// Delay por timer
+			xSemaphoreTake(sDACdelay, ( portTickType ) TAKE_TIMEOUT); // parche para empezar a contar a partir de aca los conf.s_retencion segundos
+			NVIC_ClearPendingIRQ(TIMER1_IRQn);
+			NVIC_EnableIRQ(TIMER1_IRQn);
+			xQueueReceive(qDAC, &conf, 0);
+			if(conf.set == false){
+				// finaliza la tarea
+				Chip_DAC_UpdateValue(LPC_DAC, gen_valor_retencion);
+
+				if (debugging == ENABLED)
+					DEBUGOUT("DAC: Deshabilitado\n");
+
+				vTaskDelete(NULL);
+			}
+			xSemaphoreTake(sDACdelay, ( portTickType ) portMAX_DELAY);
+		}
+	}
+
+	// Se da comienzo a la inyección de los flancos de la señal
 	cuentas = (timerFreq/1000)*gen_ms_entrepuntos_subida;
 	if(cuentas <= 0) cuentas = 1;
 	Chip_TIMER_Reset(LPC_TIMER1);
@@ -436,13 +465,16 @@ static void vDACTask(struct DACmsj *pvParameters) {
 					NVIC_EnableIRQ(TIMER1_IRQn);
 					xQueueReceive(qDAC, &conf, 0);
 					if(conf.set == false){
-						// finaliza la tarea
-						Chip_DAC_UpdateValue(LPC_DAC, 512);
+						// Finaliza la tarea
+						Chip_DAC_UpdateValue(LPC_DAC, gen_valor_retencion);
 
 						if (debugging == ENABLED)
 							DEBUGOUT("DAC: Deshabilitado\n");
 						midiendo = false;
 
+						NVIC_DisableIRQ(TIMER1_IRQn);
+						NVIC_ClearPendingIRQ(TIMER1_IRQn);
+						xSemaphoreTake(sDACdelay, ( portTickType ) TAKE_TIMEOUT);
 						vTaskDelete(NULL);
 					}
 					xSemaphoreTake(sDACdelay, ( portTickType ) TAKE_TIMEOUT);
@@ -468,13 +500,16 @@ static void vDACTask(struct DACmsj *pvParameters) {
 		error = xQueueSendToBack(qUSBout,&respuesta_out,TAKE_TIMEOUT);
 	}
 
-	Chip_DAC_UpdateValue(LPC_DAC, 512);
+	Chip_DAC_UpdateValue(LPC_DAC, gen_valor_retencion);
 
 	if (debugging == ENABLED)
 		DEBUGOUT("DAC: Deshabilitado\n");
 	midiendo = false;
 
 	// Finaliza la tarea
+	NVIC_DisableIRQ(TIMER1_IRQn);
+	NVIC_ClearPendingIRQ(TIMER1_IRQn);
+	xSemaphoreTake(sDACdelay, ( portTickType ) TAKE_TIMEOUT);
 	vTaskDelete(NULL);
 }
 
@@ -484,7 +519,7 @@ static void vADCTask(struct ADCmsj *pvParameters) {
     uint32_t timerFreq, cuentas, error, datos_ok, i;
     struct ADCmsj conf;
     struct USBmsj msjUSB;
-    unsigned portBASE_TYPE n_mensajes;
+    uint32_t n_mensajes;
 
 	timerFreq = Chip_Clock_GetSystemClockRate()/4;
 	NVIC_SetPriority(ADC_IRQn, 5);
@@ -519,7 +554,7 @@ static void vADCTask(struct ADCmsj *pvParameters) {
 	midiendo = true;
 	while (conf.set && midiendo){
 
-		// TODO: Revisar comportamiento y tuning
+		// TODO: Revisar comportamiento y ajustar
 		if(conf.velocidad<FRECUENCIA_BAJA){
 			NVIC_EnableIRQ(ADC_IRQn);
 			error = xQueueReceive(qADCmedicion,&msjUSB,10);
@@ -575,6 +610,9 @@ static void vADCTask(struct ADCmsj *pvParameters) {
 		respuesta_in[i] = 0x0;
 	}
 	error = xQueueSendToBack(qUSBin,&respuesta_in,TAKE_TIMEOUT);
+	NVIC_DisableIRQ(TIMER0_IRQn);
+	NVIC_ClearPendingIRQ(TIMER0_IRQn);
+	xSemaphoreTake(sADCdelay, ( portTickType ) TAKE_TIMEOUT);
 	vTaskDelete(NULL);
 }
 
@@ -590,8 +628,6 @@ static void vADCTask(struct ADCmsj *pvParameters) {
 int main(void)
 {
     prvSetupHardware();
-    //ADC conf
-    //DAC conf
     Board_LED_Set(0, false);
     if (debugging == ENABLED)
         DEBUGOUT("Potenciostato UTN FRA\r\n");
