@@ -27,8 +27,7 @@ uint8_t connected = 0;
 int8_t Dispositivo = -1;
 
 // Definiciones de los códigos de operación
-#define OC_INITMEASUREMENTLINEAL 0xA1
-#define OC_INITMEASUREMENTCYCLICAL 0xA2
+#define OC_INITMEASUREMENTCYCLICAL 0xA1
 #define OC_ABORTMEASUREMENT         0xB1
 #define OC_ENDMEASUREMENT 			0xB2
 #define OC_SENDDATA 0xC

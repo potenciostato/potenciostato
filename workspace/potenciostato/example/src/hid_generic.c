@@ -140,7 +140,7 @@ static ErrorCode_t HID_Ep_Hdlr(USBD_HANDLE_T hUsb, void *data, uint32_t event)
 		break;
 
 	case USB_EVT_OUT:
-		/* Leo el mensaje del QT */
+		/* Se lee el mensaje del QT */
 		cantidad = USBD_API->hw->ReadEP(hUsb, pHidCtrl->epout_adr, loopback_report);
 		for (i = 0; i < cantidad; i++){
 			mensaje[i] = *(loopback_report+i);
@@ -151,7 +151,7 @@ static ErrorCode_t HID_Ep_Hdlr(USBD_HANDLE_T hUsb, void *data, uint32_t event)
 		// tiene sin tener que pasar por USBTask (para agilizar)
 		// qUSBout tendra los datos a pasar
 
-		if(mensaje[0] == OC_INITMEASUREMENTCYCLICAL || mensaje[0] == OC_INITMEASUREMENTLINEAL)
+		if(mensaje[0] == OC_INITMEASUREMENTCYCLICAL)
 			medicion_iniciada = true;
 		if(mensaje[0] == OC_ABORTMEASUREMENT)
 			medicion_iniciada = false;
@@ -211,15 +211,6 @@ static ErrorCode_t HID_Ep_Hdlr(USBD_HANDLE_T hUsb, void *data, uint32_t event)
 							respuesta[4+3*n_punto] = (((medicion.tension) >> 4) & 0xFF);
 
 							n_punto++;
-							// Protocolo viejo
-							//respuesta[0] = OC_SENDDATA;
-							//respuesta[1] = 0x0;
-							//respuesta[2] = (medicion.corriente & 0xFF);
-							//respuesta[3] = ((medicion.corriente >> 8) & 0xFF);
-							//respuesta[4] = (medicion.tension & 0xFF);
-							//respuesta[5] = ((medicion.tension >> 8) & 0xFF);
-							//respuesta[6] = 0x0;
-							//respuesta[7] = 0x0;
 							if (n_punto < MAX_PUNTOS){
 								cod_receive = xQueueReceiveFromISR( qADCsend, &medicion, &xHigherPriorityTaskWoken);
 							}
@@ -228,7 +219,6 @@ static ErrorCode_t HID_Ep_Hdlr(USBD_HANDLE_T hUsb, void *data, uint32_t event)
 				}
 				USBD_API->hw->WriteEP(hUsb, pHidCtrl->epin_adr, respuesta, LARGO_MENSAJE_ENTRADA);
 				break;
-			case OC_INITMEASUREMENTLINEAL:
 			case OC_INITMEASUREMENTCYCLICAL:
 			case OC_ABORTMEASUREMENT:
 			case OC_ENDMEASUREMENT:
@@ -253,8 +243,6 @@ static ErrorCode_t HID_Ep_Hdlr(USBD_HANDLE_T hUsb, void *data, uint32_t event)
 				break;
 		}
 
-		//xQueueReceive(qUSBin, paquete, 0);
-		//USBD_API->hw->WriteEP(hUsb, pHidCtrl->epin_adr, loopback_report, 8);
 		break;
 	}
 	return LPC_OK;
@@ -275,7 +263,7 @@ ErrorCode_t usb_hid_init(USBD_HANDLE_T hUsb,
 	ErrorCode_t ret = LPC_OK;
 
 	memset((void *) &hid_param, 0, sizeof(USBD_HID_INIT_PARAM_T));
-	/* HID paramas */
+	/* HID params */
 	hid_param.max_reports = 1;
 	/* Init reports_data */
 	reports_data[0].len = HID_ReportDescSize;

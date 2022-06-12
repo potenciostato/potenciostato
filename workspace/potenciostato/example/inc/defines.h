@@ -61,8 +61,7 @@
 
 
 // Definiciones de los códigos de operación
-#define OC_INITMEASUREMENTLINEAL 	0xA1
-#define OC_INITMEASUREMENTCYCLICAL 	0xA2
+#define OC_INITMEASUREMENTCYCLICAL  0xA1
 #define OC_RETRYMEASUREMENT		 	0xA3
 #define OC_ABORTMEASUREMENT 		0xB1
 #define OC_ENDMEASUREMENT 			0xB2
@@ -73,7 +72,6 @@
 #define OC_SENDDATA_ERR 			0xF
 
 #define BARRIDO_CICLICO 		OC_INITMEASUREMENTCYCLICAL
-#define BARRIDO_LINEAL 			OC_INITMEASUREMENTLINEAL
 
 // Definiciones del codigo generador de señales
 #define GEN_GAN_AT 165 //100*3300mV/2000 se multiplica por 100 para no utilizar punto flotante
