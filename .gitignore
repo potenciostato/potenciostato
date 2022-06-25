@@ -3,10 +3,14 @@
 *.o
 *.d
 *.mk
-build-potenciostato_inicial-Desktop_Qt_5_12_11_MinGW_32_bit-Debug/*
-build-potenciostato_inicial-Desktop_Qt_5_15_1_MinGW_32_bit-Debug/*
+build-potenciostato_inicial-Desktop_Qt_5_12_1_MinGW_32_bit-Debug/*
+build-potenciostato_inicial-Desktop_Qt_5_12_11_MinGW_32_bit-Debug/debug/*
+build-potenciostato_inicial-Desktop_Qt_5_12_11_MinGW_32_bit-Debug/release/*
+build-potenciostato_inicial-Desktop_Qt_5_12_11_MinGW_32_bit-Debug/Makefile*
+build-potenciostato_inicial-Desktop_Qt_5_12_11_MinGW_32_bit-Debug/qmake*
+build-potenciostato_inicial-Desktop_Qt_5_12_11_MinGW_32_bit-Debug/med*
+build-potenciostato_inicial-Desktop_Qt_5_12_11_MinGW_32_bit-Debug/primercurva*
 build-potenciostato_inicial-Desktop_Qt_5_12_11_GCC_64bit-Debug/*
-build-potenciostato_inicial_SEBA-Desktop_Qt_5_12_11_GCC_64bit-Debug/*
 workspace/lpc_board_nxp_lpcxpresso_1769/Debug/liblpc_board_nxp_lpcxpresso_1769.a
 workspace/lpc_board_nxp_lpcxpresso_1769/Debug/src/board.d
 workspace/lpc_board_nxp_lpcxpresso_1769/Debug/src/board.o
@@ -150,6 +154,7 @@ workspace/FreeRTOS_TAD_logs/
 workspace/lpc_board_nxp_lpcxpresso_1769/.settings/
 workspace/lpc_chip_175x_6x/.settings/
 workspace/periph_adc/.settings/
+workspace/periph_dac/.cprofile
 workspace/periph_timer/.settings/language.settings.xml
 workspace/potenciostato/Debug/example/src/cr_startup_lpc175x_6x.su
 workspace/potenciostato/Debug/example/src/hid_desc.su
