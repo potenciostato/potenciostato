@@ -50,7 +50,7 @@
       <property name="geometry">
        <rect>
         <x>780</x>
-        <y>470</y>
+        <y>490</y>
         <width>211</width>
         <height>31</height>
        </rect>
@@ -74,9 +74,9 @@
       <property name="geometry">
        <rect>
         <x>780</x>
-        <y>510</y>
+        <y>520</y>
         <width>211</width>
-        <height>41</height>
+        <height>31</height>
        </rect>
       </property>
       <property name="font">
@@ -97,7 +97,7 @@
         <x>770</x>
         <y>90</y>
         <width>231</width>
-        <height>371</height>
+        <height>391</height>
        </rect>
       </property>
       <property name="font">
@@ -254,7 +254,7 @@
           <x>0</x>
           <y>100</y>
           <width>221</width>
-          <height>181</height>
+          <height>171</height>
          </rect>
         </property>
         <property name="font">
@@ -494,7 +494,7 @@
         <property name="geometry">
          <rect>
           <x>50</x>
-          <y>300</y>
+          <y>320</y>
           <width>121</width>
           <height>41</height>
          </rect>
@@ -506,6 +506,59 @@
         </property>
         <property name="text">
          <string>Iniciar Medición</string>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="Num_GanCorriente">
+        <property name="geometry">
+         <rect>
+          <x>140</x>
+          <y>280</y>
+          <width>69</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <item>
+         <property name="text">
+          <string>x1</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>x2</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>x5</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>x10</string>
+         </property>
+        </item>
+       </widget>
+       <widget class="QLabel" name="Lb_GanCorriente">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>280</y>
+          <width>111</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>9</pointsize>
+          <weight>50</weight>
+          <bold>false</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Ganancia Corriente:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
        </widget>
       </widget>

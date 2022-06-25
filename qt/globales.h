@@ -51,7 +51,7 @@ int8_t Dispositivo = -1;
 
 #define LARGO_MENSAJE_ENTRADA	21 //cantidad de bytes de los reports de entrada (visto desde el punto de vista de la PC)
                                    //da 21 porque no se pudo enviar mas datos desde el LPC, deberia ser 32 o hasta 64
-#define LARGO_MENSAJE_SALIDA	12 //cantidad de bytes de los reports de salida (visto desde el punto de vista de la PC)
+#define LARGO_MENSAJE_SALIDA	13 //cantidad de bytes de los reports de salida (visto desde el punto de vista de la PC)
 
 #define CANT_VALORES 1000 //cantidad maxima de puntos a representar en el grafico
 #define PUNTOS_REFRESCO 10
@@ -59,6 +59,11 @@ int8_t Dispositivo = -1;
 
 #define GEN_PTO_MEDIO 1000 //mV
 
+// Definiciones de las ganancias de corriente(x1, x2, x5 y x10)
+#define GAN_CORRIENTE_X1 0
+#define GAN_CORRIENTE_X2 1
+#define GAN_CORRIENTE_X5 2
+#define GAN_CORRIENTE_X10 3
 
 // CONSTANTES INTERNAS
 #define ENABLED true

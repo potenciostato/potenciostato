@@ -45,8 +45,8 @@
 #define TAMANIO_MAX_COLA_USB		100 //cantidad maxima de mensajes en la cola USB
 #define LARGO_MENSAJE_ENTRADA		21 //cantidad de bytes de los reports de entrada (visto desde el punto de vista de la PC)
 #define LARGO_PACKETSIZE_ENTRADA	21 //cantidad de bytes máxima de los reports de entrada
-#define LARGO_MENSAJE_SALIDA		12 //cantidad de bytes de los reports de salida (visto desde el punto de vista de la PC)
-#define LARGO_PACKETSIZE_SALIDA		12 //cantidad de bytes máxima de los reports de salida
+#define LARGO_MENSAJE_SALIDA		13 //cantidad de bytes de los reports de salida (visto desde el punto de vista de la PC)
+#define LARGO_PACKETSIZE_SALIDA		13 //cantidad de bytes máxima de los reports de salida
 
 #define PUNTOS_GRAFICA			200
 #define MAX_PUNTOS 6
@@ -82,5 +82,11 @@
 // Definiciones de los flancos
 #define PRIMER_FLANCO 1
 #define SEGUNDO_FLANCO 2
+
+// Definiciones de las ganancias de corriente(x1, x2, x5 y x10)
+#define GAN_CORRIENTE_X1 0
+#define GAN_CORRIENTE_X2 1
+#define GAN_CORRIENTE_X5 2
+#define GAN_CORRIENTE_X10 3
 
 #endif /* DEFINES_H_ */

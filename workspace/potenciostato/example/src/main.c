@@ -195,7 +195,9 @@ static void vInicializarUSB(void *pvParameters) {
  * */
 static void vUSBTask(void *pvParameters) {
 
-    uint8_t lecturaQT[LARGO_MENSAJE_SALIDA]={0};
+    uint8_t lecturaQT[LARGO_MENSAJE_SALIDA] = {0};
+    uint8_t ganancia_corriente = GAN_CORRIENTE_X1;
+
     int error, retry_cnt = 0;
     struct DACmsj conf_dac = {false, BARRIDO_CICLICO}; //estado del modulo, modo Cíclico
     struct ADCmsj conf_adc = {false, 100}; //estado del modulo, velocidad[mV/s]
@@ -247,6 +249,36 @@ static void vUSBTask(void *pvParameters) {
 
 					conf_adc.set = true;
 					conf_adc.velocidad = conf_dac.velocidad;
+
+					// Se configura la ganancia en funcion a lo recibido desde la PC
+					ganancia_corriente = (uint8_t) (lecturaQT[12] & 0xFF);
+					switch (ganancia_corriente){
+						case GAN_CORRIENTE_X10:
+							Chip_GPIO_SetPinOutLow(LPC_GPIO, PUERTO(0), PIN(0));
+							Chip_GPIO_SetPinOutLow(LPC_GPIO, PUERTO(0), PIN(6));
+							Chip_GPIO_SetPinOutLow(LPC_GPIO, PUERTO(0), PIN(7));
+							Chip_GPIO_SetPinOutHigh(LPC_GPIO, PUERTO(0), PIN(8));
+							break;
+						case GAN_CORRIENTE_X5:
+							Chip_GPIO_SetPinOutLow(LPC_GPIO, PUERTO(0), PIN(0));
+							Chip_GPIO_SetPinOutLow(LPC_GPIO, PUERTO(0), PIN(6));
+							Chip_GPIO_SetPinOutHigh(LPC_GPIO, PUERTO(0), PIN(7));
+							Chip_GPIO_SetPinOutLow(LPC_GPIO, PUERTO(0), PIN(8));
+							break;
+						case GAN_CORRIENTE_X2:
+							Chip_GPIO_SetPinOutLow(LPC_GPIO, PUERTO(0), PIN(0));
+							Chip_GPIO_SetPinOutHigh(LPC_GPIO, PUERTO(0), PIN(6));
+							Chip_GPIO_SetPinOutLow(LPC_GPIO, PUERTO(0), PIN(7));
+							Chip_GPIO_SetPinOutLow(LPC_GPIO, PUERTO(0), PIN(8));
+							break;
+						case GAN_CORRIENTE_X1:
+						default:
+							Chip_GPIO_SetPinOutHigh(LPC_GPIO, PUERTO(0), PIN(0));
+							Chip_GPIO_SetPinOutLow(LPC_GPIO, PUERTO(0), PIN(6));
+							Chip_GPIO_SetPinOutLow(LPC_GPIO, PUERTO(0), PIN(7));
+							Chip_GPIO_SetPinOutLow(LPC_GPIO, PUERTO(0), PIN(8));
+							break;
+					}
                 } else {
                 	retry_cnt++;
                 }

@@ -315,6 +315,8 @@ void MainWindow::on_Bt_IniciarCiclico_clicked()
     uint8_t tiempo_retencion = 0;  //max: 255 seg
     int16_t tension_retencion = 0; //min: -1000 mV, max: 1000 mV
     uint8_t ciclos = 0;            //max: 255 ciclos
+    QString str_ganancia_corriente;
+    uint8_t ganancia_corriente = GAN_CORRIENTE_X1;
 
     //Se procesa la configuración elegida
     //la cual consiste en el protocolo detallado en: https://docs.google.com/document/d/1LWbUOdiwlQI_1ugtcBbvklIMVfBlg8_1/edit#heading=h.v8ol8v6hjwx
@@ -325,6 +327,16 @@ void MainWindow::on_Bt_IniciarCiclico_clicked()
     velocidad = ui->Num_mVSegVelCiclico->value();
     tiempo_retencion = ui->Num_SegRetCiclico->value();
     ciclos = ui->Num_CicCiclico->value();
+    str_ganancia_corriente = ui->Num_GanCorriente->currentText();
+
+    if (str_ganancia_corriente.compare("x1") == 0)
+        ganancia_corriente = GAN_CORRIENTE_X1;
+    if (str_ganancia_corriente.compare("x2") == 0)
+        ganancia_corriente = GAN_CORRIENTE_X2;
+    if (str_ganancia_corriente.compare("x5") == 0)
+        ganancia_corriente = GAN_CORRIENTE_X5;
+    if (str_ganancia_corriente.compare("x10") == 0)
+        ganancia_corriente = GAN_CORRIENTE_X10;
 
     qDebug() << "tension_punto1:" << tension_punto1;
     qDebug() << "tension_punto2:" << tension_punto2;
@@ -333,6 +345,8 @@ void MainWindow::on_Bt_IniciarCiclico_clicked()
     qDebug() << "velocidad:" << velocidad;
     qDebug() << "tiempo_retencion:" << tiempo_retencion;
     qDebug() << "ciclos:" << ciclos;
+    qDebug() << "str_ganancia corriente:" << str_ganancia_corriente;
+    qDebug() << "ganancia_corriente:" << ganancia_corriente;
 
     // para simplificar el envio se le adiciona GEN_PTO_MEDIO a cada valor de tension a enviar
     uint16_t tension_punto1_aenviar;
@@ -389,10 +403,11 @@ void MainWindow::on_Bt_IniciarCiclico_clicked()
     buffer[9] = (uint8_t) (velocidad & 0x0FF);
     buffer[10] = (uint8_t) (tiempo_retencion & 0x0FF);
     buffer[11] = (uint8_t) (ciclos & 0x0FF);
+    buffer[12] = (uint8_t) (ganancia_corriente & 0x0FF);
 
     qDebug() << "dato a enviar completo"
              << buffer[0] << buffer[1] << buffer[2] << buffer[3] << buffer[4] << buffer[5]
-             << buffer[6] << buffer[7] << buffer[8] << buffer[9] << buffer[10] << buffer[11];
+             << buffer[6] << buffer[7] << buffer[8] << buffer[9] << buffer[10] << buffer[11] << buffer[12];
 
     send_ret = libusb_interrupt_transfer(dev_handle, 0x01, buffer, (sizeof(buffer)) * BITS_EN_UN_BYTE, &len, 1000);
     recv_ret = libusb_interrupt_transfer(dev_handle, 0x81, recv_data, (sizeof(recv_data)) * BITS_EN_UN_BYTE, &len, 1000);
@@ -402,7 +417,7 @@ void MainWindow::on_Bt_IniciarCiclico_clicked()
     qDebug() << "codigo envio" << send_ret;
     qDebug() << "dato enviado completo"
              << buffer[0] << buffer[1] << buffer[2] << buffer[3] << buffer[4] << buffer[5]
-             << buffer[6] << buffer[7] << buffer[8] << buffer[9] << buffer[10] << buffer[11];
+             << buffer[6] << buffer[7] << buffer[8] << buffer[9] << buffer[10] << buffer[11] << buffer[12];
 
     qDebug() << "dato enviado [0]" << buffer[0];
 
