@@ -164,3 +164,21 @@ workspace/potenciostato/Debug/example/src/setup.su
 workspace/potenciostato/Debug/example/src/sysinit.su
 workspace/potenciostato/Debug/freertos/
 workspace/potenciostato/potenciostato LinkServer Debug.launch
+workspace/lpc_board_nxp_lpcxpresso_1769/Debug/sources.mk
+workspace/lpc_board_nxp_lpcxpresso_1769/Debug/src/board.su
+workspace/lpc_board_nxp_lpcxpresso_1769/Debug/src/board_sysinit.su
+workspace/lpc_board_nxp_lpcxpresso_1769/Debug/src/lpc_phy_smsc87x0.su
+workspace/lpc_chip_175x_6x/Debug/sources.mk
+workspace/lpc_chip_175x_6x/Debug/src/can_17xx_40xx.su
+workspace/lpc_chip_175x_6x/Debug/src/chip_17xx_40xx.su
+workspace/lpc_chip_175x_6x/Debug/src/clock_17xx_40xx.su
+workspace/lpc_chip_175x_6x/Debug/src/enet_17xx_40xx.su
+workspace/lpc_chip_175x_6x/Debug/src/iap.su
+workspace/lpc_chip_175x_6x/Debug/src/ring_buffer.su
+workspace/lpc_chip_175x_6x/Debug/src/ritimer_17xx_40xx.su
+workspace/lpc_chip_175x_6x/Debug/src/spi_17xx_40xx.su
+workspace/lpc_chip_175x_6x/Debug/src/ssp_17xx_40xx.su
+workspace/lpc_chip_175x_6x/Debug/src/stopwatch_17xx_40xx.su
+workspace/lpc_chip_175x_6x/Debug/src/sysinit_17xx_40xx.su
+workspace/lpc_chip_175x_6x/Debug/src/uart_17xx_40xx.su
+workspace/potenciostato/Debug/sources.mk
