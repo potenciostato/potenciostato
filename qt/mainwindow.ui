@@ -519,12 +519,12 @@
         </property>
         <item>
          <property name="text">
-          <string>x1</string>
+          <string>x0.1</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>x2</string>
+          <string>x1</string>
          </property>
         </item>
         <item>

@@ -80,13 +80,18 @@
 #define GEN_PTO_MEDIO 1000 //mV
 
 // Definiciones de los flancos
-#define PRIMER_FLANCO 1
-#define SEGUNDO_FLANCO 2
+#define PRIMER_FLANCO 	1
+#define SEGUNDO_FLANCO 	2
 
-// Definiciones de las ganancias de corriente(x1, x2, x5 y x10)
-#define GAN_CORRIENTE_X1 0
-#define GAN_CORRIENTE_X2 1
-#define GAN_CORRIENTE_X5 2
-#define GAN_CORRIENTE_X10 3
+// Definiciones de las ganancias de corriente(x0.1, x1, x5 y x10)
+#define GAN_CORRIENTE_X01 	0
+#define GAN_CORRIENTE_X1 	1
+#define GAN_CORRIENTE_X5 	2
+#define GAN_CORRIENTE_X10 	3
+
+#define PIN_GAN_CORR_X01 	PIN(7)
+#define PIN_GAN_CORR_X1 	PIN(0)
+#define PIN_GAN_CORR_X5 	PIN(6)
+#define PIN_GAN_CORR_X10 	PIN(8)
 
 #endif /* DEFINES_H_ */

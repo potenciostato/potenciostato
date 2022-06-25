@@ -47,16 +47,23 @@ void prvSetupHardware(void)
 	Chip_TIMER_Enable(LPC_TIMER1);
 
 	// Pines selectores de ganancia de corriente
-    Chip_IOCON_PinMux(LPC_IOCON, PUERTO(0), PIN(8), MD_PUP, IOCON_FUNC0); //Configuro la funcion del pin
-    Chip_GPIO_SetPinDIROutput(LPC_GPIO, PUERTO(0), PIN(8)); //Configuro como salida el pin
-    Chip_GPIO_SetPinOutLow(LPC_GPIO, PUERTO(0), PIN(8));
-    Chip_IOCON_PinMux(LPC_IOCON, PUERTO(0), PIN(7), MD_PUP, IOCON_FUNC0);
-    Chip_GPIO_SetPinDIROutput(LPC_GPIO, PUERTO(0), PIN(7));
-    Chip_GPIO_SetPinOutLow(LPC_GPIO, PUERTO(0), PIN(7));
-    Chip_IOCON_PinMux(LPC_IOCON, PUERTO(0), PIN(6), MD_PUP, IOCON_FUNC0);
-    Chip_GPIO_SetPinDIROutput(LPC_GPIO, PUERTO(0), PIN(6));
-    Chip_GPIO_SetPinOutLow(LPC_GPIO, PUERTO(0), PIN(6));
-    Chip_IOCON_PinMux(LPC_IOCON, PUERTO(0), PIN(0), MD_PUP, IOCON_FUNC0);
-    Chip_GPIO_SetPinDIROutput(LPC_GPIO, PUERTO(0), PIN(0));
-    Chip_GPIO_SetPinOutHigh(LPC_GPIO, PUERTO(0), PIN(7));
+    // Asociado a una R de 100k (Ganancia 10)
+	Chip_IOCON_PinMux(LPC_IOCON, PUERTO(0), PIN_GAN_CORR_X10, MD_PUP, IOCON_FUNC0); //Se configura la funcion del pin como GPIO
+    Chip_GPIO_SetPinDIROutput(LPC_GPIO, PUERTO(0), PIN_GAN_CORR_X10); //Se configura como salida el pin
+    Chip_GPIO_SetPinOutLow(LPC_GPIO, PUERTO(0), PIN_GAN_CORR_X10);
+
+    // Asociado a una R de 47k (Ganancia 5)
+    Chip_IOCON_PinMux(LPC_IOCON, PUERTO(0), PIN_GAN_CORR_X5, MD_PUP, IOCON_FUNC0);
+    Chip_GPIO_SetPinDIROutput(LPC_GPIO, PUERTO(0), PIN_GAN_CORR_X5);
+    Chip_GPIO_SetPinOutLow(LPC_GPIO, PUERTO(0), PIN_GAN_CORR_X5);
+
+    // Asociado a una R de 10k (Ganancia 1)
+    Chip_IOCON_PinMux(LPC_IOCON, PUERTO(0), PIN_GAN_CORR_X1, MD_PUP, IOCON_FUNC0);
+    Chip_GPIO_SetPinDIROutput(LPC_GPIO, PUERTO(0), PIN_GAN_CORR_X1);
+    Chip_GPIO_SetPinOutHigh(LPC_GPIO, PUERTO(0), PIN_GAN_CORR_X1);
+
+    // Asociado a una R de 1k (Ganancia 0.1)
+    Chip_IOCON_PinMux(LPC_IOCON, PUERTO(0), PIN_GAN_CORR_X01, MD_PUP, IOCON_FUNC0);
+    Chip_GPIO_SetPinDIROutput(LPC_GPIO, PUERTO(0), PIN_GAN_CORR_X01);
+    Chip_GPIO_SetPinOutLow(LPC_GPIO, PUERTO(0), PIN_GAN_CORR_X01);
 }

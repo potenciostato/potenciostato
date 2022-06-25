@@ -329,10 +329,10 @@ void MainWindow::on_Bt_IniciarCiclico_clicked()
     ciclos = ui->Num_CicCiclico->value();
     str_ganancia_corriente = ui->Num_GanCorriente->currentText();
 
+    if (str_ganancia_corriente.compare("x0.1") == 0)
+        ganancia_corriente = GAN_CORRIENTE_X01;
     if (str_ganancia_corriente.compare("x1") == 0)
         ganancia_corriente = GAN_CORRIENTE_X1;
-    if (str_ganancia_corriente.compare("x2") == 0)
-        ganancia_corriente = GAN_CORRIENTE_X2;
     if (str_ganancia_corriente.compare("x5") == 0)
         ganancia_corriente = GAN_CORRIENTE_X5;
     if (str_ganancia_corriente.compare("x10") == 0)

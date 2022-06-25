@@ -59,9 +59,9 @@ int8_t Dispositivo = -1;
 
 #define GEN_PTO_MEDIO 1000 //mV
 
-// Definiciones de las ganancias de corriente(x1, x2, x5 y x10)
-#define GAN_CORRIENTE_X1 0
-#define GAN_CORRIENTE_X2 1
+// Definiciones de las ganancias de corriente(x0.1, x1, x5 y x10)
+#define GAN_CORRIENTE_X01 0
+#define GAN_CORRIENTE_X1 1
 #define GAN_CORRIENTE_X5 2
 #define GAN_CORRIENTE_X10 3
 

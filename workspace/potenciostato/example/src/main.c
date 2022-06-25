@@ -254,29 +254,29 @@ static void vUSBTask(void *pvParameters) {
 					ganancia_corriente = (uint8_t) (lecturaQT[12] & 0xFF);
 					switch (ganancia_corriente){
 						case GAN_CORRIENTE_X10:
-							Chip_GPIO_SetPinOutLow(LPC_GPIO, PUERTO(0), PIN(0));
-							Chip_GPIO_SetPinOutLow(LPC_GPIO, PUERTO(0), PIN(6));
-							Chip_GPIO_SetPinOutLow(LPC_GPIO, PUERTO(0), PIN(7));
-							Chip_GPIO_SetPinOutHigh(LPC_GPIO, PUERTO(0), PIN(8));
+							Chip_GPIO_SetPinOutLow(LPC_GPIO, PUERTO(0), PIN_GAN_CORR_X01);
+							Chip_GPIO_SetPinOutLow(LPC_GPIO, PUERTO(0), PIN_GAN_CORR_X1);
+							Chip_GPIO_SetPinOutLow(LPC_GPIO, PUERTO(0), PIN_GAN_CORR_X5);
+							Chip_GPIO_SetPinOutHigh(LPC_GPIO, PUERTO(0), PIN_GAN_CORR_X10);
 							break;
 						case GAN_CORRIENTE_X5:
-							Chip_GPIO_SetPinOutLow(LPC_GPIO, PUERTO(0), PIN(0));
-							Chip_GPIO_SetPinOutLow(LPC_GPIO, PUERTO(0), PIN(6));
-							Chip_GPIO_SetPinOutHigh(LPC_GPIO, PUERTO(0), PIN(7));
-							Chip_GPIO_SetPinOutLow(LPC_GPIO, PUERTO(0), PIN(8));
-							break;
-						case GAN_CORRIENTE_X2:
-							Chip_GPIO_SetPinOutLow(LPC_GPIO, PUERTO(0), PIN(0));
-							Chip_GPIO_SetPinOutHigh(LPC_GPIO, PUERTO(0), PIN(6));
-							Chip_GPIO_SetPinOutLow(LPC_GPIO, PUERTO(0), PIN(7));
-							Chip_GPIO_SetPinOutLow(LPC_GPIO, PUERTO(0), PIN(8));
+							Chip_GPIO_SetPinOutLow(LPC_GPIO, PUERTO(0), PIN_GAN_CORR_X01);
+							Chip_GPIO_SetPinOutLow(LPC_GPIO, PUERTO(0), PIN_GAN_CORR_X1);
+							Chip_GPIO_SetPinOutHigh(LPC_GPIO, PUERTO(0), PIN_GAN_CORR_X5);
+							Chip_GPIO_SetPinOutLow(LPC_GPIO, PUERTO(0), PIN_GAN_CORR_X10);
 							break;
 						case GAN_CORRIENTE_X1:
+							Chip_GPIO_SetPinOutLow(LPC_GPIO, PUERTO(0), PIN_GAN_CORR_X01);
+							Chip_GPIO_SetPinOutHigh(LPC_GPIO, PUERTO(0), PIN_GAN_CORR_X1);
+							Chip_GPIO_SetPinOutLow(LPC_GPIO, PUERTO(0), PIN_GAN_CORR_X5);
+							Chip_GPIO_SetPinOutLow(LPC_GPIO, PUERTO(0), PIN_GAN_CORR_X10);
+							break;
+						case GAN_CORRIENTE_X01:
 						default:
-							Chip_GPIO_SetPinOutHigh(LPC_GPIO, PUERTO(0), PIN(0));
-							Chip_GPIO_SetPinOutLow(LPC_GPIO, PUERTO(0), PIN(6));
-							Chip_GPIO_SetPinOutLow(LPC_GPIO, PUERTO(0), PIN(7));
-							Chip_GPIO_SetPinOutLow(LPC_GPIO, PUERTO(0), PIN(8));
+							Chip_GPIO_SetPinOutHigh(LPC_GPIO, PUERTO(0), PIN_GAN_CORR_X01);
+							Chip_GPIO_SetPinOutLow(LPC_GPIO, PUERTO(0), PIN_GAN_CORR_X1);
+							Chip_GPIO_SetPinOutLow(LPC_GPIO, PUERTO(0), PIN_GAN_CORR_X5);
+							Chip_GPIO_SetPinOutLow(LPC_GPIO, PUERTO(0), PIN_GAN_CORR_X10);
 							break;
 					}
                 } else {
