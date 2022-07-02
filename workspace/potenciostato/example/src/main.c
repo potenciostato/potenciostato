@@ -428,13 +428,6 @@ static void vDACTask(struct DACmsj *pvParameters) {
 	gen_ms_entrepuntos_bajada = (uint16_t) ((gen_dif_bajada*1000)
 			/ (GEN_CANT_MUESTRAS_MAX * gen_velocidad));
 
-	// Se da comienzo al período de retención
-	cuentas = (timerFreq)*conf.s_retencion;
-	if(cuentas <= 0) cuentas = 1;
-	Chip_TIMER_Reset(LPC_TIMER1);
-	Chip_TIMER_MatchEnableInt(LPC_TIMER1, 1);
-	Chip_TIMER_SetMatch(LPC_TIMER1, 1, cuentas);
-	Chip_TIMER_ResetOnMatchEnable(LPC_TIMER1, 1);
 	if (conf.mode == BARRIDO_CICLICO) {
 		if(conf.s_retencion > 0){
 			if (conf.ncic == 0) conf.ncic = 255;
@@ -443,21 +436,20 @@ static void vDACTask(struct DACmsj *pvParameters) {
 
 			Chip_DAC_UpdateValue(LPC_DAC, gen_valor_retencion);
 
-			// Delay por timer
-			xSemaphoreTake(sDACdelay, ( portTickType ) TAKE_TIMEOUT); // parche para empezar a contar a partir de aca los conf.s_retencion segundos
-			NVIC_ClearPendingIRQ(TIMER1_IRQn);
-			NVIC_EnableIRQ(TIMER1_IRQn);
-			xQueueReceive(qDAC, &conf, 0);
-			if(conf.set == false){
-				// finaliza la tarea
-				Chip_DAC_UpdateValue(LPC_DAC, gen_valor_retencion);
+			for (i = 0; i < conf.s_retencion; i ++){
+				xQueueReceive(qDAC, &conf, 0);
+				if(conf.set == false){
+					// finaliza la tarea
+					Chip_DAC_UpdateValue(LPC_DAC, gen_valor_retencion);
 
-				if (debugging == ENABLED)
-					DEBUGOUT("DAC: Deshabilitado\n");
+					if (debugging == ENABLED)
+						DEBUGOUT("DAC: Deshabilitado\n");
 
-				vTaskDelete(NULL);
+					vTaskDelete(NULL);
+				}
+				vTaskDelay(1000/portTICK_RATE_MS); //Se espera 1 segundo
 			}
-			xSemaphoreTake(sDACdelay, ( portTickType ) portMAX_DELAY);
+
 		}
 	}
 
