@@ -336,7 +336,7 @@ static void vUSBTask(void *pvParameters) {
 /* DAC parpadeo cada 0.1s */
 static void vDACTask(struct DACmsj *pvParameters) {
     bool DACset = false, DACfail = false;
-    uint16_t i, j, SG_OK = 0;
+    uint16_t i, j;
     uint16_t gen_cant_valores_dac = 1, gen_ms_entrepuntos_subida, gen_ms_entrepuntos_bajada;
     int32_t gen_pto_inicial, gen_pto_picomax, gen_pto_final, gen_pto_retencion;
     int16_t gen_velocidad;
@@ -404,6 +404,7 @@ static void vDACTask(struct DACmsj *pvParameters) {
 
 		gen_vector_valores_subida[i] = (uint16_t) (gen_inicial_subida+
 				((((gen_pto_picomax - gen_pto_inicial)*gen_mul_subida+GEN_PTO_MEDIO)*gen_cant_valores_dac)/(2*GEN_PTO_MEDIO)/GEN_CANT_MUESTRAS_MAX));
+
 	}
 
 	// se obtiene el vector de valores del segundo flanco ya escalado para mV (con la ganancia tenida en cuenta)
