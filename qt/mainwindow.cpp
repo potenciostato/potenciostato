@@ -164,7 +164,7 @@ void MainWindow::onTimeout(){
                     // en graficarValores tengo double multiplicadorX = 1, double multiplicadorY = 10
 
                     valoresX[p_refresco] = volts_tension; //ANTES: el rango en el grafico va desde 0 a 1
-                    valoresY[p_refresco] = volts_corriente; //ANTES: el rango en el grafico va desde 0 a 3
+                    valoresY[p_refresco] = (volts_corriente-OFFSET_CORRIENTE) * MULT_CORRIENTE; //ANTES: el rango en el grafico va desde 0 a 3
 
                     if (p_refresco >= (CANT_VALORES-1)){
                         p_refresco = 0;
