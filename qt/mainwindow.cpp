@@ -210,7 +210,11 @@ void MainWindow::onTimeout(){
 void MainWindow::inicializarGraficos(int curva){
     // se crea el graph
     ui->customPlot->addGraph(); //para la medicion
-    ui->customPlot->addGraph(); //para los cursores
+    ui->customPlot->addGraph(); //para la linea que une los cursores [1]
+    ui->customPlot->addGraph(); //para la linea horizontal del cursor A [2]
+    ui->customPlot->addGraph(); //para la linea vertical del cursor A [3]
+    ui->customPlot->addGraph(); //para la linea horizontal del cursor B [4]
+    ui->customPlot->addGraph(); //para la linea vertical del cursor B [5]
     ui->customPlot->xAxis->setLabel("Tension [V]");
     ui->customPlot->yAxis->setLabel("Corriente [uA]");
 
@@ -786,28 +790,70 @@ void MainWindow::calcularCursor(int x, int y, char cursor)
 void MainWindow::graficarCursor(char cursor){
     //float x, y;
     QVector<double> x(2), y(2);
+    QVector<double> x1_horiz(2), y1_horiz(2), x1_vert(2), y1_vert(2);
+    QVector<double> x2_horiz(2), y2_horiz(2), x2_vert(2), y2_vert(2);
     switch(cursor){
-    case CUR_A:
+    case CUR_A: //con un click, que aparezca el punto seleccionado
         x[0] = a_med_x;
         y[0] = a_med_y;
         x[1] = a_med_x;
         y[1] = a_med_y;
+        x1_horiz[0] = -9999;
+        x1_horiz[1] = +9999;
+        y1_horiz[0] = a_med_y;
+        y1_horiz[1] = a_med_y;
+        x1_vert[0] = a_med_x;
+        x1_vert[1] = a_med_x;
+        y1_vert[0] = -9999;
+        y1_vert[1] = +9999;
+        x2_horiz[0] = -9999;
+        x2_horiz[1] = +9999;
+        y2_horiz[0] = a_med_y;
+        y2_horiz[1] = a_med_y;
+        x2_vert[0] = a_med_x;
+        x2_vert[1] = a_med_x;
+        y2_vert[0] = -9999;
+        y2_vert[1] = +9999;
         break;
-    case CUR_B:
+    case CUR_B: //con el segundo click, que aparezca la linea completa
         x[0] = a_med_x;
         y[0] = a_med_y;
         x[1] = b_med_x;
         y[1] = b_med_y;
+        x1_horiz[0] = -9999;
+        x1_horiz[1] = +9999;
+        y1_horiz[0] = a_med_y;
+        y1_horiz[1] = a_med_y;
+        x1_vert[0] = a_med_x;
+        x1_vert[1] = a_med_x;
+        y1_vert[0] = -9999;
+        y1_vert[1] = +9999;
+        x2_horiz[0] = -9999;
+        x2_horiz[1] = +9999;
+        y2_horiz[0] = b_med_y;
+        y2_horiz[1] = b_med_y;
+        x2_vert[0] = b_med_x;
+        x2_vert[1] = b_med_x;
+        y2_vert[0] = -9999;
+        y2_vert[1] = +9999;
         break;
     }
-    ui->customPlot->graph(1)->setData(x, y, false);
+    //ui->customPlot->graph(1)->setData(x, y, false);
+    ui->customPlot->graph(2)->setData(x1_horiz, y1_horiz, false); //se grafica linea vertical
+    ui->customPlot->graph(3)->setData(x1_vert, y1_vert, false); //se grafica linea horizontal
+    ui->customPlot->graph(4)->setData(x2_horiz, y2_horiz, false); //se grafica linea vertical
+    ui->customPlot->graph(5)->setData(x2_vert, y2_vert, false); //se grafica linea horizontal
     ui->customPlot->replot();
 }
 
 void MainWindow::refrescarDeltas(){
     ui->Num_deltaX->setText(QString::number(b_med_x-a_med_x, 'f', 4));
-    ui->Num_deltaY->setText(QString::number(b_med_y-a_med_y, 'f', 4));
+    ui->Num_deltaY->setText(QString::number(b_med_y-a_med_y, 'f', 2));
     ui->Num_deltaZ->setText(QString::number(med_z, 'f', 4));
+    ui->Num_deltaXa->setText(QString::number(a_med_x, 'f', 4));
+    ui->Num_deltaYa->setText(QString::number(a_med_y, 'f', 2));
+    ui->Num_deltaXb->setText(QString::number(b_med_x, 'f', 4));
+    ui->Num_deltaYb->setText(QString::number(b_med_y, 'f', 2));
 }
 
 void MainWindow::mouseWheel()
