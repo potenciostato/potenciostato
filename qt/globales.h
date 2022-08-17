@@ -55,7 +55,7 @@ int8_t Dispositivo = -1;
                                    //da 21 porque no se pudo enviar mas datos desde el LPC, deberia ser 32 o hasta 64
 #define LARGO_MENSAJE_SALIDA	13 //cantidad de bytes de los reports de salida (visto desde el punto de vista de la PC)
 
-#define CANT_VALORES 1000 //cantidad maxima de puntos a representar en el grafico
+#define CANT_VALORES 10000 //cantidad maxima de puntos a representar en el grafico
 #define PUNTOS_REFRESCO 10
 #define REPORTES_A_RECIBIR 4 //reportes a recibir en una misma rafaga de pedido de datos
 
