@@ -10,7 +10,7 @@
 #include "libusb.h"
 #include "time.h"
 
-bool debugging = DISABLED;
+bool debugging = ENABLED;
 
 QVector<double> valoresX(CANT_VALORES), valoresY(CANT_VALORES); // declara vectores con 10 posiciones (0..9)
 
@@ -163,7 +163,7 @@ void MainWindow::onTimeout(){
                     // probablemente aca haya que aplicar algun multiplicador (o no)
                     // en graficarValores tengo double multiplicadorX = 1, double multiplicadorY = 10
 
-                    valoresX[p_refresco] = volts_tension; //ANTES: el rango en el grafico va desde 0 a 1
+                    valoresX[p_refresco] = (volts_tension-OFFSET_TENSION) * MULT_TENSION; //ANTES: el rango en el grafico va desde 0 a 1
                     valoresY[p_refresco] = (volts_corriente-OFFSET_CORRIENTE) * MULT_CORRIENTE; //ANTES: el rango en el grafico va desde 0 a 3
 
                     if (p_refresco >= (CANT_VALORES-1)){
