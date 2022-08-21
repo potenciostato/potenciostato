@@ -48,7 +48,8 @@
 #define LARGO_MENSAJE_SALIDA		13 //cantidad de bytes de los reports de salida (visto desde el punto de vista de la PC)
 #define LARGO_PACKETSIZE_SALIDA		13 //cantidad de bytes máxima de los reports de salida
 
-#define PUNTOS_GRAFICA			200
+#define PUNTOS_GRAFICA			500
+#define MAX_PUNTOS_RETENCION	50
 #define MAX_PUNTOS 6
 #define FRECUENCIA_BAJA			50000 // FREC*1000
 #define FRECUENCIA_MUY_BAJA		5000 // FREC*1000

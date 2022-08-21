@@ -62,7 +62,8 @@ struct DACmsj {
 
 struct ADCmsj {
   bool set;
-  uint8_t velocidad;
+  uint8_t frec;
+  uint8_t nfilt;
 };
 
 struct USBmsj {
@@ -198,7 +199,7 @@ static void vUSBTask(void *pvParameters) {
     uint8_t lecturaQT[LARGO_MENSAJE_SALIDA] = {0};
     uint8_t ganancia_corriente = GAN_CORRIENTE_X1;
 
-    int error, retry_cnt = 0;
+    int error, retry_cnt = 0, amplitud_total;
     struct DACmsj conf_dac = {false, BARRIDO_CICLICO}; //estado del modulo, modo Cíclico
     struct ADCmsj conf_adc = {false, 100}; //estado del modulo, velocidad[mV/s]
 
@@ -247,8 +248,20 @@ static void vUSBTask(void *pvParameters) {
 					conf_dac.s_retencion = (uint8_t) (lecturaQT[10] & 0xFF);
 					conf_dac.ncic = (uint8_t) (lecturaQT[11] & 0xFF);
 
+					// Se Calcula el recorrido total de la senal para pasar a frecuencia
+					if(conf_dac.v_pto1>conf_dac.v_pto2)
+						amplitud_total = conf_dac.v_pto1-conf_dac.v_pto2;
+					else
+						amplitud_total = conf_dac.v_pto2-conf_dac.v_pto1;
+
+					if(conf_dac.v_pto2>conf_dac.v_pto3)
+						amplitud_total += conf_dac.v_pto2-conf_dac.v_pto3;
+					else
+						amplitud_total += conf_dac.v_pto3-conf_dac.v_pto2;
+
 					conf_adc.set = true;
-					conf_adc.velocidad = conf_dac.velocidad;
+					conf_adc.frec = (conf_dac.velocidad * 1000) / amplitud_total;
+					conf_adc.nfilt = 10;
 
 					// Se configura la ganancia en funcion a lo recibido desde la PC
 					ganancia_corriente = (uint8_t) (lecturaQT[12] & 0xFF);
@@ -540,8 +553,10 @@ static void vDACTask(struct DACmsj *pvParameters) {
 
 
 static void vADCTask(struct ADCmsj *pvParameters) {
+	bool cant_muestras_ok = false;
     uint8_t respuesta_in[LARGO_MENSAJE_ENTRADA]={0};
-    uint32_t timerFreq, cuentas, error, datos_ok, i;
+    uint16_t medidas_v[MAX_PUNTOS_RETENCION]={0}, medidas_i[MAX_PUNTOS_RETENCION]={0}, indice_medida=0, i;
+    uint32_t timerFreq, cuentas, error, datos_ok, acum_v, acum_i;
     struct ADCmsj conf;
     struct USBmsj msjUSB;
     uint32_t n_mensajes;
@@ -553,13 +568,13 @@ static void vADCTask(struct ADCmsj *pvParameters) {
     conf = *pvParameters;
 
 	if (debugging == ENABLED)
-		DEBUGOUT("ADC: Conf recibida Set:%d,Velocidad:%d\n",conf.set,conf.velocidad);
+		DEBUGOUT("ADC: Conf recibida Set:%d,Velocidad:%d\n",conf.set,conf.frec);
 
 	// TODO: escalar esto al mejor valor posible en funcion de la velocidad (8 bits)
-	if(conf.velocidad < 1000){
-		cuentas = ((timerFreq*10) / (conf.velocidad*PUNTOS_GRAFICA))*100;
+	if(conf.frec < 1000){
+		cuentas = ((timerFreq*10) / (conf.frec*PUNTOS_GRAFICA))*100;
 	} else {
-		cuentas = timerFreq / ((conf.velocidad/1000)*PUNTOS_GRAFICA);
+		cuentas = timerFreq / ((conf.frec/1000)*PUNTOS_GRAFICA);
 	}
 	if(cuentas <= 0) cuentas = 1;
 	Chip_TIMER_Reset(LPC_TIMER0);
@@ -580,11 +595,37 @@ static void vADCTask(struct ADCmsj *pvParameters) {
 	while (conf.set && midiendo){
 
 		// TODO: Revisar comportamiento y ajustar
-		if(conf.velocidad<FRECUENCIA_BAJA){
+		if(conf.frec<FRECUENCIA_BAJA){
 			NVIC_EnableIRQ(ADC_IRQn);
 			error = xQueueReceive(qADCmedicion,&msjUSB,10);
 			if (error == pdFAIL){
 				continue;
+			}
+
+			// Se guardan las muestras
+			if (conf.nfilt >= 0) {
+				medidas_i[indice_medida] = msjUSB.corriente;
+				medidas_v[indice_medida] = msjUSB.tension;
+				indice_medida++;
+			}
+
+			// El indice vuelve a cero, se completo la cantidad de muestras > comienza a filtrar
+			if(indice_medida >= conf.nfilt) {
+				cant_muestras_ok = true;
+				indice_medida = 0;
+			}
+
+			// Si se completo el buffer se comienza a filtrar
+			if (cant_muestras_ok) {
+				for(i=0;i<conf.nfilt;i++){
+					acum_v += medidas_v[i];
+					acum_i += medidas_i[i];
+				}
+				msjUSB.tension = acum_v / conf.nfilt;
+				msjUSB.corriente = acum_i / conf.nfilt;
+				// Se resetean los acumuladores
+				acum_v = 0;
+				acum_i = 0;
 			}
 
 			error = xQueueSendToBack(qADCsend, &msjUSB, 0);
@@ -618,7 +659,7 @@ static void vADCTask(struct ADCmsj *pvParameters) {
 		DEBUGOUT("ADC: Deshabilita medicion ADC\n");
 	Chip_ADC_SetBurstCmd(LPC_ADC, DISABLE);
 	// TODO: Corroborar utilidad actual
-	if(conf.velocidad>=FRECUENCIA_BAJA){
+	if(conf.frec>=FRECUENCIA_BAJA){
 		datos_ok = 1;
 		n_mensajes = uxQueueMessagesWaiting(qADCmedicion);
 		while(datos_ok){
