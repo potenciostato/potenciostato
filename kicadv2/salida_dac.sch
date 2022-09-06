@@ -3,7 +3,7 @@ EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 3 4
+Sheet 2 3
 Title ""
 Date ""
 Rev ""
@@ -16,624 +16,652 @@ $EndDescr
 $Comp
 L salida_dac-rescue:R-Device R2
 U 1 1 5F8A81B2
-P 3200 3050
+P 6550 5050
 AR Path="/5F8A81B2" Ref="R2"  Part="1" 
 AR Path="/5F899696/5F8A81B2" Ref="R7"  Part="1" 
 AR Path="/6013BA2D/5F8A81B2" Ref="R7"  Part="1" 
-F 0 "R7" V 3400 3050 50  0000 C CNN
-F 1 "10K" V 3300 3050 50  0000 C CNN
-F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal" V 3130 3050 50  0001 C CNN
-F 3 "~" H 3200 3050 50  0001 C CNN
-	1    3200 3050
+F 0 "R7" V 6750 5050 50  0000 C CNN
+F 1 "10K" V 6650 5050 50  0000 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal" V 6480 5050 50  0001 C CNN
+F 3 "~" H 6550 5050 50  0001 C CNN
+	1    6550 5050
 	0    1    1    0   
 $EndComp
-Wire Wire Line
-	4200 3050 3350 3050
-Wire Wire Line
-	3050 2850 2550 2850
-Text HLabel 2550 2850 0    50   Input ~ 0
-DAC1
-Text HLabel 2400 12250 3    50   Input ~ 0
-SW_FILTRO1
-Text HLabel 2500 12250 3    50   Input ~ 0
-SW_FILTRO2
-Text HLabel 5650 2950 2    50   Input ~ 0
+Text HLabel 8550 4950 2    50   Input ~ 0
 VIN
-$Comp
-L salida_dac-rescue:R-Device R4
-U 1 1 5F9506DA
-P 3200 5750
-AR Path="/5F9506DA" Ref="R4"  Part="1" 
-AR Path="/5F899696/5F9506DA" Ref="R9"  Part="1" 
-AR Path="/6013BA2D/5F9506DA" Ref="R9"  Part="1" 
-F 0 "R9" V 2993 5750 50  0000 C CNN
-F 1 "10K" V 3084 5750 50  0000 C CNN
-F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 3130 5750 50  0001 C CNN
-F 3 "~" H 3200 5750 50  0001 C CNN
-	1    3200 5750
-	0    1    1    0   
-$EndComp
-$Comp
-L salida_dac-rescue:R-Device R10
-U 1 1 5F95073B
-P 4950 6900
-AR Path="/5F95073B" Ref="R10"  Part="1" 
-AR Path="/5F899696/5F95073B" Ref="R15"  Part="1" 
-AR Path="/6013BA2D/5F95073B" Ref="R15"  Part="1" 
-F 0 "R15" V 4743 6900 50  0000 C CNN
-F 1 "10K" V 4834 6900 50  0000 C CNN
-F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 4880 6900 50  0001 C CNN
-F 3 "~" H 4950 6900 50  0001 C CNN
-	1    4950 6900
-	0    1    -1   0   
-$EndComp
-Text HLabel 4800 6200 2    50   Input ~ 0
+Text HLabel 9000 1500 2    50   Input ~ 0
 I_IN
-Text HLabel 1700 6300 0    50   Input ~ 0
-I_ADC
 Wire Wire Line
-	1700 6300 2250 6300
-Wire Wire Line
-	2250 5750 2250 6300
-Connection ~ 2250 6300
-Wire Wire Line
-	2250 6300 2550 6300
-$Comp
-L salida_dac-rescue:R-Device R11
-U 1 1 5F971DA5
-P 5750 6900
-AR Path="/5F971DA5" Ref="R11"  Part="1" 
-AR Path="/5F899696/5F971DA5" Ref="R16"  Part="1" 
-AR Path="/6013BA2D/5F971DA5" Ref="R16"  Part="1" 
-F 0 "R16" V 5543 6900 50  0000 C CNN
-F 1 "1K" V 5634 6900 50  0000 C CNN
-F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 5680 6900 50  0001 C CNN
-F 3 "~" H 5750 6900 50  0001 C CNN
-	1    5750 6900
-	0    1    -1   0   
-$EndComp
-$Comp
-L salida_dac-rescue:R_POT-Device RV6
-U 1 1 5F972A62
-P 5350 6900
-F 0 "RV6" V 5234 6900 50  0000 C CNN
-F 1 "1K" V 5141 6900 50  0000 C CNN
-F 2 "Potentiometer_THT:Potentiometer_Bourns_3266Y_Vertical" H 5350 6900 50  0001 C CNN
-F 3 "~" H 5350 6900 50  0001 C CNN
-	1    5350 6900
-	0    -1   -1   0   
-$EndComp
-Wire Wire Line
-	5600 6900 5500 6900
-Wire Wire Line
-	5200 6900 5100 6900
-$Comp
-L salida_dac-rescue:-5V-power #PWR0103
-U 1 1 5F97ACB1
-P 5900 6900
-AR Path="/5F97ACB1" Ref="#PWR0103"  Part="1" 
-AR Path="/5F899696/5F97ACB1" Ref="#PWR020"  Part="1" 
-AR Path="/6013BA2D/5F97ACB1" Ref="#PWR0113"  Part="1" 
-F 0 "#PWR0113" H 5900 7000 50  0001 C CNN
-F 1 "-5V" H 5915 7077 50  0000 C CNN
-F 2 "" H 5900 6900 50  0001 C CNN
-F 3 "" H 5900 6900 50  0001 C CNN
-	1    5900 6900
-	0    1    1    0   
-$EndComp
-$Comp
-L salida_dac-rescue:+5V-power #PWR0104
-U 1 1 5F980950
-P 4800 6900
-AR Path="/5F980950" Ref="#PWR0104"  Part="1" 
-AR Path="/5F899696/5F980950" Ref="#PWR019"  Part="1" 
-AR Path="/6013BA2D/5F980950" Ref="#PWR0114"  Part="1" 
-F 0 "#PWR0114" H 4800 6750 50  0001 C CNN
-F 1 "+5V" H 4815 7077 50  0000 C CNN
-F 2 "" H 4800 6900 50  0001 C CNN
-F 3 "" H 4800 6900 50  0001 C CNN
-	1    4800 6900
-	0    -1   -1   0   
-$EndComp
-Wire Wire Line
-	3150 6200 3850 6200
-$Comp
-L salida_dac-rescue:R_POT-Device RV2
-U 1 1 5F9A1C6C
-P 3600 5750
-F 0 "RV2" V 3484 5750 50  0000 C CNN
-F 1 "R_POT" V 3391 5750 50  0000 C CNN
-F 2 "Potentiometer_THT:Potentiometer_Bourns_3266Y_Vertical" H 3600 5750 50  0001 C CNN
-F 3 "~" H 3600 5750 50  0001 C CNN
-	1    3600 5750
-	0    -1   -1   0   
-$EndComp
-Wire Wire Line
-	3850 6200 3850 5750
-Connection ~ 3850 6200
-Wire Wire Line
-	3750 5750 3850 5750
-Connection ~ 3850 5750
-Wire Wire Line
-	3850 5750 3850 5550
-Wire Wire Line
-	3450 5750 3350 5750
-Wire Wire Line
-	3600 5600 3600 5550
-Wire Wire Line
-	3600 5550 3850 5550
-Wire Wire Line
-	4550 6200 4800 6200
-Wire Wire Line
-	3850 6200 4250 6200
-$Comp
-L salida_dac-rescue:R-Device R16
-U 1 1 5F9D8922
-P 9150 3650
-AR Path="/5F9D8922" Ref="R16"  Part="1" 
-AR Path="/5F899696/5F9D8922" Ref="R21"  Part="1" 
-AR Path="/6013BA2D/5F9D8922" Ref="R21"  Part="1" 
-F 0 "R21" V 8943 3650 50  0000 C CNN
-F 1 "1K" V 9034 3650 50  0000 C CNN
-F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 9080 3650 50  0001 C CNN
-F 3 "~" H 9150 3650 50  0001 C CNN
-	1    9150 3650
-	0    -1   1    0   
-$EndComp
-$Comp
-L salida_dac-rescue:R-Device R13
-U 1 1 5F9D8928
-P 7950 3200
-AR Path="/5F9D8928" Ref="R13"  Part="1" 
-AR Path="/5F899696/5F9D8928" Ref="R18"  Part="1" 
-AR Path="/6013BA2D/5F9D8928" Ref="R18"  Part="1" 
-F 0 "R18" V 7743 3200 50  0000 C CNN
-F 1 "4K7" V 7834 3200 50  0000 C CNN
-F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 7880 3200 50  0001 C CNN
-F 3 "~" H 7950 3200 50  0001 C CNN
-	1    7950 3200
-	0    1    1    0   
-$EndComp
-$Comp
-L salida_dac-rescue:R-Device R17
-U 1 1 5F9D895F
-P 9700 4350
-AR Path="/5F9D895F" Ref="R17"  Part="1" 
-AR Path="/5F899696/5F9D895F" Ref="R22"  Part="1" 
-AR Path="/6013BA2D/5F9D895F" Ref="R22"  Part="1" 
-F 0 "R22" V 9493 4350 50  0000 C CNN
-F 1 "10K" V 9584 4350 50  0000 C CNN
-F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 9630 4350 50  0001 C CNN
-F 3 "~" H 9700 4350 50  0001 C CNN
-	1    9700 4350
-	0    1    -1   0   
-$EndComp
-Text HLabel 9550 3650 2    50   Input ~ 0
-V_IN
-Text HLabel 6450 3750 0    50   Input ~ 0
-V_ADC
-Wire Wire Line
-	6450 3750 7000 3750
-Wire Wire Line
-	7000 3200 7000 3750
-Connection ~ 7000 3750
-Wire Wire Line
-	7000 3750 7300 3750
-$Comp
-L salida_dac-rescue:R_POT-Device RV10
-U 1 1 5F9D8985
-P 10100 4350
-F 0 "RV10" V 9984 4350 50  0000 C CNN
-F 1 "1K" V 9891 4350 50  0000 C CNN
-F 2 "Potentiometer_THT:Potentiometer_Bourns_3266Y_Vertical" H 10100 4350 50  0001 C CNN
-F 3 "~" H 10100 4350 50  0001 C CNN
-	1    10100 4350
-	0    -1   -1   0   
-$EndComp
-Wire Wire Line
-	10350 4350 10250 4350
-Wire Wire Line
-	9950 4350 9850 4350
-$Comp
-L salida_dac-rescue:+5V-power #PWR0112
-U 1 1 5F9D899F
-P 9550 4350
-AR Path="/5F9D899F" Ref="#PWR0112"  Part="1" 
-AR Path="/5F899696/5F9D899F" Ref="#PWR027"  Part="1" 
-AR Path="/6013BA2D/5F9D899F" Ref="#PWR0121"  Part="1" 
-F 0 "#PWR0121" H 9550 4200 50  0001 C CNN
-F 1 "+5V" H 9565 4527 50  0000 C CNN
-F 2 "" H 9550 4350 50  0001 C CNN
-F 3 "" H 9550 4350 50  0001 C CNN
-	1    9550 4350
-	0    -1   -1   0   
-$EndComp
-Wire Wire Line
-	7900 3650 8600 3650
-$Comp
-L salida_dac-rescue:R_POT-Device RV8
-U 1 1 5F9D89D6
-P 8350 3200
-F 0 "RV8" V 8234 3200 50  0000 C CNN
-F 1 "1K" V 8141 3200 50  0000 C CNN
-F 2 "Potentiometer_THT:Potentiometer_Bourns_3266Y_Vertical" H 8350 3200 50  0001 C CNN
-F 3 "~" H 8350 3200 50  0001 C CNN
-	1    8350 3200
-	0    -1   -1   0   
-$EndComp
-Wire Wire Line
-	8600 3650 8600 3200
-Connection ~ 8600 3650
-Wire Wire Line
-	8500 3200 8600 3200
-Connection ~ 8600 3200
-Wire Wire Line
-	8600 3200 8600 3000
-Wire Wire Line
-	8200 3200 8100 3200
-Wire Wire Line
-	8350 3050 8350 3000
-Wire Wire Line
-	8350 3000 8600 3000
-Wire Wire Line
-	9300 3650 9550 3650
-Wire Wire Line
-	8600 3650 9000 3650
+	8750 1500 9000 1500
 $Comp
 L salida_dac-rescue:R-Device R1
 U 1 1 5F8A5925
-P 3200 2850
+P 6550 4850
 AR Path="/5F8A5925" Ref="R1"  Part="1" 
 AR Path="/5F899696/5F8A5925" Ref="R6"  Part="1" 
 AR Path="/6013BA2D/5F8A5925" Ref="R6"  Part="1" 
-F 0 "R6" V 2993 2850 50  0000 C CNN
-F 1 "10K" V 3084 2850 50  0000 C CNN
-F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 3130 2850 50  0001 C CNN
-F 3 "~" H 3200 2850 50  0001 C CNN
-	1    3200 2850
+F 0 "R6" V 6343 4850 50  0000 C CNN
+F 1 "10K" V 6434 4850 50  0000 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 6480 4850 50  0001 C CNN
+F 3 "~" H 6550 4850 50  0001 C CNN
+	1    6550 4850
 	0    1    1    0   
 $EndComp
 Wire Wire Line
-	6600 5450 6850 5450
-Wire Wire Line
-	5750 5350 6000 5350
-Wire Wire Line
-	5750 5350 5750 5550
-Wire Wire Line
-	5750 5550 6000 5550
-Connection ~ 5750 5350
-$Comp
-L salida_dac-rescue:GND-power #PWR0125
-U 1 1 601B8CB3
-P 5750 5550
-F 0 "#PWR0125" H 5750 5300 50  0001 C CNN
-F 1 "GND" H 5755 5373 50  0000 C CNN
-F 2 "" H 5750 5550 50  0001 C CNN
-F 3 "" H 5750 5550 50  0001 C CNN
-	1    5750 5550
-	1    0    0    -1  
-$EndComp
-Connection ~ 5750 5550
+	3400 6750 3650 6750
 $Comp
 L salida_dac-rescue:TL064-Amplifier_Operational U7
 U 1 1 604B7F16
-P 4500 2950
+P 7400 4950
 AR Path="/604B7F16" Ref="U7"  Part="1" 
 AR Path="/6013BA2D/604B7F16" Ref="U7"  Part="1" 
-F 0 "U7" H 4550 3250 50  0000 C CNN
-F 1 "TL064" H 4750 3050 50  0000 C CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_Socket_LongPads" H 4450 3050 50  0001 C CNN
-F 3 "http://www.ti.com/lit/ds/symlink/tl061.pdf" H 4550 3150 50  0001 C CNN
-	1    4500 2950
+F 0 "U7" H 7450 5250 50  0000 C CNN
+F 1 "TL064" H 7650 5050 50  0000 C CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_Socket_LongPads" H 7350 5050 50  0001 C CNN
+F 3 "http://www.ti.com/lit/ds/symlink/tl061.pdf" H 7450 5150 50  0001 C CNN
+	1    7400 4950
 	1    0    0    1   
 $EndComp
 $Comp
 L salida_dac-rescue:TL064-Amplifier_Operational U7
-U 2 1 604BA8D0
-P 7600 3750
-AR Path="/604BA8D0" Ref="U7"  Part="2" 
-AR Path="/6013BA2D/604BA8D0" Ref="U7"  Part="2" 
-F 0 "U7" H 7800 4000 50  0000 C CNN
-F 1 "TL064" H 7800 3850 50  0000 C CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_Socket_LongPads" H 7550 3850 50  0001 C CNN
-F 3 "http://www.ti.com/lit/ds/symlink/tl061.pdf" H 7650 3950 50  0001 C CNN
-	2    7600 3750
-	-1   0    0    1   
-$EndComp
-$Comp
-L salida_dac-rescue:TL064-Amplifier_Operational U7
 U 3 1 604BBA82
-P 2850 6300
+P 7800 1600
 AR Path="/604BBA82" Ref="U7"  Part="3" 
 AR Path="/6013BA2D/604BBA82" Ref="U7"  Part="3" 
-F 0 "U7" H 2850 6667 50  0000 C CNN
-F 1 "TL064" H 2850 6576 50  0000 C CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_Socket_LongPads" H 2800 6400 50  0001 C CNN
-F 3 "http://www.ti.com/lit/ds/symlink/tl061.pdf" H 2900 6500 50  0001 C CNN
-	3    2850 6300
+F 0 "U7" H 7800 1967 50  0000 C CNN
+F 1 "TL064" H 7800 1876 50  0000 C CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_Socket_LongPads" H 7750 1700 50  0001 C CNN
+F 3 "http://www.ti.com/lit/ds/symlink/tl061.pdf" H 7850 1800 50  0001 C CNN
+	3    7800 1600
 	-1   0    0    1   
 $EndComp
 $Comp
 L salida_dac-rescue:TL064-Amplifier_Operational U7
 U 4 1 604BCA31
-P 6300 5450
+P 3100 6750
 AR Path="/604BCA31" Ref="U7"  Part="4" 
 AR Path="/6013BA2D/604BCA31" Ref="U7"  Part="4" 
-F 0 "U7" H 6350 5650 50  0000 C CNN
-F 1 "TL064" H 6300 5726 50  0000 C CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_Socket_LongPads" H 6250 5550 50  0001 C CNN
-F 3 "http://www.ti.com/lit/ds/symlink/tl061.pdf" H 6350 5650 50  0001 C CNN
-	4    6300 5450
+F 0 "U7" H 3150 6950 50  0000 C CNN
+F 1 "TL064" H 3100 7026 50  0000 C CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_Socket_LongPads" H 3050 6850 50  0001 C CNN
+F 3 "http://www.ti.com/lit/ds/symlink/tl061.pdf" H 3150 6950 50  0001 C CNN
+	4    3100 6750
 	1    0    0    -1  
 $EndComp
 $Comp
 L salida_dac-rescue:+5V-power #PWR0108
 U 1 1 5F9BDFA6
-P 4450 2650
+P 7350 4650
 AR Path="/5F9BDFA6" Ref="#PWR0108"  Part="1" 
 AR Path="/5F899696/5F9BDFA6" Ref="#PWR017"  Part="1" 
 AR Path="/6013BA2D/5F9BDFA6" Ref="#PWR0117"  Part="1" 
-F 0 "#PWR0117" H 4450 2500 50  0001 C CNN
-F 1 "+5V" H 4300 2700 50  0000 C CNN
-F 2 "" H 4450 2650 50  0001 C CNN
-F 3 "" H 4450 2650 50  0001 C CNN
-	1    4450 2650
+F 0 "#PWR0117" H 7350 4500 50  0001 C CNN
+F 1 "+5V" H 7200 4700 50  0000 C CNN
+F 2 "" H 7350 4650 50  0001 C CNN
+F 3 "" H 7350 4650 50  0001 C CNN
+	1    7350 4650
 	1    0    0    -1  
 $EndComp
 $Comp
 L salida_dac-rescue:-5V-power #PWR0107
 U 1 1 5F9BBD75
-P 4450 3250
+P 7350 5250
 AR Path="/5F9BBD75" Ref="#PWR0107"  Part="1" 
 AR Path="/5F899696/5F9BBD75" Ref="#PWR018"  Part="1" 
 AR Path="/6013BA2D/5F9BBD75" Ref="#PWR0124"  Part="1" 
-F 0 "#PWR0124" H 4450 3350 50  0001 C CNN
-F 1 "-5V" H 4600 3350 50  0000 C CNN
-F 2 "" H 4450 3250 50  0001 C CNN
-F 3 "" H 4450 3250 50  0001 C CNN
-	1    4450 3250
+F 0 "#PWR0124" H 7350 5350 50  0001 C CNN
+F 1 "-5V" H 7500 5350 50  0000 C CNN
+F 2 "" H 7350 5250 50  0001 C CNN
+F 3 "" H 7350 5250 50  0001 C CNN
+	1    7350 5250
 	-1   0    0    1   
 $EndComp
 $Comp
 L salida_dac-rescue:TL064-Amplifier_Operational U7
 U 5 1 604BE6F2
-P 4550 2950
+P 7450 4950
 AR Path="/604BE6F2" Ref="U7"  Part="5" 
 AR Path="/6013BA2D/604BE6F2" Ref="U7"  Part="5" 
-F 0 "U7" H 4650 2650 50  0000 L CNN
-F 1 "TL064" H 4600 2750 50  0000 L CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_Socket_LongPads" H 4500 3050 50  0001 C CNN
-F 3 "http://www.ti.com/lit/ds/symlink/tl061.pdf" H 4600 3150 50  0001 C CNN
-	5    4550 2950
+F 0 "U7" H 7550 4650 50  0000 L CNN
+F 1 "TL064" H 7500 4750 50  0000 L CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_Socket_LongPads" H 7400 5050 50  0001 C CNN
+F 3 "http://www.ti.com/lit/ds/symlink/tl061.pdf" H 7500 5150 50  0001 C CNN
+	5    7450 4950
 	1    0    0    -1  
 $EndComp
-Entry Wire Line
-	2300 12550 2400 12450
-Wire Wire Line
-	6850 5050 5750 5050
-Wire Wire Line
-	5750 5050 5750 5350
-Text Notes 2200 2700 0    50   ~ 0
-Salida DAC uC de 0 a 3.3V\nSalida módulo amplificador:\n0V = VEE (-5V)\n1.5V = 0V\n3.3V = VCC (5V)
-Text Notes 1400 7050 0    50   ~ 0
-Salida electrodo: VEE<0<VCC\nEntrada ADC: 0 a 5V (eventualmente 0 a 3.3V)
-Text Notes 4100 1450 0    50   ~ 0
-Amplificador Tension Inversor con selector\nde ganancia y offset\n(AMP T1)
-Text Notes 7500 2200 0    50   ~ 0
-Amplificador Tension Inversor con selector\nde ganancia y offset\n(AMP T2)
-Text Notes 1500 4450 0    50   ~ 0
-El offset de este amplificador se regulará para tener valor medio nulo
-Text Notes 8250 4850 0    50   ~ 0
-El offset de este amplificador se regulará para tener\nvalor medio igual a la mitad del rango del ADC (0 a 3.3V)
-Text Notes 2550 4800 0    50   ~ 0
-Amplificador Tension Inversor con selector\nde ganancia y offset\n(AMP I2)
-Connection ~ 5150 2950
-Wire Wire Line
-	4800 2950 5150 2950
-Wire Wire Line
-	5150 2950 5650 2950
-Wire Wire Line
-	5150 2200 5150 2450
-Wire Wire Line
-	4850 2200 5150 2200
-Wire Wire Line
-	4850 2300 4850 2200
-Connection ~ 5150 2450
-Wire Wire Line
-	5150 2450 5150 2950
-Wire Wire Line
-	5000 2450 5150 2450
-Wire Wire Line
-	4650 2450 4700 2450
+Text Notes 7900 5500 0    50   ~ 0
+Salida DAC uC de 0 a 3.3V\nSalida módulo amplificador:\n0V = -1V\n1.5V = 0V\n3.3V = +1V
+Text Notes 8500 2800 0    50   ~ 0
+Amplificador Inversor con ganancia unitaria y offset,\nadapta la señal a 0-3.3V\n(AMP T2)
 $Comp
 L salida_dac-rescue:R-Device R8
 U 1 1 5F8A592F
-P 4500 2450
+P 7300 4450
 AR Path="/5F8A592F" Ref="R8"  Part="1" 
 AR Path="/5F899696/5F8A592F" Ref="R13"  Part="1" 
 AR Path="/6013BA2D/5F8A592F" Ref="R13"  Part="1" 
-F 0 "R13" V 4293 2450 50  0000 C CNN
-F 1 "5K6" V 4384 2450 50  0000 C CNN
-F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 4430 2450 50  0001 C CNN
-F 3 "~" H 4500 2450 50  0001 C CNN
-	1    4500 2450
-	0    1    1    0   
-$EndComp
-Wire Wire Line
-	3550 2850 4200 2850
-Wire Wire Line
-	3350 2850 3550 2850
-Connection ~ 3550 2850
-Wire Wire Line
-	3550 2450 3550 2850
-Wire Wire Line
-	3550 2450 4350 2450
-$Comp
-L salida_dac-rescue:R-Device R?
-U 1 1 605448B2
-P 2650 3500
-AR Path="/605448B2" Ref="R?"  Part="1" 
-AR Path="/5F899696/605448B2" Ref="R?"  Part="1" 
-AR Path="/6013BA2D/605448B2" Ref="R26"  Part="1" 
-F 0 "R26" V 2443 3500 50  0000 C CNN
-F 1 "8.2K" V 2534 3500 50  0000 C CNN
-F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 2580 3500 50  0001 C CNN
-F 3 "~" H 2650 3500 50  0001 C CNN
-	1    2650 3500
-	0    1    -1   0   
-$EndComp
-$Comp
-L salida_dac-rescue:R-Device R?
-U 1 1 605448BD
-P 3450 3500
-AR Path="/605448BD" Ref="R?"  Part="1" 
-AR Path="/5F899696/605448BD" Ref="R?"  Part="1" 
-AR Path="/6013BA2D/605448BD" Ref="R27"  Part="1" 
-F 0 "R27" V 3243 3500 50  0000 C CNN
-F 1 "10K" V 3334 3500 50  0000 C CNN
-F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 3380 3500 50  0001 C CNN
-F 3 "~" H 3450 3500 50  0001 C CNN
-	1    3450 3500
-	0    1    -1   0   
-$EndComp
-$Comp
-L salida_dac-rescue:R_POT-Device RV12
-U 1 1 605448C7
-P 3050 3500
-F 0 "RV12" V 2934 3500 50  0000 C CNN
-F 1 "1K" V 2841 3500 50  0000 C CNN
-F 2 "Potentiometer_THT:Potentiometer_Bourns_3266Y_Vertical" H 3050 3500 50  0001 C CNN
-F 3 "~" H 3050 3500 50  0001 C CNN
-	1    3050 3500
-	0    -1   -1   0   
-$EndComp
-Wire Wire Line
-	3300 3500 3200 3500
-Wire Wire Line
-	2900 3500 2800 3500
-$Comp
-L salida_dac-rescue:-5V-power #PWR?
-U 1 1 605448D3
-P 3600 3500
-AR Path="/605448D3" Ref="#PWR?"  Part="1" 
-AR Path="/5F899696/605448D3" Ref="#PWR?"  Part="1" 
-AR Path="/6013BA2D/605448D3" Ref="#PWR0129"  Part="1" 
-F 0 "#PWR0129" H 3600 3600 50  0001 C CNN
-F 1 "-5V" H 3615 3677 50  0000 C CNN
-F 2 "" H 3600 3500 50  0001 C CNN
-F 3 "" H 3600 3500 50  0001 C CNN
-	1    3600 3500
+F 0 "R13" V 7093 4450 50  0000 C CNN
+F 1 "5K6" V 7184 4450 50  0000 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 7230 4450 50  0001 C CNN
+F 3 "~" H 7300 4450 50  0001 C CNN
+	1    7300 4450
 	0    1    1    0   
 $EndComp
 $Comp
-L salida_dac-rescue:+5V-power #PWR?
-U 1 1 605448DD
-P 2500 3500
-AR Path="/605448DD" Ref="#PWR?"  Part="1" 
-AR Path="/5F899696/605448DD" Ref="#PWR?"  Part="1" 
-AR Path="/6013BA2D/605448DD" Ref="#PWR0128"  Part="1" 
-F 0 "#PWR0128" H 2500 3350 50  0001 C CNN
-F 1 "+5V" H 2515 3677 50  0000 C CNN
-F 2 "" H 2500 3500 50  0001 C CNN
-F 3 "" H 2500 3500 50  0001 C CNN
-	1    2500 3500
-	0    -1   -1   0   
-$EndComp
-Wire Wire Line
-	3050 3050 3050 3350
-Wire Wire Line
-	2250 5750 3050 5750
-Text Notes 5300 6300 0    50   ~ 0
-El offset de este amplificador se regulará para tener\nvalor medio igual a la mitad del rango del ADC (0 a 3.3V)
-Wire Wire Line
-	5350 6400 5350 6750
-Wire Wire Line
-	3150 6400 4250 6400
-Wire Wire Line
-	10100 3850 10100 4200
-Wire Wire Line
-	7900 3850 9000 3850
-$Comp
-L salida_dac-rescue:-5V-power #PWR0111
-U 1 1 5F9D8999
-P 10650 4350
-AR Path="/5F9D8999" Ref="#PWR0111"  Part="1" 
-AR Path="/5F899696/5F9D8999" Ref="#PWR028"  Part="1" 
-AR Path="/6013BA2D/5F9D8999" Ref="#PWR0120"  Part="1" 
-F 0 "#PWR0120" H 10650 4450 50  0001 C CNN
-F 1 "-5V" H 10665 4527 50  0000 C CNN
-F 2 "" H 10650 4350 50  0001 C CNN
-F 3 "" H 10650 4350 50  0001 C CNN
-	1    10650 4350
-	0    1    1    0   
-$EndComp
-$Comp
-L salida_dac-rescue:R-Device R18
-U 1 1 5F9D897F
-P 10500 4350
-AR Path="/5F9D897F" Ref="R18"  Part="1" 
-AR Path="/5F899696/5F9D897F" Ref="R23"  Part="1" 
-AR Path="/6013BA2D/5F9D897F" Ref="R23"  Part="1" 
-F 0 "R23" V 10293 4350 50  0000 C CNN
-F 1 "15K" V 10384 4350 50  0000 C CNN
-F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 10430 4350 50  0001 C CNN
-F 3 "~" H 10500 4350 50  0001 C CNN
-	1    10500 4350
-	0    1    -1   0   
-$EndComp
-Wire Wire Line
-	7000 3200 7800 3200
-$Comp
-L Device:R R10
-U 1 1 6174BBEA
-P 9150 3850
-F 0 "R10" V 9250 3850 50  0000 C CNN
-F 1 "1K" V 9350 3850 50  0000 C CNN
-F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 9080 3850 50  0001 C CNN
-F 3 "~" H 9150 3850 50  0001 C CNN
-	1    9150 3850
-	0    1    1    0   
-$EndComp
-Wire Wire Line
-	9300 3850 10100 3850
-$Comp
-L Device:R R8
+L potenciostato-rescue:R-Device R8
 U 1 1 6174E172
-P 4400 6400
-F 0 "R8" V 4500 6400 50  0000 C CNN
-F 1 "10K" V 4600 6400 50  0000 C CNN
-F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 4330 6400 50  0001 C CNN
-F 3 "~" H 4400 6400 50  0001 C CNN
-	1    4400 6400
+P 8600 1700
+F 0 "R8" V 8700 1700 50  0000 C CNN
+F 1 "10K" V 8800 1700 50  0000 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 8530 1700 50  0001 C CNN
+F 3 "~" H 8600 1700 50  0001 C CNN
+	1    8600 1700
 	0    1    1    0   
-$EndComp
-Wire Wire Line
-	4550 6400 5350 6400
-Wire Wire Line
-	6850 5450 6850 5050
-$Comp
-L salida_dac-rescue:R_POT-Device RV5
-U 1 1 5F9C3DAC
-P 4850 2450
-F 0 "RV5" V 4734 2450 50  0000 C CNN
-F 1 "1K" V 4641 2450 50  0000 C CNN
-F 2 "Potentiometer_THT:Potentiometer_Bourns_3266Y_Vertical" H 4850 2450 50  0001 C CNN
-F 3 "~" H 4850 2450 50  0001 C CNN
-	1    4850 2450
-	0    -1   -1   0   
 $EndComp
 $Comp
 L salida_dac-rescue:R-Device R9
 U 1 1 5F9506D4
-P 4400 6200
+P 8600 1500
 AR Path="/5F9506D4" Ref="R9"  Part="1" 
 AR Path="/5F899696/5F9506D4" Ref="R14"  Part="1" 
 AR Path="/6013BA2D/5F9506D4" Ref="R14"  Part="1" 
-F 0 "R14" V 4193 6200 50  0000 C CNN
-F 1 "10K" V 4284 6200 50  0000 C CNN
-F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 4330 6200 50  0001 C CNN
-F 3 "~" H 4400 6200 50  0001 C CNN
-	1    4400 6200
+F 0 "R14" V 8393 1500 50  0000 C CNN
+F 1 "10K" V 8484 1500 50  0000 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 8530 1500 50  0001 C CNN
+F 3 "~" H 8600 1500 50  0001 C CNN
+	1    8600 1500
 	0    -1   1    0   
 $EndComp
+Wire Wire Line
+	8100 1500 8300 1500
+Wire Wire Line
+	7700 4950 7750 4950
+$Comp
+L salida_dac-rescue:R-Device R4
+U 1 1 5F9506DA
+P 7850 1050
+AR Path="/5F9506DA" Ref="R4"  Part="1" 
+AR Path="/5F899696/5F9506DA" Ref="R9"  Part="1" 
+AR Path="/6013BA2D/5F9506DA" Ref="R9"  Part="1" 
+F 0 "R9" V 7643 1050 50  0000 C CNN
+F 1 "10K" V 7734 1050 50  0000 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 7780 1050 50  0001 C CNN
+F 3 "~" H 7850 1050 50  0001 C CNN
+	1    7850 1050
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	8000 1050 8300 1050
+Wire Wire Line
+	8300 1050 8300 1500
+Wire Wire Line
+	7700 1050 7300 1050
+Wire Wire Line
+	7300 1050 7300 1600
+Connection ~ 7300 1600
+Wire Wire Line
+	7300 1600 7500 1600
+Wire Wire Line
+	8300 1500 8450 1500
+Connection ~ 8300 1500
+Wire Wire Line
+	8100 1700 8450 1700
+$Comp
+L Diode:1N4007 D?
+U 1 1 63179ED2
+P 1500 6700
+F 0 "D?" V 1546 6620 50  0000 R CNN
+F 1 "1N4007" V 1455 6620 50  0000 R CNN
+F 2 "Diode_THT:D_DO-41_SOD81_P10.16mm_Horizontal" H 1500 6525 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/88503/1n4001.pdf" H 1500 6700 50  0001 C CNN
+	1    1500 6700
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Diode:1N4007 D?
+U 1 1 6317AD92
+P 1500 7000
+F 0 "D?" V 1546 6920 50  0000 R CNN
+F 1 "1N4007" V 1455 6920 50  0000 R CNN
+F 2 "Diode_THT:D_DO-41_SOD81_P10.16mm_Horizontal" H 1500 6825 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/88503/1n4001.pdf" H 1500 7000 50  0001 C CNN
+	1    1500 7000
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	7150 4450 6900 4450
+Wire Wire Line
+	6900 4450 6900 4850
+Connection ~ 6900 4850
+Wire Wire Line
+	6900 4850 7100 4850
+Wire Wire Line
+	7450 4450 7750 4450
+Wire Wire Line
+	7750 4450 7750 4950
+Connection ~ 7750 4950
+Wire Wire Line
+	7750 4950 8550 4950
+Wire Wire Line
+	6700 4850 6900 4850
+Wire Wire Line
+	6700 5050 7100 5050
+$Comp
+L potenciostato-rescue:Conn_01x01_Female-Connector J?
+U 1 1 6318DCEB
+P 4850 3250
+AR Path="/60147E53/6318DCEB" Ref="J?"  Part="1" 
+AR Path="/6013BA2D/6318DCEB" Ref="J?"  Part="1" 
+F 0 "J?" H 4750 3200 50  0000 L CNN
+F 1 "test_DAC" H 4700 3100 50  0000 L CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical" H 4850 3250 50  0001 C CNN
+F 3 "~" H 4850 3250 50  0001 C CNN
+	1    4850 3250
+	0    -1   1    0   
+$EndComp
+Wire Wire Line
+	4500 3050 4850 3050
+Wire Wire Line
+	1300 1700 1300 1850
+$Comp
+L potenciostato-rescue:USB_B_Micro-Connector J?
+U 1 1 6318DCB8
+P 1300 2250
+AR Path="/6318DCB8" Ref="J?"  Part="1" 
+AR Path="/60147E53/6318DCB8" Ref="J?"  Part="1" 
+AR Path="/6013BA2D/6318DCB8" Ref="J?"  Part="1" 
+F 0 "J?" H 1070 2146 50  0000 R CNN
+F 1 "USB_B_Micro" H 1070 2239 50  0000 R CNN
+F 2 "Connector_USB:USB_Mini-B_Wuerth_65100516121_Horizontal" H 1450 2200 50  0001 C CNN
+F 3 "~" H 1450 2200 50  0001 C CNN
+	1    1300 2250
+	1    0    0    1   
+$EndComp
+Wire Wire Line
+	750  1700 1200 1700
+$Comp
+L potenciostato-rescue:GND-power #PWR?
+U 1 1 6318DCCE
+P 750 1700
+AR Path="/60147E53/6318DCCE" Ref="#PWR?"  Part="1" 
+AR Path="/6013BA2D/6318DCCE" Ref="#PWR?"  Part="1" 
+F 0 "#PWR?" H 750 1450 50  0001 C CNN
+F 1 "GND" H 755 1523 50  0000 C CNN
+F 2 "" H 750 1700 50  0001 C CNN
+F 3 "" H 750 1700 50  0001 C CNN
+	1    750  1700
+	-1   0    0    -1  
+$EndComp
+Wire Wire Line
+	1200 1850 1200 1700
+Connection ~ 1200 1700
+Wire Wire Line
+	1200 1700 1300 1700
+$Comp
+L potenciostato-rescue:LPCXPRESSO_LPC1769-LPCXPRESSO_LPC1769 LPC?
+U 1 1 6318DCAF
+P 3300 2750
+AR Path="/6318DCAF" Ref="LPC?"  Part="1" 
+AR Path="/60147E53/6318DCAF" Ref="LPC?"  Part="1" 
+AR Path="/6013BA2D/6318DCAF" Ref="LPC?"  Part="1" 
+F 0 "LPC?" H 3450 4420 50  0000 C CNN
+F 1 "LPCXPRESSO_LPC1769" H 3450 4329 50  0000 C CNN
+F 2 "LPC:LPCXPRESSO_LPC1769" H 3300 2750 50  0001 L BNN
+F 3 "" H 3300 2750 50  0001 L BNN
+	1    3300 2750
+	-1   0    0    -1  
+$EndComp
+Wire Wire Line
+	5100 1350 4500 1350
+Wire Wire Line
+	5100 1450 4500 1450
+$Comp
+L potenciostato-rescue:Conn_01x01_Female-Connector J?
+U 1 1 6318DCE3
+P 6150 1800
+AR Path="/60147E53/6318DCE3" Ref="J?"  Part="1" 
+AR Path="/6013BA2D/6318DCE3" Ref="J?"  Part="1" 
+F 0 "J?" V 6088 1712 50  0000 R CNN
+F 1 "test_I" V 5997 1712 50  0000 R CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical" H 6150 1800 50  0001 C CNN
+F 3 "~" H 6150 1800 50  0001 C CNN
+	1    6150 1800
+	-1   0    0    -1  
+$EndComp
+$Comp
+L potenciostato-rescue:Jumper-Device JP?
+U 1 1 6318DCDD
+P 5400 1450
+AR Path="/60147E53/6318DCDD" Ref="JP?"  Part="1" 
+AR Path="/6013BA2D/6318DCDD" Ref="JP?"  Part="1" 
+F 0 "JP?" H 5400 1350 50  0000 C CNN
+F 1 "alimentacion_lpc" H 5400 1250 50  0000 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" H 5400 1450 50  0001 C CNN
+F 3 "~" H 5400 1450 50  0001 C CNN
+	1    5400 1450
+	-1   0    0    -1  
+$EndComp
+Text Label 1800 3550 2    50   ~ 0
+Pin12_U8
+Text Label 1800 3350 2    50   ~ 0
+Pin6_U8
+Text Label 1800 3250 2    50   ~ 0
+Pin5_U8
+Text Label 1800 3450 2    50   ~ 0
+Pin13_U8
+$Comp
+L potenciostato-rescue:GND-power #PWR?
+U 1 1 6318DCC8
+P 1600 3950
+AR Path="/60147E53/6318DCC8" Ref="#PWR?"  Part="1" 
+AR Path="/6013BA2D/6318DCC8" Ref="#PWR?"  Part="1" 
+F 0 "#PWR?" H 1600 3700 50  0001 C CNN
+F 1 "GND" H 1605 3773 50  0000 C CNN
+F 2 "" H 1600 3950 50  0001 C CNN
+F 3 "" H 1600 3950 50  0001 C CNN
+	1    1600 3950
+	-1   0    0    -1  
+$EndComp
+Wire Wire Line
+	1800 3950 1600 3950
+Wire Wire Line
+	1800 2250 1600 2250
+Wire Wire Line
+	1800 2150 1600 2150
+Connection ~ 4850 3050
+Wire Wire Line
+	8150 3300 8650 3300
+Connection ~ 8400 3100
+Wire Wire Line
+	8650 3100 8400 3100
+Wire Wire Line
+	7400 3200 7550 3200
+Connection ~ 7400 3200
+Wire Wire Line
+	7400 2650 7400 3200
+Wire Wire Line
+	7750 2650 7400 2650
+Wire Wire Line
+	8050 2650 8400 2650
+Wire Wire Line
+	8400 2650 8400 3100
+Wire Wire Line
+	8150 3100 8400 3100
+$Comp
+L potenciostato-rescue:R-Device R10
+U 1 1 6174BBEA
+P 8800 3300
+F 0 "R10" V 8900 3300 50  0000 C CNN
+F 1 "1K" V 9000 3300 50  0000 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 8730 3300 50  0001 C CNN
+F 3 "~" H 8800 3300 50  0001 C CNN
+	1    8800 3300
+	0    1    1    0   
+$EndComp
+$Comp
+L salida_dac-rescue:TL064-Amplifier_Operational U7
+U 2 1 604BA8D0
+P 7850 3200
+AR Path="/604BA8D0" Ref="U7"  Part="2" 
+AR Path="/6013BA2D/604BA8D0" Ref="U7"  Part="2" 
+F 0 "U7" H 8050 3450 50  0000 C CNN
+F 1 "TL064" H 8050 3300 50  0000 C CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_Socket_LongPads" H 7800 3300 50  0001 C CNN
+F 3 "http://www.ti.com/lit/ds/symlink/tl061.pdf" H 7900 3400 50  0001 C CNN
+	2    7850 3200
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	8950 3100 9200 3100
+Text HLabel 9200 3100 2    50   Input ~ 0
+V_IN
+$Comp
+L salida_dac-rescue:R-Device R13
+U 1 1 5F9D8928
+P 7900 2650
+AR Path="/5F9D8928" Ref="R13"  Part="1" 
+AR Path="/5F899696/5F9D8928" Ref="R18"  Part="1" 
+AR Path="/6013BA2D/5F9D8928" Ref="R18"  Part="1" 
+F 0 "R18" V 7693 2650 50  0000 C CNN
+F 1 "10K" V 7784 2650 50  0000 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 7830 2650 50  0001 C CNN
+F 3 "~" H 7900 2650 50  0001 C CNN
+	1    7900 2650
+	0    1    1    0   
+$EndComp
+$Comp
+L salida_dac-rescue:R-Device R16
+U 1 1 5F9D8922
+P 8800 3100
+AR Path="/5F9D8922" Ref="R16"  Part="1" 
+AR Path="/5F899696/5F9D8922" Ref="R21"  Part="1" 
+AR Path="/6013BA2D/5F9D8922" Ref="R21"  Part="1" 
+F 0 "R21" V 8593 3100 50  0000 C CNN
+F 1 "1K" V 8684 3100 50  0000 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 8730 3100 50  0001 C CNN
+F 3 "~" H 8800 3100 50  0001 C CNN
+	1    8800 3100
+	0    -1   1    0   
+$EndComp
+Wire Wire Line
+	6350 1600 6350 1800
+Wire Wire Line
+	6350 1600 7300 1600
+Wire Wire Line
+	6000 3200 6000 3050
+Wire Wire Line
+	6000 3200 7400 3200
+Connection ~ 6000 3050
+Wire Wire Line
+	6000 3050 6000 2850
+Connection ~ 6350 1800
+Wire Wire Line
+	6350 1800 6350 2750
+Wire Wire Line
+	4500 2750 6350 2750
+Wire Wire Line
+	4500 2850 6000 2850
+Wire Wire Line
+	5650 3050 5650 4850
+Wire Wire Line
+	5650 4850 6400 4850
+Wire Wire Line
+	4850 3050 5650 3050
+$Comp
+L potenciostato-rescue:Conn_01x01_Female-Connector J?
+U 1 1 6318DCF3
+P 6200 3050
+AR Path="/60147E53/6318DCF3" Ref="J?"  Part="1" 
+AR Path="/6013BA2D/6318DCF3" Ref="J?"  Part="1" 
+F 0 "J?" H 6150 2850 50  0000 R CNN
+F 1 "test_V" H 6300 2950 50  0000 R CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical" H 6200 3050 50  0001 C CNN
+F 3 "~" H 6200 3050 50  0001 C CNN
+	1    6200 3050
+	1    0    0    1   
+$EndComp
+$Comp
+L potenciostato-rescue:+5V-power #PWR?
+U 1 1 6322594C
+P 5800 1350
+AR Path="/6322594C" Ref="#PWR?"  Part="1" 
+AR Path="/6013BA2D/6322594C" Ref="#PWR?"  Part="1" 
+F 0 "#PWR?" H 5800 1200 50  0001 C CNN
+F 1 "+5V" H 5815 1527 50  0000 C CNN
+F 2 "" H 5800 1350 50  0001 C CNN
+F 3 "" H 5800 1350 50  0001 C CNN
+	1    5800 1350
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5700 1450 5800 1450
+Wire Wire Line
+	5800 1450 5800 1350
+Wire Wire Line
+	5100 1350 5100 950 
+Wire Wire Line
+	5100 950  5250 950 
+Wire Wire Line
+	5250 950  5250 1000
+$Comp
+L potenciostato-rescue:GND-power #PWR?
+U 1 1 6322CB06
+P 5250 1000
+AR Path="/6322CB06" Ref="#PWR?"  Part="1" 
+AR Path="/6013BA2D/6322CB06" Ref="#PWR?"  Part="1" 
+F 0 "#PWR?" H 5250 750 50  0001 C CNN
+F 1 "GND" H 5255 827 50  0000 C CNN
+F 2 "" H 5250 1000 50  0001 C CNN
+F 3 "" H 5250 1000 50  0001 C CNN
+	1    5250 1000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2800 6850 2600 6850
+Wire Wire Line
+	2600 6850 2600 7150
+Wire Wire Line
+	2600 7150 3650 7150
+Wire Wire Line
+	3650 7150 3650 6750
+$Comp
+L salida_dac-rescue:R-Device R?
+U 1 1 632432FB
+P 1500 6300
+AR Path="/632432FB" Ref="R?"  Part="1" 
+AR Path="/5F899696/632432FB" Ref="R?"  Part="1" 
+AR Path="/6013BA2D/632432FB" Ref="R?"  Part="1" 
+F 0 "R?" V 1293 6300 50  0000 C CNN
+F 1 "5K6" V 1384 6300 50  0000 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 1430 6300 50  0001 C CNN
+F 3 "~" H 1500 6300 50  0001 C CNN
+	1    1500 6300
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	1500 6450 1500 6500
+Wire Wire Line
+	1500 6150 1500 6050
+Wire Wire Line
+	1500 7150 1500 7250
+$Comp
+L potenciostato-rescue:GND-power #PWR?
+U 1 1 632489BA
+P 1500 7250
+AR Path="/60147E53/632489BA" Ref="#PWR?"  Part="1" 
+AR Path="/6013BA2D/632489BA" Ref="#PWR?"  Part="1" 
+F 0 "#PWR?" H 1500 7000 50  0001 C CNN
+F 1 "GND" H 1505 7073 50  0000 C CNN
+F 2 "" H 1500 7250 50  0001 C CNN
+F 3 "" H 1500 7250 50  0001 C CNN
+	1    1500 7250
+	-1   0    0    -1  
+$EndComp
+$Comp
+L potenciostato-rescue:+5V-power #PWR?
+U 1 1 63249071
+P 1500 6050
+AR Path="/63249071" Ref="#PWR?"  Part="1" 
+AR Path="/6013BA2D/63249071" Ref="#PWR?"  Part="1" 
+F 0 "#PWR?" H 1500 5900 50  0001 C CNN
+F 1 "+5V" H 1515 6227 50  0000 C CNN
+F 2 "" H 1500 6050 50  0001 C CNN
+F 3 "" H 1500 6050 50  0001 C CNN
+	1    1500 6050
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3650 6750 3900 6750
+Connection ~ 3650 6750
+Text Label 3900 6750 0    50   ~ 0
+VOffset
+Wire Wire Line
+	6400 5050 6250 5050
+Wire Wire Line
+	8950 3300 9200 3300
+Wire Wire Line
+	8750 1700 9000 1700
+Text Label 6250 5050 2    50   ~ 0
+VOffset
+Text Label 9200 3300 0    50   ~ 0
+VOffset
+Text Label 9000 1700 0    50   ~ 0
+VOffset
+$Comp
+L salida_dac-rescue:R-Device R?
+U 1 1 63256A9B
+P 2200 6300
+AR Path="/63256A9B" Ref="R?"  Part="1" 
+AR Path="/5F899696/63256A9B" Ref="R?"  Part="1" 
+AR Path="/6013BA2D/63256A9B" Ref="R?"  Part="1" 
+F 0 "R?" V 1993 6300 50  0000 C CNN
+F 1 "4K7" V 2084 6300 50  0000 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 2130 6300 50  0001 C CNN
+F 3 "~" H 2200 6300 50  0001 C CNN
+	1    2200 6300
+	-1   0    0    1   
+$EndComp
+$Comp
+L salida_dac-rescue:R-Device R?
+U 1 1 63257614
+P 2200 7000
+AR Path="/63257614" Ref="R?"  Part="1" 
+AR Path="/5F899696/63257614" Ref="R?"  Part="1" 
+AR Path="/6013BA2D/63257614" Ref="R?"  Part="1" 
+F 0 "R?" V 1993 7000 50  0000 C CNN
+F 1 "5K6" V 2084 7000 50  0000 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 2130 7000 50  0001 C CNN
+F 3 "~" H 2200 7000 50  0001 C CNN
+	1    2200 7000
+	-1   0    0    1   
+$EndComp
+$Comp
+L Device:R_POT RV?
+U 1 1 6325355B
+P 2200 6650
+F 0 "RV?" H 2131 6696 50  0000 R CNN
+F 1 "10K" H 2131 6605 50  0000 R CNN
+F 2 "" H 2200 6650 50  0001 C CNN
+F 3 "~" H 2200 6650 50  0001 C CNN
+	1    2200 6650
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2200 6800 2200 6850
+Wire Wire Line
+	2200 6450 2200 6500
+Wire Wire Line
+	2200 7150 2200 7250
+$Comp
+L potenciostato-rescue:GND-power #PWR?
+U 1 1 6325E51B
+P 2200 7250
+AR Path="/60147E53/6325E51B" Ref="#PWR?"  Part="1" 
+AR Path="/6013BA2D/6325E51B" Ref="#PWR?"  Part="1" 
+F 0 "#PWR?" H 2200 7000 50  0001 C CNN
+F 1 "GND" H 2205 7073 50  0000 C CNN
+F 2 "" H 2200 7250 50  0001 C CNN
+F 3 "" H 2200 7250 50  0001 C CNN
+	1    2200 7250
+	-1   0    0    -1  
+$EndComp
+Wire Wire Line
+	1500 6500 1850 6500
+Wire Wire Line
+	1850 6500 1850 6050
+Wire Wire Line
+	1850 6050 2200 6050
+Wire Wire Line
+	2200 6050 2200 6150
+Connection ~ 1500 6500
+Wire Wire Line
+	1500 6500 1500 6550
+Wire Wire Line
+	2350 6650 2800 6650
+Text Notes 7950 4650 0    50   ~ 0
+Amplificador Tension Inversor atenua la señal de dac y\nagrega offset para que la salida tenga valor medio nulo\n(AMP T1)
+Text Notes 8450 1150 0    50   ~ 0
+Amplificador Inversor con ganancia unitaria y offset,\nadapta la señal a 0-3.3V\n(AMP T3)
+Text Notes 2650 6250 0    50   ~ 0
+Buffer, tension de offset para los \namplificadores que adaptan señal
 $EndSCHEMATC

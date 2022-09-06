@@ -67,7 +67,7 @@
           (stroke (width 0) (type default) (color 0 0 0 0))
           (fill (type none))
         )
-        (arc (start 2.5146 1.27) (mid 0.0127 2.5097) (end -2.4892 1.27)
+        (arc (start 2.5146 1.27) (mid 0.0078 2.5097) (end -2.4892 1.27)
           (stroke (width 0) (type default) (color 0 0 0 0))
           (fill (type none))
         )
@@ -1608,7 +1608,7 @@
     (uuid d1eca865-05c5-48a4-96cf-ed5f8a640e25)
   )
 
-  (symbol (lib_id "potenciostato-rescue:LPCXPRESSO_LPC1769-LPCXPRESSO_LPC1769") (at 101.6 78.74 0) (unit 1)
+  (symbol (lib_id "potenciostato-rescue:LPCXPRESSO_LPC1769-LPCXPRESSO_LPC1769") (at 101.6 78.74 0)
     (in_bom yes) (on_board yes)
     (uuid 00000000-0000-0000-0000-00006014ac32)
     (property "Reference" "LPC1" (id 0) (at 105.41 36.322 0))
@@ -1694,7 +1694,7 @@
     (pin "9" (uuid b803990c-1c4e-44c3-8e26-7de262febd0b))
   )
 
-  (symbol (lib_id "potenciostato-rescue:USB_B_Micro-Connector") (at 173.99 66.04 180) (unit 1)
+  (symbol (lib_id "potenciostato-rescue:USB_B_Micro-Connector") (at 173.99 66.04 180)
     (in_bom yes) (on_board yes)
     (uuid 00000000-0000-0000-0000-0000609a40c2)
     (property "Reference" "J2" (id 0) (at 179.832 63.3984 0)

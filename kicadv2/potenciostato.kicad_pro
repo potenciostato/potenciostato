@@ -338,7 +338,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "potenciostatov2.kicad_pro",
+    "filename": "potenciostato.kicad_pro",
     "version": 1
   },
   "net_settings": {
@@ -509,10 +509,6 @@
     [
       "00000000-0000-0000-0000-00006013ba2d",
       "salida_dac"
-    ],
-    [
-      "3811fe8d-9d89-42b7-a8a2-da04a3937b29",
-      "Fuente"
     ]
   ],
   "text_variables": {}

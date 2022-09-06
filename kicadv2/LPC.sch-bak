@@ -3,7 +3,7 @@ EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 2 3
+Sheet 2 4
 Title ""
 Date ""
 Rev ""
@@ -105,7 +105,7 @@ Wire Wire Line
 Wire Wire Line
 	2200 1700 2800 1700
 $Comp
-L Device:Jumper JP1
+L potenciostato-rescue:Jumper-Device JP1
 U 1 1 6184E96B
 P 1900 1800
 F 0 "JP1" H 1900 2064 50  0000 C CNN
@@ -116,7 +116,7 @@ F 3 "~" H 1900 1800 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Connector:Conn_01x01_Female J8
+L potenciostato-rescue:Conn_01x01_Female-Connector J8
 U 1 1 6184FD8B
 P 2450 2900
 F 0 "J8" V 2388 2812 50  0000 R CNN
@@ -130,7 +130,7 @@ Connection ~ 2450 3100
 Wire Wire Line
 	2450 3100 2200 3100
 $Comp
-L Connector:Conn_01x01_Female J9
+L potenciostato-rescue:Conn_01x01_Female-Connector J9
 U 1 1 618507D3
 P 2450 3600
 F 0 "J9" V 2296 3648 50  0000 L CNN
@@ -144,7 +144,7 @@ Connection ~ 2450 3400
 Wire Wire Line
 	2450 3400 2200 3400
 $Comp
-L Connector:Conn_01x01_Female J7
+L potenciostato-rescue:Conn_01x01_Female-Connector J7
 U 1 1 61850C4C
 P 2300 3000
 F 0 "J7" V 2238 2912 50  0000 R CNN
