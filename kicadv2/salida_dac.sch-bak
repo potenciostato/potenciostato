@@ -3,7 +3,7 @@ EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 2 3
+Sheet 3 2
 Title ""
 Date ""
 Rev ""
@@ -341,14 +341,6 @@ F 3 "~" H 5400 1450 50  0001 C CNN
 	1    5400 1450
 	-1   0    0    -1  
 $EndComp
-Text Label 1800 3550 2    50   ~ 0
-Pin12_U8
-Text Label 1800 3350 2    50   ~ 0
-Pin6_U8
-Text Label 1800 3250 2    50   ~ 0
-Pin5_U8
-Text Label 1800 3450 2    50   ~ 0
-Pin13_U8
 $Comp
 L potenciostato-rescue:GND-power #PWR?
 U 1 1 6318DCC8
@@ -664,4 +656,12 @@ Text Notes 8450 1150 0    50   ~ 0
 Amplificador Inversor con ganancia unitaria y offset,\nadapta la señal a 0-3.3V\n(AMP T3)
 Text Notes 2650 6250 0    50   ~ 0
 Buffer, tension de offset para los \namplificadores que adaptan señal
+Text HLabel 1800 3250 0    50   Input ~ 0
+gan_x1
+Text HLabel 1800 3350 0    50   Input ~ 0
+gan_x5
+Text HLabel 1800 3550 0    50   Input ~ 0
+gan_x10
+Text HLabel 1800 3450 0    50   Input ~ 0
+gan_x0.1
 $EndSCHEMATC

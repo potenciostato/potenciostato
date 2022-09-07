@@ -1,0 +1,15 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP 4066_copy
+D Quad Analog Switches
+K CMOS SWITCH
+F http://www.ti.com/lit/ds/symlink/cd4066b.pdf
+$ENDCMP
+#
+$CMP 4316
+D Quad Analog Switches
+K CMOS SWITCH
+F http://www.ti.com/lit/ds/symlink/cd4016b.pdf
+$ENDCMP
+#
+#End Doc Library
