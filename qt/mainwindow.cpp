@@ -215,7 +215,7 @@ void MainWindow::inicializarGraficos(int curva){
     ui->customPlot->addGraph(); //para la linea vertical del cursor A [3]
     ui->customPlot->addGraph(); //para la linea horizontal del cursor B [4]
     ui->customPlot->addGraph(); //para la linea vertical del cursor B [5]
-    ui->customPlot->xAxis->setLabel("Tension [V]");
+    ui->customPlot->xAxis->setLabel("Tension [mV]");
     ui->customPlot->yAxis->setLabel("Corriente [uA]");
 
     // hace que los ejes escalen automaticamente con los valores actuales
@@ -224,8 +224,8 @@ void MainWindow::inicializarGraficos(int curva){
     // se puede especificar el rango fijo
     if (flag_inicial == true){
         // TODO: se debera hacer una calibración para saber donde centrar el gráfico
-        ui->customPlot->xAxis->setRange(0, 3.0);
-        ui->customPlot->yAxis->setRange(0, 50);
+        ui->customPlot->xAxis->setRange(-1800, 1300);
+        ui->customPlot->yAxis->setRange(-1200, 1000);
         flag_inicial = false;
     }
     ui->customPlot->axisRect()->setupFullAxesBox();
@@ -847,12 +847,12 @@ void MainWindow::graficarCursor(char cursor){
 }
 
 void MainWindow::refrescarDeltas(){
-    ui->Num_deltaX->setText(QString::number(b_med_x-a_med_x, 'f', 4));
+    ui->Num_deltaX->setText(QString::number(b_med_x-a_med_x, 'f', 2));
     ui->Num_deltaY->setText(QString::number(b_med_y-a_med_y, 'f', 2));
-    ui->Num_deltaZ->setText(QString::number(med_z, 'f', 4));
-    ui->Num_deltaXa->setText(QString::number(a_med_x, 'f', 4));
+    ui->Num_deltaZ->setText(QString::number(med_z, 'f', 2));
+    ui->Num_deltaXa->setText(QString::number(a_med_x, 'f', 2));
     ui->Num_deltaYa->setText(QString::number(a_med_y, 'f', 2));
-    ui->Num_deltaXb->setText(QString::number(b_med_x, 'f', 4));
+    ui->Num_deltaXb->setText(QString::number(b_med_x, 'f', 2));
     ui->Num_deltaYb->setText(QString::number(b_med_y, 'f', 2));
 }
 
@@ -1000,6 +1000,7 @@ void MainWindow::exportarCSV()
 //Buff=QString::number(Datos);
 //ui->TBox_2->setText(Buff);
 
+/*
 void MainWindow::makePlot()
 {
     // generate some data:
@@ -1045,15 +1046,15 @@ void MainWindow::realtimeData(){
     ++frameCount;
     if (key-lastFpsKey > 2) // average fps over 2 seconds
     {
-        /*ui->statusBar->showMessage(
-            QString("%1 FPS, Total Data points: %2")
-                .arg(frameCount/(key-lastFpsKey), 0, 'f', 0)
-                .arg(ui->customPlot->graph(0)->data()->size()+ui->customPlot->graph(1)->data()->size())
-                , 0);*/
+        //ui->statusBar->showMessage(
+        //    QString("%1 FPS, Total Data points: %2")
+        //        .arg(frameCount/(key-lastFpsKey), 0, 'f', 0)
+        //        .arg(ui->customPlot->graph(0)->data()->size()+ui->customPlot->graph(1)->data()->size())
+        //        , 0);
         qDebug() << QString("%1 FPS, Total Data points: %2")
                         .arg(frameCount/(key-lastFpsKey), 0, 'f', 0)
                         .arg(ui->customPlot->graph(0)->data()->size()+ui->customPlot->graph(1)->data()->size());
         lastFpsKey = key;
         frameCount = 0;
     }
-}
+}*/

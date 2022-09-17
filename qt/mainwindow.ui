@@ -584,8 +584,8 @@
      <widget class="QLabel" name="Lb_deltaY">
       <property name="geometry">
        <rect>
-        <x>430</x>
-        <y>20</y>
+        <x>390</x>
+        <y>30</y>
         <width>21</width>
         <height>20</height>
        </rect>
@@ -602,8 +602,8 @@
      <widget class="QLabel" name="Lb_deltaX">
       <property name="geometry">
        <rect>
-        <x>320</x>
-        <y>20</y>
+        <x>390</x>
+        <y>10</y>
         <width>21</width>
         <height>20</height>
        </rect>
@@ -620,7 +620,7 @@
      <widget class="QLabel" name="Lb_deltaZ">
       <property name="geometry">
        <rect>
-        <x>540</x>
+        <x>510</x>
         <y>20</y>
         <width>21</width>
         <height>20</height>
@@ -638,9 +638,9 @@
      <widget class="QLabel" name="Num_deltaX">
       <property name="geometry">
        <rect>
-        <x>350</x>
-        <y>20</y>
-        <width>51</width>
+        <x>410</x>
+        <y>10</y>
+        <width>81</width>
         <height>20</height>
        </rect>
       </property>
@@ -665,9 +665,9 @@
      <widget class="QLabel" name="Num_deltaY">
       <property name="geometry">
        <rect>
-        <x>460</x>
-        <y>20</y>
-        <width>51</width>
+        <x>410</x>
+        <y>30</y>
+        <width>81</width>
         <height>20</height>
        </rect>
       </property>
@@ -692,9 +692,9 @@
      <widget class="QLabel" name="Num_deltaZ">
       <property name="geometry">
        <rect>
-        <x>560</x>
+        <x>520</x>
         <y>20</y>
-        <width>51</width>
+        <width>81</width>
         <height>20</height>
        </rect>
       </property>
@@ -815,9 +815,9 @@
      <widget class="QLabel" name="Num_deltaXa">
       <property name="geometry">
        <rect>
-        <x>40</x>
+        <x>30</x>
         <y>10</y>
-        <width>51</width>
+        <width>81</width>
         <height>20</height>
        </rect>
       </property>
@@ -842,9 +842,9 @@
      <widget class="QLabel" name="Num_deltaXb">
       <property name="geometry">
        <rect>
-        <x>40</x>
+        <x>30</x>
         <y>30</y>
-        <width>51</width>
+        <width>81</width>
         <height>20</height>
        </rect>
       </property>
@@ -869,7 +869,7 @@
      <widget class="QLabel" name="Lb_deltaYa">
       <property name="geometry">
        <rect>
-        <x>120</x>
+        <x>140</x>
         <y>10</y>
         <width>21</width>
         <height>20</height>
@@ -887,7 +887,7 @@
      <widget class="QLabel" name="Lb_deltaYb">
       <property name="geometry">
        <rect>
-        <x>120</x>
+        <x>140</x>
         <y>30</y>
         <width>21</width>
         <height>20</height>
@@ -905,9 +905,9 @@
      <widget class="QLabel" name="Num_deltaYb">
       <property name="geometry">
        <rect>
-        <x>150</x>
+        <x>160</x>
         <y>30</y>
-        <width>51</width>
+        <width>81</width>
         <height>20</height>
        </rect>
       </property>
@@ -932,9 +932,9 @@
      <widget class="QLabel" name="Num_deltaYa">
       <property name="geometry">
        <rect>
-        <x>150</x>
+        <x>160</x>
         <y>10</y>
-        <width>51</width>
+        <width>81</width>
         <height>20</height>
        </rect>
       </property>

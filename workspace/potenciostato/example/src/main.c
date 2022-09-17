@@ -261,7 +261,7 @@ static void vUSBTask(void *pvParameters) {
 
 					conf_adc.set = true;
 					conf_adc.frec = (conf_dac.velocidad * 1000) / amplitud_total;
-					conf_adc.nfilt = 10;
+					conf_adc.nfilt = 1;
 
 					// Se configura la ganancia en funcion a lo recibido desde la PC
 					ganancia_corriente = (uint8_t) (lecturaQT[12] & 0xFF);
