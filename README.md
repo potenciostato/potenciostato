@@ -6,7 +6,7 @@ El potenciostato es un dispositivo electrónico utilizado en la mayoría de los 
 Es un instrumento capaz de caracterizar la impedancia de una sustancia por medio de la medición de corriente y tensión.<br>
 
 Integrantes del grupo:
-- [Arluna, Gustavo Luis](mailto:gustavoarluna@gmail.com)<br>
+- [Arluna, Gustavo Luiss](mailto:gustavoarluna@gmail.com)<br>
 - [Gómez Caamaño, Axel Lucas](mailto:gomezaxel.lucas@gmail.com)<br>
 - [Trinidad, Hernán](mailto:hernantri@gmail.com)<br>
 
