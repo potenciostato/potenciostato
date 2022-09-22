@@ -370,7 +370,7 @@ void MainWindow::on_Bt_IniciarCiclico_clicked()
 
     /*
      * el mensaje a enviar, segun protocolo v4, sera:
-     * 0xA2;
+     * 0xA1;
      * 0x00;
      * 8 bits mas significativos de tension_punto1
      *  => ((tension_punto1 & 0x3FC0) >> 6);
