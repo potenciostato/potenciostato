@@ -261,7 +261,7 @@ static void vUSBTask(void *pvParameters) {
 
 					conf_adc.set = true;
 					conf_adc.frec = (conf_dac.velocidad * 1000) / amplitud_total;
-					conf_adc.nfilt = 1;
+					conf_adc.nfilt = 0;
 
 					// Se configura la ganancia en funcion a lo recibido desde la PC
 					ganancia_corriente = (uint8_t) (lecturaQT[12] & 0xFF);
@@ -602,30 +602,31 @@ static void vADCTask(struct ADCmsj *pvParameters) {
 				continue;
 			}
 
+			// Si esta activado el filtro, es decir, si las muestras a filtar son mayores a 1
 			// Se guardan las muestras
-			if (conf.nfilt >= 0) {
+			if (conf.nfilt > 1) {
 				medidas_i[indice_medida] = msjUSB.corriente;
 				medidas_v[indice_medida] = msjUSB.tension;
 				indice_medida++;
-			}
 
-			// El indice vuelve a cero, se completo la cantidad de muestras > comienza a filtrar
-			if(indice_medida >= conf.nfilt) {
-				cant_muestras_ok = true;
-				indice_medida = 0;
-			}
-
-			// Si se completo el buffer se comienza a filtrar
-			if (cant_muestras_ok) {
-				for(i=0;i<conf.nfilt;i++){
-					acum_v += medidas_v[i];
-					acum_i += medidas_i[i];
+				// El indice vuelve a cero, se completo la cantidad de muestras > comienza a filtrar
+				if(indice_medida >= conf.nfilt) {
+					cant_muestras_ok = true;
+					indice_medida = 0;
 				}
-				msjUSB.tension = acum_v / conf.nfilt;
-				msjUSB.corriente = acum_i / conf.nfilt;
-				// Se resetean los acumuladores
-				acum_v = 0;
-				acum_i = 0;
+
+				// Si se completo el buffer se comienza a filtrar
+				if (cant_muestras_ok) {
+					for(i=0;i<conf.nfilt;i++){
+						acum_v += medidas_v[i];
+						acum_i += medidas_i[i];
+					}
+					msjUSB.tension = acum_v / conf.nfilt;
+					msjUSB.corriente = acum_i / conf.nfilt;
+					// Se resetean los acumuladores
+					acum_v = 0;
+					acum_i = 0;
+				}
 			}
 
 			error = xQueueSendToBack(qADCsend, &msjUSB, 0);
