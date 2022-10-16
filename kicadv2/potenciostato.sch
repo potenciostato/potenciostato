@@ -828,19 +828,6 @@ Wire Wire Line
 Connection ~ 3800 2000
 Wire Wire Line
 	3800 2000 3350 2000
-$Comp
-L Device:D_Bridge_+-AA D?
-U 1 1 6322EBC2
-P 2350 1450
-AR Path="/6214974F/6322EBC2" Ref="D?"  Part="1" 
-AR Path="/6322EBC2" Ref="D1"  Part="1" 
-F 0 "D1" V 2396 1106 50  0000 R CNN
-F 1 "D_Bridge_+-AA" V 2305 1106 50  0000 R CNN
-F 2 "Diode_SMD:Diode_Bridge_Vishay_DFS" H 2350 1450 50  0001 C CNN
-F 3 "~" H 2350 1450 50  0001 C CNN
-	1    2350 1450
-	0    -1   -1   0   
-$EndComp
 Wire Wire Line
 	2350 1150 2350 950 
 Wire Wire Line
@@ -850,21 +837,9 @@ Wire Wire Line
 Wire Wire Line
 	2350 2000 3350 2000
 Wire Wire Line
-	1550 1250 1900 1250
-Wire Wire Line
-	1900 1250 1900 1450
-Wire Wire Line
 	1900 1450 2050 1450
 Wire Wire Line
 	2650 1450 2750 1450
-Wire Wire Line
-	2750 1450 2750 1850
-Wire Wire Line
-	2750 1850 1800 1850
-Wire Wire Line
-	1800 1850 1800 1650
-Wire Wire Line
-	1800 1650 1550 1650
 Wire Wire Line
 	1550 1450 1650 1450
 Wire Wire Line
@@ -977,4 +952,29 @@ Connection ~ 1250 4650
 Connection ~ 4600 2750
 Wire Wire Line
 	4600 2750 5700 2750
+$Comp
+L Device:D_Bridge_+-AA D?
+U 1 1 6322EBC2
+P 2350 1450
+AR Path="/6214974F/6322EBC2" Ref="D?"  Part="1" 
+AR Path="/6322EBC2" Ref="D1"  Part="1" 
+F 0 "D1" V 2396 1106 50  0000 R CNN
+F 1 "D_Bridge_+-AA" V 2305 1106 50  0000 R CNN
+F 2 "Diode_SMD:Diode_Bridge_Vishay_DFS" H 2350 1450 50  0001 C CNN
+F 3 "~" H 2350 1450 50  0001 C CNN
+	1    2350 1450
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	2200 1250 2200 1100
+Wire Wire Line
+	2200 1100 2750 1100
+Wire Wire Line
+	2750 1100 2750 1450
+Wire Wire Line
+	1550 1250 2200 1250
+Wire Wire Line
+	1900 1650 1900 1450
+Wire Wire Line
+	1550 1650 1900 1650
 $EndSCHEMATC
