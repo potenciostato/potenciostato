@@ -197,10 +197,10 @@ F 3 "" H 1150 1200 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L potenciostato-rescue:+5V-power #PWR0109
+L potenciostato-rescue:+5V-power #PWR04
 U 1 1 617B6A7C
 P 2050 2350
-F 0 "#PWR0109" H 2050 2200 50  0001 C CNN
+F 0 "#PWR04" H 2050 2200 50  0001 C CNN
 F 1 "+5V" H 2065 2527 50  0000 C CNN
 F 2 "" H 2050 2350 50  0001 C CNN
 F 3 "" H 2050 2350 50  0001 C CNN
@@ -208,10 +208,10 @@ F 3 "" H 2050 2350 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L potenciostato-rescue:-5V-power #PWR0103
+L potenciostato-rescue:-5V-power #PWR06
 U 1 1 601CC2C2
 P 6300 4500
-F 0 "#PWR0103" H 6300 4600 50  0001 C CNN
+F 0 "#PWR06" H 6300 4600 50  0001 C CNN
 F 1 "-5V" H 6315 4677 50  0000 C CNN
 F 2 "" H 6300 4500 50  0001 C CNN
 F 3 "" H 6300 4500 50  0001 C CNN
@@ -219,10 +219,10 @@ F 3 "" H 6300 4500 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L potenciostato-rescue:+5V-power #PWR0108
+L potenciostato-rescue:+5V-power #PWR07
 U 1 1 601CC639
 P 6300 5100
-F 0 "#PWR0108" H 6300 4950 50  0001 C CNN
+F 0 "#PWR07" H 6300 4950 50  0001 C CNN
 F 1 "+5V" H 6315 5277 50  0000 C CNN
 F 2 "" H 6300 5100 50  0001 C CNN
 F 3 "" H 6300 5100 50  0001 C CNN
@@ -230,10 +230,10 @@ F 3 "" H 6300 5100 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L potenciostato-rescue:+5V-power #PWR0102
+L potenciostato-rescue:+5V-power #PWR08
 U 1 1 601CC0FC
 P 6450 3050
-F 0 "#PWR0102" H 6450 2900 50  0001 C CNN
+F 0 "#PWR08" H 6450 2900 50  0001 C CNN
 F 1 "+5V" H 6465 3227 50  0000 C CNN
 F 2 "" H 6450 3050 50  0001 C CNN
 F 3 "" H 6450 3050 50  0001 C CNN
@@ -241,10 +241,10 @@ F 3 "" H 6450 3050 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L potenciostato-rescue:-5V-power #PWR0101
+L potenciostato-rescue:-5V-power #PWR09
 U 1 1 601CC089
 P 6450 3650
-F 0 "#PWR0101" H 6450 3750 50  0001 C CNN
+F 0 "#PWR09" H 6450 3750 50  0001 C CNN
 F 1 "-5V" H 6465 3827 50  0000 C CNN
 F 2 "" H 6450 3650 50  0001 C CNN
 F 3 "" H 6450 3650 50  0001 C CNN
@@ -252,10 +252,10 @@ F 3 "" H 6450 3650 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L potenciostato-rescue:-5V-power #PWR0105
+L potenciostato-rescue:-5V-power #PWR012
 U 1 1 601CC42A
 P 7600 2000
-F 0 "#PWR0105" H 7600 2100 50  0001 C CNN
+F 0 "#PWR012" H 7600 2100 50  0001 C CNN
 F 1 "-5V" H 7615 2177 50  0000 C CNN
 F 2 "" H 7600 2000 50  0001 C CNN
 F 3 "" H 7600 2000 50  0001 C CNN
@@ -263,10 +263,10 @@ F 3 "" H 7600 2000 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L potenciostato-rescue:+5V-power #PWR0106
+L potenciostato-rescue:+5V-power #PWR013
 U 1 1 601CC539
 P 7600 2600
-F 0 "#PWR0106" H 7600 2450 50  0001 C CNN
+F 0 "#PWR013" H 7600 2450 50  0001 C CNN
 F 1 "+5V" H 7615 2777 50  0000 C CNN
 F 2 "" H 7600 2600 50  0001 C CNN
 F 3 "" H 7600 2600 50  0001 C CNN
@@ -274,10 +274,10 @@ F 3 "" H 7600 2600 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L potenciostato-rescue:-5V-power #PWR0104
+L potenciostato-rescue:-5V-power #PWR014
 U 1 1 601CC383
 P 8400 4400
-F 0 "#PWR0104" H 8400 4500 50  0001 C CNN
+F 0 "#PWR014" H 8400 4500 50  0001 C CNN
 F 1 "-5V" H 8415 4577 50  0000 C CNN
 F 2 "" H 8400 4400 50  0001 C CNN
 F 3 "" H 8400 4400 50  0001 C CNN
@@ -285,10 +285,10 @@ F 3 "" H 8400 4400 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L potenciostato-rescue:+5V-power #PWR0107
+L potenciostato-rescue:+5V-power #PWR015
 U 1 1 601CC592
 P 8400 5000
-F 0 "#PWR0107" H 8400 4850 50  0001 C CNN
+F 0 "#PWR015" H 8400 4850 50  0001 C CNN
 F 1 "+5V" H 8415 5177 50  0000 C CNN
 F 2 "" H 8400 5000 50  0001 C CNN
 F 3 "" H 8400 5000 50  0001 C CNN
@@ -296,10 +296,10 @@ F 3 "" H 8400 5000 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L Connector:Conn_01x01_Female J10
+L Connector:Conn_01x01_Female J1
 U 1 1 6185E017
 P 1450 2900
-F 0 "J10" V 1388 2812 50  0000 R CNN
+F 0 "J1" V 1388 2812 50  0000 R CNN
 F 1 "Conn_01x01_Female" V 1297 2812 50  0000 R CNN
 F 2 "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical" H 1450 2900 50  0001 C CNN
 F 3 "~" H 1450 2900 50  0001 C CNN
@@ -307,10 +307,10 @@ F 3 "~" H 1450 2900 50  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L Connector:Conn_01x01_Female J11
+L Connector:Conn_01x01_Female J2
 U 1 1 6185DEE6
 P 1800 2900
-F 0 "J11" V 1738 2812 50  0000 R CNN
+F 0 "J2" V 1738 2812 50  0000 R CNN
 F 1 "Conn_01x01_Female" V 1647 2812 50  0000 R CNN
 F 2 "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical" H 1800 2900 50  0001 C CNN
 F 3 "~" H 1800 2900 50  0001 C CNN
@@ -318,10 +318,10 @@ F 3 "~" H 1800 2900 50  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L Connector:Conn_01x01_Female J12
+L Connector:Conn_01x01_Female J4
 U 1 1 6185D9DF
 P 2050 2900
-F 0 "J12" V 1988 2812 50  0000 R CNN
+F 0 "J4" V 1988 2812 50  0000 R CNN
 F 1 "Conn_01x01_Female" V 1897 2812 50  0000 R CNN
 F 2 "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical" H 2050 2900 50  0001 C CNN
 F 3 "~" H 2050 2900 50  0001 C CNN
@@ -329,10 +329,10 @@ F 3 "~" H 2050 2900 50  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L Connector:Conn_01x01_Female J4
+L Connector:Conn_01x01_Female J5
 U 1 1 6185139C
 P 5150 3600
-F 0 "J4" V 5088 3512 50  0000 R CNN
+F 0 "J5" V 5088 3512 50  0000 R CNN
 F 1 "Conn_01x01_Female" V 4997 3512 50  0000 R CNN
 F 2 "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical" H 5150 3600 50  0001 C CNN
 F 3 "~" H 5150 3600 50  0001 C CNN
@@ -340,10 +340,10 @@ F 3 "~" H 5150 3600 50  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L Connector:Conn_01x01_Female J5
+L Connector:Conn_01x01_Female J6
 U 1 1 61851AC8
 P 5300 3150
-F 0 "J5" V 5238 3062 50  0000 R CNN
+F 0 "J6" V 5238 3062 50  0000 R CNN
 F 1 "Conn_01x01_Female" V 5147 3062 50  0000 R CNN
 F 2 "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical" H 5300 3150 50  0001 C CNN
 F 3 "~" H 5300 3150 50  0001 C CNN
@@ -351,10 +351,10 @@ F 3 "~" H 5300 3150 50  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L Connector:Conn_01x01_Female J6
+L Connector:Conn_01x01_Female J7
 U 1 1 61851D11
 P 5550 2000
-F 0 "J6" V 5488 1912 50  0000 R CNN
+F 0 "J7" V 5488 1912 50  0000 R CNN
 F 1 "Conn_01x01_Female" V 5397 1912 50  0000 R CNN
 F 2 "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical" H 5550 2000 50  0001 C CNN
 F 3 "~" H 5550 2000 50  0001 C CNN
@@ -373,10 +373,10 @@ F 3 "" H 1000 1100 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L potenciostato-rescue:GND-power #PWR0130
+L potenciostato-rescue:GND-power #PWR05
 U 1 1 609B9D8E
 P 2050 3200
-F 0 "#PWR0130" H 2050 2950 50  0001 C CNN
+F 0 "#PWR05" H 2050 2950 50  0001 C CNN
 F 1 "GND" H 2055 3027 50  0000 C CNN
 F 2 "" H 2050 3200 50  0001 C CNN
 F 3 "" H 2050 3200 50  0001 C CNN
@@ -384,10 +384,10 @@ F 3 "" H 2050 3200 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L potenciostato-rescue:GND-power #PWR06
+L potenciostato-rescue:GND-power #PWR010
 U 1 1 5F9FAD4A
 P 6600 5000
-F 0 "#PWR06" H 6600 4750 50  0001 C CNN
+F 0 "#PWR010" H 6600 4750 50  0001 C CNN
 F 1 "GND" H 6605 4827 50  0000 C CNN
 F 2 "" H 6600 5000 50  0001 C CNN
 F 3 "" H 6600 5000 50  0001 C CNN
@@ -395,10 +395,10 @@ F 3 "" H 6600 5000 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L potenciostato-rescue:GND-power #PWR07
+L potenciostato-rescue:GND-power #PWR011
 U 1 1 5CC2A149
 P 7300 2500
-F 0 "#PWR07" H 7300 2250 50  0001 C CNN
+F 0 "#PWR011" H 7300 2250 50  0001 C CNN
 F 1 "GND" H 7305 2327 50  0000 C CNN
 F 2 "" H 7300 2500 50  0001 C CNN
 F 3 "" H 7300 2500 50  0001 C CNN
@@ -406,10 +406,10 @@ F 3 "" H 7300 2500 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L potenciostato-rescue:GND-power #PWR08
+L potenciostato-rescue:GND-power #PWR016
 U 1 1 5CC2AC7B
 P 8700 4900
-F 0 "#PWR08" H 8700 4650 50  0001 C CNN
+F 0 "#PWR016" H 8700 4650 50  0001 C CNN
 F 1 "GND" H 8705 4727 50  0000 C CNN
 F 2 "" H 8700 4900 50  0001 C CNN
 F 3 "" H 8700 4900 50  0001 C CNN
@@ -483,10 +483,10 @@ F 3 "~" H 8000 4050 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L potenciostato-rescue:Conn_01x03_Male-Connector J3
+L potenciostato-rescue:Conn_01x03_Male-Connector J8
 U 1 1 5D250C0E
 P 9950 3350
-F 0 "J3" H 9922 3282 50  0000 R CNN
+F 0 "J8" H 9922 3282 50  0000 R CNN
 F 1 "Conn_01x03_Male" H 9922 3373 50  0000 R CNN
 F 2 "Connector:FanPinHeader_1x03_P2.54mm_Vertical" H 9950 3350 50  0001 C CNN
 F 3 "~" H 9950 3350 50  0001 C CNN
@@ -494,10 +494,10 @@ F 3 "~" H 9950 3350 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L potenciostato-rescue:Conn_01x03_Female-Connector J1
+L potenciostato-rescue:Conn_01x03_Female-Connector J3
 U 1 1 5CDF8979
 P 1850 1100
-F 0 "J1" H 1550 900 50  0000 L CNN
+F 0 "J3" H 1550 900 50  0000 L CNN
 F 1 "Conn_01x03_Female" H 1250 1300 50  0000 L CNN
 F 2 "Connector:FanPinHeader_1x03_P2.54mm_Vertical" H 1850 1100 50  0001 C CNN
 F 3 "~" H 1850 1100 50  0001 C CNN
@@ -509,8 +509,8 @@ L salida_dac-rescue:R_POT-Device RV?
 U 1 1 617C0F32
 P 8650 4050
 AR Path="/6013BA2D/617C0F32" Ref="RV?"  Part="1" 
-AR Path="/617C0F32" Ref="RV4"  Part="1" 
-F 0 "RV4" V 8534 4050 50  0000 C CNN
+AR Path="/617C0F32" Ref="RV1"  Part="1" 
+F 0 "RV1" V 8534 4050 50  0000 C CNN
 F 1 "1K" V 8441 4050 50  0000 C CNN
 F 2 "Potentiometer_THT:Potentiometer_Bourns_3266Y_Vertical" H 8650 4050 50  0001 C CNN
 F 3 "~" H 8650 4050 50  0001 C CNN
