@@ -327,7 +327,7 @@ static void vUSBTask(void *pvParameters) {
                 error = xQueueSendToBack(qDAC,&conf_dac,0);
                 error = xQueueSendToBack(qADC,&conf_adc,0);
 
-                break;
+                //break;
 
             case OC_ENDMEASUREMENT:
                 // Se limpian las colas de las mediciones
@@ -493,29 +493,31 @@ static void vDACTask(struct DACmsj *pvParameters) {
 						Chip_TIMER_ResetOnMatchEnable(LPC_TIMER1, 1);
 					}
 					for(j=0;j<GEN_CANT_MUESTRAS_MAX;j++){
-					if (flanco == PRIMER_FLANCO)
-						Chip_DAC_UpdateValue(LPC_DAC, gen_vector_valores_subida[j]);
-					if (flanco == SEGUNDO_FLANCO)
-						Chip_DAC_UpdateValue(LPC_DAC, gen_vector_valores_bajada[j]);
+						if (flanco == PRIMER_FLANCO)
+							Chip_DAC_UpdateValue(LPC_DAC, gen_vector_valores_subida[j]);
+						if (flanco == SEGUNDO_FLANCO)
+							Chip_DAC_UpdateValue(LPC_DAC, gen_vector_valores_bajada[j]);
 
-					// Delay por timer
-					NVIC_ClearPendingIRQ(TIMER1_IRQn);
-					NVIC_EnableIRQ(TIMER1_IRQn);
-					xQueueReceive(qDAC, &conf, 0);
-					if(conf.set == false){
-						// Finaliza la tarea
-						Chip_DAC_UpdateValue(LPC_DAC, gen_valor_retencion);
-
-						if (debugging == ENABLED)
-							DEBUGOUT("DAC: Deshabilitado\n");
-						midiendo = false;
-
-						NVIC_DisableIRQ(TIMER1_IRQn);
+						// Delay por timer
 						NVIC_ClearPendingIRQ(TIMER1_IRQn);
+						NVIC_EnableIRQ(TIMER1_IRQn);
+						xQueueReceive(qDAC, &conf, 0);
+						if(conf.set == false){
+							// Finaliza la tarea
+							Chip_DAC_UpdateValue(LPC_DAC, gen_valor_retencion);
+
+							if (debugging == ENABLED)
+								DEBUGOUT("DAC: Deshabilitado\n");
+							midiendo = false;
+
+							vTaskDelay(1000/portTICK_RATE_MS); //Se espera 1 segundo por las dudas
+
+							NVIC_DisableIRQ(TIMER1_IRQn);
+							NVIC_ClearPendingIRQ(TIMER1_IRQn);
+							xSemaphoreTake(sDACdelay, ( portTickType ) TAKE_TIMEOUT);
+							vTaskDelete(NULL);
+						}
 						xSemaphoreTake(sDACdelay, ( portTickType ) TAKE_TIMEOUT);
-						vTaskDelete(NULL);
-					}
-					xSemaphoreTake(sDACdelay, ( portTickType ) TAKE_TIMEOUT);
 					}
 				}
 			}
@@ -525,6 +527,7 @@ static void vDACTask(struct DACmsj *pvParameters) {
 			DEBUGOUT("DAC: ABORT\n");
 
 		midiendo = false;
+		vTaskDelay(1000/portTICK_RATE_MS); //Se espera 1 segundo por las dudas
 
 		// Si algo falla se reintenta TODO: no implementado todavia
 		if(DACfail)
@@ -655,6 +658,7 @@ static void vADCTask(struct ADCmsj *pvParameters) {
 				i=0;
 			}
 		}
+
 	}
 	if (debugging == ENABLED)
 		DEBUGOUT("ADC: Deshabilita medicion ADC\n");
