@@ -19,6 +19,9 @@ int p_refrescado = 0;
 
 char metodo[30] = "BarridoCiclico"; //TODO: rehacer la verificacion del modo con defines
 int medicion_habilitada = 0;
+bool habilitar_abortar = false, habilitar_iniciar = false;
+int habilitar_abortar_ms = MILISEGUNDOS_BOTON, habilitar_iniciar_ms = MILISEGUNDOS_BOTON;
+
 int estado_cursor = SIN_SELECCIONAR;
 bool flag_inicial = true;
 float a_med_x=0, a_med_y=0, b_med_x=0, b_med_y=0, med_z=0;
@@ -111,6 +114,8 @@ void MainWindow::onTimeout(){
     unsigned int cuentas_corriente, cuentas_tension;
     float volts_tension, volts_corriente;
     //qDebug() << clock() << "TimeOut";
+
+    // Se reciben los reportes de USB
     for(i=0;i<REPORTES_A_RECIBIR;i++){
         //Se envia inicio de medición al LPC
         if (connected == 1 && medicion_habilitada == 1){
@@ -204,6 +209,24 @@ void MainWindow::onTimeout(){
             }
         }
     }
+
+    //Se verifica la habilitación de los botones abortar y iniciar
+    if (habilitar_abortar == true && habilitar_abortar_ms > 0){
+        habilitar_abortar_ms -= MILISEGUNDOS_POLLING;
+    }
+    if (habilitar_abortar == true && habilitar_abortar_ms <= 0){
+        habilitar_abortar = false;
+        ui->Bt_Abortar->setEnabled(true);
+    }
+
+    if (habilitar_iniciar == true && habilitar_iniciar_ms > 0){
+        habilitar_iniciar_ms -= MILISEGUNDOS_POLLING;
+    }
+    if (habilitar_iniciar == true && habilitar_iniciar_ms <= 0){
+        habilitar_iniciar = false;
+        ui->Bt_IniciarCiclico->setEnabled(true);
+    }
+
 }
 
 // Funcion para inicializar las curvas de los graficos
@@ -291,7 +314,9 @@ void MainWindow::terminoMedicion(){
     qDebug() << "codigo recepcion" << recv_ret;
     qDebug() << "dato recibido[0]" << recv_data[0];
 
-    ui->Bt_IniciarCiclico->setEnabled(true);
+    // Se habilita el boton de iniciar transcurridos 5 segundos
+    habilitar_iniciar = true;
+    habilitar_iniciar_ms = MILISEGUNDOS_BOTON;
     ui->Bt_Abortar->setEnabled(false);
     ui->Bt_Exportar->setEnabled(true);
 }
@@ -441,8 +466,9 @@ void MainWindow::on_Bt_IniciarCiclico_clicked()
     //Se activa la medicion en el Timer
     medicion_habilitada = 1;
 
-    //Habilita abortar
-    ui->Bt_Abortar->setEnabled(true);
+    // Se habilita el boton de abortar transcurridos 5 segundos
+    habilitar_abortar = true;
+    habilitar_abortar_ms = MILISEGUNDOS_BOTON;
 }
 
 void MainWindow::on_Bt_Abortar_clicked()

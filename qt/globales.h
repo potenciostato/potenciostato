@@ -47,6 +47,7 @@ int8_t Dispositivo = -1;
 #define MV_TENSION_MAXIMA 3300
 
 #define MILISEGUNDOS_POLLING 50 //cantidad de milisegundos entre rafagas de REPORTES_A_RECIBIR
+#define MILISEGUNDOS_BOTON 3000 //cantidad de milisegundos para habilitar los botones de iniciar y abortar
 
 #define POS_X_MINIMA 46
 #define POS_X_MAXIMA 736

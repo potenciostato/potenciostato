@@ -327,7 +327,7 @@ static void vUSBTask(void *pvParameters) {
                 error = xQueueSendToBack(qDAC,&conf_dac,0);
                 error = xQueueSendToBack(qADC,&conf_adc,0);
 
-                //break;
+                break;
 
             case OC_ENDMEASUREMENT:
                 // Se limpian las colas de las mediciones
