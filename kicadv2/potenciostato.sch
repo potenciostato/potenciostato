@@ -21,7 +21,7 @@ Connection ~ 7200 3800
 Connection ~ 8200 5150
 NoConn ~ 4950 7850
 Wire Wire Line
-	4050 2750 4600 2750
+	4050 2750 4550 2750
 Wire Wire Line
 	4550 3900 4050 3900
 Wire Wire Line
@@ -37,7 +37,7 @@ Wire Wire Line
 Wire Wire Line
 	5900 4000 6000 4000
 Wire Wire Line
-	6000 2750 6200 2750
+	5750 2750 6200 2750
 Wire Wire Line
 	6000 4000 6000 4350
 Wire Wire Line
@@ -206,12 +206,12 @@ $EndComp
 $Comp
 L potenciostato-rescue:Conn_01x01_Female-Connector J6
 U 1 1 61851D11
-P 4600 2550
-F 0 "J6" V 4538 2462 50  0000 R CNN
-F 1 "test_DAC" V 4447 2462 50  0000 R CNN
-F 2 "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical" H 4600 2550 50  0001 C CNN
-F 3 "~" H 4600 2550 50  0001 C CNN
-	1    4600 2550
+P 4550 2550
+F 0 "J6" V 4488 2462 50  0000 R CNN
+F 1 "test_DAC" V 4397 2462 50  0000 R CNN
+F 2 "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical" H 4550 2550 50  0001 C CNN
+F 3 "~" H 4550 2550 50  0001 C CNN
+	1    4550 2550
 	0    -1   -1   0   
 $EndComp
 $Comp
@@ -272,12 +272,12 @@ $EndComp
 $Comp
 L potenciostato-rescue:R-Device R2
 U 1 1 5CC25964
-P 5850 2750
-F 0 "R2" V 5643 2750 50  0000 C CNN
-F 1 "100K" V 5734 2750 50  0000 C CNN
-F 2 "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder" V 5780 2750 50  0001 C CNN
-F 3 "~" H 5850 2750 50  0001 C CNN
-	1    5850 2750
+P 5600 2750
+F 0 "R2" V 5393 2750 50  0000 C CNN
+F 1 "100K" V 5484 2750 50  0000 C CNN
+F 2 "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder" V 5530 2750 50  0001 C CNN
+F 3 "~" H 5600 2750 50  0001 C CNN
+	1    5600 2750
 	0    1    1    0   
 $EndComp
 $Comp
@@ -294,12 +294,12 @@ $EndComp
 $Comp
 L potenciostato-rescue:R-Device R4
 U 1 1 5F9FD20A
-P 6400 5250
-F 0 "R4" V 6193 5250 50  0000 C CNN
-F 1 "10K" V 6284 5250 50  0000 C CNN
-F 2 "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder" V 6330 5250 50  0001 C CNN
-F 3 "~" H 6400 5250 50  0001 C CNN
-	1    6400 5250
+P 6500 5250
+F 0 "R4" V 6293 5250 50  0000 C CNN
+F 1 "10K" V 6384 5250 50  0000 C CNN
+F 2 "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder" V 6430 5250 50  0001 C CNN
+F 3 "~" H 6500 5250 50  0001 C CNN
+	1    6500 5250
 	0    1    1    0   
 $EndComp
 $Comp
@@ -551,7 +551,7 @@ Wire Wire Line
 Wire Wire Line
 	2650 3950 3050 3950
 Wire Wire Line
-	6250 5250 6150 5250
+	6350 5250 6150 5250
 Wire Wire Line
 	6150 5250 6150 6800
 $Comp
@@ -601,13 +601,13 @@ S 3050 2650 1000 1900
 U 6013BA2D
 F0 "salida_dac" 50
 F1 "salida_dac.sch" 50
-F2 "VIN" I R 4050 2750 50 
+F2 "VIN" O R 4050 2750 50 
 F3 "I_IN" I L 3050 3700 50 
 F4 "V_IN" I R 4050 3900 50 
-F5 "gan_x1" I L 3050 4250 50 
-F6 "gan_x5" I L 3050 4100 50 
-F7 "gan_x0.1" I L 3050 4400 50 
-F8 "gan_x10" I L 3050 3950 50 
+F5 "gan_x1" O L 3050 4250 50 
+F6 "gan_x5" O L 3050 4100 50 
+F7 "gan_x0.1" O L 3050 4400 50 
+F8 "gan_x10" O L 3050 3950 50 
 $EndSheet
 Wire Wire Line
 	3050 6900 2550 6900
@@ -628,8 +628,6 @@ F 3 "~" H 4550 3700 50  0001 C CNN
 	1    4550 3700
 	0    -1   -1   0   
 $EndComp
-Wire Wire Line
-	6550 5250 6850 5250
 Wire Wire Line
 	7700 4600 8200 4600
 Wire Wire Line
@@ -949,9 +947,6 @@ Wire Wire Line
 Wire Wire Line
 	900  4650 1250 4650
 Connection ~ 1250 4650
-Connection ~ 4600 2750
-Wire Wire Line
-	4600 2750 5700 2750
 $Comp
 L Device:D_Bridge_+-AA D?
 U 1 1 6322EBC2
@@ -977,4 +972,9 @@ Wire Wire Line
 	1900 1650 1900 1450
 Wire Wire Line
 	1550 1650 1900 1650
+Wire Wire Line
+	6650 5250 6850 5250
+Connection ~ 4550 2750
+Wire Wire Line
+	4550 2750 5450 2750
 $EndSCHEMATC

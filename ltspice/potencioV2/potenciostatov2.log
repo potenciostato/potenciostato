@@ -1,4 +1,4 @@
-Circuit: * C:\Facultad\proyecto final\potenciostato\ltspice\potencioV2\potenciostatov2.asc
+Circuit: * D:\UTN\Proyecto Final\drive\desarrollo\software\repo\proyecto-final\ltspice\potencioV2\potenciostatov2.asc
 
 Direct Newton iteration failed to find .op point.  (Use ".option noopiter" to skip.)
 Starting Gmin stepping
@@ -37,21 +37,21 @@ Source Step = 93.9394%
 Source stepping succeeded in finding the operating point.
 
 
-Date: Thu Oct 27 23:12:12 2022
-Total elapsed time: 0.877 seconds.
+Date: Sat Oct 29 16:43:29 2022
+Total elapsed time: 1.286 seconds.
 
 tnom = 27
 temp = 27
 method = modified trap
-totiter = 6910
+totiter = 6898
 traniter = 2096
 tranpoints = 1049
 accept = 1049
 rejected = 0
-matrix size = 70
-fillins = 110
+matrix size = 69
+fillins = 107
 solver = Normal
-Thread vector: 28.4/12.1[8] 9.1/4.4[8] 5.3/3.2[8] 0.4/3.8[1]  2592/500
-Matrix Compiler1: 9.10 KB object code size  2.9/1.4/[0.6]
-Matrix Compiler2: 9.70 KB object code size  1.6/1.7/[0.5]
+Thread vector: 23.5/14.9[8] 17.6/11.4[8] 11.8/7.9[8] 0.3/1.2[1]  2592/500
+Matrix Compiler1: 9.09 KB object code size  5.6/3.1/[1.4]
+Matrix Compiler2: 9.48 KB object code size  1.2/2.0/[0.4]
 
