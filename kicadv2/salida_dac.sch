@@ -525,8 +525,6 @@ Wire Wire Line
 Wire Wire Line
 	3850 6850 3650 6850
 Wire Wire Line
-	3650 7300 4700 7300
-Wire Wire Line
 	4700 6750 4950 6750
 Connection ~ 4700 6750
 Text Label 5200 6500 0    50   ~ 0
@@ -656,10 +654,6 @@ Wire Wire Line
 	2750 6450 2750 6750
 Wire Wire Line
 	4950 6750 4950 6500
-Wire Wire Line
-	3650 6850 3650 7300
-Wire Wire Line
-	4700 6750 4700 7300
 Wire Wire Line
 	4950 6500 5200 6500
 Wire Wire Line
@@ -810,4 +804,19 @@ Wire Wire Line
 	4500 2750 6400 2750
 Wire Wire Line
 	4500 3050 6200 3050
+$Comp
+L potenciostato-rescue:GND-power #PWR?
+U 1 1 635F5223
+P 3650 7250
+AR Path="/60147E53/635F5223" Ref="#PWR?"  Part="1" 
+AR Path="/6013BA2D/635F5223" Ref="#PWR?"  Part="1" 
+F 0 "#PWR?" H 3650 7000 50  0001 C CNN
+F 1 "GND" H 3655 7073 50  0000 C CNN
+F 2 "" H 3650 7250 50  0001 C CNN
+F 3 "" H 3650 7250 50  0001 C CNN
+	1    3650 7250
+	-1   0    0    -1  
+$EndComp
+Wire Wire Line
+	3650 6850 3650 7250
 $EndSCHEMATC
