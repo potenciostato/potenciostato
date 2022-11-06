@@ -503,7 +503,7 @@ Wire Wire Line
 Wire Wire Line
 	1450 6650 1900 6650
 Text Notes 8500 4700 0    50   ~ 0
-Amplificador Tension Inversor de ganancia unitaria (-1)\nla señal de dac y agrega -VOffset para que la salida tenga\nvalor medio nulo\n(AMP T1)
+Amplificador Tension Inversor de ganancia unitaria (-1)\nla señal de dac y agrega -VOffset para que la salida\ntenga valor medio nulo\n(AMP T1)
 Text Notes 8500 1150 0    50   ~ 0
 Amplificador Inversor con ganancia unitaria y offset,\nadapta la señal a 0-3.3V\n(AMP I2)
 Text Notes 2250 6100 0    50   ~ 0
@@ -525,8 +525,6 @@ Wire Wire Line
 Wire Wire Line
 	3850 6850 3650 6850
 Wire Wire Line
-	3650 7300 4700 7300
-Wire Wire Line
 	4700 6750 4950 6750
 Connection ~ 4700 6750
 Text Label 5200 6500 0    50   ~ 0
@@ -539,8 +537,8 @@ U 1 1 635F7680
 P 4250 6200
 AR Path="/635F7680" Ref="R?"  Part="1" 
 AR Path="/5F899696/635F7680" Ref="R?"  Part="1" 
-AR Path="/6013BA2D/635F7680" Ref="R?"  Part="1" 
-F 0 "R?" V 4043 6200 50  0000 C CNN
+AR Path="/6013BA2D/635F7680" Ref="R20"  Part="1" 
+F 0 "R20" V 4043 6200 50  0000 C CNN
 F 1 "10K" V 4134 6200 50  0000 C CNN
 F 2 "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder" V 4180 6200 50  0001 C CNN
 F 3 "~" H 4250 6200 50  0001 C CNN
@@ -553,8 +551,8 @@ U 1 1 635FE6C2
 P 3550 6650
 AR Path="/635FE6C2" Ref="R?"  Part="1" 
 AR Path="/5F899696/635FE6C2" Ref="R?"  Part="1" 
-AR Path="/6013BA2D/635FE6C2" Ref="R?"  Part="1" 
-F 0 "R?" V 3343 6650 50  0000 C CNN
+AR Path="/6013BA2D/635FE6C2" Ref="R16"  Part="1" 
+F 0 "R16" V 3343 6650 50  0000 C CNN
 F 1 "10K" V 3434 6650 50  0000 C CNN
 F 2 "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder" V 3480 6650 50  0001 C CNN
 F 3 "~" H 3550 6650 50  0001 C CNN
@@ -564,34 +562,34 @@ $EndComp
 Wire Wire Line
 	2750 6750 3200 6750
 $Comp
-L Amplifier_Operational:TL082 U?
+L Amplifier_Operational:TL082 U9
 U 1 1 63602CFE
 P 2200 6750
-F 0 "U?" H 2300 7100 50  0000 C CNN
+F 0 "U9" H 2300 7100 50  0000 C CNN
 F 1 "TL082" H 2300 7000 50  0000 C CNN
-F 2 "" H 2200 6750 50  0001 C CNN
+F 2 "Package_DIP:DIP-8_W7.62mm_LongPads" H 2200 6750 50  0001 C CNN
 F 3 "http://www.ti.com/lit/ds/symlink/tl081.pdf" H 2200 6750 50  0001 C CNN
 	1    2200 6750
 	1    0    0    -1  
 $EndComp
 $Comp
-L Amplifier_Operational:TL082 U?
+L Amplifier_Operational:TL082 U9
 U 2 1 63604C97
 P 4150 6750
-F 0 "U?" H 4150 7117 50  0000 C CNN
+F 0 "U9" H 4150 7117 50  0000 C CNN
 F 1 "TL082" H 4150 7026 50  0000 C CNN
-F 2 "" H 4150 6750 50  0001 C CNN
+F 2 "Package_DIP:DIP-8_W7.62mm_LongPads" H 4150 6750 50  0001 C CNN
 F 3 "http://www.ti.com/lit/ds/symlink/tl081.pdf" H 4150 6750 50  0001 C CNN
 	2    4150 6750
 	1    0    0    -1  
 $EndComp
 $Comp
-L Amplifier_Operational:TL082 U?
+L Amplifier_Operational:TL082 U9
 U 3 1 63615A45
 P 2200 6750
-F 0 "U?" H 2158 6796 50  0000 L CNN
+F 0 "U9" H 2158 6796 50  0000 L CNN
 F 1 "TL082" H 2158 6705 50  0000 L CNN
-F 2 "" H 2200 6750 50  0001 C CNN
+F 2 "Package_DIP:DIP-8_W7.62mm_LongPads" H 2200 6750 50  0001 C CNN
 F 3 "http://www.ti.com/lit/ds/symlink/tl081.pdf" H 2200 6750 50  0001 C CNN
 	3    2200 6750
 	1    0    0    -1  
@@ -602,15 +600,6 @@ Wire Wire Line
 	10000 6000 10000 6200
 Wire Wire Line
 	10000 6200 10100 6200
-Wire Wire Line
-	10700 6100 10800 6100
-Wire Wire Line
-	10800 6100 10800 5750
-Wire Wire Line
-	10800 5750 10000 5750
-Wire Wire Line
-	10000 5750 10000 6000
-Connection ~ 10000 6000
 Wire Wire Line
 	3850 6650 3800 6650
 Wire Wire Line
@@ -623,10 +612,10 @@ Wire Wire Line
 Wire Wire Line
 	4400 6200 4700 6200
 $Comp
-L power:-5V #PWR?
+L power:-5V #PWR0109
 U 1 1 6365A963
 P 2100 7050
-F 0 "#PWR?" H 2100 7150 50  0001 C CNN
+F 0 "#PWR0109" H 2100 7150 50  0001 C CNN
 F 1 "-5V" H 2115 7223 50  0000 C CNN
 F 2 "" H 2100 7050 50  0001 C CNN
 F 3 "" H 2100 7050 50  0001 C CNN
@@ -638,10 +627,10 @@ Wire Wire Line
 Wire Wire Line
 	1700 6850 1700 7300
 $Comp
-L power:+5V #PWR?
+L power:+5V #PWR0110
 U 1 1 63667AD1
 P 2100 6450
-F 0 "#PWR?" H 2100 6300 50  0001 C CNN
+F 0 "#PWR0110" H 2100 6300 50  0001 C CNN
 F 1 "+5V" H 2115 6623 50  0000 C CNN
 F 2 "" H 2100 6450 50  0001 C CNN
 F 3 "" H 2100 6450 50  0001 C CNN
@@ -657,20 +646,16 @@ Wire Wire Line
 Wire Wire Line
 	4950 6750 4950 6500
 Wire Wire Line
-	3650 6850 3650 7300
-Wire Wire Line
-	4700 6750 4700 7300
-Wire Wire Line
 	4950 6500 5200 6500
 Wire Wire Line
 	7450 5100 7450 5300
 Wire Wire Line
 	7450 5300 7250 5300
 $Comp
-L power:GND #PWR?
+L power:GND #PWR0111
 U 1 1 63699AB5
 P 7650 5300
-F 0 "#PWR?" H 7650 5050 50  0001 C CNN
+F 0 "#PWR0111" H 7650 5050 50  0001 C CNN
 F 1 "GND" H 7655 5127 50  0000 C CNN
 F 2 "" H 7650 5300 50  0001 C CNN
 F 3 "" H 7650 5300 50  0001 C CNN
@@ -698,8 +683,8 @@ U 1 1 636D2235
 P 8250 3850
 AR Path="/636D2235" Ref="R?"  Part="1" 
 AR Path="/5F899696/636D2235" Ref="R?"  Part="1" 
-AR Path="/6013BA2D/636D2235" Ref="R?"  Part="1" 
-F 0 "R?" V 8043 3850 50  0000 C CNN
+AR Path="/6013BA2D/636D2235" Ref="R23"  Part="1" 
+F 0 "R23" V 8043 3850 50  0000 C CNN
 F 1 "10K" V 8134 3850 50  0000 C CNN
 F 2 "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder" V 8180 3850 50  0001 C CNN
 F 3 "~" H 8250 3850 50  0001 C CNN
@@ -712,10 +697,10 @@ Connection ~ 8250 3650
 Wire Wire Line
 	7950 3650 8250 3650
 $Comp
-L power:GND #PWR?
+L power:GND #PWR0112
 U 1 1 636DBEAE
 P 8250 4050
-F 0 "#PWR?" H 8250 3800 50  0001 C CNN
+F 0 "#PWR0112" H 8250 3800 50  0001 C CNN
 F 1 "GND" H 8255 3877 50  0000 C CNN
 F 2 "" H 8250 4050 50  0001 C CNN
 F 3 "" H 8250 4050 50  0001 C CNN
@@ -752,8 +737,8 @@ U 1 1 63757CA9
 P 8250 2350
 AR Path="/63757CA9" Ref="R?"  Part="1" 
 AR Path="/5F899696/63757CA9" Ref="R?"  Part="1" 
-AR Path="/6013BA2D/63757CA9" Ref="R?"  Part="1" 
-F 0 "R?" V 8043 2350 50  0000 C CNN
+AR Path="/6013BA2D/63757CA9" Ref="R22"  Part="1" 
+F 0 "R22" V 8043 2350 50  0000 C CNN
 F 1 "10K" V 8134 2350 50  0000 C CNN
 F 2 "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder" V 8180 2350 50  0001 C CNN
 F 3 "~" H 8250 2350 50  0001 C CNN
@@ -763,10 +748,10 @@ $EndComp
 Wire Wire Line
 	8250 2150 8250 2200
 $Comp
-L power:GND #PWR?
+L power:GND #PWR0113
 U 1 1 63757CB2
 P 8250 2550
-F 0 "#PWR?" H 8250 2300 50  0001 C CNN
+F 0 "#PWR0113" H 8250 2300 50  0001 C CNN
 F 1 "GND" H 8255 2377 50  0000 C CNN
 F 2 "" H 8250 2550 50  0001 C CNN
 F 3 "" H 8250 2550 50  0001 C CNN
@@ -810,4 +795,19 @@ Wire Wire Line
 	4500 2750 6400 2750
 Wire Wire Line
 	4500 3050 6200 3050
+$Comp
+L potenciostato-rescue:GND-power #PWR?
+U 1 1 635F5223
+P 3650 7250
+AR Path="/60147E53/635F5223" Ref="#PWR?"  Part="1" 
+AR Path="/6013BA2D/635F5223" Ref="#PWR0114"  Part="1" 
+F 0 "#PWR0114" H 3650 7000 50  0001 C CNN
+F 1 "GND" H 3655 7073 50  0000 C CNN
+F 2 "" H 3650 7250 50  0001 C CNN
+F 3 "" H 3650 7250 50  0001 C CNN
+	1    3650 7250
+	-1   0    0    -1  
+$EndComp
+Wire Wire Line
+	3650 6850 3650 7250
 $EndSCHEMATC
