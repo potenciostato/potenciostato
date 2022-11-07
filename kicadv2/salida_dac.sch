@@ -378,7 +378,7 @@ AR Path="/60147E53/6318DCF3" Ref="J?"  Part="1"
 AR Path="/6013BA2D/6318DCF3" Ref="J8"  Part="1" 
 F 0 "J8" H 6450 2850 50  0000 R CNN
 F 1 "test_V" H 6600 2950 50  0000 R CNN
-F 2 "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical" H 6500 3050 50  0001 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical" H 6500 3050 50  0001 C CNN
 F 3 "~" H 6500 3050 50  0001 C CNN
 	1    6500 3050
 	1    0    0    1   
@@ -782,7 +782,7 @@ AR Path="/60147E53/6318DCE3" Ref="J?"  Part="1"
 AR Path="/6013BA2D/6318DCE3" Ref="J7"  Part="1" 
 F 0 "J7" H 6550 2250 50  0000 R CNN
 F 1 "test_I" H 6650 2350 50  0000 R CNN
-F 2 "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical" H 6600 2450 50  0001 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical" H 6600 2450 50  0001 C CNN
 F 3 "~" H 6600 2450 50  0001 C CNN
 	1    6600 2450
 	1    0    0    1   

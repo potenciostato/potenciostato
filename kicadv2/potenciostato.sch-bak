@@ -977,4 +977,26 @@ Wire Wire Line
 Connection ~ 4550 2750
 Wire Wire Line
 	4550 2750 5450 2750
+$Comp
+L potenciostato-rescue:Conn_01x01_Female-Connector J13
+U 1 1 63685931
+P 950 1650
+F 0 "J13" H 888 1562 50  0000 R CNN
+F 1 "AC2" H 1100 1450 50  0000 R CNN
+F 2 "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical" H 950 1650 50  0001 C CNN
+F 3 "~" H 950 1650 50  0001 C CNN
+	1    950  1650
+	-1   0    0    1   
+$EndComp
+$Comp
+L potenciostato-rescue:Conn_01x01_Female-Connector J9
+U 1 1 636995B8
+P 950 1250
+F 0 "J9" H 888 1162 50  0000 R CNN
+F 1 "AC1" H 1100 1050 50  0000 R CNN
+F 2 "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical" H 950 1250 50  0001 C CNN
+F 3 "~" H 950 1250 50  0001 C CNN
+	1    950  1250
+	-1   0    0    1   
+$EndComp
 $EndSCHEMATC
