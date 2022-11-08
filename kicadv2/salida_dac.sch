@@ -230,13 +230,11 @@ AR Path="/60147E53/6318DCB8" Ref="J?"  Part="1"
 AR Path="/6013BA2D/6318DCB8" Ref="J1"  Part="1" 
 F 0 "J1" H 1070 2146 50  0000 R CNN
 F 1 "USB_B_Micro" H 1070 2239 50  0000 R CNN
-F 2 "Connector_USB:USB_Mini-B_Wuerth_65100516121_Horizontal" H 1450 2200 50  0001 C CNN
+F 2 "kicadv2:ModuloUSB-Micro" H 1450 2200 50  0001 C CNN
 F 3 "~" H 1450 2200 50  0001 C CNN
 	1    1300 2250
 	1    0    0    1   
 $EndComp
-Wire Wire Line
-	750  1700 1200 1700
 $Comp
 L potenciostato-rescue:GND-power #PWR?
 U 1 1 6318DCCE
@@ -250,11 +248,6 @@ F 3 "" H 750 1700 50  0001 C CNN
 	1    750  1700
 	-1   0    0    -1  
 $EndComp
-Wire Wire Line
-	1200 1850 1200 1700
-Connection ~ 1200 1700
-Wire Wire Line
-	1200 1700 1300 1700
 $Comp
 L potenciostato-rescue:LPCXPRESSO_LPC1769-LPCXPRESSO_LPC1769 LPC?
 U 1 1 6318DCAF
@@ -810,4 +803,16 @@ F 3 "" H 3650 7250 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	3650 6850 3650 7250
+Wire Wire Line
+	750  1700 1000 1700
+Wire Wire Line
+	1100 1850 1100 1700
+Connection ~ 1100 1700
+Wire Wire Line
+	1000 1850 1000 1700
+Connection ~ 1000 1700
+Wire Wire Line
+	1000 1700 1100 1700
+Wire Wire Line
+	1100 1700 1300 1700
 $EndSCHEMATC

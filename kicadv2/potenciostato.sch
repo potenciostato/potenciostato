@@ -729,7 +729,7 @@ AR Path="/6214974F/6322EB8D" Ref="TR?"  Part="1"
 AR Path="/6322EB8D" Ref="TR1"  Part="1" 
 F 0 "TR1" H 1350 1831 50  0000 C CNN
 F 1 "ADT2-71T" H 1350 1740 50  0000 C CNN
-F 2 "RF_Mini-Circuits:Mini-Circuits_CD637_H5.23mm" H 1350 1100 50  0001 C CNN
+F 2 "kicadv2:Transformador_7.5V" H 1350 1100 50  0001 C CNN
 F 3 "https://www.minicircuits.com/pdfs/ADT2-71T+.pdf" H 1350 1450 50  0001 C CNN
 	1    1350 1450
 	1    0    0    -1  

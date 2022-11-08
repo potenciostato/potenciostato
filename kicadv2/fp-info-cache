@@ -1,4 +1,4 @@
-19214464075829442
+19221135561014303
 Battery
 BatteryHolder_Bulgin_BX0036_1xC
 Bulgin Battery Holder, BX0036, Battery Type C (https://www.bulgin.com/products/pub/media/bulgin/data/Battery_holders.pdf)
@@ -44317,6 +44317,13 @@ connector TE MATE-N-LOK top entry ATA PATA IDE 5.25 inch floppy drive power
 4
 4
 Connector_USB
+ModuloUSB-Micro
+
+
+0
+9
+9
+Connector_USB
 USB3_A_Molex_48393-001
 USB 3.0, type A, right angle (http://www.molex.com/pdm_docs/sd/483930003_sd.pdf)
 USB 3.0 type A right angle
@@ -47088,6 +47095,13 @@ Vigortronix VTX-214-010-xxx serie of ACDC converter
 0
 5
 5
+Converter_ACDC
+Transformador_7.5V
+
+
+0
+7
+7
 Converter_DCDC
 Converter_DCDC_Artesyn_ATA_SMD
 DCDC-Converter, Artesyn, ATA Series, 3W Single and Dual Output, 1500VDC Isolation, 24.0x13.7x8.0mm https://www.artesyn.com/power/assets/ata_series_ds_01apr2015_79c25814fd.pdf https://www.artesyn.com/power/assets/trn_dc-dc_ata_3w_series_releas1430412818_techref.pdf
@@ -83033,3 +83047,17 @@ LPCXPRESSO_LPC1769
 0
 73
 73
+kicadv2
+ModuloUSB-Micro
+
+
+0
+9
+9
+kicadv2
+Transformador_7.5V
+
+
+0
+7
+7
