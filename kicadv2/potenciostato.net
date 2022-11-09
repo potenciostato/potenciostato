@@ -1,7 +1,7 @@
 (export (version D)
   (design
     (source "D:\\UTN\\Proyecto Final\\drive\\desarrollo\\software\\repo\\proyecto-final\\kicadv2\\potenciostato.sch")
-    (date "7/11/2022 23:23:46")
+    (date "8/11/2022 21:54:14")
     (tool "Eeschema (5.1.10)-1")
     (sheet (number 1) (name /) (tstamps /)
       (title_block
@@ -34,7 +34,7 @@
       (sheetpath (names /) (tstamps /))
       (tstamp 6185139C))
     (comp (ref J6)
-      (value test_DAC)
+      (value test_VIN)
       (footprint Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical)
       (datasheet ~)
       (libsource (lib potenciostato-rescue) (part Conn_01x01_Female-Connector) (description ""))

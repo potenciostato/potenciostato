@@ -208,7 +208,7 @@ L potenciostato-rescue:Conn_01x01_Female-Connector J6
 U 1 1 61851D11
 P 4550 2550
 F 0 "J6" V 4488 2462 50  0000 R CNN
-F 1 "test_DAC" V 4397 2462 50  0000 R CNN
+F 1 "test_VIN" V 4397 2462 50  0000 R CNN
 F 2 "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical" H 4550 2550 50  0001 C CNN
 F 3 "~" H 4550 2550 50  0001 C CNN
 	1    4550 2550
