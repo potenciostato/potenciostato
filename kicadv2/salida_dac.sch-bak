@@ -236,19 +236,6 @@ F 3 "~" H 1450 2200 50  0001 C CNN
 	1    0    0    1   
 $EndComp
 $Comp
-L potenciostato-rescue:GND-power #PWR?
-U 1 1 6318DCCE
-P 750 1700
-AR Path="/60147E53/6318DCCE" Ref="#PWR?"  Part="1" 
-AR Path="/6013BA2D/6318DCCE" Ref="#PWR011"  Part="1" 
-F 0 "#PWR011" H 750 1450 50  0001 C CNN
-F 1 "GND" H 755 1523 50  0000 C CNN
-F 2 "" H 750 1700 50  0001 C CNN
-F 3 "" H 750 1700 50  0001 C CNN
-	1    750  1700
-	-1   0    0    -1  
-$EndComp
-$Comp
 L potenciostato-rescue:LPCXPRESSO_LPC1769-LPCXPRESSO_LPC1769 LPC?
 U 1 1 6318DCAF
 P 3300 2750
@@ -277,19 +264,6 @@ F 1 "alimentacion_lpc" H 5400 1250 50  0000 C CNN
 F 2 "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" H 5400 1450 50  0001 C CNN
 F 3 "~" H 5400 1450 50  0001 C CNN
 	1    5400 1450
-	-1   0    0    -1  
-$EndComp
-$Comp
-L potenciostato-rescue:GND-power #PWR?
-U 1 1 6318DCC8
-P 1600 3950
-AR Path="/60147E53/6318DCC8" Ref="#PWR?"  Part="1" 
-AR Path="/6013BA2D/6318DCC8" Ref="#PWR014"  Part="1" 
-F 0 "#PWR014" H 1600 3700 50  0001 C CNN
-F 1 "GND" H 1605 3773 50  0000 C CNN
-F 2 "" H 1600 3950 50  0001 C CNN
-F 3 "" H 1600 3950 50  0001 C CNN
-	1    1600 3950
 	-1   0    0    -1  
 $EndComp
 Wire Wire Line
@@ -399,19 +373,6 @@ Wire Wire Line
 	5100 950  5250 950 
 Wire Wire Line
 	5250 950  5250 1000
-$Comp
-L potenciostato-rescue:GND-power #PWR?
-U 1 1 6322CB06
-P 5250 1000
-AR Path="/6322CB06" Ref="#PWR?"  Part="1" 
-AR Path="/6013BA2D/6322CB06" Ref="#PWR016"  Part="1" 
-F 0 "#PWR016" H 5250 750 50  0001 C CNN
-F 1 "GND" H 5255 827 50  0000 C CNN
-F 2 "" H 5250 1000 50  0001 C CNN
-F 3 "" H 5250 1000 50  0001 C CNN
-	1    5250 1000
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	1900 6850 1700 6850
 Wire Wire Line
@@ -815,4 +776,37 @@ Wire Wire Line
 	1000 1700 1100 1700
 Wire Wire Line
 	1100 1700 1300 1700
+$Comp
+L power:GNDD #PWR?
+U 1 1 636CF2B0
+P 1600 3950
+F 0 "#PWR?" H 1600 3700 50  0001 C CNN
+F 1 "GNDD" H 1604 3795 50  0000 C CNN
+F 2 "" H 1600 3950 50  0001 C CNN
+F 3 "" H 1600 3950 50  0001 C CNN
+	1    1600 3950
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GNDD #PWR?
+U 1 1 636CF7F1
+P 750 1700
+F 0 "#PWR?" H 750 1450 50  0001 C CNN
+F 1 "GNDD" H 754 1545 50  0000 C CNN
+F 2 "" H 750 1700 50  0001 C CNN
+F 3 "" H 750 1700 50  0001 C CNN
+	1    750  1700
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GNDD #PWR?
+U 1 1 636CFCCA
+P 5250 1000
+F 0 "#PWR?" H 5250 750 50  0001 C CNN
+F 1 "GNDD" H 5254 845 50  0000 C CNN
+F 2 "" H 5250 1000 50  0001 C CNN
+F 3 "" H 5250 1000 50  0001 C CNN
+	1    5250 1000
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
