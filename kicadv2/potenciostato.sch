@@ -85,7 +85,7 @@ Wire Wire Line
 Wire Wire Line
 	8600 3700 8600 3900
 Wire Wire Line
-	8600 3900 9000 3900
+	8600 3900 8900 3900
 Wire Wire Line
 	8600 4000 8600 5150
 Wire Wire Line
@@ -1015,4 +1015,27 @@ Wire Wire Line
 Wire Wire Line
 	5700 1450 5700 1500
 Connection ~ 5450 1450
+$Comp
+L Connector:Conn_Coaxial J14
+U 1 1 636ED754
+P 9200 4250
+F 0 "J14" H 9300 4225 50  0000 L CNN
+F 1 "Conn_Coaxial" H 9300 4134 50  0000 L CNN
+F 2 "Connector_Coaxial:BNC_Amphenol_B6252HB-NPP3G-50_Horizontal" H 9200 4250 50  0001 C CNN
+F 3 " ~" H 9200 4250 50  0001 C CNN
+	1    9200 4250
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9000 4250 8750 4250
+Wire Wire Line
+	8750 4250 8750 3800
+Connection ~ 8750 3800
+Wire Wire Line
+	9200 4450 8900 4450
+Wire Wire Line
+	8900 4450 8900 3900
+Connection ~ 8900 3900
+Wire Wire Line
+	8900 3900 9000 3900
 $EndSCHEMATC
