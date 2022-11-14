@@ -193,10 +193,10 @@ F 3 "" H 7650 5550 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L potenciostato-rescue:Conn_01x01_Female-Connector J4
+L potenciostato-rescue:Conn_01x01_Female-Connector I_IN1
 U 1 1 6185139C
 P 2550 3500
-F 0 "J4" V 2488 3412 50  0000 R CNN
+F 0 "I_IN1" V 2488 3412 50  0000 R CNN
 F 1 "test_I" V 2397 3412 50  0000 R CNN
 F 2 "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical" H 2550 3500 50  0001 C CNN
 F 3 "~" H 2550 3500 50  0001 C CNN
@@ -204,10 +204,10 @@ F 3 "~" H 2550 3500 50  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L potenciostato-rescue:Conn_01x01_Female-Connector J6
+L potenciostato-rescue:Conn_01x01_Female-Connector VIN1
 U 1 1 61851D11
 P 4550 2550
-F 0 "J6" V 4488 2462 50  0000 R CNN
+F 0 "VIN1" V 4488 2462 50  0000 R CNN
 F 1 "test_VIN" V 4397 2462 50  0000 R CNN
 F 2 "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical" H 4550 2550 50  0001 C CNN
 F 3 "~" H 4550 2550 50  0001 C CNN
@@ -314,10 +314,10 @@ F 3 "~" H 7550 4600 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L potenciostato-rescue:Conn_01x03_Male-Connector J3
+L potenciostato-rescue:Conn_01x03_Male-Connector AUX1
 U 1 1 5D250C0E
 P 9200 3900
-F 0 "J3" H 9172 3832 50  0000 R CNN
+F 0 "AUX1" H 9172 3832 50  0000 R CNN
 F 1 "Conn_01x03_Male" H 9172 3923 50  0000 R CNN
 F 2 "Connector_Phoenix_MC:PhoenixContact_MCV_1,5_3-G-3.5_1x03_P3.50mm_Vertical" H 9200 3900 50  0001 C CNN
 F 3 "~" H 9200 3900 50  0001 C CNN
@@ -618,10 +618,10 @@ Connection ~ 2550 3700
 Wire Wire Line
 	2550 3700 3050 3700
 $Comp
-L potenciostato-rescue:Conn_01x01_Female-Connector J5
+L potenciostato-rescue:Conn_01x01_Female-Connector V_IN1
 U 1 1 61851AC8
 P 4550 3700
-F 0 "J5" V 4488 3612 50  0000 R CNN
+F 0 "V_IN1" V 4488 3612 50  0000 R CNN
 F 1 "test_V" V 4397 3612 50  0000 R CNN
 F 2 "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical" H 4550 3700 50  0001 C CNN
 F 3 "~" H 4550 3700 50  0001 C CNN
@@ -908,10 +908,10 @@ F 3 "" H 1250 4750 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L potenciostato-rescue:Conn_01x01_Female-Connector J12
+L potenciostato-rescue:Conn_01x01_Female-Connector GND3
 U 1 1 6185D9DF
 P 1600 4450
-F 0 "J12" H 1538 4362 50  0000 R CNN
+F 0 "GND3" H 1538 4362 50  0000 R CNN
 F 1 "test_GND" H 1750 4250 50  0000 R CNN
 F 2 "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical" H 1600 4450 50  0001 C CNN
 F 3 "~" H 1600 4450 50  0001 C CNN
@@ -919,10 +919,10 @@ F 3 "~" H 1600 4450 50  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L potenciostato-rescue:Conn_01x01_Female-Connector J11
+L potenciostato-rescue:Conn_01x01_Female-Connector GND2
 U 1 1 6185DEE6
 P 1250 4450
-F 0 "J11" H 1188 4362 50  0000 R CNN
+F 0 "GND2" H 1188 4362 50  0000 R CNN
 F 1 "test_GND" H 1400 4250 50  0000 R CNN
 F 2 "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical" H 1250 4450 50  0001 C CNN
 F 3 "~" H 1250 4450 50  0001 C CNN
@@ -930,10 +930,10 @@ F 3 "~" H 1250 4450 50  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L potenciostato-rescue:Conn_01x01_Female-Connector J10
+L potenciostato-rescue:Conn_01x01_Female-Connector GND1
 U 1 1 6185E017
 P 900 4450
-F 0 "J10" H 838 4362 50  0000 R CNN
+F 0 "GND1" H 838 4362 50  0000 R CNN
 F 1 "test_GND" H 1050 4250 50  0000 R CNN
 F 2 "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical" H 900 4450 50  0001 C CNN
 F 3 "~" H 900 4450 50  0001 C CNN
@@ -978,10 +978,10 @@ Connection ~ 4550 2750
 Wire Wire Line
 	4550 2750 5450 2750
 $Comp
-L potenciostato-rescue:Conn_01x01_Female-Connector J13
+L potenciostato-rescue:Conn_01x01_Female-Connector AC2
 U 1 1 63685931
 P 950 1650
-F 0 "J13" H 888 1562 50  0000 R CNN
+F 0 "AC2" H 888 1562 50  0000 R CNN
 F 1 "AC2" H 1100 1450 50  0000 R CNN
 F 2 "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical" H 950 1650 50  0001 C CNN
 F 3 "~" H 950 1650 50  0001 C CNN
@@ -989,10 +989,10 @@ F 3 "~" H 950 1650 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L potenciostato-rescue:Conn_01x01_Female-Connector J9
+L potenciostato-rescue:Conn_01x01_Female-Connector AC1
 U 1 1 636995B8
 P 950 1250
-F 0 "J9" H 888 1162 50  0000 R CNN
+F 0 "AC1" H 888 1162 50  0000 R CNN
 F 1 "AC1" H 1100 1050 50  0000 R CNN
 F 2 "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical" H 950 1250 50  0001 C CNN
 F 3 "~" H 950 1250 50  0001 C CNN
@@ -1016,10 +1016,10 @@ Wire Wire Line
 	5700 1450 5700 1500
 Connection ~ 5450 1450
 $Comp
-L Connector:Conn_Coaxial J14
+L Connector:Conn_Coaxial BNC1
 U 1 1 636ED754
 P 9200 4250
-F 0 "J14" H 9300 4225 50  0000 L CNN
+F 0 "BNC1" H 9300 4225 50  0000 L CNN
 F 1 "Conn_Coaxial" H 9300 4134 50  0000 L CNN
 F 2 "Connector_Coaxial:BNC_Amphenol_B6252HB-NPP3G-50_Horizontal" H 9200 4250 50  0001 C CNN
 F 3 " ~" H 9200 4250 50  0001 C CNN
