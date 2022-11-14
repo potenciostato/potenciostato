@@ -1,7 +1,7 @@
 (export (version D)
   (design
     (source "D:\\UTN\\Proyecto Final\\drive\\desarrollo\\software\\repo\\proyecto-final\\kicadv2\\potenciostato.sch")
-    (date "13/11/2022 22:38:16")
+    (date "14/11/2022 18:31:24")
     (tool "Eeschema (5.1.10)-1")
     (sheet (number 1) (name /) (tstamps /)
       (title_block
@@ -84,7 +84,7 @@
       (tstamp 5CC26B83))
     (comp (ref AUX1)
       (value Conn_01x03_Male)
-      (footprint Connector_Phoenix_MC:PhoenixContact_MCV_1,5_3-G-3.5_1x03_P3.50mm_Vertical)
+      (footprint Connector_Phoenix_MC_HighVoltage:PhoenixContact_MCV_1,5_3-G-5.08_1x03_P5.08mm_Vertical)
       (datasheet ~)
       (libsource (lib potenciostato-rescue) (part Conn_01x03_Male-Connector) (description ""))
       (sheetpath (names /) (tstamps /))
