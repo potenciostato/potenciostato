@@ -211,9 +211,9 @@ L potenciostato-rescue:Conn_01x01_Female-Connector J?
 U 1 1 6318DCEB
 P 6400 3550
 AR Path="/60147E53/6318DCEB" Ref="J?"  Part="1" 
-AR Path="/6013BA2D/6318DCEB" Ref="J2"  Part="1" 
-F 0 "J2" H 6300 3500 50  0000 L CNN
-F 1 "test_DAC" H 6250 3400 50  0000 L CNN
+AR Path="/6013BA2D/6318DCEB" Ref="DAC1"  Part="1" 
+F 0 "DAC1" H 6300 3350 50  0000 L CNN
+F 1 "test_DAC" H 6300 3450 50  0000 L CNN
 F 2 "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical" H 6400 3550 50  0001 C CNN
 F 3 "~" H 6400 3550 50  0001 C CNN
 	1    6400 3550
@@ -227,8 +227,8 @@ U 1 1 6318DCB8
 P 1300 2250
 AR Path="/6318DCB8" Ref="J?"  Part="1" 
 AR Path="/60147E53/6318DCB8" Ref="J?"  Part="1" 
-AR Path="/6013BA2D/6318DCB8" Ref="J1"  Part="1" 
-F 0 "J1" H 1070 2146 50  0000 R CNN
+AR Path="/6013BA2D/6318DCB8" Ref="USB1"  Part="1" 
+F 0 "USB1" H 1070 2146 50  0000 R CNN
 F 1 "USB_B_Micro" H 1070 2239 50  0000 R CNN
 F 2 "kicadv2:ModuloUSB-Micro" H 1450 2200 50  0001 C CNN
 F 3 "~" H 1450 2200 50  0001 C CNN
@@ -258,8 +258,8 @@ L potenciostato-rescue:Jumper-Device JP?
 U 1 1 6318DCDD
 P 5400 1450
 AR Path="/60147E53/6318DCDD" Ref="JP?"  Part="1" 
-AR Path="/6013BA2D/6318DCDD" Ref="JP1"  Part="1" 
-F 0 "JP1" H 5400 1350 50  0000 C CNN
+AR Path="/6013BA2D/6318DCDD" Ref="+5V_LPC1"  Part="1" 
+F 0 "+5V_LPC1" H 5400 1350 50  0000 C CNN
 F 1 "alimentacion_lpc" H 5400 1250 50  0000 C CNN
 F 2 "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" H 5400 1450 50  0001 C CNN
 F 3 "~" H 5400 1450 50  0001 C CNN
@@ -342,8 +342,8 @@ L potenciostato-rescue:Conn_01x01_Female-Connector J?
 U 1 1 6318DCF3
 P 6500 3050
 AR Path="/60147E53/6318DCF3" Ref="J?"  Part="1" 
-AR Path="/6013BA2D/6318DCF3" Ref="J8"  Part="1" 
-F 0 "J8" H 6450 2850 50  0000 R CNN
+AR Path="/6013BA2D/6318DCF3" Ref="V1"  Part="1" 
+F 0 "V1" H 6450 2850 50  0000 R CNN
 F 1 "test_V" H 6600 2950 50  0000 R CNN
 F 2 "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical" H 6500 3050 50  0001 C CNN
 F 3 "~" H 6500 3050 50  0001 C CNN
@@ -733,8 +733,8 @@ L potenciostato-rescue:Conn_01x01_Female-Connector J?
 U 1 1 6318DCE3
 P 6600 2450
 AR Path="/60147E53/6318DCE3" Ref="J?"  Part="1" 
-AR Path="/6013BA2D/6318DCE3" Ref="J7"  Part="1" 
-F 0 "J7" H 6550 2250 50  0000 R CNN
+AR Path="/6013BA2D/6318DCE3" Ref="I1"  Part="1" 
+F 0 "I1" H 6550 2250 50  0000 R CNN
 F 1 "test_I" H 6650 2350 50  0000 R CNN
 F 2 "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical" H 6600 2450 50  0001 C CNN
 F 3 "~" H 6600 2450 50  0001 C CNN
@@ -765,17 +765,12 @@ $EndComp
 Wire Wire Line
 	3650 6850 3650 7250
 Wire Wire Line
-	750  1700 1000 1700
-Wire Wire Line
-	1100 1850 1100 1700
+	1200 1850 1200 1700
 Connection ~ 1100 1700
 Wire Wire Line
-	1000 1850 1000 1700
-Connection ~ 1000 1700
+	1100 1850 1100 1700
 Wire Wire Line
-	1000 1700 1100 1700
-Wire Wire Line
-	1100 1700 1300 1700
+	1100 1700 1200 1700
 $Comp
 L power:GNDD #PWR0115
 U 1 1 636CF2B0
@@ -809,4 +804,9 @@ F 3 "" H 5250 1000 50  0001 C CNN
 	1    5250 1000
 	1    0    0    -1  
 $EndComp
+Connection ~ 1200 1700
+Wire Wire Line
+	1200 1700 1300 1700
+Wire Wire Line
+	750  1700 1100 1700
 $EndSCHEMATC
