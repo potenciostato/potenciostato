@@ -39,9 +39,9 @@ int8_t Dispositivo = -1;
 #define ADC_TENSION_MAX 31
 #define ADC_CORRIENTE_MAX 31
 #define MULT_CORRIENTE 832
-#define OFFSET_CORRIENTE 1.5
+#define OFFSET_CORRIENTE 1.518 //Placa versión 2: 1.518, Placa versión 2: 1.50
 #define MULT_TENSION 1167
-#define OFFSET_TENSION 1.51
+#define OFFSET_TENSION 1.474 //Placa versión 3: 1.474, Placa versión 2: 1.51
 #define ADC_TENSION_BITS 12
 #define ADC_CORRIENTE_BITS 12
 #define MV_TENSION_MAXIMA 3300
