@@ -91,7 +91,7 @@
 #define GAN_CORRIENTE_X10 	3
 
 #define PIN_GAN_CORR_X01 	PIN(7)
-#define PIN_GAN_CORR_X1 	PIN(0)
+#define PIN_GAN_CORR_X1 	PIN(5)
 #define PIN_GAN_CORR_X5 	PIN(6)
 #define PIN_GAN_CORR_X10 	PIN(8)
 
