@@ -4,8 +4,8 @@ EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
 Sheet 2 2
-Title ""
-Date ""
+Title "Potenciostato - Adaptación de Señal"
+Date "22/12/22"
 Rev ""
 Comp ""
 Comment1 ""
@@ -528,17 +528,6 @@ F 3 "http://www.ti.com/lit/ds/symlink/tl081.pdf" H 2200 6750 50  0001 C CNN
 $EndComp
 $Comp
 L Amplifier_Operational:TL082 U9
-U 2 1 63604C97
-P 4150 6750
-F 0 "U9" H 4150 7117 50  0000 C CNN
-F 1 "TL082" H 4150 7026 50  0000 C CNN
-F 2 "Package_DIP:DIP-8_W7.62mm_LongPads" H 4150 6750 50  0001 C CNN
-F 3 "http://www.ti.com/lit/ds/symlink/tl081.pdf" H 4150 6750 50  0001 C CNN
-	2    4150 6750
-	1    0    0    -1  
-$EndComp
-$Comp
-L Amplifier_Operational:TL082 U9
 U 3 1 63615A45
 P 2200 6750
 F 0 "U9" H 2158 6796 50  0000 L CNN
@@ -809,4 +798,15 @@ Wire Wire Line
 	1200 1700 1300 1700
 Wire Wire Line
 	750  1700 1100 1700
+$Comp
+L Amplifier_Operational:TL082 U9
+U 2 1 63604C97
+P 4150 6750
+F 0 "U9" H 4150 7117 50  0000 C CNN
+F 1 "TL082" H 4150 7026 50  0000 C CNN
+F 2 "Package_DIP:DIP-8_W7.62mm_LongPads" H 4150 6750 50  0001 C CNN
+F 3 "http://www.ti.com/lit/ds/symlink/tl081.pdf" H 4150 6750 50  0001 C CNN
+	2    4150 6750
+	1    0    0    1   
+$EndComp
 $EndSCHEMATC

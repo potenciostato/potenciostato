@@ -4,10 +4,10 @@ EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 2
-Title ""
-Date ""
-Rev ""
-Comp ""
+Title "Potenciostato"
+Date "22/12/22"
+Rev "4"
+Comp "UTN Facultad Regional Avellaneda"
 Comment1 ""
 Comment2 ""
 Comment3 ""

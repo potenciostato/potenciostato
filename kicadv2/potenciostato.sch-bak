@@ -319,7 +319,7 @@ U 1 1 5D250C0E
 P 9200 3900
 F 0 "AUX1" H 9172 3832 50  0000 R CNN
 F 1 "Conn_01x03_Male" H 9172 3923 50  0000 R CNN
-F 2 "Connector_Phoenix_MC:PhoenixContact_MCV_1,5_3-G-3.5_1x03_P3.50mm_Vertical" H 9200 3900 50  0001 C CNN
+F 2 "Connector_Phoenix_MC_HighVoltage:PhoenixContact_MCV_1,5_3-G-5.08_1x03_P5.08mm_Vertical" H 9200 3900 50  0001 C CNN
 F 3 "~" H 9200 3900 50  0001 C CNN
 	1    9200 3900
 	-1   0    0    1   
