@@ -1,4 +1,0 @@
-(sym_lib_table
-  (lib (name potenciostato-rescue)(type Legacy)(uri ${KIPRJMOD}/potenciostato-rescue.lib)(options "")(descr ""))
-  (lib (name salida_dac-rescue)(type Legacy)(uri ${KIPRJMOD}/salida_dac-rescue.lib)(options "")(descr ""))
-)
